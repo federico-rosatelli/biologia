@@ -14,8 +14,6 @@ def parsing(file_name):
         json_gene["Description"] = gene.description
         json_gene["Features"] = {}
         for feature in gene.features:
-            # print(feature.location.start+1)
-            # print(feature.location.end)
             json_gene["Features"][feature.type] = {}
             for qual in feature.qualifiers:
                 json_gene["Features"][feature.type][qual] = "".join(feature.qualifiers.get(qual))
