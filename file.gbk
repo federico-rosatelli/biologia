@@ -1,0 +1,130 @@
+LOCUS       OP157201                 999 bp    DNA     linear   VRT 06-MAR-2023
+DEFINITION  Amolops wenshanensis isolate AL06 NADH dehydrogenase subunit 2
+            (ND2) gene, partial cds; mitochondrial.
+ACCESSION   OP157201
+VERSION     OP157201.1
+KEYWORDS    .
+SOURCE      mitochondrion Amolops wenshanensis
+  ORGANISM  Amolops wenshanensis
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Amphibia; Batrachia; Anura; Neobatrachia; Ranoidea; Ranidae;
+            Amolops.
+REFERENCE   1  (bases 1 to 999)
+  AUTHORS   Pham,A.V., Pham,C.T., Ngo,H.T., Nenh,S.B., Ziegler,T. and Le,M.D.
+  TITLE     A new species of Amolops (Anura: Ranidae) from Son La Province,
+            northwestern Vietnam
+  JOURNAL   Raffles Bull Zool 71, 51-69 (2023)
+REFERENCE   2  (bases 1 to 999)
+  AUTHORS   Pham,A.V., Pham,C.T., Ngo,H.T., Nenh,S.B., Ziegler,T. and Le,M.D.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (03-AUG-2022) Herpetology, American Museum of Natural
+            History, Central Park West at 79th Street, New York, NY 10024, USA
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..999
+                     /organism="Amolops wenshanensis"
+                     /organelle="mitochondrion"
+                     /mol_type="genomic DNA"
+                     /isolate="AL06"
+                     /db_xref="taxon:2135273"
+     gene            <1..>999
+                     /gene="ND2"
+     CDS             <1..>999
+                     /gene="ND2"
+                     /codon_start=1
+                     /transl_table=2
+                     /product="NADH dehydrogenase subunit 2"
+                     /protein_id="WDW42245.1"
+                     /translation="LSLAVGTTITLASYHWLLAWIGLEINTHAIIPIMTKIPHPRAVE
+                     AATKYFLIQATASALVLFSSLINAWQVGQWNISALTDLPMNVLSIALMMKLGLAPMHF
+                     WLPEVLQGISLPTGLILSTWQKIAPMALLLQTSHQINLNLITIVGLTSILVGGWGGIA
+                     QTQLRKIIAFSSIGHLGWMVIILKYNPQLTLFNFLLYLLMTAAMFMSLMMVSATKMSE
+                     ISTSWPKTPALTATTMLILLSLXGLPPLTGFAPKLLIILELIKQNSILLATIMMVASL
+                     LSLFFYLRLAYIVMLTLPPNTPSSLATWRTPTKSSPLTAVLNTLALVLLPLTPTVFN"
+ORIGIN      
+        1 ctaagccttg ccgttggcac taccatcacc ctcgcaagct accactgact cctagcctga
+       61 atcggcttag aaatcaacac tcatgctatt atcccaatta taactaaaat cccccacccc
+      121 cgagccgttg aagccgccac aaaatatttc cttattcaag ctacagcctc cgccttagta
+      181 ctattttcaa gtctcattaa tgcctgacaa gtgggacaat gaaatatttc tgccctaacc
+      241 gatttaccaa taaatgttct ctctattgcc ctcatgataa agctaggcct ggcccccata
+      301 catttttggc taccagaagt cttacagggc atttcactgc ccacaggact tattttatca
+      361 acctgacaaa aaattgcccc tatagccctc ctcctacaaa cctcacacca aatcaacctt
+      421 aatttaatta ccatcgtagg cctcacctca attctagttg gcggatgggg cggcatcgcc
+      481 caaacccaat tacgcaaaat catcgctttc tcttcaattg ggcatctcgg atggatagtt
+      541 atcatcttaa agtacaaccc ccagcttacg ctttttaatt tcttacttta cctcttgata
+      601 acagccgcca tatttatatc ccttataata gtctctgcca caaagatgtc agaaatctcc
+      661 acctcctgac ctaaaacccc agccctcacc gcaaccacca tactaatcct gctctccctr
+      721 rcagggttac cccccctaac aggctttgcc cccaaacttc tcattattct agaacttatt
+      781 aagcagaact caattctact cgccacaatt ataatagtag cctccctcct ctcccttttt
+      841 ttctaccttc gactagcata tattgttata ttaaccctcc ccccaaatac ccctagctcc
+      901 ctagccacct gacgaacacc tacaaaatca tccccattaa ccgccgtact aaacacccta
+      961 gctctcgtgc ttctcccact caccccgacc gttttcaac
+//
+
+LOCUS       OP157200                 999 bp    DNA     linear   VRT 06-MAR-2023
+DEFINITION  Amolops truongi voucher ZVNU.2022.01 NADH dehydrogenase subunit 2
+            (ND2) gene, partial cds; mitochondrial.
+ACCESSION   OP157200
+VERSION     OP157200.1
+KEYWORDS    .
+SOURCE      mitochondrion Amolops truongi
+  ORGANISM  Amolops truongi
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Amphibia; Batrachia; Anura; Neobatrachia; Ranoidea; Ranidae;
+            Amolops.
+REFERENCE   1  (bases 1 to 999)
+  AUTHORS   Pham,A.V., Pham,C.T., Ngo,H.T., Nenh,S.B., Ziegler,T. and Le,M.D.
+  TITLE     A new species of Amolops (Anura: Ranidae) from Son La Province,
+            northwestern Vietnam
+  JOURNAL   Raffles Bull Zool 71, 51-69 (2023)
+REFERENCE   2  (bases 1 to 999)
+  AUTHORS   Pham,A.V., Pham,C.T., Ngo,H.T., Nenh,S.B., Ziegler,T. and Le,M.D.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (03-AUG-2022) Herpetology, American Museum of Natural
+            History, Central Park West at 79th Street, New York, NY 10024, USA
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..999
+                     /organism="Amolops truongi"
+                     /organelle="mitochondrion"
+                     /mol_type="genomic DNA"
+                     /specimen_voucher="ZVNU.2022.01"
+                     /type_material="holotype of Amolops truongi"
+                     /db_xref="taxon:3030973"
+     gene            <1..>999
+                     /gene="ND2"
+     CDS             <1..>999
+                     /gene="ND2"
+                     /codon_start=1
+                     /transl_table=2
+                     /product="NADH dehydrogenase subunit 2"
+                     /protein_id="WDW42244.1"
+                     /translation="LSLAVGTTITLASYHWLLAWIGLEINTLAIIPIMTKIPHPRAVE
+                     AATKYFIIQATASALVLFSSLINAWQVGQWNISTLTYLPMNVLSIALMMKLGLAPMHF
+                     WLPEVLQGISLPTGLILSTWQKIAPMALLLQTSHQINLNLITVVGLTSILVGGWGGIA
+                     QTQLRKIIAFSSIGHLGWMVIILKYSPQLTLFSFLLYLLMTAAMFMSLMAISATKMSE
+                     ISTSWPKTPALTATTMLILLSLAGLPPLTGFAPKLLIILELIKQNSILLATIMMMASL
+                     LSLFFYLRLAYIVVLTLPPNTPSSLATWRSPTKSPSLTAVLSTLALVLLPLTSTIFS"
+ORIGIN      
+        1 ctaagccttg ccgttggtac tactattacc ctcgcaagct accactgact tctagcctga
+       61 attggattag aaatcaacac tcttgctatt atcccaatta taactaaaat cccccacccc
+      121 cgagccgttg aagctgccac aaaatatttt attatccaag ctacagcctc cgccttagtc
+      181 ctattttcaa gtctcatcaa tgcctgacaa gtgggacaat gaaatatttc taccctaacc
+      241 tatttaccaa taaacgttct ctctattgcc ctcataataa agctaggcct agcccccata
+      301 catttttgac taccagaagt cttacaaggc atttcactgc ccacaggact tatcctgtca
+      361 acctgacaaa aaattgcccc tatagccctc ctcctacaaa cctcacacca aatcaacctt
+      421 aacttaatta ccgtcgtagg ccttacctca attctagtgg gcggatgggg tggtatcgcc
+      481 caaacccaat tacgcaaaat catcgctttc tcttcaattg gacatctcgg gtgaatagtc
+      541 atcatcttaa aatacagccc ccaacttacg ctttttagtt ttttacttta tctcttaata
+      601 acagccgcca tatttatgtc ccttatagct atctctgcca caaagatatc agaaatttcc
+      661 acctcctgac ctaaaacccc agccctcacc gcaaccacca tacttattct gctgtcccta
+      721 gcgggattac cccccctaac aggttttgcc cccaaacttc ttattattct agaacttatt
+      781 aagcagaact caattctact cgccacaatt ataataatgg cctccctcct ctcccttttt
+      841 ttctatcttc gactagcata tattgtagta ttaactcttc ccccaaatac ccctagctct
+      901 ttagccacct gacgatcacc tacaaaatca ccctcattaa ccgccgtatt aagcacccta
+      961 gctctcgtgc ttctcccact cacctcaacc attttcagc
+//
