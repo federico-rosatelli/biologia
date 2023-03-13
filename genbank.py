@@ -1,12 +1,12 @@
 import os
 from Bio import SeqIO
-import Bio
 import json
 import hashlib
 import argparse
 from pymongo import MongoClient
 import sqlite3
 from time import ctime,perf_counter
+import requests
 
 
 # Credits
@@ -147,6 +147,7 @@ class Database:
         self.client = None
         self.connection = None
         self.printWarning = PrintWarning(10)
+        self.dataSource = {}
     
     # def save_on_mongo(self)
     def save_on_mongo(self,tuple_of_array:tuple) -> None:
@@ -213,8 +214,34 @@ class Database:
         finder = collection_data.find(info)
         # for x in finder:
         #     print(x)
-        finder = list(finder)
-        print(len(finder))
+        # finder = list(finder)
+        # print(len(finder))
+        dataSource = {}
+        for x in finder:
+            #print(x["Features"])
+            source = None
+            for f in x["Features"]:
+                if f["Type"] == "source":
+                    source = f["organism"]
+                    if source not in dataSource:
+                        dataSource[source] = []
+            
+            dataSource[source].append(x["Id"])
+        self.dataSource = dataSource
+        # self.isAlgae()
+        return dataSource
+    
+    def save_on_json(self):
+        with open("dataSource.json","w") as js:
+            json.dump(self.dataSource,js,indent=4)
+    
+    def isAlgae(self):
+        data = self.dataSource["Synechococcales cyanobacterium PMC 1067.18"]
+        data = data.split(" ")[0]
+        # r = requests.get(f"https://api.algaebase.org/v1.3/species?dwc:scientificName=Phycisphaeraceae+bacterium")
+        #r = requests.get(f"https://www.algaebase.org/search/species/?name=Phycisphaeraceae+bacterium",headers={"User-Agent":"Mozilla/5.0 (Windows; U; Windows NT 5.2; de-de; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)"})
+        # SERVE AUTH DA AMMINISTRATORE
+
 
     def file_exists(self)-> bool:
         return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
@@ -253,8 +280,10 @@ def main(args:dict) -> None:
         if args["sql"]:
             d.save_on_sql((data,conv))
     if args["find"]:
-        finder = {"Features":{"$elemMatch":{"Type":"source","$or":[{"isolation_source" : "Microalgae"},{"host":"Microalgae"}]}}}
-        d.get_data_from_mongo(finder)
+        finder = {"Features":{"$elemMatch":{"Type":"source"}}}
+        data = d.get_data_from_mongo(finder)
+        if args["json"]:
+            d.save_on_json(data)
     
     return
 
@@ -271,7 +300,7 @@ if __name__ == "__main__":
                     epilog='Text at the bottom of help')
     parser.add_argument('-m', '--mongodb',
                         action='store_true')
-    parser.add_argument('-s', '--sql',
+    parser.add_argument('-s', '--sqlite3',
                         action='store_true')
     parser.add_argument('-j', '--json',
                         action='store_true')
