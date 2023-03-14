@@ -1,4 +1,6 @@
+import os
 from Bio import SeqIO
+import Bio
 import json
 import hashlib
 import argparse
@@ -39,7 +41,10 @@ class Error:
             self.color = bcolors.BOLD
         if type == 8:
             self.color = bcolors.UNDERLINE
-        self.error = None
+        if type == 9:
+            self.color = bcolors.WARN_BOX
+        if type == 10:
+            self.color = bcolors.OK_BOX
 
     
     def newError(self,error) ->None:
@@ -52,49 +57,71 @@ class Error:
 CLUSTER = "localhost:27017"     # apertura porta di default sul localhost che esegue il codice
 
 class Parsing(object):
+    """Parsing class for GenBank file format"""
     def __init__(self,file_name:str) -> None:
-        # funzione di inizializzazione del dato in input
+        
         self.record = SeqIO.parse(file_name, "genbank")
 
     def parsing_gene(self) -> list:
-        # Ritorna due liste: 
-        # - nella prima vi sono i dati analizzati: per ogni file.gbk dato in input ci sono  di geni,
-        #   e per ogni gene avremo un dizionario dei campi di interesse, come il Name, l'ID, e così via;
-        # - nella seconda vi sono i dati trattati riferiti alla Sequenza. Salviamo infatti sia la sequenza
-        #   di basi azotate "as is", sia la versione codificata con SHA256.  
+        """Ritorna due liste: 
+        - nella prima vi sono i dati analizzati: per ogni file.gbk dato in input ci sono  di geni,
+          e per ogni gene avremo un dizionario dei campi di interesse, come il Name, l'ID, e così via;
+        - nella seconda vi sono i dati trattati riferiti alla Sequenza. Salviamo infatti sia la sequenza
+          di basi azotate "as is", sia la versione codificata con SHA256."""  
         gene_array = []
         hex_array = []
+        count = 0
+        last = -1
+        errors = 0
         for gene in self.record:
+            count += 1
+            if int((count/86000)*100) != last:
+                print("[%-50s] %d%%" % ('='*((last+1)//2),last+1),end="\r")
+                last +=1
+            #print(count)
             json_gene = {}
             json_convert = {}
             json_gene["Name"] = gene.name
             json_gene["Id"] = gene.id
-            sh = self.sha_index(str(gene.seq))
-            json_gene["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
-            #json_gene["Seq_Raw"] = sh["seq"]  #str(gene.seq)-> SHA256 funzione
-            json_convert["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
-            json_convert["Seq_Raw"] = sh["seq"]  #str(gene.seq)-> SHA256 funzione
+            check = False
+            try:
+                if gene.seq != "":
+                    #print(count)
+                    check = True
+                    sh = self.sha_index(str(gene.seq))
+                    json_gene["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
+                    json_convert["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
+                    json_convert["Seq_Raw"] = sh["seq"]  #str(gene.seq)-> SHA256 funzione
+                    
+            except Exception as e:
+                if check:
+                    print(e,"Entra qua nella sequenza:",gene.id)
+                errors += 1
+                pass
             json_gene["Description"] = gene.description
-            json_gene["Features"] = {}
+            json_gene["Features"] = []
             for feature in gene.features:
-                json_gene["Features"][feature.type] = {}
+                feature_type = {"Type":feature.type}
+                #json_gene["Features"][feature.type] = {}
                 for qual in feature.qualifiers:
-                    json_gene["Features"][feature.type][qual] = feature.qualifiers.get(qual)[0]
-                json_gene["Features"][feature.type]["Location"] = (int(feature.location.start),int(feature.location.end))
-            gene_array.append(json_gene)
+                    feature_type[qual] = feature.qualifiers.get(qual)[0]
+                feature_type["Location"] = (int(feature.location.start),int(feature.location.end))
+                json_gene["Features"].append(feature_type)
             hex_array.append(json_convert)
+            gene_array.append(json_gene)
+            
+        print(f"\n\nProcess completed with {errors} errors")
         return gene_array,hex_array
     
     def sha_index(self,seq:str) -> dict:
         # ritorna, in un dizionario, il codice hash di una sequenza di basi azotate (ACGTU le possibili unità)
         return {
-            'hex':hashlib.sha256(seq.encode()).hexdigest(),
+            'hex':hashlib.sha256(seq.encode('utf-8')).hexdigest(),
             'seq':seq
         }
     
     def save_data(self, json_array:tuple) -> None:
         # crea un file json contentene i dati parsati - salvare in DB?
-        print("AIIII")
         with open("datastruct.json","w") as js:
             json.dump({
                         "struct":json_array[0],
@@ -106,53 +133,78 @@ class Parsing(object):
 
 class Database:
     def __init__(self) -> None:
-        pass
+        self.file = "Biologia.db"
+        self.client = None
+        self.connection = None
     
     # def save_on_mongo(self)
     def save_on_mongo(self,tuple_of_array:tuple) -> None:
         ip = CLUSTER.split(":")[0]
         port = int(CLUSTER.split(":")[1])
-        client = MongoClient(f'{ip}', port)
-        db = client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
+        self.client = MongoClient(f'{ip}', port)
+        db = self.client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
         collection_data = db["genetic_data"]
         collection_convert = db["hex_to_seq"]
+        count = 0
+        last = -1
         for i in range(len(tuple_of_array[0])):
+            count+=1
+            if int((count/86000)*100) != last:
+                print("[%-50s] %d%%" % ('='*((last+1)//2),last+1),end="\r")
+                last +=1
             filter = {"Name":tuple_of_array[0][i]["Name"]}
             check_name = collection_data.find_one(filter)
             if not check_name:
                 collection_data.insert_one(tuple_of_array[0][i])
-            filter = {"Seq_Hex":tuple_of_array[1][i]["Seq_Hex"]}
-            check_hex = collection_convert.find_one(filter)
-            if not check_hex:
-                collection_convert.insert_one(tuple_of_array[1][i])
-        client.close()
+            if tuple_of_array[1][i] != {}:
+                filter = {"Seq_Hex":tuple_of_array[1][i]["Seq_Hex"]}
+                check_hex = collection_convert.find_one(filter)
+                if not check_hex:
+                    collection_convert.insert_one(tuple_of_array[1][i])
         
-    # def save_on_sql(self)
-    def save_on_sql(self,tuple_of_array:tuple) -> Error:
+    def save_on_sql(self,tuple_of_array:tuple,file=None) -> Error:
         # filename to form database
-        
-        file = "Biologia.db"
+        if file != None:
+            self.file = file
         try:
-            conn = sqlite3.connect(file)
-            print("Database Biologia.db formed.")
-            cursor = conn.cursor()
-            scr = open("init.sql").read()
-            cursor.executescript(scr)
-            list_of_tuples = [(tuple_of_array[0][i]["Name"],tuple_of_array[0][i]["Id"],tuple_of_array[0][i]["Seq_Hex"],tuple_of_array[0][i]["Description"],i) for i in range(len(tuple_of_array))]
-            #cursor.executemany("INSERT INTO movie VALUES(?, ?, ?)", data)
-            table ="""INSERT INTO Biologia VALUES(?,?,?,?,?)"""
-            # cursor.execute(table)
-            # cursor.execute()
-            cursor.executemany(table,list_of_tuples)
-            print("ASASAS")
+            self.connection = sqlite3.connect(self.file)
+            cursor = self.connection.cursor()
+            if not self.file_exists():
+                scr = open("init.sql").read()
+                cursor.executescript(scr)
+            for i in range(len(tuple_of_array[0])):
+                data_tuple = (tuple_of_array[0][i]["Name"],tuple_of_array[0][i]["Id"],tuple_of_array[0][i]["Seq_Hex"],tuple_of_array[0][i]["Description"],i)
+                find = f"SELECT Seq_Hex FROM Biologia WHERE Seq_Hex='{tuple_of_array[0][i]['Seq_Hex']}'"
+                res = cursor.execute(find)
+                if not res:
+                    table ="""INSERT INTO Biologia VALUES(?,?,?,?,?)"""
+                    cursor.execute(table,data_tuple)
         except Exception as e:
-            conn.close()
+            self.connection.close()
             return Error(4).newError(f"Error Database Biologia.db: {e}")
-        conn.commit()
-        if conn:
-            conn.close()
-            return Error(5).newError(f"Error Writing Database Biologia.db: {e}")
+        self.connection.commit()
+        if not self.connection:
+            self.connection.close()
+            return Error(5).newError(f"Error Writing Database Biologia.db")
+        self.connection.close()
         return None
+
+    def get_data_from_mongo(self,info) -> list:
+        if self.client == None:
+            ip = CLUSTER.split(":")[0]
+            port = int(CLUSTER.split(":")[1])
+            self.client = MongoClient(f'{ip}', port)
+        db = self.client["Biologia"]
+        collection_data = db["genetic_data"]
+        collection_convert = db["hex_to_seq"]
+        finder = collection_data.find(info)
+        # for x in finder:
+        #     print(x)
+        finder = list(finder)
+        print(len(finder))
+
+    def file_exists(self)-> bool:
+        return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
 
 
 class bcolors:
@@ -166,25 +218,31 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+    WARN_BOX = WARNING + '[!] ' + ENDC
+    OK_BOX = OKBLUE + '[*] ' + ENDC
 
 
 
 
 
 def main(args:dict) -> Error:
+    d = Database()
     if args["mongodb"] and args["sql"]:
         return Error(5).newError("Can't select both mongo-db and sql for storing")
-    if args["file"] == None:
-        return Error(5).newError("File must not be empty")
-    p = Parsing(args["file"])
-    data,conv = p.parsing_gene()
-    if args["json"]:
-        p.save_data((data,conv))
-    d = Database()
-    if args["mongodb"]:
-        d.save_on_mongo((data,conv))
-    if args["sql"]:
-        d.save_on_sql((data,conv))
+    if args["file"]:
+        p = Parsing(args["file"])
+        data,conv = p.parsing_gene()
+        if args["json"]:
+            p.save_data((data,conv))
+        
+        if args["mongodb"]:
+            Error(3).newError("FINITO IL PARSING")
+            d.save_on_mongo((data,conv))
+        if args["sql"]:
+            d.save_on_sql((data,conv))
+    if args["find"]:
+        finder = {"Features":{"$elemMatch":{"Type":"source","$or":[{"isolation_source" : "Microalgae"},{"host":"Microalgae"}]}}}
+        d.get_data_from_mongo(finder)
     
     return
 
@@ -204,6 +262,8 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--sql',
                         action='store_true')
     parser.add_argument('-j', '--json',
+                        action='store_true')
+    parser.add_argument('--find',
                         action='store_true')
     parser.add_argument('-f', '--file')
     args = vars(parser.parse_args())
