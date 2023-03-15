@@ -6,6 +6,7 @@ import hashlib
 import argparse
 from pymongo import MongoClient
 import sqlite3
+from time import ctime,perf_counter
 
 
 # Credits
@@ -19,9 +20,10 @@ import sqlite3
 # pymongo       "https://pymongo.readthedocs.io/en/stable/"
 
 
-class Error:
+class  PrintWarning:
     # applicazione della classe di bcolors
-    def __init__(self,type:int) -> None:
+    def __init__(self,type:int,error:str="") -> None:
+        self.error = error
         self.color = None
         if type == 0:
             self.color = bcolors.HEADER
@@ -47,9 +49,13 @@ class Error:
             self.color = bcolors.OK_BOX
 
     
-    def newError(self,error) ->None:
-        self.error = error
-        print(self.color + self.error + bcolors.ENDC)
+    def stdout(self,*strings:any) ->None:
+        self.error = ' '.join(str(i) for i in strings)
+        plus = ""
+        if self.error[:1] == "\n":
+            plus = "\n"
+            self.error = self.error[1:]
+        print(bcolors.BOLD + f"{plus}[{ctime()}] " + bcolors.ENDC + self.color + self.error +  bcolors.ENDC)
     
     def __str__(self) -> str:
         return self.error
@@ -73,10 +79,14 @@ class Parsing(object):
         count = 0
         last = -1
         errors = 0
+        PrintWarning(8).stdout("\nSTART PARSING")
+        print("~"*56+"\n")
+        t_last = perf_counter()
         for gene in self.record:
             count += 1
-            if int((count/86000)*100) != last:
-                print("[%-50s] %d%%" % ('='*((last+1)//2),last+1),end="\r")
+            if int((count/86100)*100) != last:
+                t_now = perf_counter()
+                print("[%-50s] %d%% %d" % ('='*((last+1)//2),last+1,(t_now-t_last)*(86100//count)),end="\r") #??????
                 last +=1
             #print(count)
             json_gene = {}
@@ -109,8 +119,8 @@ class Parsing(object):
                 json_gene["Features"].append(feature_type)
             hex_array.append(json_convert)
             gene_array.append(json_gene)
-            
-        print(f"\n\nProcess completed with {errors} errors")
+        PrintWarning(3).stdout("\nParsing completed\n") 
+        PrintWarning(5).stdout("Process completed with",errors,'errors\n')
         return gene_array,hex_array
     
     def sha_index(self,seq:str) -> dict:
@@ -136,9 +146,11 @@ class Database:
         self.file = "Biologia.db"
         self.client = None
         self.connection = None
+        self.printWarning = PrintWarning(10)
     
     # def save_on_mongo(self)
     def save_on_mongo(self,tuple_of_array:tuple) -> None:
+        PrintWarning(8).stdout("\nStart saving on database")
         ip = CLUSTER.split(":")[0]
         port = int(CLUSTER.split(":")[1])
         self.client = MongoClient(f'{ip}', port)
@@ -149,7 +161,7 @@ class Database:
         last = -1
         for i in range(len(tuple_of_array[0])):
             count+=1
-            if int((count/86000)*100) != last:
+            if int((count/len(tuple_of_array[0]))*100) != last:
                 print("[%-50s] %d%%" % ('='*((last+1)//2),last+1),end="\r")
                 last +=1
             filter = {"Name":tuple_of_array[0][i]["Name"]}
@@ -161,8 +173,9 @@ class Database:
                 check_hex = collection_convert.find_one(filter)
                 if not check_hex:
                     collection_convert.insert_one(tuple_of_array[1][i])
+        self.printWarning.stdout("Saved correctly on mongo")
         
-    def save_on_sql(self,tuple_of_array:tuple,file=None) -> Error:
+    def save_on_sql(self,tuple_of_array:tuple,file=None):
         # filename to form database
         if file != None:
             self.file = file
@@ -181,11 +194,11 @@ class Database:
                     cursor.execute(table,data_tuple)
         except Exception as e:
             self.connection.close()
-            return Error(4).newError(f"Error Database Biologia.db: {e}")
+            return PrintWarning(4).stdout(f"Error Database Biologia.db: {e}")
         self.connection.commit()
         if not self.connection:
             self.connection.close()
-            return Error(5).newError(f"Error Writing Database Biologia.db")
+            return PrintWarning(5).stdout(f"Error Writing Database Biologia.db")
         self.connection.close()
         return None
 
@@ -218,17 +231,17 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-    WARN_BOX = WARNING + '[!] ' + ENDC
-    OK_BOX = OKBLUE + '[*] ' + ENDC
+    WARN_BOX = WARNING + '[!] '
+    OK_BOX = OKBLUE + '[*] '
 
 
 
 
 
-def main(args:dict) -> Error:
+def main(args:dict) -> None:
     d = Database()
     if args["mongodb"] and args["sql"]:
-        return Error(5).newError("Can't select both mongo-db and sql for storing")
+        return PrintWarning(5).stdout("Can't select both mongo-db and sql for storing")
     if args["file"]:
         p = Parsing(args["file"])
         data,conv = p.parsing_gene()
@@ -236,7 +249,6 @@ def main(args:dict) -> Error:
             p.save_data((data,conv))
         
         if args["mongodb"]:
-            Error(3).newError("FINITO IL PARSING")
             d.save_on_mongo((data,conv))
         if args["sql"]:
             d.save_on_sql((data,conv))
