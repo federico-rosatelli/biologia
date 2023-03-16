@@ -149,6 +149,7 @@ class Database:
         self.connection = None
         self.printWarning = PrintWarning(10)
         self.dataSource = {}
+        self.totLength = 0
     
     # def save_on_mongo(self)
     def save_on_mongo(self,tuple_of_array:tuple) -> None:
@@ -214,6 +215,7 @@ class Database:
         collection_convert = db["hex_to_seq"]
         finder = collection_data.find(info)
         dataSource = {}
+        
         for x in finder:
             #print(x["Features"])
             source = None
@@ -222,8 +224,9 @@ class Database:
                     source = f["organism"]
                     if source not in dataSource:
                         dataSource[source] = []
-            
             dataSource[source].append(x["Id"])
+
+        self.totLength = len(dataSource)
         self.dataSource = dataSource
         if saveOnJson:
             self.save_on_json()
@@ -233,6 +236,7 @@ class Database:
             for algae in totAlgae:
                 algaeSource[algae] = dataSource[algae]
             self.dataSource = algaeSource
+            PrintWarning(2).stdout(f"Total algae {len(self.dataSource)} out of {self.totLength}")
             if saveOnJson:
                 self.save_on_json(fileName="algaeSource.json")
         return dataSource
