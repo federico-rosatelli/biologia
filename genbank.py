@@ -1,3 +1,4 @@
+import csv
 import os
 from Bio import SeqIO
 import json
@@ -203,7 +204,7 @@ class Database:
         self.connection.close()
         return None
 
-    def get_data_from_mongo(self,info) -> list:
+    def get_data_from_mongo(self,info:dict,saveOnJson:bool=False,algae:bool=False) -> dict:
         if self.client == None:
             ip = CLUSTER.split(":")[0]
             port = int(CLUSTER.split(":")[1])
@@ -212,10 +213,6 @@ class Database:
         collection_data = db["genetic_data"]
         collection_convert = db["hex_to_seq"]
         finder = collection_data.find(info)
-        # for x in finder:
-        #     print(x)
-        # finder = list(finder)
-        # print(len(finder))
         dataSource = {}
         for x in finder:
             #print(x["Features"])
@@ -228,19 +225,45 @@ class Database:
             
             dataSource[source].append(x["Id"])
         self.dataSource = dataSource
-        # self.isAlgae()
+        if saveOnJson:
+            self.save_on_json()
+        if algae:
+            totAlgae = self.isAlgae(dataSource)
+            algaeSource = {}
+            for algae in totAlgae:
+                algaeSource[algae] = dataSource[algae]
+            self.dataSource = algaeSource
+            if saveOnJson:
+                self.save_on_json(fileName="algaeSource.json")
         return dataSource
     
-    def save_on_json(self):
-        with open("dataSource.json","w") as js:
+    def save_on_json(self,fileName:str="dataSource.json") ->None:
+        with open(fileName,"w") as js:
             json.dump(self.dataSource,js,indent=4)
     
-    def isAlgae(self):
-        data = self.dataSource["Synechococcales cyanobacterium PMC 1067.18"]
-        data = data.split(" ")[0]
-        # r = requests.get(f"https://api.algaebase.org/v1.3/species?dwc:scientificName=Phycisphaeraceae+bacterium")
-        #r = requests.get(f"https://www.algaebase.org/search/species/?name=Phycisphaeraceae+bacterium",headers={"User-Agent":"Mozilla/5.0 (Windows; U; Windows NT 5.2; de-de; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)"})
-        # SERVE AUTH DA AMMINISTRATORE
+    def isAlgae(self,dataSource,rewrite:bool=False) ->list:
+        if not os.path.isfile("algaeDatabase.csv") or rewrite:
+            r = requests.get("https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt")
+            with open("algaeDatabase.csv", "w") as wr:
+                dataContent = r.text
+                dataContent = dataContent.split("\n")
+                writer = csv.writer(wr)
+                for i in range(len(dataContent)):
+                    dataContent[i] = dataContent[i].split("\t")
+                    writer.writerow(dataContent[i])
+        file = open("algaeDatabase.csv","r")
+        dataAlgae = csv.reader(file)
+        dataAlgae = list(dataAlgae)
+        totAlgae = []
+        for key in dataSource:
+            val_key = key.split(" ")[0]
+            for algae in dataAlgae:
+                if len(algae) > 1 and val_key.lower() in algae[2].lower():
+                    totAlgae.append(key)
+        return totAlgae
+
+
+
 
 
     def file_exists(self)-> bool:
@@ -281,9 +304,13 @@ def main(args:dict) -> None:
             d.save_on_sql((data,conv))
     if args["find"]:
         finder = {"Features":{"$elemMatch":{"Type":"source"}}}
-        data = d.get_data_from_mongo(finder)
+        save = False
+        algae = False
         if args["json"]:
-            d.save_on_json(data)
+            save = True
+        if args["algae"]:
+            algae = True
+        data = d.get_data_from_mongo(finder,saveOnJson=save,algae=algae)
     
     return
 
@@ -305,6 +332,8 @@ if __name__ == "__main__":
     parser.add_argument('-j', '--json',
                         action='store_true')
     parser.add_argument('--find',
+                        action='store_true')
+    parser.add_argument('-a','--algae',
                         action='store_true')
     parser.add_argument('-f', '--file')
     args = vars(parser.parse_args())
