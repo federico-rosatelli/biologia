@@ -1,0 +1,26 @@
+Idea di come si potrebbe modellare il database a grafo 
+
+
+
+Dominio
+  ||
+Regno
+  ||
+Phylum
+  ||
+Classe
+  ||
+Ordine
+  ||
+Famiglia
+  ||
+ Genere
+  ||
+Specie
+   ||
+Organismo===TaxonomyId
+   ||
+   ||
+   ||
+  Gene===>Proteina===>Funzione
+   
