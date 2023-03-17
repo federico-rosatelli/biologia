@@ -8,6 +8,7 @@ from pymongo import MongoClient
 import sqlite3
 from time import ctime,perf_counter
 import requests
+import pandas as pd
 
 
 # Credits
@@ -205,7 +206,7 @@ class Database:
         self.connection.close()
         return None
 
-    def get_data_from_mongo(self,info:dict,saveOnJson:bool=False,algae:bool=False) -> dict:
+    def get_data_from_mongo(self,info:dict,saveOnJson:bool=False,algae:bool=False,micro_algae:bool=False) -> dict:
         if self.client == None:
             ip = CLUSTER.split(":")[0]
             port = int(CLUSTER.split(":")[1])
@@ -230,16 +231,29 @@ class Database:
         self.dataSource = dataSource
         if saveOnJson:
             self.save_on_json()
+
         if algae:
-            totAlgae = self.isAlgae(dataSource)
+            totAlgae,same = self.isAlgae(dataSource)
             algaeSource = {}
             for algae in totAlgae:
                 algaeSource[algae] = dataSource[algae]
             self.dataSource = algaeSource
-            PrintWarning(2).stdout(f"Total algae {len(self.dataSource)} out of {self.totLength}")
+            PrintWarning(2).stdout(f"Total algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
             if saveOnJson:
                 self.save_on_json(fileName="algaeSource.json")
-        return dataSource
+
+        if micro_algae:
+            # ? self.datasource vs. datasource
+            totAlgae,same = self.isMicorAlgae(self.dataSource)
+            algaeSource = {}
+            for algae in totAlgae:
+                algaeSource[algae] = dataSource[algae]
+            self.dataSource = algaeSource
+            PrintWarning(2).stdout(f"Total micro algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
+            if saveOnJson:
+                self.save_on_json(fileName="microAlgaeSource.json")
+
+        return self.dataSource
     
     def save_on_json(self,fileName:str="dataSource.json") ->None:
         with open(fileName,"w") as js:
@@ -259,12 +273,33 @@ class Database:
         dataAlgae = csv.reader(file)
         dataAlgae = list(dataAlgae)
         totAlgae = []
+        unico = []
         for key in dataSource:
             val_key = key.split(" ")[0]
             for algae in dataAlgae:
                 if len(algae) > 1 and val_key.lower() in algae[2].lower():
                     totAlgae.append(key)
-        return totAlgae
+                    if val_key.lower() not in unico:
+                        unico.append(val_key.lower())
+        return totAlgae,unico
+
+    def isMicorAlgae(self,dataSource):
+        rl = open('microAlgaeProva.csv').readlines()
+        dataAlgae = []
+        for i in range(len(rl)):
+            data = rl[i].split(";")
+            dataAlgae.append(data[1:])
+        totAlgae = []
+        unico = []
+        for key in dataSource:
+            val_key = key.split(" ")[0] 
+            for algae in dataAlgae:
+                if len(algae) > 1 and val_key.lower() in algae[2].lower():
+                    totAlgae.append(key)
+                    if val_key.lower() not in unico:
+                        unico.append(val_key.lower())
+        return totAlgae,unico
+        
 
 
 
@@ -294,7 +329,7 @@ class bcolors:
 
 def main(args:dict) -> None:
     d = Database()
-    if args["mongodb"] and args["sql"]:
+    if args["nosql_mongo"] and args["sql"]:
         return PrintWarning(5).stdout("Can't select both mongo-db and sql for storing")
     if args["file"]:
         p = Parsing(args["file"])
@@ -310,11 +345,15 @@ def main(args:dict) -> None:
         finder = {"Features":{"$elemMatch":{"Type":"source"}}}
         save = False
         algae = False
+        micro = False
         if args["json"]:
             save = True
         if args["algae"]:
             algae = True
-        data = d.get_data_from_mongo(finder,saveOnJson=save,algae=algae)
+        if args["micro_algae"]:
+            micro = True
+        data = d.get_data_from_mongo(finder,saveOnJson=save,algae=algae,micro_algae=micro)
+    #d.isMicorAlgae()
     
     return
 
@@ -329,7 +368,7 @@ if __name__ == "__main__":
                     prog='Biologia Database Parsing',
                     description='What the program does',
                     epilog='Text at the bottom of help')
-    parser.add_argument('-m', '--mongodb',
+    parser.add_argument('-n', '--nosql-mongo',
                         action='store_true')
     parser.add_argument('-s', '--sqlite3',
                         action='store_true')
@@ -338,6 +377,8 @@ if __name__ == "__main__":
     parser.add_argument('--find',
                         action='store_true')
     parser.add_argument('-a','--algae',
+                        action='store_true')
+    parser.add_argument('-m','--micro-algae',
                         action='store_true')
     parser.add_argument('-f', '--file')
     args = vars(parser.parse_args())

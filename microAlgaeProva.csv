@@ -1,0 +1,420 @@
+;ACOI 432;N16UC2;Scenedesmus aculeolatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 433;N16UC3;Scenedesmus aculeolatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 548;N16UC12;Scenedesmus asymmetricus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 754;N16UC13;Scenedesmus asymmetricus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 565;N16UC14;Scenedesmus brasiliensis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 415;N16UC4;Scenedesmus acuminatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 968;N16UC6;Scenedesmus arcuatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 442;N16UC7;Scenedesmus armatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 562;N16UC8;Scenedesmus armatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 563;N16UC9;Scenedesmus armatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 557;N16UC16;Scenedesmus communis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 120;N16UC18;Scenedesmus corallinus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 543;N16UC19;Scenedesmus corallinus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2139;N16UC87;Gloeocapsa sp.;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 246;N16UC110;Tetraëdron caudatum;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 119;N16UC118;Phormidium autumnale;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2281;N16UC129;Pseudanabaena sp.;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 527;N16UC20;Scenedesmus denticulatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1080;N16UC21;Scenedesmus denticulatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1428;N16UC22;Scenedesmus denticulatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2767;N16UC23;Scenedesmus ellipsoideus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2617;N16UC109;Tetracystis sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2057;N16UC11;Scenedesmus armatus var. brevicaudatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1261;N16UC15;Scenedesmus brasiliensis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 916;N16UC24;Scenedesmus grahneisii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 318;N16UC25;Scenedesmus maximus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1463;N16UC38;Pediastrum integrum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 20;N16UC60;Anabaena variabilis;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 225;N16UC26;Monoraphidium contortum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 401;N16UC27;Monoraphidium contortum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 189;N16UC28;Monoraphidium griffithii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 805;N16UC29;Monoraphidium griffithii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 171;N16UC30;Pediastrum angulosum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1354;N16UC31;Pediastrum angulosum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 75;N16UC32;Pediastrum boryanum var. boryanum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2115;N16UC33;Pediastrum boryanum var. boryanum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 392;N16UC34;Pediastrum duplex var. gracillimun;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 152;N16UC35;Pediastrum duplex var. rugulosum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1457;N16UC36;Pediastrum duplex var. rugulosum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1327;N16UC37;Pediastrum integrum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 84;N16UC40;Pediastrum tetras;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 118;N16UC42;Enallax acutiformis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 503;N16UC43;Enallax acutiformis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 213;N16UC47;Kirchneriella obesa;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2604;N16UC54;Oocystis lacustris;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2118;N16UC55;Oocystis parva;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1;N16UC65;Scenedesmus naegelli;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 232;N16UC66;Scenedesmus naegelii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 550;N16UC68;Scenedesmus obliquus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 560;N16UC73;Scenedesmus pannonicus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 719;N16UC74;Scenedesmus pannonicus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 545;N16UC75;Scenedesmus quadrispina;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2139;N16UC87;Gloeocapsa sp.;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 600;N16UC113; Tetraëdron minimun;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1042;N16UC39;Pediastrum simplex var. sturmii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2632;N16UC56;Oocystis parva;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2024;N16UC64;Calothrix sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 556;N16UC67;Scenedesmus naegelii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2146;N16UC86;Chroococcus sp.;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1451;N16UC89;Microchaete tenera ;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2176;N16UC91;Nostoc sp.;UC;F;S.Tomé e Príncipe;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2184;N16UC93;Nostoc sp.;UC;F;S.Tomé e Príncipe;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2173;N16UC94;Nostoc sp.;UC;F;S.Tomé e Príncipe;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2174;N16UC95;Nostoc sp.;UC;F;S.Tomé e Príncipe;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2175;N16UC96;Nostoc sp.;UC;F;S.Tomé e Príncipe;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2177;N16UC97;Nostoc sp.;UC;F;S.Tomé e Príncipe;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2178;N16UC98;Nostoc sp.;UC;F;S.Tomé e Príncipe;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2171;N16UC102;Nostoc sp.;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 24;N16UC111;Tetraedron minimum;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1317;N16UC115;Westella botryoides;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 295;N16UC124;Geminella terricola;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 731;N16UC134;Tolypothrix distorta;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 92;N16UC135;Tolypothrix tenuis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 429;N16UC1;Scenedesmus aculeolatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 533;N16UC5;Scenedesmus acuminatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 227;N16UC58;Oocystis solitaria;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 505;N16UC59;Anabaena cylindrica;UC;F; S.Tomé e Príncipe;LC, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2022;N16UC63;Calothrix sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 547;N16UC76;Scenedesmus smithii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 684;N16UC77;Scenedesmus smithii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 179;N16UC81;Scenedesmus tenuispina;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2170;N16UC101;Nostoc sp. ;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2611;N16UC103;Nostoc sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2233;N16UC104;Nostoc sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 80;N16UC116;Oscillatoria pseudacutissima;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 108;N16UC122;Geminella minor;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2274;N16UC127;Plectonema sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 573;N16UC131;Scytonema obscurum;UC;F; S.Tomé e Príncipe;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 248;N16UC156;Microthamnion strictissimum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1685;N16UC159;Oedogonium areschougii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 17;N16UC160;Heterothrix debilis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 91;N16UC162;Ophiocytium maius;UC;F;Portugal;LC, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 379;N16UC197;Cosmarium laeve;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1785;N16UC198;Cosmarium laeve;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 662;N16UC133;Tolypothrix byssoidea;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2289;N16UC136;Tolypothrix sp.;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 55;N16UC164;Cylindrocystis brebissonii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 365;N16UC182;Closterium moniliferum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 82;N16UC45;Glaucocystis nostochinearum;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 389;N16UC46;Glaucocystis nostochinearum;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 424;N16UC71;Scenedesmus obtusus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 479;N16UC72;Scenedesmus opoliensis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2089;N16UC90;Nostoc sp.;UC;F;S.Tomé e Príncipe;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2183;N16UC92;Nostoc sp. ;UC;F;S.Tomé e Príncipe;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2280;N16UC128;Pseudanabaena sp.;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 580;N16UC130;Scytonema crispum;UC;F; S.Tomé e Príncipe;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1017;N16UC161;Ophiocytium capitatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1405;N16UC165;Cylindrocystis brebissonii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1525;N16UC166;Cylindrocystis brebissonii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1941;N16UC167;Cylindrocystis brebissonii var. minor;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 788;N16UC168;Cylindrocystis crassa;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1880;N16UC169;Netrium digitus var. lamellosum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 407;N16UC175;Closterium cornu;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 176;N16UC181;Closterium limneticum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 383;N16UC183;Closterium moniliferum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1182;N16UC184;Closterium moniliferum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1897;N16UC186;Cosmarium botrytis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1384;N16UC189;Cosmarium crenatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1741;N16UC194;Cosmarium holmiense;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 630;N16UC88;Microchaete  tenera;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2169;N16UC100;Nostoc sp.;UC;F;Portugal;LC, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2415;N16UC106;Nostoc sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2204;N16UC107;Nostoc sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2205;N16UC108;Nostoc sp.;UC;F;S.Tomé e Príncipe;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 430;N16UC121;Geminella interrupta;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1055;N16UC148;Monomorphina aenigmatica;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 398;N16UC157;Microthamnion strictissimum;UC;F;Portugal;LC, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1705;N16UC173;Synura petersennii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 504;N16UC176;Closterium cornu;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 355;N16UC188;Cosmarium crenatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 345;N16UC191;Cosmarium elegantissimum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 528;N17UC112;Tetraedron minimum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1067;N17UC158;Trentepohlia lagenifera;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1386;N17UC190;Cosmarium crenatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 490;N17UC193;Cosmarium granatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1085;N17UC200;Cosmarium notabile;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 26;N17UC202;Cosmarium obtusatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 971;N17UC221;Ankistrodesmus fusiformis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 400;N17UC227;Ankistrodesmus spiralis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2234;N16UC105;Nostoc sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 426;N17UC125;Geminella terricola;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 826;N17UC187;Cosmarium caelatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 370;N17UC205;Cosmarium regnelli var. pseudoregnelli;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 354;N17UC210;Cosmarium subcrenatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 33;N17UC212;Cosmarium vexatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 638;N17UC220;Ankistrodesmus fusiformis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 172;N17UC223;Ankistrodesmus gracilis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 140;N17UC155;Microthamnion kuetzingianum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1786;N17UC199;Cosmarium laeve;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2769;N17UC204;Cosmarium punctulatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 870;N17UC206;Cosmarium regnellii var. pseudoregnellii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2821;N17UC203;Cosmarium praemorsum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 376;N17UC208;Cosmarium sportella;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 771;N17UC224;Ankistrodesmus gracilis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1208;N17UC226;Ankistrodesmus gracilis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2795;N17UC196;Cosmarium impressulum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1806;N17UC201;Cosmarium notabile;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1221;N17UC207;Cosmarium regnellii var. pseudoregnellii ;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 103;N17UC211;Cosmarium subcucumis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2828;N17UC214;Cosmarium vexatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1960;N17UC215;Actinastrum hantzschii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 164;N17UC216;Ankistrodesmus bibraianus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1015;N17UC225;Ankistrodesmus gracilis ;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1383;N17UC213;Cosmarium vexatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 990;N17UC229;Ankistrodesmus spiralis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1480;N17UC234;Chlorella ellipsoidea;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 516;N17UC235;Chlorella emersonii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 621;N17UC236;Chlorella fusca;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2928;N17UC237;Chlorella kessleri;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 217;N17UC238;Chlorella minutissima;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 454;N17UC239;Chlorella reisiglii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 267;N17UC217;Ankistrodesmus densus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 167;N17UC218;Ankistrodesmus fusiformis ;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 294;N17UC219;Ankistrodesmus fusiformis ;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 58;N17UC230;Botryococcus braunii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1257;N17UC231;Botryococcus braunii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2042;N17UC10;Scenedesmus armatus var. brevicaudatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2166;N17UC99;Nostoc sp.;UC;F;Portugal;LC, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 682;N17UC228;Ankistrodesmus spiralis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 102;N17UC232;Botryosphaerella sudetica ;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 19;N17UC233;Chlorella ellipsoidea;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 879;N17UC240;Chlorella vulgaris;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1998;N17UC241;Chlorella vulgaris;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2914;N17UC243;Chlorella vulgaris;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 231;N17UC248;Chlorolobion lunulatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 149;N17UC252;Coelastrum reticulatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 165;N17UC253;Coelastrum reticulatum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 150;N17UC254;Coelastrum sphaericum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1276;N17UC255;Crucigenia mucronata;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1275;N17UC256;Crucigenia tetrapedia;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2913;N18UC244;Chlorella sp.;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 608;N18UC247;Chlorolobion braunii;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 181;N18UC250;Coelastrum pseudomicroporum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 182;N18UC251;Coelastrum pseudomicroporum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 974;N18UC260;Chlorosphaeropsis alveolata;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1451;N15UC89;Microchaete tenera ;UC;F;Portugal;S2T2, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 2042;N15UC10;Scenedesmus armatus var brevicaudatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 429;N15UC1;Scenedesmus aculeolatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 533;N15UC5;Scenedesmus acuminatus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 565;N17UC14;Scenedesmus brasiliensis;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 213;N17UC47; Kirchneriella obesa;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 318;N17UC25;Scenedesmus maximus;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 1405;N17UC165;Cylindrocytis brebissoni;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 181;N17UC250;Coelastrum pseudomicroporum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 182;N17UC251;Coelastrum pseudomicroporum;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;ACOI 974;N17UC260;Chlorosphaeropsis alveolata;UC;F;Portugal;M7, 30-60 µmol/m2/s, 23ºC, 16h:8h
+;RCC1054;RCC1054;Stichococcus sp;UPMC;S;International waters? South East Pacific;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC1108;RCC1108;Ostreococcus sp.;UPMC;S;France;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC1119;RCC1119;Ostreococcus mediterraneus;UPMC;S;France;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC112;RCC112;Sarcinochrysis marina;UPMC;S;USA;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC119;RCC119;Tetraselmis sp.;UPMC;S;UNKNOWN;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC128;RCC128;Tetraselmis chui;UPMC;S;UNKNOWN;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC130;RCC130;Tetraselmis striata;UPMC;S;UNKNOWN;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC133;RCC133;Tetraselmis rubens;UPMC;S;UNKNOWN;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC1349;RCC1349;Tisochrysis_lutea;UPMC;S;France;ES, 25 µmol/m2/s, 17ºC,12h:12h
+;RCC139;RCC139;Picochlorum sp.;UPMC;S;International waters, Tropical Atlantic;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC1504;RCC1504;UNKNOWN;;;;
+;RCC1608;RCC1608;Bathycoccus prasinos;UPMC;S;France;K,  35 µmol/m2/s, 15ºC,12h:12h
+;RCC1648;RCC1648;Synechococcus sp. clade IVA;UPMC;S;UK;PCRS11,  35 µmol/m2/s, 15ºC,12h:12h
+;RCC1651;RCC1651;Dolichomastigales Unknown;UPMC;S;UK;K,  35 µmol/m2/s, 15ºC,12h:12h
+;RCC1786;RCC1786;Spirulina sp.;UPMC;S;France;PCRS11,  10 µmol/m2/s, 20ºC,12h:12h
+;RCC1787;RCC1787;Ceratium horridum;UPMC;S;France;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC1811;RCC1811;Chaetoceros_calcitrans;UPMC;S;France;K+Si, 100 µmol/m2/s, 20ºC,12h:12h
+;RCC1871;RCC1871;Chloropicon_roscoffensis;UPMC;S;France;K,  45 µmol/m2/s, 15ºC,12h:12h
+;RCC1935;RCC1935;Gymnochlora dimorpha;UPMC;S;Palau;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC1973;RCC1973;Ceratium massiliense;UPMC;S;France;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC1975;RCC1975;Tetraselmis sp.;UPMC;S;France;F/2,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC1981;RCC1981;Amphidinium testudo;UPMC;S;France;F/2,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC235;RCC235;Tetraselmis sp;UPMC;S;Mediterranean Sea;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC2475;RCC2475;Thecadinium_sp;UPMC;S;France;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC2476;RCC2476;Pleurochrysis sp.;UPMC;S;France;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC2479;RCC2479;Dinophyceae Unknown;UPMC;S;Malaysia;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC2538;RCC2538;Azadinium cf.spinosum;UPMC;S;Norway;K/2ET,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC2539;RCC2539;Karlodinium cf.veneficum;UPMC;S;Norway;K/2ET,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC2604;RCC2604;Tetraselmis sp.;UPMC;S;UK;K,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC2616;RCC2616;Heterocapsa sp.;UPMC;S;Netherlands;F/2,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC262;RCC262;Synechococcus_sp;UPMC;S;France;PCRS11, 20 µmol/m2/s, 22ºC,12h:12h
+;RCC286;RCC286;Ankylochrysis lutea;UPMC;S;UNKNOWN;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC287;RCC287;Chloropicon_sieburthii;UPMC;S;Equatorial Pacific;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC29;RCC29;Synechococcus sp. Clade IIIA;UPMC;S;International waters, Atlantic ocean;PCRS11,  100 µmol/m2/s, 22ºC,12h:12h
+;RCC2942;RCC2942;Trebouxiophyceae Unknown;UPMC;S;UK;K,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC2945;RCC2945;Ulvophyceae Unknwon;UPMC;S;UK;K,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC2946;RCC2946;Synchroma_grande;UPMC;S;Spain;K/2ET,  20 µmol/m2/s, 20ºC,12h:12h
+;RCC2960;RCC2960;Acrochaete sp.;UPMC;S;Japan;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC2964;RCC2964;Stylonema_sp;UPMC;S;Japan;PCRS11,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC2977;RCC2977;Cruciplacolithus sp.;UPMC;S;Japan;K,  100 µmol/m2/s, 22ºC,12h:12h
+;RCC3000;RCC3000;Azadinium sp.nov.;UPMC;S;Italy;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC3038;RCC3038;Alexandrium catenella;UPMC;S;France;K/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC316;RCC316;Synechococcus sp. cladeXVI;UPMC;S;Algeria;PCRS11,  100 µmol/m2/s, 22ºC,12h:12h
+;RCC32;RCC32;Synechococcus sp. cladeIb;UPMC;S;France;PCRS11,  100 µmol/m2/s, 22ºC,12h:12h
+;RCC3390;RCC3390;Guanchochroma wildpretii;UPMC;S;Spain;K,  50 µmol/m2/s, 20ºC,12h:12h
+;RCC3401;RCC3401;Ostreococcus lucimarinus;UPMC;S;USA;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC3402;RCC3402;Picocystis salinarum;UPMC;S;USA;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC347;RCC347;Chlorella sp.;UPMC;S;Kiribati;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC348;RCC348;Tetraselmis sp.;UPMC;S;UNKNOWN;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC350;RCC350;Rhodomonas baltica;UPMC;S;UNKNOWN;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC357;RCC357;Nannochloropsis_sp;UPMC;S;France;F/2,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC376;RCC376;Lotharella_reticulosa;UPMC;S;Mediterranean Sea;K, 100 µmol/m2/s, 20ºC,12h:12h
+;RCC391;RCC391;Mamiella species nov;UPMC;S;Marocco;L1,  100 µmol/m2/s, 22ºC,12h:12h
+;RCC4086;RCC4086;Alexandrium fundyense;UPMC;S;USA;K/2,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC4088;RCC4088;Alexandrium mediterraneum;UPMC;S;Italy;K/2,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC4104;RCC4104;Protoceratium reticulatum;UPMC;S;Japan;f/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC4105;RCC4105;Prorocentrum minimum;UPMC;S;Japan;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC4110;RCC4110;Pycnococcus sp.;UPMC;S;Japan;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC417;RCC417;Mantoniella squamata;UPMC;S;UK;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC42;RCC42;Synechococcus sp. cladeVIa;UPMC;S;Mediterranean Sea;PCRS11,  100 µmol/m2/s, 22ºC,12h:12h
+;RCC4299;RCC4299;Nodularia spumigena;UPMC;S;Denmark;PCRS11,  20 µmol/m2/s, 20ºC,12h:12h
+;RCC431;RCC431;Gomphonema_sp;UPMC;S;France;K+Si,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC446;RCC446;Florenciella parvula;UPMC;S;France;K,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC4497;RCC4497;Pavlova sp.;UPMC;S;Japan;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC4637;RCC4637;Dynophyceae Unknown;UPMC;S;Peru;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC4638;RCC4638;Heterocapsa sp.;UPMC;S;Peru;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC5;RCC5;Dunaliella_sp;UPMC;S;UNKNOWN;K, 100 µmol/m2/s, 20ºC,12h:12h
+;RCC504;RCC504;Microchloropsis gaditana;UPMC;S;Spain;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC540;RCC540;Synechococcus sp. clade IX;UPMC;S;Israel;PCRS11,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC545;RCC545;Synechococcus sp. clade VIII;UPMC;S;Israel;PCRS11,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC562;RCC562;Microchloropsis_gaditana;UPMC;S;Spain;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC571;RCC571;Tetraselmis sp.;UPMC;S;Spain;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC574;RCC574;Chrysochromulina sp.;UPMC;S;Spain;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC6;RCC6;Dunaliella tertiolecta;UPMC;S;Norway;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC619;RCC619;Pyramimonas parkae;UPMC;S;USA;F/2,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC632;RCC632;Picochlorum sp.;UPMC;S;Germany;K,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC650;RCC650;Synechococcus sp. Clade V;UPMC;S;USA;PCRS11,  10 µmol/m2/s, 20ºC,12h:12h
+;RCC653;RCC653;Porphyridium cruentum;UPMC;S;Switzerland;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC655;RCC655;Rhodella maculata;UPMC;S;UK;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC682;RCC682;Bathycoccus prasinos;UPMC;S;Germany;K,  100 µmol/m2/s, 15ºC,12h:12h
+;RCC716;RCC716;Bathycoccus prasinos;UPMC;S;International waters, Indian Ocean;L1,  50 µmol/m2/s, 22ºC,12h:12h
+;RCC717;RCC717;Chloropicon_primus;UPMC;S;International waters, Indian Ocean;K,  20 µmol/m2/s, 20ºC,12h:12h
+;RCC749;RCC749;Alexandrium minutum;UPMC;S;France;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC8;RCC8;Nannochloropsis granulata;UPMC;S;USA;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC809;RCC809;Ostreococcus sp.;UPMC;S;International waters, Tropical Atlantic;L1,  20 µmol/m2/s, 20ºC,12h:12h
+;RCC821;RCC821;Rhinomonas sp.;UPMC;S;France;K,  65 µmol/m2/s, 15ºC,12h:12h
+;RCC856;RCC856;Chloropicon_laureae;UPMC;S;France;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC884;RCC884;Pelagomonas calceolata;UPMC;S;France;K,  20 µmol/m2/s, 20ºC,12h:12h
+;RCC903;RCC903;Coccomyxa sp.;UPMC;S;Israel;K,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC927;RCC927;Prasinoderma singularis;UPMC;S;Chile;K,  20 µmol/m2/s, 20ºC,12h:12h
+;RCC96;RCC96;Aureococcus anophagefferens;UPMC;S;USA;F/2,  100 µmol/m2/s, 20ºC,12h:12h
+;RCC998;RCC998;Chloropicon_mariensis;UPMC;S;France;K,  20 µmol/m2/s, 20ºC,12h:12h
+;RCCArg;RCCArg;Chaetoceros gracilis;UPMC;S;France;UNKNOWN
+;RCCArg;RCCArg;Dunaliella salina;UPMC;S;France;UNKNOWN
+;LEGE 02266;N15001;Sphaerospermopsis sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 03284;N15002;Cuspidothrix sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06102;N15003;Leptolyngbya cf. halophila;CIIMAR;S ;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 11428;N15004;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00049;N15021;unidentified Oscillatoriales;CIIMAR;F;Morocco;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06118;N16029;Leptolyngbya mycoidea;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06127;N16030;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07089;N16031;Leptolyngbya sp;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 13416;N16032;Leptolyngbya sp;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00250;N16033;Anabaena aphanizomenioides;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00259;N16034;Dolichospermum sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06135;N16035;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 12431;N16036;Cyanobium gracile;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06110;N16037;Nodosilinea sp. ;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06114;N16038;Plectonema cf. radiosum;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06130;N16039;Cyanobium sp. ;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06143;N16040;Cyanobium sp. ;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06078;N16041;cf. Oxynema acuminatum;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06119;N16042;Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06139;N16043;Cyanobium sp. ;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07364;N16044;Nodosilinea sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00249;N16045;Sphaerospermopsis sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06137;N16046;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07314;N16047;Nodosilinea sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE XX062;N16048;unidentified filamentous cyanobacterium;CIIMAR;UNKNOWN;UNKNOWN;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06121;N16049;Leptolyngbya sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06124;N16050;Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06133;N16051;Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06144;N16052;unidentified filamentous Synechococcales;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 91093;N16053;Microcystis sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06140;N16054;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07157;N16055;unidentified filamentous cyanobacterium;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07167;N16056;unidentified filamentous cyanobacterium;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06077;N16057;Nostoc sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06109;N16058;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07178;N16059;Rivularia sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 10410;N16060;unidentified Pleurocapsales;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06069;N16061;Nodosilinea sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06112;N16062;unidentified Pseudanabaenaceae cyanobacterium*;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07180;N16063;unidentified filamentous cyanobacterium;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 14445;N16064;Tolypothrix sp.;CIIMAR;F;Colombia;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07091;N16065;Nodosilinea sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06308;N16066;Nodosilinea sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 11397;N16067;Tolypothrix sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 10387;N16068;unidentified unicellular Synechococcales;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06113;N16069;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 12450;N16070;Nostoc sp.;CIIMAR;T;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06148;N16071;aff. Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 10400;N16072;unidentified colonial Synechococcales;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 12447;N16073;Nostoc sp.;CIIMAR;T;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 91352;N17074;Microcystis aeruginosa;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07085;N17075;Nodosilinea sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07189;N17076;Scytonema sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 12411;N17077;aff. Roholtiella sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 99044;N17078;Cylindrospermopsis raciborskii;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 03282;N17079;Cuspidothrix issatschenkoi;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06222;N17080;Planktothrix mougeotii;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07084;N17081;Nodosilinea nodulosa;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06023;N17082;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06145;N17083;Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07171;N17084;Synechococcus nidulans;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07298;N17085;Nodosilinea sp.;CIIMAR;B;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06104;N17086;Nodosilinea nodulosa;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06120;N17087;Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06147;N17088;unidentified Pleurocapsales;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 13412;N17089;Leptolyngbya-like sp.;CIIMAR;UNKNOWN;UNKNOWN;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06101;N17090;Nodosilinea nodulosa;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06016;N17091;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06220;N17092;Tychonema sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07216;N17093;Tychonema sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 91338;N17094;Microcystis aeruginosa;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00037;N17095;Synechocystis salina;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07186;N17096;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 08334;N17097;Sphaerospermopsis sp.;CIIMAR;F;Mexico;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06129;N17098;Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06193;N17099;Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07217;N17100;Tychonema sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07309;N17101;Nodosilinea sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06022;N17102;Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06024;N17103;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06099;N17104;Synechocystis salina;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06174;N17105;Chroococcidiopsis sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 91339;N17106;Microcystis aeruginosa;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/a, 25ºC, 14h:10h
+;LEGE 06015;N17107;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06098;N17108;Cyanobium sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07367;N17109;Synechocystis sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06021;N17110;unidentified filamentous Synechococcales;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06152;N17111;Nodosilinea sp.;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06363;N17112;Tychonema sp.;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 07366;N17113;Cyanobium aff. gracile;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 95046;N17114;Cylindrospermopsis raciborskii;CIIMAR;F;Australia;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 99048;N17115;Cylindrospermopsis raciborskii;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06306;N17116;Synechococcus sp.;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 08333;N17117;unidentified unicellular Synechococcales;CIIMAR;F;Mexico;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00049;N17138;See N15021;CIIMAR;F;Morocco;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00049;N17139;;CIIMAR;F;Morocco;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00049;N17140;;CIIMAR;F;Morocco;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00049;N17141;;CIIMAR;F;Morocco;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 00049;N17142;;CIIMAR;F;Morocco;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06135;N17143;See N16035;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06135;N17144;;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06135;N17145;;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06078;N17146;See N16041;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06078;N17147;;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06078;N17148;;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06078;N17149;;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06078;N17150;;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06078;N17151;;CIIMAR;B;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06137;N17152;See N16046;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06137;N17153;;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06137;N17154;;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06137;N17155;;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06137;N17156;;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 06137;N17157 ;;CIIMAR;S;Portugal;Z825, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 08335;N15005;Sphaerospermopsis sp.;CIIMAR;F;Mexico;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;LEGE 91351;N15011;Microcystis aeruginosa;CIIMAR;F;Portugal;Z8, 10-30 µmol/m2/s, 25ºC, 14h:10h
+;;;;;;;
+;;;;;;;
+;;;;;;;
+;;;Yellow: strains used in cryopreservation (CIIMAR);;;;
