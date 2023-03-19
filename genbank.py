@@ -10,6 +10,11 @@ from time import ctime,perf_counter
 import requests
 import pandas as pd
 
+#######################
+# List Address source db
+# ARGS    = "https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt"
+# ARGS2   =
+#######################
 
 # Credits
 # Authors: federico-rosatelli (Federico Rosatelli), AxnNxs (Mattia Di Gesaro)
@@ -20,6 +25,23 @@ import pandas as pd
 # hashlib:      "https://docs.python.org/3/library/hashlib.html"
 # argparse:     "https://docs.python.org/3/library/argparse.html"
 # pymongo       "https://pymongo.readthedocs.io/en/stable/"
+
+class Global:
+    CLUSTER = "localhost:27017"
+    WEBSOURCE = {
+        "Algae":{
+            "Web":"https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt",
+            "File":"algaeDatabase.csv"
+        },
+        "MicroAlgae":{
+            "Web":"",
+            "File":"microAlgaeProva.csv"
+        }
+    }
+    SQL = {
+        "Init":"init.sql",
+        "Store":"Biologia.db"
+    }
 
 
 class  PrintWarning:
@@ -145,7 +167,7 @@ class Parsing(object):
 
 class Database:
     def __init__(self) -> None:
-        self.file = "Biologia.db"
+        self.file = Global.SQL["Store"]
         self.client = None
         self.connection = None
         self.printWarning = PrintWarning(10)
@@ -155,8 +177,8 @@ class Database:
     # def save_on_mongo(self)
     def save_on_mongo(self,tuple_of_array:tuple) -> None:
         PrintWarning(8).stdout("\nStart saving on database")
-        ip = CLUSTER.split(":")[0]
-        port = int(CLUSTER.split(":")[1])
+        ip = Global.CLUSTER.split(":")[0]
+        port = int(Global.CLUSTER.split(":")[1])
         self.client = MongoClient(f'{ip}', port)
         db = self.client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
         collection_data = db["genetic_data"]
@@ -229,11 +251,13 @@ class Database:
 
         self.totLength = len(dataSource)
         self.dataSource = dataSource
+        self.diffAlg = {}
         if saveOnJson:
             self.save_on_json()
 
         if algae:
             totAlgae,same = self.isAlgae(dataSource)
+            self.diffAlg["Algae"] = same
             algaeSource = {}
             for algae in totAlgae:
                 algaeSource[algae] = dataSource[algae]
@@ -244,7 +268,8 @@ class Database:
 
         if micro_algae:
             # ? self.datasource vs. datasource
-            totAlgae,same = self.isMicorAlgae(self.dataSource)
+            totAlgae,same = self.isMicroAlgae(dataSource)
+            self.diffAlg["MicroAlgae"] = same
             algaeSource = {}
             for algae in totAlgae:
                 algaeSource[algae] = dataSource[algae]
@@ -253,29 +278,84 @@ class Database:
             if saveOnJson:
                 self.save_on_json(fileName="microAlgaeSource.json")
 
+        #
+        #self.printDifferenceAlgae()
+        dataDiff = self.checkDifferenceAlgae()
+
         return self.dataSource
+
+    def printDifferenceAlgae(self) -> list:
+
+        # list1 = [1,2,3,5,7]
+        # list2 = [1,2,4,6,8]
+        # list3 = [1,4,6]
+
+        # listatot = [3,5,6,7,8]
+        # 
+
+
+        #print algae non contenute in microalgae
+        diff = [self.diffAlg[key] for key in self.diffAlg]
+        print(len(diff[0])-len(diff[1]))
+
+
+    def checkDifferenceAlgae(self) -> list:
+        #check algae non contenute in microalgae
+        diff = [self.diffAlg[key] for key in self.diffAlg]
+        tot = {}
+        for i in range(len(diff)):
+            for k in range(len(diff[i])):
+                if diff[i][k] not in tot:
+                    tot[diff[i][k]] = 1
+                else:
+                    tot[diff[i][k]] += 1  
+        algTot = []
+        for i in tot:
+            if tot[i] == 1:
+                algTot.append(i)
+        return algTot
+
+
+        
+        # for i in range(len(diff)):
+        #     print("lista ", i, " in stampa... ")
+        #     diffsort = sorted(diff[i])
+        #     for k in range(len(diffsort)):
+        #         print(diffsort[k])
+        # print("adesso i dati presenti soltanto una volta")
+        # algTotsort = sorted(algTot)
+        # print(algTotsort)
+        # print(len(algTotsort))
+        # return algTotsort
+
+        # [1,2,3,4,5,6],[2,5,8,2,6],[1,5,3]
     
     def save_on_json(self,fileName:str="dataSource.json") ->None:
         with open(fileName,"w") as js:
             json.dump(self.dataSource,js,indent=4)
     
     def isAlgae(self,dataSource,rewrite:bool=False) ->list:
-        if not os.path.isfile("algaeDatabase.csv") or rewrite:
-            r = requests.get("https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt")
-            with open("algaeDatabase.csv", "w") as wr:
+        if not os.path.isfile(Global.WEBSOURCE["Algae"]["File"]) or rewrite:
+            r = requests.get(Global.WEBSOURCE["Algae"]["Web"])
+            with open(Global.WEBSOURCE["Algae"]["File"], "w") as wr:
                 dataContent = r.text
                 dataContent = dataContent.split("\n")
                 writer = csv.writer(wr)
                 for i in range(len(dataContent)):
                     dataContent[i] = dataContent[i].split("\t")
                     writer.writerow(dataContent[i])
-        file = open("algaeDatabase.csv","r")
+        file = open(Global.WEBSOURCE["Algae"]["File"],"r")
         dataAlgae = csv.reader(file)
         dataAlgae = list(dataAlgae)
         totAlgae = []
         unico = []
         for key in dataSource:
-            val_key = key.split(" ")[0]
+            keySplit = key.split(" ")
+            if keySplit[0] == "cf.":
+                val_key = key.split(" ")[1]
+            else:
+                val_key = key.split(" ")[0]
+
             for algae in dataAlgae:
                 if len(algae) > 1 and val_key.lower() in algae[2].lower():
                     totAlgae.append(key)
@@ -283,8 +363,8 @@ class Database:
                         unico.append(val_key.lower())
         return totAlgae,unico
 
-    def isMicorAlgae(self,dataSource):
-        rl = open('microAlgaeProva.csv').readlines()
+    def isMicroAlgae(self,dataSource):
+        rl = open(Global.WEBSOURCE["MicroAlgae"]["File"]).readlines()
         dataAlgae = []
         for i in range(len(rl)):
             data = rl[i].split(";")
@@ -292,7 +372,12 @@ class Database:
         totAlgae = []
         unico = []
         for key in dataSource:
-            val_key = key.split(" ")[0] 
+            keySplit = key.split(" ")
+            if keySplit[0] == "cf.":
+                val_key = key.split(" ")[1]
+            else:
+                val_key = key.split(" ")[0]
+
             for algae in dataAlgae:
                 if len(algae) > 1 and val_key.lower() in algae[2].lower():
                     totAlgae.append(key)
