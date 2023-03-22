@@ -279,8 +279,9 @@ class Database:
                 self.save_on_json(fileName="microAlgaeSource.json")
 
         #
-        #self.printDifferenceAlgae()
+        self.printDifferenceAlgae()
         dataDiff = self.checkDifferenceAlgae()
+        print(len(dataDiff))
 
         return self.dataSource
 
@@ -414,7 +415,7 @@ class bcolors:
 
 def main(args:dict) -> None:
     d = Database()
-    if args["nosql_mongo"] and args["sql"]:
+    if args["nosql_mongo"] and args["sqlite3"]:
         return PrintWarning(5).stdout("Can't select both mongo-db and sql for storing")
     if args["file"]:
         p = Parsing(args["file"])
@@ -422,7 +423,7 @@ def main(args:dict) -> None:
         if args["json"]:
             p.save_data((data,conv))
         
-        if args["mongodb"]:
+        if args["nosql_mongo"]:
             d.save_on_mongo((data,conv))
         if args["sql"]:
             d.save_on_sql((data,conv))
