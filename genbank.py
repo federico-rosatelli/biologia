@@ -1,5 +1,6 @@
 import csv
 import os
+import random
 from Bio import SeqIO
 import json
 import hashlib
@@ -9,6 +10,7 @@ import sqlite3
 from time import ctime,perf_counter
 import requests
 import pandas as pd
+import smith_waterman
 
 #######################
 # List Address source db
@@ -31,11 +33,11 @@ class Global:
     WEBSOURCE = {
         "Algae":{
             "Web":"https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt",
-            "File":"algaeDatabase.csv"
+            "File":"data/databaseCsv/algaeDatabase.csv"
         },
         "MicroAlgae":{
             "Web":"",
-            "File":"microAlgaeProva.csv"
+            "File":"data/databaseCsv/microAlgaeDatabase.csv"
         }
     }
     SQL = {
@@ -166,15 +168,20 @@ class Parsing(object):
 
 
 class Database:
-    def __init__(self) -> None:
+    def __init__(self,verbose=False) -> None:
         self.file = Global.SQL["Store"]
         self.client = None
         self.connection = None
         self.printWarning = PrintWarning(10)
         self.dataSource = {}
         self.totLength = 0
+        self.diffAlg = {}
+        self.verbose = verbose
     
-    # def save_on_mongo(self)
+    
+    def listSource(self):
+        return [key for key in self.dataSource]
+
     def save_on_mongo(self,tuple_of_array:tuple) -> None:
         PrintWarning(8).stdout("\nStart saving on database")
         ip = Global.CLUSTER.split(":")[0]
@@ -251,7 +258,7 @@ class Database:
 
         self.totLength = len(dataSource)
         self.dataSource = dataSource
-        self.diffAlg = {}
+        
         if saveOnJson:
             self.save_on_json()
 
@@ -279,21 +286,62 @@ class Database:
                 self.save_on_json(fileName="microAlgaeSource.json")
 
         #
-        self.printDifferenceAlgae()
-        dataDiff = self.checkDifferenceAlgae()
-        print(len(dataDiff))
-
+        # self.printDifferenceAlgae()
+        # dataDiff = self.checkDifferenceAlgae()
         return self.dataSource
+    
+    def alignmentSeq(self,f1_key:str,f2_key:str) -> str:
+        db = self.client["Biologia"]
+        collection_data = db["genetic_data"]
+        collection_convert = db["hex_to_seq"]
+        info = {"Features":{"$elemMatch":{"Type":"source","organism":f1_key}}}
+        finder = collection_data.find_one(info)
+        hex1 = finder['Seq_Hex']
+        info2 = {"Features":{"$elemMatch":{"Type":"source","organism":f2_key}}}
+        finder2 = collection_data.find_one(info2)
+        hex2 = finder2['Seq_Hex']
+
+        info_hex = {"Seq_Hex":hex1}
+        finder_hex = collection_convert.find_one(info_hex)
+        seq1 = finder_hex['Seq_Raw']
+        info_hex = {"Seq_Hex":hex2}
+        finder_hex = collection_convert.find_one(info_hex)
+        seq2 = finder_hex['Seq_Raw']
+
+        s1,s2 = smith_waterman.algorithm(seq1,seq2,show=self.verbose)
+
+        return s1,s2
+    
+    def saveFileSeq(self,name:str,seq1:str,seq2:str) -> None:
+        seq1_fasta = ""
+        for i in range(len(seq1)):
+            if i%100 == 0 and i != 0:
+                seq1_fasta += "\n"
+            elif i%10 == 0 and i != 0:
+                seq1_fasta += " "
+            seq1_fasta += seq1[i]
+        seq2_fasta = ""
+        for i in range(len(seq2)):
+            if i%100 == 0 and i != 0:
+                seq2_fasta += "\n"
+            elif i%10 == 0 and i != 0:
+                seq2_fasta += " "
+            seq2_fasta += seq2[i]
+        with open(name,"w") as wr:
+            wr.write(seq1_fasta+"\n\n//\n\n"+seq2_fasta)
+    
+    def alignment(self,fileIn,fileOut) -> None:
+        rd = open(fileIn).readlines()
+
+        for i in range(len(rd)):
+            for j in range(i+1,len(rd)):
+                seq1,seq2 = self.alignmentSeq(rd[i].strip(),rd[j].strip())
+                PrintWarning(3).stdout(rd[i].strip(),rd[j].strip())
+                self.saveFileSeq(f"data/alignments/{fileOut.split('.')[0]}_{rd[i].strip()}_{rd[j].strip()}.txt",seq1,seq2)
+
+
 
     def printDifferenceAlgae(self) -> list:
-
-        # list1 = [1,2,3,5,7]
-        # list2 = [1,2,4,6,8]
-        # list3 = [1,4,6]
-
-        # listatot = [3,5,6,7,8]
-        # 
-
 
         #print algae non contenute in microalgae
         diff = [self.diffAlg[key] for key in self.diffAlg]
@@ -332,7 +380,7 @@ class Database:
         # [1,2,3,4,5,6],[2,5,8,2,6],[1,5,3]
     
     def save_on_json(self,fileName:str="dataSource.json") ->None:
-        with open(fileName,"w") as js:
+        with open(f"data/sourceJson/{fileName}","w") as js:
             json.dump(self.dataSource,js,indent=4)
     
     def isAlgae(self,dataSource,rewrite:bool=False) ->list:
@@ -414,7 +462,10 @@ class bcolors:
 
 
 def main(args:dict) -> None:
-    d = Database()
+    v = False
+    if args["verbose"]:
+        v = True
+    d = Database(verbose=v)
     if args["nosql_mongo"] and args["sqlite3"]:
         return PrintWarning(5).stdout("Can't select both mongo-db and sql for storing")
     if args["file"]:
@@ -427,7 +478,7 @@ def main(args:dict) -> None:
             d.save_on_mongo((data,conv))
         if args["sql"]:
             d.save_on_sql((data,conv))
-    if args["find"]:
+    elif args["find"]:
         finder = {"Features":{"$elemMatch":{"Type":"source"}}}
         save = False
         algae = False
@@ -439,6 +490,12 @@ def main(args:dict) -> None:
         if args["micro_algae"]:
             micro = True
         data = d.get_data_from_mongo(finder,saveOnJson=save,algae=algae,micro_algae=micro)
+        if args["list"]:
+            PrintWarning(4).stdout(d.listSource())
+        elif args["alignment"]:
+            fileIn,fileOut = args["alignment"]
+            d.alignment(fileIn=fileIn,fileOut=fileOut)
+            
     #d.isMicorAlgae()
     
     return
@@ -454,6 +511,9 @@ if __name__ == "__main__":
                     prog='Biologia Database Parsing',
                     description='What the program does',
                     epilog='Text at the bottom of help')
+    parser.add_argument('-v', '--verbose',
+                        action='store_true')
+    parser.add_argument('-f', '--file')
     parser.add_argument('-n', '--nosql-mongo',
                         action='store_true')
     parser.add_argument('-s', '--sqlite3',
@@ -466,7 +526,12 @@ if __name__ == "__main__":
                         action='store_true')
     parser.add_argument('-m','--micro-algae',
                         action='store_true')
-    parser.add_argument('-f', '--file')
+    parser.add_argument('-l','--list',
+                        action='store_true')
+    parser.add_argument('--alignment',nargs=2,
+                        metavar=('fromfile', 'tofile'),
+                        help='Align all organisms in __fromfile__ and save it in __tofile__',
+                        )
     args = vars(parser.parse_args())
     main(args)
     

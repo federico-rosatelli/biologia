@@ -1,3 +1,4 @@
 *.json
 *.db
 *.gbk
+__pycache__/

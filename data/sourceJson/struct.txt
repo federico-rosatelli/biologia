@@ -1,0 +1,18 @@
+SOURCE JSON STRUCT
+
+
+"KEY":[
+    "ID"
+]
+
+KEY     = Name of the organism in the database
+ID      = LOCUS VERSION of the organism
+
+Example:
+"Chrysochromulina sp. JD-2012": [
+        "JX661041.1",
+        "JX661040.1",
+        "JX661039.1",
+        "JX661038.1",
+        "JX661037.1"
+],
