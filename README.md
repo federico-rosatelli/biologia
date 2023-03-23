@@ -1,6 +1,6 @@
 # MicroAlgae Parsing & Searching
 
-`federico-rosatelli & AxnNxs & Loriv3`
+`federico-rosatelli & AxnNxs & Loriv3 & Samseys`
 
 ![Algae Project Struct](algaeStruct.png "Struct of the Project")
 
