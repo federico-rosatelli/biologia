@@ -335,7 +335,7 @@ class Database:
             return None, None
         seq2 = finder_hex['Seq_Raw']
 
-        s1,s2 = smith_waterman.algorithm(seq1,seq2,show=self.verbose)
+        s1,s2 = smith_waterman.local_align(seq1,seq2,show=self.verbose)
 
         return s1,s2
     
