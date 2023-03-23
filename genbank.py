@@ -303,6 +303,7 @@ class Database:
         collection_data = db["genetic_data"]
         collection_convert = db["hex_to_seq"]
         info = {"Features":{"$elemMatch":{"Type":"source","organism":f1_key}}}
+        # FIND PROTEIN
         finder = collection_data.find_one(info)
         if not finder:
             PrintWarning(5).stdout(f"Error searching {f1_key}: Organism Not Found")
@@ -462,7 +463,25 @@ class Database:
                     if val_key.lower() not in unico:
                         unico.append(val_key.lower())
         return totAlgae,unico
-        
+    
+    def toFasta(self,name):
+        print(name)
+        db = self.client["Biologia"]
+        collection_data = db["genetic_data"]
+        collection_convert = db["hex_to_seq"]
+        info = {"Features":{"$elemMatch":{"Type":"source","organism":name}}}
+        # FIND PROTEIN
+        finder = collection_data.find(info)
+        if not finder:
+            PrintWarning(5).stdout(f"Error searching {name}: Organism Not Found")
+            return None, None
+        cds = []
+        #print("\n\n".join([i for i in finder]))
+        # for i in finder["Features"]:
+        #     print(i)
+        #     if i["Type"] == "CDS":
+        #         cds.append(i)
+        # print(cds)
 
 
 
@@ -524,6 +543,9 @@ def main(args:dict) -> None:
         elif args["alignment"]:
             fileIn,fileOut = args["alignment"]
             d.alignment(fileIn=fileIn,fileOut=fileOut)
+        if args["fasta"]:
+            #print(args["fasta"])
+            d.toFasta(args["fasta"])
             
     #d.isMicorAlgae()
     
@@ -561,6 +583,7 @@ if __name__ == "__main__":
                         metavar=('fromfile', 'tofile'),
                         help='Align all organisms in __fromfile__ and save it in __tofile__',
                         )
+    parser.add_argument('--fasta')
     args = vars(parser.parse_args())
     main(args)
     

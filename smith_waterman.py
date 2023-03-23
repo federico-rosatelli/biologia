@@ -82,6 +82,7 @@ def local_align(seq1, seq2, gap=-1,show=False)->tuple:
     traceback = []
     print(f"Table length. First sequence:{len(seq1)}, Second sequence:{len(seq2)}")
     print(f"Max term: {score_matrix[i][j]}; in index: {max_index}")
+    f1 = 0
     while score_matrix[i][j] != 0:
         traceback.append((i,j))
         # if score_matrix[i-1][j-1] == 0:
@@ -93,6 +94,7 @@ def local_align(seq1, seq2, gap=-1,show=False)->tuple:
             aligned_seq1 = seq1[i-1] + aligned_seq1
             aligned_seq2 = seq2[j-1] + aligned_seq2
             i, j = i-1, j-1
+            f1 += 1
         elif score_matrix[i-1][j] >= score_matrix[i-1][j-1] and score_matrix[i-1][j] >= score_matrix[i][j-1]:
             aligned_seq1 = seq1[i-1] + aligned_seq1
             aligned_seq2 = '-' + aligned_seq2
@@ -104,5 +106,5 @@ def local_align(seq1, seq2, gap=-1,show=False)->tuple:
     
     if show:
         printTable(score_matrix,(seq1,seq2),trace=traceback)
-
+    print(f"{(f1/len(aligned_seq1))*100}% of alignment")
     return aligned_seq1, aligned_seq2
