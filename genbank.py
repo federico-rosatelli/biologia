@@ -44,6 +44,14 @@ class Global:
         "Init":"init.sql",
         "Store":"Biologia.db"
     }
+    JSON = {
+        "Path":"data/sourceJson/",
+        "Type":"JSONFile"
+    }
+    ALIGNMENT = {
+        "Path":"data/alignments/",
+        "Type":"TXTFile"
+    }
 
 
 class  PrintWarning:
@@ -158,7 +166,7 @@ class Parsing(object):
     
     def save_data(self, json_array:tuple) -> None:
         # crea un file json contentene i dati parsati - salvare in DB?
-        with open("datastruct.json","w") as js:
+        with open(f"{Global.JSON['Path']}datastruct.json","w") as js:
             json.dump({
                         "struct":json_array[0],
                         "hex":json_array[1]
@@ -296,16 +304,35 @@ class Database:
         collection_convert = db["hex_to_seq"]
         info = {"Features":{"$elemMatch":{"Type":"source","organism":f1_key}}}
         finder = collection_data.find_one(info)
+        if not finder:
+            PrintWarning(5).stdout(f"Error searching {f1_key}: Organism Not Found")
+            return None, None
+        if not 'Seq_Hex' in finder:
+            PrintWarning(5).stdout(f"Error searching {f1_key}: Hex Sequence Not Found")
+            return None, None
         hex1 = finder['Seq_Hex']
         info2 = {"Features":{"$elemMatch":{"Type":"source","organism":f2_key}}}
         finder2 = collection_data.find_one(info2)
+        if not finder2:
+            PrintWarning(5).stdout(f"Error searching {f2_key}: Organism Not Found")
+            return None, None
+
+        if not 'Seq_Hex' in finder2:
+            PrintWarning(5).stdout(f"Error searching {f2_key}: Hex Sequence Not Found")
+            return None, None
         hex2 = finder2['Seq_Hex']
 
         info_hex = {"Seq_Hex":hex1}
         finder_hex = collection_convert.find_one(info_hex)
+        if not finder_hex:
+            PrintWarning(5).stdout(f"Error searching {f1_key}: Hex Sequence Not Found in the Database")
+            return None, None
         seq1 = finder_hex['Seq_Raw']
         info_hex = {"Seq_Hex":hex2}
         finder_hex = collection_convert.find_one(info_hex)
+        if not finder_hex:
+            PrintWarning(5).stdout(f"Error searching {f2_key}: Hex Sequence Not Found in the Database")
+            return None, None
         seq2 = finder_hex['Seq_Raw']
 
         s1,s2 = smith_waterman.algorithm(seq1,seq2,show=self.verbose)
@@ -335,9 +362,11 @@ class Database:
 
         for i in range(len(rd)):
             for j in range(i+1,len(rd)):
+                PrintWarning(3).stdout(f"Align {rd[i].strip()} with {rd[j].strip()}")
                 seq1,seq2 = self.alignmentSeq(rd[i].strip(),rd[j].strip())
-                PrintWarning(3).stdout(rd[i].strip(),rd[j].strip())
-                self.saveFileSeq(f"data/alignments/{fileOut.split('.')[0]}_{rd[i].strip()}_{rd[j].strip()}.txt",seq1,seq2)
+                if seq1 and seq2:   
+                    PrintWarning(3).stdout(f"Sequence length: {len(seq1)}\n")
+                    self.saveFileSeq(f"{Global.ALIGNMENT['Path']}{fileOut.split('.')[0]}_{rd[i].strip()}_{rd[j].strip()}.txt",seq1,seq2)
 
 
 
@@ -380,7 +409,7 @@ class Database:
         # [1,2,3,4,5,6],[2,5,8,2,6],[1,5,3]
     
     def save_on_json(self,fileName:str="dataSource.json") ->None:
-        with open(f"data/sourceJson/{fileName}","w") as js:
+        with open(f"{Global.JSON['Path']}{fileName}","w") as js:
             json.dump(self.dataSource,js,indent=4)
     
     def isAlgae(self,dataSource,rewrite:bool=False) ->list:
