@@ -18,14 +18,14 @@ class bcolors:
 
 def printTable(table,gene,trace=[]):
     #print([i for i in range(len(table[0]))])
-    indx = "      "
-    for i in range(len(table[0])-1):
+    indx = "  "
+    for i in range(trace[len(trace)-1][1],trace[len(trace)-1][1]+10):
         indx += gene[1][i]+" "*3
     print(indx)
-    print('_'*len(table[0])*4)
-    for i in range(len(table)):
+    print('_'*10*4)
+    for i in range(trace[len(trace)-1][0],trace[len(trace)-1][0]+10):
         print("| ",end="")
-        for j in range(len(table[i])):
+        for j in range(trace[len(trace)-1][1],trace[len(trace)-1][1]+10):
             #print(table[i][j])
             if (i,j) in trace:
                 print(bcolors.OKGREEN+str(table[i][j])+bcolors.ENDC+" "*(2-len(str(table[i][j]))),end="| ")
@@ -35,6 +35,7 @@ def printTable(table,gene,trace=[]):
             print(gene[0][i-1])
         else:
             print("")
+    print('\n')
 
 def saveTable(table,trace=[]):
     color = [["w" for j in range(len(table[0]))]for i in range(len(table))]
@@ -101,7 +102,7 @@ def local_align(seq1, seq2, gap=-1,show=False)->tuple:
             aligned_seq2 = seq2[j-1] + aligned_seq2
             j -= 1
     
-    if show and len(seq1) < 80 and len(seq2) < 40:
+    if show:
         printTable(score_matrix,(seq1,seq2),trace=traceback)
 
     return aligned_seq1, aligned_seq2
