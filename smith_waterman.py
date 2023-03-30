@@ -64,12 +64,15 @@ def saveTable(table,trace=[]):
 
 
 class Alignment:
-    def __init__(self,seq1:str,seq2:str,gap:int=1,show_table:tuple=False) -> None:
-        self.seq1 = seq1
-        self.seq2 = seq2
+    def __init__(self,*seqs:str,gap:int=1,show_table:bool=False) -> None:
+        if len(seqs)<2:
+            print(bcolors.FAIL+f"MinMaxError: input len for sequences must be >= 2, got {len(seqs)}"+bcolors.ENDC)
+            return
+        self.seqs = seqs
+        self.seq1 = seqs[0]
+        self.seq2 = seqs[1]
         self.gap = gap
         self.show_table = show_table
-        self.score_matrix, self.max_index_score_matrix = self.createScoreMatrix(len(seq1),len(seq2))
         self.aligned_seq1 = str
         self.aligned_seq2 = str
     
@@ -100,23 +103,27 @@ class Alignment:
                     max_index = (i, j)
         return score_matrix,max_index
 
-    def local_alignment(self,save_table=False):
+    def localAlignment(self,save_table=False) -> tuple:
+        if len(self.seqs)>2:
+            print(bcolors.WARN_BOX+f"Warning! Only 2 arguments were expected, but got {len(self.seqs)}.\n\t-The algorithm will use only the first 2 sequences..."+bcolors.ENDC)
         aligned_seq1 = ""
         aligned_seq2 = ""
 
-        i, j = self.max_index_score_matrix
+        score_matrix, max_index_score_matrix = self.createScoreMatrix(len(self.seq1),len(self.seq2))
+
+        i, j = max_index_score_matrix
         traceback = []
         print(f"Table length. First sequence:{len(self.seq1)}, Second sequence:{len(self.seq2)}")
-        print(f"Max term: {self.score_matrix[i][j]}; in index: {self.max_index_score_matrix}")
+        print(f"Max term: {score_matrix[i][j]}; in index: {max_index_score_matrix}")
         f1 = 0
-        while self.score_matrix[i][j] != 0:
+        while score_matrix[i][j] != 0:
             traceback.append((i,j))
-            if self.score_matrix[i-1][j-1] >= self.score_matrix[i-1][j] and self.score_matrix[i-1][j-1] >= self.score_matrix[i][j-1]:
+            if score_matrix[i-1][j-1] >= score_matrix[i-1][j] and score_matrix[i-1][j-1] >= score_matrix[i][j-1]:
                 aligned_seq1 = self.seq1[i-1] + aligned_seq1
                 aligned_seq2 = self.seq2[j-1] + aligned_seq2
                 i, j = i-1, j-1
                 f1 += 1
-            elif self.score_matrix[i-1][j] >= self.score_matrix[i-1][j-1] and self.score_matrix[i-1][j] >= self.score_matrix[i][j-1]:
+            elif score_matrix[i-1][j] >= score_matrix[i-1][j-1] and score_matrix[i-1][j] >= score_matrix[i][j-1]:
                 aligned_seq1 = self.seq1[i-1] + aligned_seq1
                 aligned_seq2 = '-' + aligned_seq2
                 i -= 1
@@ -126,8 +133,11 @@ class Alignment:
                 j -= 1
         
         if self.show_table:
-            printTable(self.score_matrix,(self.seq1,self.seq2),trace=traceback)
+            printTable(score_matrix,(self.seq1,self.seq2),trace=traceback)
             if save_table:
-                saveTable(self.score_matrix,trace=traceback)
+                saveTable(score_matrix,trace=traceback)
         print(f"{(f1/len(aligned_seq1))*100}% of alignment")
         return aligned_seq1, aligned_seq2
+    
+    def globalAlignment(self):
+        return 0

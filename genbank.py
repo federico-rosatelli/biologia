@@ -338,7 +338,7 @@ class Database:
 
         smwt = smith_waterman.Alignment(seq1,seq2,show_table=self.verbose)
 
-        s1,s2 = smwt.local_alignment()
+        s1,s2 = smwt.localAlignment()
 
         return s1,s2
     
