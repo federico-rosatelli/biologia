@@ -2,4 +2,3 @@ Synechococcales cyanobacterium PMC 1088.18
 Chlorella sp. MOW10
 Chaetoceros calcitrans
 Chlorella sp. MOW4
-Dunaliella viridis

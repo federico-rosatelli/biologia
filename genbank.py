@@ -336,7 +336,9 @@ class Database:
             return None, None
         seq2 = finder_hex['Seq_Raw']
 
-        s1,s2 = smith_waterman.local_align(seq1,seq2,show=self.verbose)
+        smwt = smith_waterman.Alignment(seq1,seq2,show_table=self.verbose)
+
+        s1,s2 = smwt.local_alignment()
 
         return s1,s2
     
@@ -394,20 +396,6 @@ class Database:
                 algTot.append(i)
         return algTot
 
-
-        
-        # for i in range(len(diff)):
-        #     print("lista ", i, " in stampa... ")
-        #     diffsort = sorted(diff[i])
-        #     for k in range(len(diffsort)):
-        #         print(diffsort[k])
-        # print("adesso i dati presenti soltanto una volta")
-        # algTotsort = sorted(algTot)
-        # print(algTotsort)
-        # print(len(algTotsort))
-        # return algTotsort
-
-        # [1,2,3,4,5,6],[2,5,8,2,6],[1,5,3]
     
     def save_on_json(self,fileName:str="dataSource.json") ->None:
         with open(f"{Global.JSON['Path']}{fileName}","w") as js:
@@ -476,15 +464,6 @@ class Database:
             PrintWarning(5).stdout(f"Error searching {name}: Organism Not Found")
             return None, None
         cds = []
-        #print("\n\n".join([i for i in finder]))
-        # for i in finder["Features"]:
-        #     print(i)
-        #     if i["Type"] == "CDS":
-        #         cds.append(i)
-        # print(cds)
-
-
-
 
 
     def file_exists(self)-> bool:
