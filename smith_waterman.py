@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
 import pandas as pd
+from Bio.Seq import Seq
 
 
 class bcolors:
@@ -32,7 +33,7 @@ def printTable(table,gene,trace=[]):
             else:
                 print(str(table[i][j])+" "*(2-len(str(table[i][j]))),end="| ")
         if i != 0:
-            print(gene[0][i-1])
+            print(gene[0][i])
         else:
             print("")
     print('\n')
@@ -68,7 +69,7 @@ class Alignment:
         if len(seqs)<2:
             print(bcolors.FAIL+f"MinMaxError: input len for sequences must be >= 2, got {len(seqs)}"+bcolors.ENDC)
             return
-        self.seqs = seqs
+        self.seqs = [Seq(i) for i in seqs]
         self.seq1 = seqs[0]
         self.seq2 = seqs[1]
         self.gap = gap
@@ -77,10 +78,17 @@ class Alignment:
         self.aligned_seq2 = str
     
     def __str__(self) -> str:
-        return self.seq1 + "\n" + self.seq2
+        return '\n'.join(self.seqs)
 
     def __len__(self) -> int:
-        return len(self.seq1)*len(self.seq2)
+        x = 1
+        for i in self.seqs:
+            x *= len(i)
+        return x
+    
+    def __call__(self, seq:str) -> list:
+        self.seqs.append(seq)
+        return self.seqs
 
     def createScoreMatrix(self,lnSeq1:int,lnSeq2:int) -> tuple:
         score_matrix = [[0 for _ in range(lnSeq2 + 1)] for _ in range(lnSeq1 + 1)]
@@ -103,7 +111,7 @@ class Alignment:
                     max_index = (i, j)
         return score_matrix,max_index
 
-    def localAlignment(self,save_table=False) -> tuple:
+    def localAlignment(self,save_table:bool=False) -> tuple:
         if len(self.seqs)>2:
             print(bcolors.WARN_BOX+f"Warning! Only 2 arguments were expected, but got {len(self.seqs)}.\n\t-The algorithm will use only the first 2 sequences..."+bcolors.ENDC)
         aligned_seq1 = ""
