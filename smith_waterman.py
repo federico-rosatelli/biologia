@@ -39,6 +39,8 @@ def printTable(table,gene,trace=[]):
     print('\n')
 
 def saveTable(table,trace=[]):
+    if len(table)<40 or len(table[0])<40:
+        return
     tableCopy = []
     for i in range(10,40):
         tbCp = []
@@ -74,8 +76,6 @@ class Alignment:
         self.seq2 = seqs[1]
         self.gap = gap
         self.show_table = show_table
-        self.aligned_seq1 = str
-        self.aligned_seq2 = str
     
     def __str__(self) -> str:
         return '\n'.join(self.seqs)
@@ -111,7 +111,7 @@ class Alignment:
                     max_index = (i, j)
         return score_matrix,max_index
 
-    def localAlignment(self,save_table:bool=False) -> tuple:
+    def localAlignment(self,save_table:bool=True) -> tuple:
         if len(self.seqs)>2:
             print(bcolors.WARN_BOX+f"Warning! Only 2 arguments were expected, but got {len(self.seqs)}.\n\t-The algorithm will use only the first 2 sequences..."+bcolors.ENDC)
         aligned_seq1 = ""
@@ -149,3 +149,7 @@ class Alignment:
     
     def globalAlignment(self):
         return 0
+
+
+# a = Alignment("AGTCCCTGATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTCCCTGATTT","TTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGT",show_table=True)
+# a.localAlignment(save_table=True)

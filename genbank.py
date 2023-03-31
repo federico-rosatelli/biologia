@@ -176,10 +176,12 @@ class Parsing(object):
 
 
 class Database:
-    def __init__(self,verbose=False) -> None:
+    def __init__(self,verbose=False,type:str="") -> None:
         self.file = Global.SQL["Store"]
+
         self.client = None
         self.connection = None
+        self.mongo_collections = (type+"_data",type+"_hex")
         self.printWarning = PrintWarning(10)
         self.dataSource = {}
         self.totLength = 0
@@ -196,8 +198,9 @@ class Database:
         port = int(Global.CLUSTER.split(":")[1])
         self.client = MongoClient(f'{ip}', port)
         db = self.client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
-        collection_data = db["genetic_data"]
-        collection_convert = db["hex_to_seq"]
+        print(self.mongo_collections)
+        collection_data = db[self.mongo_collections[0]]
+        collection_convert = db[self.mongo_collections[1]]
         count = 0
         last = -1
         for i in range(len(tuple_of_array[0])):
@@ -249,8 +252,8 @@ class Database:
             port = int(CLUSTER.split(":")[1])
             self.client = MongoClient(f'{ip}', port)
         db = self.client["Biologia"]
-        collection_data = db["genetic_data"]
-        collection_convert = db["hex_to_seq"]
+        collection_data = db[self.mongo_collections[0]]
+        collection_convert = db[self.mongo_collections[1]]
         finder = collection_data.find(info)
         dataSource = {}
         
@@ -492,7 +495,10 @@ def main(args:dict) -> None:
     v = False
     if args["verbose"]:
         v = True
-    d = Database(verbose=v)
+    type = "nucleotide"
+    if args["protein"]:
+        type = "protein"
+    d = Database(verbose=v,type=type)
     if args["nosql_mongo"] and args["sqlite3"]:
         return PrintWarning(5).stdout("Can't select both mongo-db and sql for storing")
     if args["file"]:
@@ -503,7 +509,7 @@ def main(args:dict) -> None:
         
         if args["nosql_mongo"]:
             d.save_on_mongo((data,conv))
-        if args["sql"]:
+        if args["sqlite3"]:
             d.save_on_sql((data,conv))
     elif args["find"]:
         finder = {"Features":{"$elemMatch":{"Type":"source"}}}
@@ -557,6 +563,8 @@ if __name__ == "__main__":
     parser.add_argument('-m','--micro-algae',
                         action='store_true')
     parser.add_argument('-l','--list',
+                        action='store_true')
+    parser.add_argument('-p','--protein',
                         action='store_true')
     parser.add_argument('--alignment',nargs=2,
                         metavar=('fromfile', 'tofile'),
