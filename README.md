@@ -1,6 +1,6 @@
 # MicroAlgae Parsing & Searching
 
-`federico-rosatelli & AxnNxs & Loriv3 & Samseys`
+[`federico-rosatelli`](https://github.com/federico-rosatelli) [`Mat`](https://github.com/AxnNxs) [`Loriv3`](https://github.com/Loriv3) [`Samsey`](https://github.com/Samseys)
 
 ![Algae Project Struct](algaeStruct.png "Struct of the Project")
 

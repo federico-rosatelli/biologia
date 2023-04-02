@@ -111,7 +111,7 @@ class Alignment:
                     max_index = (i, j)
         return score_matrix,max_index
 
-    def localAlignment(self,save_table:bool=True) -> tuple:
+    def localAlignment(self,save_table:bool=False) -> tuple:
         if len(self.seqs)>2:
             print(bcolors.WARN_BOX+f"Warning! Only 2 arguments were expected, but got {len(self.seqs)}.\n\t-The algorithm will use only the first 2 sequences..."+bcolors.ENDC)
         aligned_seq1 = ""

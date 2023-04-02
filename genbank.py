@@ -1,7 +1,7 @@
 import csv
 import os
 import random
-from Bio import SeqIO
+from Bio import SeqIO, Entrez
 import json
 import hashlib
 import argparse
@@ -55,7 +55,8 @@ class Global:
 
 
 class  PrintWarning:
-    # applicazione della classe di bcolors
+    """ Applicazione della classe di bcolors. Con questa classe possiamo stampare a video
+    vari codici di errore/warning con colori diversi e tenere traccia visivamente di vari eventi """
     def __init__(self,type:int,error:str="") -> None:
         self.error = error
         self.color = None
@@ -98,9 +99,11 @@ CLUSTER = "localhost:27017"     # apertura porta di default sul localhost che es
 
 class Parsing(object):
     """Parsing class for GenBank file format"""
-    def __init__(self,file_name:str) -> None:
-        
-        self.record = SeqIO.parse(file_name, "genbank")
+    def __init__(self,file_name:str | None=None) -> None:
+        if not file_name:
+            self.record = []
+        else:
+            self.record = SeqIO.parse(file_name, "genbank")
 
     def parsing_gene(self) -> list:
         """Ritorna due liste: 
@@ -123,39 +126,43 @@ class Parsing(object):
                 print("[%-50s] %d%% %d" % ('='*((last+1)//2),last+1,(t_now-t_last)*(86100//count)),end="\r") #??????
                 last +=1
             #print(count)
-            json_gene = {}
-            json_convert = {}
-            json_gene["Name"] = gene.name
-            json_gene["Id"] = gene.id
-            check = False
-            try:
-                if gene.seq != "":
-                    #print(count)
-                    check = True
-                    sh = self.sha_index(str(gene.seq))
-                    json_gene["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
-                    json_convert["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
-                    json_convert["Seq_Raw"] = sh["seq"]  #str(gene.seq)-> SHA256 funzione
-                    
-            except Exception as e:
-                if check:
-                    print(e,"Entra qua nella sequenza:",gene.id)
-                errors += 1
-                pass
-            json_gene["Description"] = gene.description
-            json_gene["Features"] = []
-            for feature in gene.features:
-                feature_type = {"Type":feature.type}
-                #json_gene["Features"][feature.type] = {}
-                for qual in feature.qualifiers:
-                    feature_type[qual] = feature.qualifiers.get(qual)[0]
-                feature_type["Location"] = (int(feature.location.start),int(feature.location.end))
-                json_gene["Features"].append(feature_type)
+            json_gene, json_convert = self.parseGene(gene)
             hex_array.append(json_convert)
             gene_array.append(json_gene)
         PrintWarning(3).stdout("\nParsing completed\n") 
         PrintWarning(5).stdout("Process completed with",errors,'errors\n')
         return gene_array,hex_array
+
+    def parseGene(self,gene):
+        json_gene = {}
+        json_convert = {}
+        json_gene["Name"] = gene.name
+        json_gene["Id"] = gene.id
+        check = False
+        try:
+            if gene.seq != "":
+                #print(count)
+                check = True
+                sh = self.sha_index(str(gene.seq))
+                json_gene["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
+                json_convert["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
+                json_convert["Seq_Raw"] = sh["seq"]  #str(gene.seq)-> SHA256 funzione
+                
+        except Exception as e:
+            if check:
+                print(e,"Entra qua nella sequenza:",gene.id)
+            errors += 1
+            pass
+        json_gene["Description"] = gene.description
+        json_gene["Features"] = []
+        for feature in gene.features:
+            feature_type = {"Type":feature.type}
+            #json_gene["Features"][feature.type] = {}
+            for qual in feature.qualifiers:
+                feature_type[qual] = feature.qualifiers.get(qual)[0]
+            feature_type["Location"] = (int(feature.location.start),int(feature.location.end))
+            json_gene["Features"].append(feature_type)
+        return json_gene,json_convert
     
     def sha_index(self,seq:str) -> dict:
         # ritorna, in un dizionario, il codice hash di una sequenza di basi azotate (ACGTU le possibili unità)
@@ -176,7 +183,7 @@ class Parsing(object):
 
 
 class Database:
-    def __init__(self,verbose=False,type:str="") -> None:
+    def __init__(self,verbose=False,type:str="",email:str|None=None) -> None:
         self.file = Global.SQL["Store"]
 
         self.client = None
@@ -187,10 +194,19 @@ class Database:
         self.totLength = 0
         self.diffAlg = {}
         self.verbose = verbose
+        self.parse = Parsing()
+        self.email = email
+        print(email)
+        if email:
+            Entrez.email = email
     
     
-    def listSource(self):
+    def listSource(self)->list:
         return [key for key in self.dataSource]
+    
+    def addEmail(self,email) -> None:
+        self.email = email
+        Entrez.email = email
 
     def save_on_mongo(self,tuple_of_array:tuple) -> None:
         PrintWarning(8).stdout("\nStart saving on database")
@@ -299,6 +315,8 @@ class Database:
         #
         # self.printDifferenceAlgae()
         # dataDiff = self.checkDifferenceAlgae()
+        #return self.dataSource
+        self.confronto()
         return self.dataSource
     
     def alignmentSeq(self,f1_key:str,f2_key:str) -> str:
@@ -404,7 +422,7 @@ class Database:
         with open(f"{Global.JSON['Path']}{fileName}","w") as js:
             json.dump(self.dataSource,js,indent=4)
     
-    def isAlgae(self,dataSource,rewrite:bool=False) ->list:
+    def isAlgae(self,dataSource,rewrite:bool=False) -> tuple[list,list]:
         if not os.path.isfile(Global.WEBSOURCE["Algae"]["File"]) or rewrite:
             r = requests.get(Global.WEBSOURCE["Algae"]["Web"])
             with open(Global.WEBSOURCE["Algae"]["File"], "w") as wr:
@@ -433,7 +451,7 @@ class Database:
                         unico.append(val_key.lower())
         return totAlgae,unico
 
-    def isMicroAlgae(self,dataSource):
+    def isMicroAlgae(self,dataSource) -> tuple[list,list]:
         rl = open(Global.WEBSOURCE["MicroAlgae"]["File"]).readlines()
         dataAlgae = []
         for i in range(len(rl)):
@@ -472,6 +490,68 @@ class Database:
     def file_exists(self)-> bool:
         return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
 
+    
+    def proteinFind(self,id) -> dict|None:
+        db = self.client["Biologia"]
+        collection_data_nucleotide = db["nucleotide_data"]
+        info = {"Id":id,"Features":{"$elemMatch":{"Type":"CDS"}}}
+        finder_data = collection_data_nucleotide.find_one(info)
+        if not finder_data:
+            PrintWarning(5).stdout(f"Error searching {id}: CDS Not Found")
+            return None
+        collection_data = db["protein_data"]
+        collection_convert = db["protein_hex"]
+        protein_id = None
+        for f in finder_data["Features"]:
+            if f["Type"] == "CDS":
+                if "protein_id" in f:
+                    protein_id = f["protein_id"]
+
+        if not protein_id:
+            PrintWarning(5).stdout(f"Error searching {id}: Protein Not Found")
+            return None
+        
+        info = {"Id":protein_id}
+        finder_data = collection_data.find_one(info)
+        if not finder_data:
+            PrintWarning(5).stdout(f"Error searching {protein_id}: Protein Not Found In Database...","\n","Searching on NCBI...")
+            p1,p2 = self.ncbiSearch(protein_id)
+            dataFind = {
+                'data':p1,
+                'hex':p2
+            }
+            return dataFind
+        info = {"Seq_Hex":finder_data["Seq_Hex"]}
+        finder_hex = collection_convert.find_one(info)
+        if not finder_hex:
+            PrintWarning(5).stdout(f"Error searching {finder_data['Seq_Hex']}: Hex Not Found")
+            return None
+        dataFind = {
+            'data':finder_data,
+            'hex':finder_hex
+        }
+        return dataFind
+
+    def ncbiSearch(self,protein_id) -> tuple[dict,dict]:
+        # NB: in futuro la composizione del link potrebbe cambiare nella sua struttura, in base alla gestione interna di NCBI.
+        # TO-DO: se questo metodo non ritorna i dati correttamente andrà aggiornata la procedura di reperimento dei dati.
+        handle = Entrez.efetch(db="protein", id=protein_id,rettype="gb", retmode="text")
+        record = SeqIO.read(handle, "genbank")
+        p1,p2 = self.parse.parseGene(record)
+
+        return p1,p2
+        
+
+    def confronto(self): #CAMBIA NOME
+        for key in self.dataSource:
+            for id in self.dataSource[key]:
+                data = self.proteinFind(id)
+                if not data:
+                    PrintWarning(5).stdout(f"ID:{id}")
+                    #return None
+                else:
+                    print(data)
+
 
 class bcolors:
     # codici di errore, intesa da utilizzare entro class Error
@@ -498,7 +578,10 @@ def main(args:dict) -> None:
     type = "nucleotide"
     if args["protein"]:
         type = "protein"
-    d = Database(verbose=v,type=type)
+    email = None
+    if args["email"]:
+        email = args["email"]
+    d = Database(verbose=v,type=type,email=email)
     if args["nosql_mongo"] and args["sqlite3"]:
         return PrintWarning(5).stdout("Can't select both mongo-db and sql for storing")
     if args["file"]:
@@ -541,8 +624,8 @@ def main(args:dict) -> None:
     
 
 if __name__ == "__main__":
-    # costrutto che permette di passare da riga di comando l'opzione desiderata per l'inserimento dei dati 
-    # in un tipo di DB
+    """ costrutto che permette di passare da riga di comando l'opzione desiderata per l'inserimento dei dati 
+     in un tipo di DB """
     parser = argparse.ArgumentParser(
                     prog='Biologia Database Parsing',
                     description='What the program does',
@@ -570,6 +653,7 @@ if __name__ == "__main__":
                         metavar=('fromfile', 'tofile'),
                         help='Align all organisms in __fromfile__ and save it in __tofile__',
                         )
+    parser.add_argument('--email')
     parser.add_argument('--fasta')
     args = vars(parser.parse_args())
     main(args)
