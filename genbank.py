@@ -99,7 +99,7 @@ CLUSTER = "localhost:27017"     # apertura porta di default sul localhost che es
 
 class Parsing(object):
     """Parsing class for GenBank file format"""
-    def __init__(self,file_name:str | None=None) -> None:
+    def __init__(self,file_name:str=None) -> None:
         if not file_name:
             self.record = []
         else:
@@ -151,7 +151,7 @@ class Parsing(object):
         except Exception as e:
             if check:
                 print(e,"Entra qua nella sequenza:",gene.id)
-            errors += 1
+            #errors += 1
             pass
         json_gene["Description"] = gene.description
         json_gene["Features"] = []
@@ -183,7 +183,7 @@ class Parsing(object):
 
 
 class Database:
-    def __init__(self,verbose=False,type:str="",email:str|None=None) -> None:
+    def __init__(self,verbose=False,type:str="",email:str=None) -> None:
         self.file = Global.SQL["Store"]
 
         self.client = None
@@ -422,7 +422,7 @@ class Database:
         with open(f"{Global.JSON['Path']}{fileName}","w") as js:
             json.dump(self.dataSource,js,indent=4)
     
-    def isAlgae(self,dataSource,rewrite:bool=False) -> tuple[list,list]:
+    def isAlgae(self,dataSource,rewrite:bool=False) -> tuple:
         if not os.path.isfile(Global.WEBSOURCE["Algae"]["File"]) or rewrite:
             r = requests.get(Global.WEBSOURCE["Algae"]["Web"])
             with open(Global.WEBSOURCE["Algae"]["File"], "w") as wr:
@@ -451,7 +451,7 @@ class Database:
                         unico.append(val_key.lower())
         return totAlgae,unico
 
-    def isMicroAlgae(self,dataSource) -> tuple[list,list]:
+    def isMicroAlgae(self,dataSource) -> tuple:
         rl = open(Global.WEBSOURCE["MicroAlgae"]["File"]).readlines()
         dataAlgae = []
         for i in range(len(rl)):
@@ -491,7 +491,7 @@ class Database:
         return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
 
     
-    def proteinFind(self,id) -> dict|None:
+    def proteinFind(self,id) -> dict:
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
         info = {"Id":id,"Features":{"$elemMatch":{"Type":"CDS"}}}
@@ -514,7 +514,7 @@ class Database:
         info = {"Id":protein_id}
         finder_data = collection_data.find_one(info)
         if not finder_data:
-            PrintWarning(5).stdout(f"Error searching {protein_id}: Protein Not Found In Database...","\n","Searching on NCBI...")
+            PrintWarning(5).stdout(f"Error searching {protein_id}: Protein Not Found In Database...","\n","\t\tSearching on NCBI...")
             p1,p2 = self.ncbiSearch(protein_id)
             dataFind = {
                 'data':p1,
@@ -532,7 +532,7 @@ class Database:
         }
         return dataFind
 
-    def ncbiSearch(self,protein_id) -> tuple[dict,dict]:
+    def ncbiSearch(self,protein_id) -> tuple:
         # NB: in futuro la composizione del link potrebbe cambiare nella sua struttura, in base alla gestione interna di NCBI.
         # TO-DO: se questo metodo non ritorna i dati correttamente andrà aggiornata la procedura di reperimento dei dati.
         handle = Entrez.efetch(db="protein", id=protein_id,rettype="gb", retmode="text")
