@@ -528,7 +528,8 @@ class Database:
         finder_data = collection_data.find_one(info)
         if not finder_data:
             PrintWarning(5).stdout(f"Error searching {protein_id}: Protein Not Found In Database...","\n","\t\tSearching on NCBI...")
-            p1,p2 = self.ncbiSearch(protein_id,"protein")
+            term = f'"{protein_id}"[id]'
+            p1,p2 = self.ncbiSearch(term,"protein")
             dataFind = {
                 'data':p1,
                 'hex':p2
@@ -570,7 +571,8 @@ class Database:
         finder_data = collection_data.find_one(info)
         if not finder_data:
             PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
-            p1,p2 = self.ncbiSearch(taxon_id,"taxonomy")
+            term = f'"{taxon_id}"[uid]'
+            p1,p2 = self.ncbiSearch(term,"taxonomy")
             dataFind = {
                 'data':p1,
                 'hex':p2
@@ -588,10 +590,10 @@ class Database:
         }
         return dataFind
 
-    def ncbiSearch(self,protein_id:str,database:str) -> tuple:
+    def ncbiSearch(self,term:str,database:str) -> tuple:
         # NB: in futuro la composizione del link potrebbe cambiare nella sua struttura, in base alla gestione interna di NCBI.
         # TO-DO: se questo metodo non ritorna i dati correttamente andrà aggiornata la procedura di reperimento dei dati.
-        handle = Entrez.efetch(db=database, id=protein_id,rettype="gb", retmode="text")
+        handle = Entrez.efetch(db=database, term=term,rettype="gb", retmode="text")
         record = SeqIO.read(handle, "genbank")
         p1,p2 = self.parse.parseGene(record)
 
