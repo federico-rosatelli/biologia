@@ -234,6 +234,19 @@ class Database:
                 if not check_hex:
                     collection_convert.insert_one(tuple_of_array[1][i])
         self.printWarning.stdout("Saved correctly on mongo")
+    
+    def save_one_in_mongo(self,struct:dict,collection:str)->None:
+        db = self.client["Biologia"]
+        collection_data_name = collection + "_data"
+        collection_hex_name = collection + "_hex"
+        collection_data = db[collection_data_name]
+        collection_hex = db[collection_hex_name]
+        data = struct["data"]
+        hex = struct["hex"]
+        collection_data.insert_one(data)
+        collection_hex.insert_one(hex)
+        self.printWarning.stdout("Saved correctly on mongo")
+
         
     def save_on_sql(self,tuple_of_array:tuple,file=None):
         # filename to form database
@@ -520,6 +533,7 @@ class Database:
                 'data':p1,
                 'hex':p2
             }
+            self.save_one_in_mongo(dataFind,"protein")
             return dataFind
         info = {"Seq_Hex":finder_data["Seq_Hex"]}
         finder_hex = collection_convert.find_one(info)
@@ -551,6 +565,7 @@ class Database:
                     #return None
                 else:
                     print(data)
+                    
 
 
 class bcolors:
