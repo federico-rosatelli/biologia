@@ -607,6 +607,13 @@ class Database:
                     #return None
                 else:
                     print(data)
+                
+                data = self.taxonFind(id)
+                if not data:
+                    PrintWarning(5).stdout(f"ID:{id}")
+                    #return None
+                else:
+                    print(data)
                     
 
 
