@@ -604,14 +604,14 @@ class Database:
                     PrintWarning(5).stdout(f"ID:{id}")
                     #return None
                 else:
-                    print(data)
+                    PrintWarning(3).stdout(f"Protein ID:{id}")
                 
                 data = self.taxonFind(id)
                 if not data:
                     PrintWarning(5).stdout(f"ID:{id}")
                     #return None
                 else:
-                    print(data)
+                    PrintWarning(3).stdout(f"Taxon ID:{id}")
                     
 
 
