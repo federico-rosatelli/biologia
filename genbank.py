@@ -528,7 +528,7 @@ class Database:
         finder_data = collection_data.find_one(info)
         if not finder_data:
             PrintWarning(5).stdout(f"Error searching {protein_id}: Protein Not Found In Database...","\n","\t\tSearching on NCBI...")
-            p1,p2 = self.ncbiSearch(protein_id)
+            p1,p2 = self.ncbiSearch(protein_id,"protein")
             dataFind = {
                 'data':p1,
                 'hex':p2
@@ -545,11 +545,53 @@ class Database:
             'hex':finder_hex
         }
         return dataFind
+    
+    def taxonFind(self,id) -> dict:
+        db = self.client["Biologia"]
+        collection_data_nucleotide = db["nucleotide_data"]
+        info = {"Id":id,"Features":{"$elemMatch":{"Type":"source"}}}
+        finder_data = collection_data_nucleotide.find_one(info)
+        if not finder_data:
+            PrintWarning(5).stdout(f"Error searching {id}: Source Not Found")
+            return None
+        collection_data = db["taxon_data"]
+        collection_convert = db["taxon_hex"]
+        taxon_meta = None
+        for f in finder_data["Features"]:
+            if f["Type"] == "source":
+                if "db_xref" in f:
+                    taxon_meta = f["db_xref"]
 
-    def ncbiSearch(self,protein_id) -> tuple:
+        if not taxon_meta:
+            PrintWarning(5).stdout(f"Error searching {id}: db_xref Not Found")
+            return None
+        taxon_id = taxon_meta.split(":")[1]
+        info = {"Id":taxon_id}
+        finder_data = collection_data.find_one(info)
+        if not finder_data:
+            PrintWarning(5).stdout(f"Error searching {taxon_id}: Protein Not Found In Database...","\n","\t\tSearching on NCBI...")
+            p1,p2 = self.ncbiSearch(taxon_id,"taxon")
+            dataFind = {
+                'data':p1,
+                'hex':p2
+            }
+            self.save_one_in_mongo(dataFind,"taxon")
+            return dataFind
+        info = {"Seq_Hex":finder_data["Seq_Hex"]}
+        finder_hex = collection_convert.find_one(info)
+        if not finder_hex:
+            PrintWarning(5).stdout(f"Error searching {finder_data['Seq_Hex']}: Hex Not Found")
+            return None
+        dataFind = {
+            'data':finder_data,
+            'hex':finder_hex
+        }
+        return dataFind
+
+    def ncbiSearch(self,protein_id:str,database:str) -> tuple:
         # NB: in futuro la composizione del link potrebbe cambiare nella sua struttura, in base alla gestione interna di NCBI.
         # TO-DO: se questo metodo non ritorna i dati correttamente andrà aggiornata la procedura di reperimento dei dati.
-        handle = Entrez.efetch(db="protein", id=protein_id,rettype="gb", retmode="text")
+        handle = Entrez.efetch(db=database, id=protein_id,rettype="gb", retmode="text")
         record = SeqIO.read(handle, "genbank")
         p1,p2 = self.parse.parseGene(record)
 
