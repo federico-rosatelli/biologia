@@ -554,8 +554,8 @@ class Database:
         if not finder_data:
             PrintWarning(5).stdout(f"Error searching {id}: Source Not Found")
             return None
-        collection_data = db["taxon_data"]
-        collection_convert = db["taxon_hex"]
+        collection_data = db["taxonomy_data"]
+        collection_convert = db["taxonomy_hex"]
         taxon_meta = None
         for f in finder_data["Features"]:
             if f["Type"] == "source":
@@ -569,13 +569,13 @@ class Database:
         info = {"Id":taxon_id}
         finder_data = collection_data.find_one(info)
         if not finder_data:
-            PrintWarning(5).stdout(f"Error searching {taxon_id}: Protein Not Found In Database...","\n","\t\tSearching on NCBI...")
-            p1,p2 = self.ncbiSearch(taxon_id,"taxon")
+            PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
+            p1,p2 = self.ncbiSearch(taxon_id,"taxonomy")
             dataFind = {
                 'data':p1,
                 'hex':p2
             }
-            self.save_one_in_mongo(dataFind,"taxon")
+            self.save_one_in_mongo(dataFind,"taxonomy")
             return dataFind
         info = {"Seq_Hex":finder_data["Seq_Hex"]}
         finder_hex = collection_convert.find_one(info)
