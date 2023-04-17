@@ -650,8 +650,6 @@ def main(args:dict) -> None:
     if args["email"]:
         email = args["email"]
     d = Database(verbose=v,type=type,email=email)
-    d.ritornodicose()
-    return
     if args["nosql_mongo"] and args["sqlite3"]:
         return PrintWarning(5).stdout("Can't select both mongo-db and sql for storing")
     if args["file"]:
