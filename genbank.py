@@ -528,8 +528,7 @@ class Database:
         finder_data = collection_data.find_one(info)
         if not finder_data:
             PrintWarning(5).stdout(f"Error searching {protein_id}: Protein Not Found In Database...","\n","\t\tSearching on NCBI...")
-            term = f'"{protein_id}"[id]'
-            p1,p2 = self.ncbiSearch(term,"protein")
+            p1,p2 = self.ncbiSearch(protein_id,"protein")
             dataFind = {
                 'data':p1,
                 'hex':p2
@@ -567,37 +566,34 @@ class Database:
             PrintWarning(5).stdout(f"Error searching {id}: db_xref Not Found")
             return None
         taxon_id = taxon_meta.split(":")[1]
-        info = {"Id":taxon_id}
+        info = {"TaxId":taxon_id}
         finder_data = collection_data.find_one(info)
         if not finder_data:
             PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
-            term = f'"{taxon_id}"[uid]'
-            p1,p2 = self.ncbiSearch(term,"taxonomy")
-            dataFind = {
-                'data':p1,
-                'hex':p2
-            }
-            self.save_one_in_mongo(dataFind,"taxonomy")
+            dataFind = self.ncbiSearchTaxon(taxon_id,"taxonomy")
+            
+            collection_data.insert_one(dataFind)
             return dataFind
-        info = {"Seq_Hex":finder_data["Seq_Hex"]}
-        finder_hex = collection_convert.find_one(info)
-        if not finder_hex:
-            PrintWarning(5).stdout(f"Error searching {finder_data['Seq_Hex']}: Hex Not Found")
-            return None
-        dataFind = {
-            'data':finder_data,
-            'hex':finder_hex
-        }
-        return dataFind
+        return finder_data
 
-    def ncbiSearch(self,term:str,database:str) -> tuple:
+    def ncbiSearch(self,id:str,database:str) -> tuple:
         # NB: in futuro la composizione del link potrebbe cambiare nella sua struttura, in base alla gestione interna di NCBI.
         # TO-DO: se questo metodo non ritorna i dati correttamente andrà aggiornata la procedura di reperimento dei dati.
-        handle = Entrez.efetch(db=database, term=term,rettype="gb", retmode="text")
+        handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
         record = SeqIO.read(handle, "genbank")
         p1,p2 = self.parse.parseGene(record)
 
         return p1,p2
+
+    def ncbiSearchTaxon(self,id:str,database:str) ->tuple:
+        handle = Entrez.efetch(db=database, id=id, retmode="xml")
+        read = Entrez.read(handle)
+        # with open("provadelcazzo.json","w") as js:
+        #     json.dump(read,js,indent=4)
+        # record = SeqIO.read(handle, "xml")
+        # p1,p2 = self.parse.parseGene(record)
+
+        return read[0]
         
 
     def confronto(self): #CAMBIA NOME
