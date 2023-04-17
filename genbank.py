@@ -186,7 +186,9 @@ class Database:
     def __init__(self,verbose=False,type:str="",email:str=None) -> None:
         self.file = Global.SQL["Store"]
 
-        self.client = None
+        ip = Global.CLUSTER.split(":")[0]
+        port = int(Global.CLUSTER.split(":")[1])
+        self.client = MongoClient(f'{ip}', port)
         self.connection = None
         self.mongo_collections = (type+"_data",type+"_hex")
         self.printWarning = PrintWarning(10)
@@ -210,9 +212,7 @@ class Database:
 
     def save_on_mongo(self,tuple_of_array:tuple) -> None:
         PrintWarning(8).stdout("\nStart saving on database")
-        ip = Global.CLUSTER.split(":")[0]
-        port = int(Global.CLUSTER.split(":")[1])
-        self.client = MongoClient(f'{ip}', port)
+        
         db = self.client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
         print(self.mongo_collections)
         collection_data = db[self.mongo_collections[0]]
@@ -320,7 +320,7 @@ class Database:
             algaeSource = {}
             for algae in totAlgae:
                 algaeSource[algae] = dataSource[algae]
-            self.dataSource = algaeSource
+            self.dataSource = totAlgae
             PrintWarning(2).stdout(f"Total micro algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
             if saveOnJson:
                 self.save_on_json(fileName="microAlgaeSource.json")
@@ -329,7 +329,7 @@ class Database:
         # self.printDifferenceAlgae()
         # dataDiff = self.checkDifferenceAlgae()
         #return self.dataSource
-        self.confronto()
+        #self.confronto()
         return self.dataSource
     
     def alignmentSeq(self,f1_key:str,f2_key:str) -> str:
@@ -588,12 +588,18 @@ class Database:
     def ncbiSearchTaxon(self,id:str,database:str) ->tuple:
         handle = Entrez.efetch(db=database, id=id, retmode="xml")
         read = Entrez.read(handle)
-        # with open("provadelcazzo.json","w") as js:
-        #     json.dump(read,js,indent=4)
-        # record = SeqIO.read(handle, "xml")
-        # p1,p2 = self.parse.parseGene(record)
+        
 
         return read[0]
+
+    def ritornodicose(self) -> None:
+        finder = {"Id":"","Features":{"$elemMatch":{"Type":"CDS"}}}
+        db = self.client["Biologia"]
+        collection_data_nucleotide = db["nucleotide_data"]
+        data = collection_data_nucleotide.count_documents(finder)
+        print(data)
+
+
         
 
     def confronto(self): #CAMBIA NOME
@@ -644,6 +650,8 @@ def main(args:dict) -> None:
     if args["email"]:
         email = args["email"]
     d = Database(verbose=v,type=type,email=email)
+    d.ritornodicose()
+    return
     if args["nosql_mongo"] and args["sqlite3"]:
         return PrintWarning(5).stdout("Can't select both mongo-db and sql for storing")
     if args["file"]:
