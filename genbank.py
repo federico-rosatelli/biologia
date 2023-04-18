@@ -11,6 +11,7 @@ from time import ctime,perf_counter
 import requests
 import pandas as pd
 import smith_waterman
+import re
 
 #######################
 # List Address source db
@@ -579,9 +580,10 @@ class Database:
     def genomeFind(self,id) -> dict:
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
-        info = {"Id":id,"Features":{"$elemMatch":{"Type":"CDS","db_xref":{"$exists":True}}}}
+        regex = re.compile('TaxId:*', re.IGNORECASE)
+        info = {"Id":id,"Features":{"$elemMatch":{"Type":"gene"}}}
         finder_data = collection_data_nucleotide.find(info)
-        #print("data")
+        print("data")
         for find in finder_data:
             print("SSADSA")
             print(find)
