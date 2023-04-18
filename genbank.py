@@ -11,7 +11,6 @@ from time import ctime,perf_counter
 import requests
 import pandas as pd
 import smith_waterman
-import re
 
 #######################
 # List Address source db
@@ -580,36 +579,26 @@ class Database:
     def genomeFind(self,id) -> dict:
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
-        regex = re.compile('TaxId:*', re.IGNORECASE)
-        info = {"Id":id,"Features":{"$elemMatch":{"Type":"gene"}}}
+        info = {"Features":{"$elemMatch":{"Type":"CDS","db_xref":{"$exists":True}}}}
         finder_data = collection_data_nucleotide.find(info)
-        print("data")
-        for find in finder_data:
-            print("SSADSA")
-            print(find)
-        # if not finder_data:
-        #     PrintWarning(5).stdout(f"Error searching {id}: CDS Not Found")
-        #     return None
-        # collection_data = db["genome_data"]
-        # collection_convert = db["genome_hex"]
-        # taxon_meta = None
-        # for f in finder_data["Features"]:
-        #     if f["Type"] == "CDS":
-        #         if "db_xref" in f:
-        #             taxon_meta = f["db_xref"]
-
-        # if not taxon_meta:
-        #     PrintWarning(5).stdout(f"Error searching {id}: db_xref Not Found")
-        #     return None
-        # genome_id = taxon_meta.split(":")[1]
-        # info = {"GenomeId":genome_id}
-        # # finder_data = collection_data.find_one(info)
-        # # if not finder_data:
-        # #     PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
-        # dataFind = self.ncbiSearchGenome(genome_id,"genome")
-        #     # for data in dataFind:
-        #     #     collection_data.insert_one(data)
-        #     # return dataFind
+        genes = []
+        
+        for finder in finder_data:
+            gene_id = None
+            for f in finder["Features"]:
+                if f["Type"] == "gene":
+                    if "gene" in f:
+                        gene_id = f["gene"]
+            
+            
+            if gene_id != None:
+                print(gene_id)
+                dataFind = self.ncbiSearchGenome(gene_id,"genome")
+                print(dataFind)
+                # info = {"TaxId":gene_id}
+                # finder_data = collection_data.find_one(info)
+        
+        
         return finder_data
 
     def ncbiSearch(self,id:str,database:str) -> tuple:
@@ -629,8 +618,11 @@ class Database:
     def ncbiSearchGenome(self,id:str,database:str) ->tuple:
         handle = Entrez.efetch(db=database, id=id, retmode="xml")
         read = Entrez.read(handle)
-        print(read)
-        #return read
+        #print(read)
+        # handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
+        # record = SeqIO.read(handle, "genbank")
+        
+        return read
 
     def ritornodicose(self) -> None:
         finder = {"Id":"","Features":{"$elemMatch":{"Type":"CDS"}}}
@@ -643,8 +635,8 @@ class Database:
         
 
     def confronto(self): #CAMBIA NOME
-        for key in self.dataSource:
-            for id in self.dataSource[key]:
+        # for key in self.dataSource:
+        #     for id in self.dataSource[key]:
                 # data = self.proteinFind(id)
                 # if not data:
                 #     PrintWarning(5).stdout(f"ID:{id}")
@@ -659,7 +651,7 @@ class Database:
                 # else:
                 #     PrintWarning(3).stdout(f"Taxon ID:{id}")
                     
-                data = self.genomeFind(id)
+        data = self.genomeFind(4)
                 # if not data:
                 #     PrintWarning(5).stdout(f"ID:{id}")
                 #     #return None
