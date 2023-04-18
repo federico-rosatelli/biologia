@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Biologia</title>
+  </head>
+  <body>
+    <form>
+        <input type="search" name="search" placeholder="Search Taxonomy"/>
+        <button type="submit">Search</button>
+    </form>
+    <% if (find) { %>
+        <% for (let i = 0; i < find.length; i++) { %>
+            <div>
+                <h5><%-JSON.stringify(find[i], null, 1)%></h5>
+            </div>
+            
+        <%} %>
+    <%} %>
+  </body>
+</html>
