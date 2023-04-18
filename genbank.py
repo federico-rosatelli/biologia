@@ -320,7 +320,7 @@ class Database:
             algaeSource = {}
             for algae in totAlgae:
                 algaeSource[algae] = dataSource[algae]
-            self.dataSource = totAlgae
+            self.dataSource = algaeSource
             PrintWarning(2).stdout(f"Total micro algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
             if saveOnJson:
                 self.save_on_json(fileName="microAlgaeSource.json")
@@ -329,7 +329,7 @@ class Database:
         # self.printDifferenceAlgae()
         # dataDiff = self.checkDifferenceAlgae()
         #return self.dataSource
-        #self.confronto()
+        self.confronto()
         return self.dataSource
     
     def alignmentSeq(self,f1_key:str,f2_key:str) -> str:
@@ -571,9 +571,39 @@ class Database:
         if not finder_data:
             PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
             dataFind = self.ncbiSearchTaxon(taxon_id,"taxonomy")
-            
-            collection_data.insert_one(dataFind)
+            for data in dataFind:
+                collection_data.insert_one(data)
             return dataFind
+        return finder_data
+    
+    def genomeFind(self,id) -> dict:
+        db = self.client["Biologia"]
+        collection_data_nucleotide = db["nucleotide_data"]
+        info = {"Id":id,"Features":{"$elemMatch":{"Type":"CDS"}}}
+        finder_data = collection_data_nucleotide.find_one(info)
+        if not finder_data:
+            PrintWarning(5).stdout(f"Error searching {id}: CDS Not Found")
+            return None
+        collection_data = db["genome_data"]
+        collection_convert = db["genome_hex"]
+        taxon_meta = None
+        for f in finder_data["Features"]:
+            if f["Type"] == "CDS":
+                if "db_xref" in f:
+                    taxon_meta = f["db_xref"]
+
+        if not taxon_meta:
+            PrintWarning(5).stdout(f"Error searching {id}: db_xref Not Found")
+            return None
+        genome_id = taxon_meta.split(":")[1]
+        info = {"GenomeId":genome_id}
+        # finder_data = collection_data.find_one(info)
+        # if not finder_data:
+        #     PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
+        dataFind = self.ncbiSearchGenome(genome_id,"genome")
+            # for data in dataFind:
+            #     collection_data.insert_one(data)
+            # return dataFind
         return finder_data
 
     def ncbiSearch(self,id:str,database:str) -> tuple:
@@ -588,9 +618,13 @@ class Database:
     def ncbiSearchTaxon(self,id:str,database:str) ->tuple:
         handle = Entrez.efetch(db=database, id=id, retmode="xml")
         read = Entrez.read(handle)
-        
-
-        return read[0]
+        return read
+    
+    def ncbiSearchGenome(self,id:str,database:str) ->tuple:
+        handle = Entrez.efetch(db=database, id=id, retmode="xml")
+        read = Entrez.read(handle)
+        print(read)
+        #return read
 
     def ritornodicose(self) -> None:
         finder = {"Id":"","Features":{"$elemMatch":{"Type":"CDS"}}}
@@ -605,19 +639,28 @@ class Database:
     def confronto(self): #CAMBIA NOME
         for key in self.dataSource:
             for id in self.dataSource[key]:
-                data = self.proteinFind(id)
-                if not data:
-                    PrintWarning(5).stdout(f"ID:{id}")
-                    #return None
-                else:
-                    PrintWarning(3).stdout(f"Protein ID:{id}")
+                # data = self.proteinFind(id)
+                # if not data:
+                #     PrintWarning(5).stdout(f"ID:{id}")
+                #     #return None
+                # else:
+                #     PrintWarning(3).stdout(f"Protein ID:{id}")
                 
-                data = self.taxonFind(id)
+                # data = self.taxonFind(id)
+                # if not data:
+                #     PrintWarning(5).stdout(f"ID:{id}")
+                #     #return None
+                # else:
+                #     PrintWarning(3).stdout(f"Taxon ID:{id}")
+                    
+                data = self.genomeFind(id)
                 if not data:
                     PrintWarning(5).stdout(f"ID:{id}")
                     #return None
                 else:
-                    PrintWarning(3).stdout(f"Taxon ID:{id}")
+                    PrintWarning(3).stdout(f"Genome ID:{id}")
+                
+
                     
 
 
