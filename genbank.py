@@ -579,31 +579,35 @@ class Database:
     def genomeFind(self,id) -> dict:
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
-        info = {"Id":id,"Features":{"$elemMatch":{"Type":"CDS"}}}
-        finder_data = collection_data_nucleotide.find_one(info)
-        if not finder_data:
-            PrintWarning(5).stdout(f"Error searching {id}: CDS Not Found")
-            return None
-        collection_data = db["genome_data"]
-        collection_convert = db["genome_hex"]
-        taxon_meta = None
-        for f in finder_data["Features"]:
-            if f["Type"] == "CDS":
-                if "db_xref" in f:
-                    taxon_meta = f["db_xref"]
-
-        if not taxon_meta:
-            PrintWarning(5).stdout(f"Error searching {id}: db_xref Not Found")
-            return None
-        genome_id = taxon_meta.split(":")[1]
-        info = {"GenomeId":genome_id}
-        # finder_data = collection_data.find_one(info)
+        info = {"Id":id,"Features":{"$elemMatch":{"Type":"CDS","db_xref":{"$exists":True}}}}
+        finder_data = collection_data_nucleotide.find(info)
+        #print("data")
+        for find in finder_data:
+            print("SSADSA")
+            print(find)
         # if not finder_data:
-        #     PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
-        dataFind = self.ncbiSearchGenome(genome_id,"genome")
-            # for data in dataFind:
-            #     collection_data.insert_one(data)
-            # return dataFind
+        #     PrintWarning(5).stdout(f"Error searching {id}: CDS Not Found")
+        #     return None
+        # collection_data = db["genome_data"]
+        # collection_convert = db["genome_hex"]
+        # taxon_meta = None
+        # for f in finder_data["Features"]:
+        #     if f["Type"] == "CDS":
+        #         if "db_xref" in f:
+        #             taxon_meta = f["db_xref"]
+
+        # if not taxon_meta:
+        #     PrintWarning(5).stdout(f"Error searching {id}: db_xref Not Found")
+        #     return None
+        # genome_id = taxon_meta.split(":")[1]
+        # info = {"GenomeId":genome_id}
+        # # finder_data = collection_data.find_one(info)
+        # # if not finder_data:
+        # #     PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
+        # dataFind = self.ncbiSearchGenome(genome_id,"genome")
+        #     # for data in dataFind:
+        #     #     collection_data.insert_one(data)
+        #     # return dataFind
         return finder_data
 
     def ncbiSearch(self,id:str,database:str) -> tuple:
@@ -654,11 +658,11 @@ class Database:
                 #     PrintWarning(3).stdout(f"Taxon ID:{id}")
                     
                 data = self.genomeFind(id)
-                if not data:
-                    PrintWarning(5).stdout(f"ID:{id}")
-                    #return None
-                else:
-                    PrintWarning(3).stdout(f"Genome ID:{id}")
+                # if not data:
+                #     PrintWarning(5).stdout(f"ID:{id}")
+                #     #return None
+                # else:
+                #     PrintWarning(3).stdout(f"Genome ID:{id}")
                 
 
                     
