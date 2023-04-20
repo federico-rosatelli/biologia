@@ -6,12 +6,46 @@
   <body>
     <form>
         <input type="search" name="search" placeholder="Search Taxonomy"/>
+        <input type="rank" name="rank" placeholder="Search Rank"/>
         <button type="submit">Search</button>
     </form>
     <% if (find) { %>
+      <h1><%= find.length %></h1>
         <% for (let i = 0; i < find.length; i++) { %>
             <div>
-                <h5><%-JSON.stringify(find[i], null, 1)%></h5>
+                <h3><%=find[i].ScientificName%></h3>
+                
+                <% for( let k = 0; k < find[i].LineageEx.length; k++ ) { %>
+                  <% if (!find[i].LineageEx[k].Rank.includes('no rank')) { %>
+                    <div style="display: flex;">
+                      <div style="margin-left: 3%; ">
+                          <%= find[i].LineageEx[k].ScientificName %>
+                      </div>
+                      <div style="margin-left: 12%;position: absolute;">
+                        | <%= find[i].LineageEx[k].Rank %>
+                      </div>
+                      <div style="margin-left: 18%;position: absolute;">
+                        | <%= find[i].LineageEx[k].tot %>
+                      </div>
+                    </div>
+                    <div></div>
+                  <% } %>
+                  
+                    
+                <% } %>
+                <% if (!find[i].ScientificName.includes("sp.")) { %>
+                  <div style="display: flex;">
+                    <div style="margin-left: 3%; ">
+                        <%= find[i].ScientificName.split(' ')[1] %>
+                    </div>
+                    <div style="margin-left: 12%;position: absolute;">
+                      | Specie
+                    </div>
+                  </div>
+                <% } %>
+                
+                <div></div>
+                <!-- <h5><%- JSON.stringify(find[i]) %></h5> -->
             </div>
             
         <%} %>

@@ -47,10 +47,90 @@ async function finder(query) {
 
 app.get('/',async(req,res)=>{
     let query = ""
-    if (req.query.search) {
-        query = req.query.search;
-        var find = await finder({Lineage:{$regex:`${query}`}})
+    let rank = ""
+    if (req.query.search == ""){
+      let info = {Lineage:{$regex:`${query}`}};
+      var find = await finder(info)
+        let count = {
+          superkingdom:{},
+          kingdom:{},
+          phylum:{},
+          clade:{},
+          class:{},
+          clade:{},
+          order:{},
+          family:{},
+          genus:{},
+          "no rank":{},
+          subfamily:{},
+          subclass:{},
+          species:{}
+        }
+        for (let i = 0; i < find.length; i++) {
+          let data = find[i]
+          for (let j = 0; j < data.LineageEx.length; j++) {
+            if(data.LineageEx[j].ScientificName in count[data.LineageEx[j].Rank]){
+              count[data.LineageEx[j].Rank][data.LineageEx[j].ScientificName] += 1;
+            }
+            else{
+              count[data.LineageEx[j].Rank][data.LineageEx[j].ScientificName] = 1;
+            }
+          }
+        }
+        for (let i = 0; i < find.length; i++) {
+          let data = find[i]
+          for (let j = 0; j < data.LineageEx.length; j++) {
+
+              find[i].LineageEx[j]["tot"] = count[data.LineageEx[j].Rank][data.LineageEx[j].ScientificName]
+          }
+        }
+        res.render('home',{find})
+    }
+    else if (req.query.search) {
         
+        query = req.query.search;
+        let info = {}
+        if (req.query.rank){
+          rank = req.query.rank;
+
+          info = {Lineage:{$regex:`${query}`},LineageEx:{$elemMatch:{Rank:rank,ScientificName:query}}};
+        }
+        else{
+          info = {Lineage:{$regex:`${query}`}}
+        }
+        var find = await finder(info)
+        let count = {
+          superkingdom:{},
+          kingdom:{},
+          phylum:{},
+          clade:{},
+          class:{},
+          clade:{},
+          order:{},
+          family:{},
+          genus:{},
+          "no rank":{},
+          subfamily:{},
+          subclass:{}
+        }
+        for (let i = 0; i < find.length; i++) {
+          let data = find[i]
+          for (let j = 0; j < data.LineageEx.length; j++) {
+            if(data.LineageEx[j].ScientificName in count[data.LineageEx[j].Rank]){
+              count[data.LineageEx[j].Rank][data.LineageEx[j].ScientificName] += 1;
+            }
+            else{
+              count[data.LineageEx[j].Rank][data.LineageEx[j].ScientificName] = 1;
+            }
+          }
+        }
+        for (let i = 0; i < find.length; i++) {
+          let data = find[i]
+          for (let j = 0; j < data.LineageEx.length; j++) {
+
+              find[i].LineageEx[j]["tot"] = count[data.LineageEx[j].Rank][data.LineageEx[j].ScientificName]
+          }
+        }
         res.render('home',{find})
     }
     else{
