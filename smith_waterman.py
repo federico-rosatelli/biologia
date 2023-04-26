@@ -1,21 +1,8 @@
-from matplotlib import pyplot as plt
+
 import pandas as pd
 from Bio.Seq import Seq
-
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    WARN_BOX = WARNING + '[!] '
-    OK_BOX = OKBLUE + '[*] '
-
+from matplotlib import pyplot as plt
+from genbank import bcolors             #prima copiata e incollata, verificare funzionamento con import
 
 def printTable(table,gene,trace=[]):
     #print([i for i in range(len(table[0]))])
