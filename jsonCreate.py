@@ -1,4 +1,7 @@
+
 import json
+from pymongo import MongoClient
+
 # fileJ = "data/sourceJson/microAlgaeSource.json"
 
 # with open(fileJ) as jsr:
@@ -20,7 +23,7 @@ import json
 # with open("uniqueGeneMicroAlgae.json","w") as jsw:
 #     json.dump(dataFinal,jsw,indent=4)
 
-from pymongo import MongoClient
+
 
 CLUSTER = "localhost:27017"
 client = MongoClient('localhost', 27017)

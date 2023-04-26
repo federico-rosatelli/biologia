@@ -4,6 +4,7 @@ from Bio.Seq import Seq
 from matplotlib import pyplot as plt
 from genbank import bcolors             #prima copiata e incollata, verificare funzionamento con import
 
+
 def printTable(table,gene,trace=[]):
     #print([i for i in range(len(table[0]))])
     indx = "  "
@@ -25,7 +26,8 @@ def printTable(table,gene,trace=[]):
             print("")
     print('\n')
 
-def saveTable(table,trace=[]):
+
+def saveTable(table, trace=[]):
     if len(table)<40 or len(table[0])<40:
         return
     tableCopy = []
@@ -54,7 +56,9 @@ def saveTable(table,trace=[]):
 
 
 class Alignment:
-    def __init__(self,*seqs:str,gap:int=1,show_table:bool=False) -> None:
+
+
+    def __init__(self, *seqs:str, gap:int=1, show_table:bool=False) -> None:
         if len(seqs)<2:
             print(bcolors.FAIL+f"MinMaxError: input len for sequences must be >= 2, got {len(seqs)}"+bcolors.ENDC)
             return
@@ -64,8 +68,10 @@ class Alignment:
         self.gap = gap
         self.show_table = show_table
     
+
     def __str__(self) -> str:
         return '\n'.join(self.seqs)
+
 
     def __len__(self) -> int:
         x = 1
@@ -73,11 +79,13 @@ class Alignment:
             x *= len(i)
         return x
     
+
     def __call__(self, seq:str) -> list:
         self.seqs.append(seq)
         return self.seqs
 
-    def createScoreMatrix(self,lnSeq1:int,lnSeq2:int) -> tuple:
+
+    def createScoreMatrix(self, lnSeq1:int, lnSeq2:int) -> tuple:
         score_matrix = [[0 for _ in range(lnSeq2 + 1)] for _ in range(lnSeq1 + 1)]
 
         max_score = 0
@@ -98,7 +106,8 @@ class Alignment:
                     max_index = (i, j)
         return score_matrix,max_index
 
-    def localAlignment(self,save_table:bool=False) -> tuple:
+
+    def localAlignment(self, save_table:bool=False) -> tuple:
         if len(self.seqs)>2:
             print(bcolors.WARN_BOX+f"Warning! Only 2 arguments were expected, but got {len(self.seqs)}.\n\t-The algorithm will use only the first 2 sequences..."+bcolors.ENDC)
         aligned_seq1 = ""
@@ -134,6 +143,7 @@ class Alignment:
         print(f"{(f1/len(aligned_seq1))*100}% of alignment")
         return aligned_seq1, aligned_seq2
     
+
     def globalAlignment(self):
         return 0
 
