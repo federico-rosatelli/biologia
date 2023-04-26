@@ -81,7 +81,7 @@ class Global:
 
 
 class bcolors:
-    '''codici di errore, intesa da utilizzare entro class Error e PrintWarning'''
+    '''Codici di errore, intesa da utilizzare entro class Error e PrintWarning'''
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
@@ -101,7 +101,7 @@ class bcolors:
 class  PrintWarning:
     """ Applicazione della classe di bcolors. Con questa classe possiamo stampare a video
     vari codici di errore/warning con colori diversi e tenere traccia visivamente di vari eventi."""
-    def __init__(self,type:int, error:str="") -> None:
+    def __init__(self, type:int, error:str="") -> None:
         self.error = error
         self.color = None
         if type == 0:
@@ -140,6 +140,7 @@ class  PrintWarning:
     
 
     def __str__(self) -> str:
+        '''Utilizzato internamente per richiamare gli errori dal Costruttore'''
         return self.error
 
 
@@ -147,7 +148,8 @@ class  PrintWarning:
 
 
 class Parsing(object):
-    '''Parsing class for GenBank file format'''
+    '''Classe che si occupa di trattare i dati forniti da GenBank.
+    Il file su cui si opera si da essere per scontato in formato .gbk'''
 
 
     def __init__(self, file_name:str=None) -> None:
@@ -208,7 +210,6 @@ class Parsing(object):
                 json_gene["Seq_Hex"] = sh["hex"]        #str(gene.seq)-> SHA256 funzione
                 json_convert["Seq_Hex"] = sh["hex"]     #str(gene.seq)-> SHA256 funzione
                 json_convert["Seq_Raw"] = sh["seq"]     #str(gene.seq)-> SHA256 funzione
-                
         except Exception as e:
             if check:
                 print(e,"Entra qua nella sequenza:",gene.id)
@@ -234,6 +235,7 @@ class Parsing(object):
             'seq':seq
         }
     
+
     def save_data(self, json_array:tuple) -> None:
         '''Crea un file json contentene i dati parsati.'''
         with open(f"{Global.JSON['Path']}datastruct.json","w") as js:
@@ -247,7 +249,7 @@ class Parsing(object):
 
 
 class Database:
-    def __init__(self,verbose=False,type:str="",email:str=None) -> None:
+    def __init__(self, verbose=False, type:str="", email:str=None) -> None:
         self.file = Global.SQL["Store"]
         ip = Global.CLUSTER.split(":")[0]
         port = int(Global.CLUSTER.split(":")[1])
@@ -270,12 +272,14 @@ class Database:
         return [key for key in self.dataSource]
     
 
-    def addEmail(self,email) -> None:
+    def addEmail(self, email) -> None:
         self.email = email
         Entrez.email = email
 
 
-    def save_on_mongo(self,tuple_of_array:tuple) -> None:
+    def save_on_mongo(self, tuple_of_array:tuple) -> None:
+        '''Questo metodo genera il database in MongoDB (v. Requisiti all'inizio del file o il README.md).
+        I dati vengono salvati in un db locale di nome Biologia, dove poi verranno eseguite tutte le operazioni.'''
         PrintWarning(8).stdout("\nStart saving on database")
         db = self.client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
         print(self.mongo_collections)
@@ -301,6 +305,8 @@ class Database:
     
 
     def save_one_in_mongo(self,struct:dict,collection:str)->None:
+        '''Come il metodo save_on_mongo(), ma con sensibilità per singolo record.
+        In questo modo, possiamo aggiungere manualmente i dati di interesse.'''
         db = self.client["Biologia"]
         collection_data_name = collection + "_data"
         collection_hex_name = collection + "_hex"
@@ -314,7 +320,8 @@ class Database:
 
         
     def save_on_sql(self,tuple_of_array:tuple, file=None):
-        # filename to form database
+        '''Questo metodo genera il database in SQL (v. Requisiti all'inizio del file o il README.md).
+        Sebbene funzionante, al momento questo ramo del progetto è in STANDBY'''
         if file != None:
             self.file = file
         try:
