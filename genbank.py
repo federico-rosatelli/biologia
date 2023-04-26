@@ -36,9 +36,15 @@ from time import ctime, perf_counter
 # Github:       "https://github.com/federico-rosatelli/biologia"
 
 # NOTES
-# MongoDB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
+#
+# MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
 # a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
 # il db di interesse e mongorestore sulla nuova postazione, una volta importata la cartella generata.
+#
+# La rappresentazione FASTA e FASTQ
+# FASTA conserva soltanto la Sequenza di un gene
+# FASTQ associa alla sequenza, per ogni indice di posizione, un valore qualitativo codificato in ASCII.
+#
 
 
 # Global constants
@@ -456,7 +462,7 @@ class Database:
         return s1,s2
     
 
-    def saveFileSeq(self,name:str,seq1:str,seq2:str) -> None:
+    def saveFileSeq(self, name:str, seq1:str, seq2:str) -> None:
         seq1_fasta = ""
         for i in range(len(seq1)):
             if i%100 == 0 and i != 0:
@@ -785,9 +791,9 @@ def main(args:dict) -> None:
     return
 
 
+
+#Costrutto che permette di passare da riga di comando l'opzione desiderata per l'inserimento dei dati in un tipo di DB
 if __name__ == "__main__":
-    """ costrutto che permette di passare da riga di comando l'opzione desiderata per l'inserimento dei dati 
-     in un tipo di DB """
     parser = argparse.ArgumentParser(
                     prog='Biologia Database Parsing',
                     description='What the program does',
