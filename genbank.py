@@ -358,7 +358,7 @@ class Database:
         # self.printDifferenceAlgae()
         # dataDiff = self.checkDifferenceAlgae()
         #return self.dataSource
-        self.confronto()
+        #self.confronto()
         return self.dataSource
     
 

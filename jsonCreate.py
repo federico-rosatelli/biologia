@@ -29,8 +29,17 @@ collection_data = db["protein_data"]
 
 filter = {}
 dataResult = collection_data.find(filter,{"Id":1})
+collection_data = db["genetic_data"]
 
-for i in dataResult:
-    print(i)
+list_res = []
+
+
+for protein in dataResult:
+    filter = {"Features":{"$elemMatch":{"Type":"CDS","protein_id":protein["Id"]}}}
+    result = collection_data.find_one(filter)
+    if result:
+        list_res.append(protein["Id"])
+
+print(list_res)
 
 
