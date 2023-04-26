@@ -1,7 +1,9 @@
-from pymongo import MongoClient
 import re
+from pymongo import MongoClient
 
 CLUSTER = "localhost:27017"
+
+
 def findTaxon(key):
     client = MongoClient('localhost', 27017)
     db = client["Biologia"]

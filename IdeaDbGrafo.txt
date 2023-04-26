@@ -14,7 +14,7 @@ Ordine
   ||
 Famiglia
   ||
- Genere
+Genere
   ||
 Specie
    ||
@@ -22,5 +22,5 @@ Organismo===TaxonomyId
    ||
    ||
    ||
-  Gene===>Proteina===>Funzione
+Gene===>Proteina===>Funzione
    

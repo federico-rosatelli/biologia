@@ -12,7 +12,7 @@ import pandas as pd
 import smith_waterman
 from Bio import SeqIO, Entrez
 from pymongo import MongoClient
-from time import ctime,perf_counter
+from time import ctime, perf_counter
 
 
 #######################
@@ -35,16 +35,23 @@ from time import ctime,perf_counter
 # Drive:        "https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW"
 # Github:       "https://github.com/federico-rosatelli/biologia"
 
+# NOTES
+# MongoDB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
+# a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
+# il db di interesse e mongorestore sulla nuova postazione, una volta importata la cartella generata.
+
 
 # Global constants
-
-CLUSTER = "localhost:27017"     # apertura porta di default sul localhost che esegue il codice
+#apertura porta di default sul localhost che esegue MongoDB
+CLUSTER = "localhost:27017"     
 
 
 #######################
 
 
 class Global:
+    '''Per l'accesso globale a costanti e risorse. I link qui preseti prelevano i dati direttamente
+    dalle piattaforme web che forniscono i database contenenti i dati genomici.'''
     CLUSTER = "localhost:27017"
     WEBSOURCE = {
         "Algae":{
@@ -68,6 +75,24 @@ class Global:
         "Path":"data/alignments/",
         "Type":"TXTFile"
     }
+
+
+#######################
+
+
+class bcolors:
+    '''codici di errore, intesa da utilizzare entro class Error e PrintWarning'''
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    WARN_BOX = WARNING + '[!] '
+    OK_BOX = OKBLUE + '[*] '
 
 
 #######################
@@ -104,7 +129,7 @@ class  PrintWarning:
 
     
     def stdout(self, *strings:any) -> None:
-        ''' Creiamo un metodo custom di stampa a video dei nostri codici di errore, in cui riportiamo il timestamp
+        '''Metodo custom di stampa a video dei nostri codici di errore, in cui riportiamo il timestamp
         e la descrizione dell'errore con un colore fissato per utilizzo informativo. '''
         self.error = ' '.join(str(i) for i in strings)
         plus = ""
@@ -134,7 +159,7 @@ class Parsing(object):
 
 
     def parsing_gene(self, verbose:bool=False) -> list:
-        '''Metodo che ritorna due liste: 
+        '''Metodo che ritorna due liste:
         - In "gene_array" vi sono i dati analizzati: per ogni file.gbk dato in input ci sono X geni,
           e per ogni gene avremo un dizionario dei campi di interesse, come il Name, l'ID, e così via;
         - In "hex_array" vi sono i dati trattati riferiti alla Sequenza. Salviamo infatti sia la sequenza
@@ -164,6 +189,11 @@ class Parsing(object):
 
 
     def parseGene(self, gene) -> tuple[dict, dict, int]:
+        '''Metodo che ritorna una tupla strutturata nel modo seguente:
+        - dict json_gene        che contiene Nome e ID del gene analizzato;
+        - dict json_convert     che contiene sia la sequenza "raw" che tradotta in SHA256;
+        - int  error            che segnala quanti errori si sono verificati durante la ricerca, ovvero quante volte il dato è risultato mancante       
+        Questa tupla viene utilizzata all'interno del metodo parsing_gene() per popolare i due array gee_array e hex_array.'''
         json_gene = {}
         json_convert = {}
         json_gene["Name"] = gene.name
@@ -175,9 +205,9 @@ class Parsing(object):
                 #print(count)
                 check = True
                 sh = self.sha_index(str(gene.seq))
-                json_gene["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
-                json_convert["Seq_Hex"] = sh["hex"]  #str(gene.seq)-> SHA256 funzione
-                json_convert["Seq_Raw"] = sh["seq"]  #str(gene.seq)-> SHA256 funzione
+                json_gene["Seq_Hex"] = sh["hex"]        #str(gene.seq)-> SHA256 funzione
+                json_convert["Seq_Hex"] = sh["hex"]     #str(gene.seq)-> SHA256 funzione
+                json_convert["Seq_Raw"] = sh["seq"]     #str(gene.seq)-> SHA256 funzione
                 
         except Exception as e:
             if check:
@@ -196,15 +226,16 @@ class Parsing(object):
         return json_gene, json_convert, errors
     
 
-    def sha_index(self,seq:str) -> dict:
-        # ritorna, in un dizionario, il codice hash di una sequenza di basi azotate (ACGTU le possibili unità)
+    def sha_index(self, seq:str) -> dict:
+        '''Metodo che, dato in input una squenza, ritorna in un dizionario la sequenza e il suo codice hash.
+        ACGTU sono le possibili unità di una qualsiasi sequenza. '''
         return {
             'hex':hashlib.sha256(seq.encode('utf-8')).hexdigest(),
             'seq':seq
         }
     
     def save_data(self, json_array:tuple) -> None:
-        # crea un file json contentene i dati parsati - salvare in DB?
+        '''Crea un file json contentene i dati parsati.'''
         with open(f"{Global.JSON['Path']}datastruct.json","w") as js:
             json.dump({
                         "struct":json_array[0],
@@ -433,13 +464,13 @@ class Database:
 
 
     def printDifferenceAlgae(self) -> list:
-        #print algae non contenute in microalgae
+        '''Stampa le algae non contenute in microalgae'''
         diff = [self.diffAlg[key] for key in self.diffAlg]
         print(len(diff[0])-len(diff[1]))
 
 
     def checkDifferenceAlgae(self) -> list:
-        #check algae non contenute in microalgae
+        '''Effettua il check delle algae non contenute in microalgae'''
         diff = [self.diffAlg[key] for key in self.diffAlg]
         tot = {}
         for i in range(len(diff)):
@@ -455,7 +486,7 @@ class Database:
         return algTot
 
     
-    def save_on_json(self,fileName:str="dataSource.json") ->None:
+    def save_on_json(self, fileName:str="dataSource.json") -> None:
         with open(f"{Global.JSON['Path']}{fileName}","w") as js:
             json.dump(self.dataSource,js,indent=4)
     
@@ -677,24 +708,7 @@ class Database:
                 #     #return None
                 # else:
                 #     PrintWarning(3).stdout(f"Genome ID:{id}")
-                
 
-#######################    
-
-
-class bcolors:
-    # codici di errore, intesa da utilizzare entro class Error
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    WARN_BOX = WARNING + '[!] '
-    OK_BOX = OKBLUE + '[*] '
 
 
 #######################
