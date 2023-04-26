@@ -72,7 +72,7 @@ class Global:
 class  PrintWarning:
     """ Applicazione della classe di bcolors. Con questa classe possiamo stampare a video
     vari codici di errore/warning con colori diversi e tenere traccia visivamente di vari eventi."""
-    def __init__(self,type:int,error:str="") -> None:
+    def __init__(self,type:int, error:str="") -> None:
         self.error = error
         self.color = None
         if type == 0:
@@ -99,7 +99,7 @@ class  PrintWarning:
             self.color = bcolors.OK_BOX
 
     
-    def stdout(self,*strings:any) -> None:
+    def stdout(self, *strings:any) -> None:
         ''' Creiamo un metodo custom di stampa a video dei nostri codici di errore, in cui riportiamo il timestamp
         e la descrizione dell'errore con un colore fissato per utilizzo informativo. '''
         self.error = ' '.join(str(i) for i in strings)
@@ -118,49 +118,54 @@ class  PrintWarning:
 
 
 class Parsing(object):
-    """Parsing class for GenBank file format"""
+    '''Parsing class for GenBank file format'''
+
+
     def __init__(self, file_name:str=None) -> None:
+        '''Costruttore'''
         if not file_name:
             self.record = []
         else:
             self.record = SeqIO.parse(file_name, "genbank")
 
 
-    def parsing_gene(self) -> list:
-        """Ritorna due liste: 
-        - nella prima vi sono i dati analizzati: per ogni file.gbk dato in input ci sono  di geni,
+    def parsing_gene(self, verbose:bool=False) -> list:
+        '''Metodo che ritorna due liste: 
+        - In "gene_array" vi sono i dati analizzati: per ogni file.gbk dato in input ci sono X geni,
           e per ogni gene avremo un dizionario dei campi di interesse, come il Name, l'ID, e così via;
-        - nella seconda vi sono i dati trattati riferiti alla Sequenza. Salviamo infatti sia la sequenza
-          di basi azotate "as is", sia la versione codificata con SHA256."""  
+        - In "hex_array" vi sono i dati trattati riferiti alla Sequenza. Salviamo infatti sia la sequenza
+          di basi azotate "as is", sia la versione codificata con SHA256.'''
         gene_array = []
         hex_array = []
         count = 0
         last = -1
         errors = 0
-        PrintWarning(8).stdout("\nSTART PARSING")
+        PrintWarning(8).stdout("\nSTART PARSING")               # messaggio informativo su console
         print("~"*56+"\n")
         t_last = perf_counter()
+        
         for gene in self.record:
             count += 1
-            if int((count/86100)*100) != last:
+            if int((count/86100)*100) != last and verbose:              # Gestito in base al verbose, attenzione alla lunghezza del file (...)
                 t_now = perf_counter()
                 print("[%-50s] %d%% %d" % ('='*((last+1)//2),last+1,(t_now-t_last)*(86100//count)),end="\r") #??????
                 last +=1
             #print(count)
-            json_gene, json_convert = self.parseGene(gene)
+            json_gene, json_convert, errors = self.parseGene(gene)
             hex_array.append(json_convert)
             gene_array.append(json_gene)
         PrintWarning(3).stdout("\nParsing completed\n") 
-        PrintWarning(5).stdout("Process completed with",errors,'errors\n')
-        return gene_array,hex_array
+        PrintWarning(5).stdout("Process completed with", errors, 'errors\n')
+        return gene_array, hex_array
 
 
-    def parseGene(self,gene):
+    def parseGene(self, gene) -> tuple[dict, dict, int]:
         json_gene = {}
         json_convert = {}
         json_gene["Name"] = gene.name
         json_gene["Id"] = gene.id
         check = False
+        errors = 0
         try:
             if gene.seq != "":
                 #print(count)
@@ -173,7 +178,7 @@ class Parsing(object):
         except Exception as e:
             if check:
                 print(e,"Entra qua nella sequenza:",gene.id)
-            #errors += 1
+            errors += 1
             pass
         json_gene["Description"] = gene.description
         json_gene["Features"] = []
@@ -184,7 +189,7 @@ class Parsing(object):
                 feature_type[qual] = feature.qualifiers.get(qual)[0]
             feature_type["Location"] = (int(feature.location.start),int(feature.location.end))
             json_gene["Features"].append(feature_type)
-        return json_gene,json_convert
+        return json_gene, json_convert, errors
     
 
     def sha_index(self,seq:str) -> dict:
