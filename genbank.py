@@ -52,6 +52,8 @@ CLUSTER = "localhost:27017"
 class Global:
     '''Per l'accesso globale a costanti e risorse. I link qui preseti prelevano i dati direttamente
     dalle piattaforme web che forniscono i database contenenti i dati genomici.'''
+
+
     CLUSTER = "localhost:27017"
     WEBSOURCE = {
         "Algae":{
@@ -82,6 +84,8 @@ class Global:
 
 class bcolors:
     '''Codici di errore, intesa da utilizzare entro class Error e PrintWarning'''
+
+
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
@@ -101,6 +105,8 @@ class bcolors:
 class  PrintWarning:
     """ Applicazione della classe di bcolors. Con questa classe possiamo stampare a video
     vari codici di errore/warning con colori diversi e tenere traccia visivamente di vari eventi."""
+
+
     def __init__(self, type:int, error:str="") -> None:
         self.error = error
         self.color = None
@@ -249,7 +255,14 @@ class Parsing(object):
 
 
 class Database:
+    '''In questa classe vengono gestiti i diversi tipi di DB su cui i dati
+    possono essere salvati. Compito di questa classe é l'inizializzazione
+    e la manipolazione dei dati, insieme alla possibilità di inserimento
+    delle credenziali per dialogare con i server delle maggiori piattaforme web.'''
+
+
     def __init__(self, verbose=False, type:str="", email:str=None) -> None:
+        '''Costruttore'''
         self.file = Global.SQL["Store"]
         ip = Global.CLUSTER.split(":")[0]
         port = int(Global.CLUSTER.split(":")[1])
@@ -269,10 +282,12 @@ class Database:
     
     
     def listSource(self)->list:
+        '''Restituisce una lista delle fonti da cui vengono prelevati i dati.'''
         return [key for key in self.dataSource]
     
 
     def addEmail(self, email) -> None:
+        '''Aggiorna il campo email per identificazione.'''
         self.email = email
         Entrez.email = email
 
@@ -349,6 +364,7 @@ class Database:
 
 
     def get_data_from_mongo(self, info:dict, saveOnJson:bool=False, algae:bool=False, micro_algae:bool=False) -> dict:
+        '''Metodo di tipo "Getter", permette la consultazione del DB basato su MongoDB'''
         if self.client == None:
             ip = CLUSTER.split(":")[0]
             port = int(CLUSTER.split(":")[1])
