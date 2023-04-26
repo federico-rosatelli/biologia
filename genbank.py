@@ -710,7 +710,6 @@ def main(args:dict) -> None:
         data,conv = p.parsing_gene()
         if args["json"]:
             p.save_data((data,conv))
-        
         if args["nosql_mongo"]:
             d.save_on_mongo((data,conv))
         if args["sqlite3"]:
@@ -735,14 +734,9 @@ def main(args:dict) -> None:
         if args["fasta"]:
             #print(args["fasta"])
             d.toFasta(args["fasta"])
-            
     #d.isMicorAlgae()
-    
     return
 
-
-
-    
 
 if __name__ == "__main__":
     """ costrutto che permette di passare da riga di comando l'opzione desiderata per l'inserimento dei dati 
