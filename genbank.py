@@ -35,16 +35,40 @@ from time import ctime, perf_counter
 # Drive:        "https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW"
 # Github:       "https://github.com/federico-rosatelli/biologia"
 
+
+
 # NOTES
 #
 # MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
 # a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
 # il db di interesse e mongorestore sulla nuova postazione, una volta importata la cartella generata.
 #
-# La rappresentazione FASTA e FASTQ
-# FASTA conserva soltanto la Sequenza di un gene
-# FASTQ associa alla sequenza, per ogni indice di posizione, un valore qualitativo codificato in ASCII.
 #
+#
+# La rappresentazione FASTA e FASTQ
+# 
+# FASTA conserva soltanto la Sequenza di nucleotidi o amminoacidi, codificando ogni gene in singole lettere
+# per indice di posizione. Nella rappresentazione in Genbank, troviamo tale dato nel file JSON che salviamo
+# in locale, alla voce translation per ogni Coding Sequence sotto ogni Specie, secondo la seguente gerarchia:
+# 
+# SPECIE
+#   FEATURES
+#       CDS
+#           /translation="LSLAVGTTITLASYHWLL[...]""
+#
+# FASTQ è un "quality score" che associa alla sequenza, per ogni indice di posizione, un valore 
+# qualitativo codificato in ASCII. Un esempio a seguire:
+# @SRR64[...]       Name Sequence
+# CCTCGTCTA[...]    DNA Sequence
+# +SRR64[...]       Quality address
+# BBBBBFFFF[...]    Quality Score
+#
+#
+#
+# Sequenziamento genetico
+# E' il processo di determinazione dell'ordine dei nucleotidi (Adenina, Citosina, Guanina e Timina) che 
+# costituiscono il frammento di DNA in analisi. Le tecniche principali di Squenziamento sono
+# Sanger e NGS.
 
 
 # Global constants
