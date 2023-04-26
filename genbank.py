@@ -32,6 +32,11 @@ from time import ctime,perf_counter
 # Pymongo:      "https://pymongo.readthedocs.io/en/stable/"
 
 
+# Global constants
+
+CLUSTER = "localhost:27017"     # apertura porta di default sul localhost che esegue il codice
+
+
 class Global:
     CLUSTER = "localhost:27017"
     WEBSOURCE = {
@@ -101,9 +106,6 @@ class  PrintWarning:
 
     def __str__(self) -> str:
         return self.error
-
-
-CLUSTER = "localhost:27017"     # apertura porta di default sul localhost che esegue il codice
 
 
 class Parsing(object):
