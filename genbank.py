@@ -1,32 +1,36 @@
+# Libraries & API
+
 import csv
 import os
 import random
-from Bio import SeqIO, Entrez
 import json
 import hashlib
 import argparse
-from pymongo import MongoClient
 import sqlite3
-from time import ctime,perf_counter
 import requests
 import pandas as pd
 import smith_waterman
+from Bio import SeqIO, Entrez
+from pymongo import MongoClient
+from time import ctime,perf_counter
+
 
 #######################
 # List Address source db
 # ARGS    = "https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt"
-# ARGS2   =
+# ARGS2   = 
 #######################
 
 # Credits
 # Authors: federico-rosatelli (Federico Rosatelli), AxnNxs (Mattia Di Gesaro)
 
+# Riferimenti ufficiali & Requisiti
+# Anaconda:     "https://www.anaconda.com"
+# Biopython:    "https://biopython.org/wiki/Documentation"
+# Hashlib:      "https://docs.python.org/3/library/hashlib.html"
+# Argparse:     "https://docs.python.org/3/library/argparse.html"
+# Pymongo:      "https://pymongo.readthedocs.io/en/stable/"
 
-# Riferimenti ufficiali
-# biopython:    "https://biopython.org/wiki/Documentation"
-# hashlib:      "https://docs.python.org/3/library/hashlib.html"
-# argparse:     "https://docs.python.org/3/library/argparse.html"
-# pymongo       "https://pymongo.readthedocs.io/en/stable/"
 
 class Global:
     CLUSTER = "localhost:27017"
@@ -56,7 +60,7 @@ class Global:
 
 class  PrintWarning:
     """ Applicazione della classe di bcolors. Con questa classe possiamo stampare a video
-    vari codici di errore/warning con colori diversi e tenere traccia visivamente di vari eventi """
+    vari codici di errore/warning con colori diversi e tenere traccia visivamente di vari eventi."""
     def __init__(self,type:int,error:str="") -> None:
         self.error = error
         self.color = None
@@ -84,7 +88,9 @@ class  PrintWarning:
             self.color = bcolors.OK_BOX
 
     
-    def stdout(self,*strings:any) ->None:
+    def stdout(self,*strings:any) -> None:
+        ''' Creiamo un metodo custom di stampa a video dei nostri codici di errore, in cui riportiamo il timestamp
+        e la descrizione dell'errore con un colore fissato per utilizzo informativo. '''
         self.error = ' '.join(str(i) for i in strings)
         plus = ""
         if self.error[:1] == "\n":
@@ -92,10 +98,13 @@ class  PrintWarning:
             self.error = self.error[1:]
         print(bcolors.BOLD + f"{plus}[{ctime()}] " + bcolors.ENDC + self.color + self.error +  bcolors.ENDC)
     
+
     def __str__(self) -> str:
         return self.error
 
+
 CLUSTER = "localhost:27017"     # apertura porta di default sul localhost che esegue il codice
+
 
 class Parsing(object):
     """Parsing class for GenBank file format"""
