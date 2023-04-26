@@ -31,6 +31,10 @@ from time import ctime,perf_counter
 # Argparse:     "https://docs.python.org/3/library/argparse.html"
 # Pymongo:      "https://pymongo.readthedocs.io/en/stable/"
 
+# Altri link
+# Drive:        "https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW"
+# Github:       "https://github.com/federico-rosatelli/biologia"
+
 
 # Global constants
 
@@ -278,7 +282,7 @@ class Database:
         self.printWarning.stdout("Saved correctly on mongo")
 
         
-    def save_on_sql(self,tuple_of_array:tuple,file=None):
+    def save_on_sql(self,tuple_of_array:tuple, file=None):
         # filename to form database
         if file != None:
             self.file = file
@@ -306,7 +310,7 @@ class Database:
         return None
 
 
-    def get_data_from_mongo(self,info:dict,saveOnJson:bool=False,algae:bool=False,micro_algae:bool=False) -> dict:
+    def get_data_from_mongo(self, info:dict, saveOnJson:bool=False, algae:bool=False, micro_algae:bool=False) -> dict:
         if self.client == None:
             ip = CLUSTER.split(":")[0]
             port = int(CLUSTER.split(":")[1])
@@ -358,7 +362,7 @@ class Database:
         return self.dataSource
     
 
-    def alignmentSeq(self,f1_key:str,f2_key:str) -> str:
+    def alignmentSeq(self, f1_key:str, f2_key:str) -> str:
         db = self.client["Biologia"]
         collection_data = db["genetic_data"]
         collection_convert = db["hex_to_seq"]
@@ -526,7 +530,8 @@ class Database:
         return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
 
     
-    def proteinFind(self,id) -> dict:
+    def proteinFind(self, id) -> dict:
+        '''Matching con db esistente di Nucleotide'''
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
         info = {"Id":id,"Features":{"$elemMatch":{"Type":"CDS"}}}
