@@ -69,6 +69,15 @@ from time import ctime, perf_counter
 # E' il processo di determinazione dell'ordine dei nucleotidi (Adenina, Citosina, Guanina e Timina) che 
 # costituiscono il frammento di DNA in analisi. Le tecniche principali di Squenziamento sono
 # Sanger e NGS.
+#
+#
+#
+# Allineamento genetico
+# E' il processo di confronto di due o più sequenze di DNA o proteine per identificare regioni identiche
+# o simili per individuare eventuali relazioni funzionali, strutturali o filogenetiche.
+# Le tecniche di allineamento prevedono il confronto globale e locale.
+# Un'applicazione algoritmica di allineamento locale è data da Smith Waterman.
+# Un'applicazione algoritmica di allineamento globale é data da Needleman-Wunsch.
 
 
 # Global constants
