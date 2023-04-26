@@ -37,6 +37,9 @@ from time import ctime,perf_counter
 CLUSTER = "localhost:27017"     # apertura porta di default sul localhost che esegue il codice
 
 
+#######################
+
+
 class Global:
     CLUSTER = "localhost:27017"
     WEBSOURCE = {
@@ -61,6 +64,9 @@ class Global:
         "Path":"data/alignments/",
         "Type":"TXTFile"
     }
+
+
+#######################
 
 
 class  PrintWarning:
@@ -108,13 +114,17 @@ class  PrintWarning:
         return self.error
 
 
+#######################
+
+
 class Parsing(object):
     """Parsing class for GenBank file format"""
-    def __init__(self,file_name:str=None) -> None:
+    def __init__(self, file_name:str=None) -> None:
         if not file_name:
             self.record = []
         else:
             self.record = SeqIO.parse(file_name, "genbank")
+
 
     def parsing_gene(self) -> list:
         """Ritorna due liste: 
@@ -143,6 +153,7 @@ class Parsing(object):
         PrintWarning(3).stdout("\nParsing completed\n") 
         PrintWarning(5).stdout("Process completed with",errors,'errors\n')
         return gene_array,hex_array
+
 
     def parseGene(self,gene):
         json_gene = {}
@@ -175,6 +186,7 @@ class Parsing(object):
             json_gene["Features"].append(feature_type)
         return json_gene,json_convert
     
+
     def sha_index(self,seq:str) -> dict:
         # ritorna, in un dizionario, il codice hash di una sequenza di basi azotate (ACGTU le possibili unità)
         return {
@@ -191,12 +203,12 @@ class Parsing(object):
                         },js,indent=4)
 
 
+#######################
 
 
 class Database:
     def __init__(self,verbose=False,type:str="",email:str=None) -> None:
         self.file = Global.SQL["Store"]
-
         ip = Global.CLUSTER.split(":")[0]
         port = int(Global.CLUSTER.split(":")[1])
         self.client = MongoClient(f'{ip}', port)
@@ -217,13 +229,14 @@ class Database:
     def listSource(self)->list:
         return [key for key in self.dataSource]
     
+
     def addEmail(self,email) -> None:
         self.email = email
         Entrez.email = email
 
+
     def save_on_mongo(self,tuple_of_array:tuple) -> None:
         PrintWarning(8).stdout("\nStart saving on database")
-        
         db = self.client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
         print(self.mongo_collections)
         collection_data = db[self.mongo_collections[0]]
@@ -246,6 +259,7 @@ class Database:
                     collection_convert.insert_one(tuple_of_array[1][i])
         self.printWarning.stdout("Saved correctly on mongo")
     
+
     def save_one_in_mongo(self,struct:dict,collection:str)->None:
         db = self.client["Biologia"]
         collection_data_name = collection + "_data"
@@ -286,6 +300,7 @@ class Database:
         self.connection.close()
         return None
 
+
     def get_data_from_mongo(self,info:dict,saveOnJson:bool=False,algae:bool=False,micro_algae:bool=False) -> dict:
         if self.client == None:
             ip = CLUSTER.split(":")[0]
@@ -296,7 +311,6 @@ class Database:
         collection_convert = db[self.mongo_collections[1]]
         finder = collection_data.find(info)
         dataSource = {}
-        
         for x in finder:
             #print(x["Features"])
             source = None
@@ -306,13 +320,10 @@ class Database:
                     if source not in dataSource:
                         dataSource[source] = []
             dataSource[source].append(x["Id"])
-
         self.totLength = len(dataSource)
         self.dataSource = dataSource
-        
         if saveOnJson:
             self.save_on_json()
-
         if algae:
             totAlgae,same = self.isAlgae(dataSource)
             self.diffAlg["Algae"] = same
@@ -323,7 +334,6 @@ class Database:
             PrintWarning(2).stdout(f"Total algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
             if saveOnJson:
                 self.save_on_json(fileName="algaeSource.json")
-
         if micro_algae:
             # ? self.datasource vs. datasource
             totAlgae,same = self.isMicroAlgae(dataSource)
@@ -335,7 +345,6 @@ class Database:
             PrintWarning(2).stdout(f"Total micro algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
             if saveOnJson:
                 self.save_on_json(fileName="microAlgaeSource.json")
-
         #
         # self.printDifferenceAlgae()
         # dataDiff = self.checkDifferenceAlgae()
@@ -343,6 +352,7 @@ class Database:
         self.confronto()
         return self.dataSource
     
+
     def alignmentSeq(self,f1_key:str,f2_key:str) -> str:
         db = self.client["Biologia"]
         collection_data = db["genetic_data"]
@@ -362,12 +372,10 @@ class Database:
         if not finder2:
             PrintWarning(5).stdout(f"Error searching {f2_key}: Organism Not Found")
             return None, None
-
         if not 'Seq_Hex' in finder2:
             PrintWarning(5).stdout(f"Error searching {f2_key}: Hex Sequence Not Found")
             return None, None
         hex2 = finder2['Seq_Hex']
-
         info_hex = {"Seq_Hex":hex1}
         finder_hex = collection_convert.find_one(info_hex)
         if not finder_hex:
@@ -380,13 +388,11 @@ class Database:
             PrintWarning(5).stdout(f"Error searching {f2_key}: Hex Sequence Not Found in the Database")
             return None, None
         seq2 = finder_hex['Seq_Raw']
-
         smwt = smith_waterman.Alignment(seq1,seq2,show_table=self.verbose)
-
         s1,s2 = smwt.localAlignment()
-
         return s1,s2
     
+
     def saveFileSeq(self,name:str,seq1:str,seq2:str) -> None:
         seq1_fasta = ""
         for i in range(len(seq1)):
@@ -405,9 +411,9 @@ class Database:
         with open(name,"w") as wr:
             wr.write(seq1_fasta+"\n\n//\n\n"+seq2_fasta)
     
+
     def alignment(self,fileIn,fileOut) -> None:
         rd = open(fileIn).readlines()
-
         for i in range(len(rd)):
             for j in range(i+1,len(rd)):
                 PrintWarning(3).stdout(f"Align {rd[i].strip()} with {rd[j].strip()}")
@@ -417,9 +423,7 @@ class Database:
                     self.saveFileSeq(f"{Global.ALIGNMENT['Path']}{fileOut.split('.')[0]}_{rd[i].strip()}_{rd[j].strip()}.txt",seq1,seq2)
 
 
-
     def printDifferenceAlgae(self) -> list:
-
         #print algae non contenute in microalgae
         diff = [self.diffAlg[key] for key in self.diffAlg]
         print(len(diff[0])-len(diff[1]))
@@ -446,6 +450,7 @@ class Database:
         with open(f"{Global.JSON['Path']}{fileName}","w") as js:
             json.dump(self.dataSource,js,indent=4)
     
+
     def isAlgae(self,dataSource,rewrite:bool=False) -> tuple:
         if not os.path.isfile(Global.WEBSOURCE["Algae"]["File"]) or rewrite:
             r = requests.get(Global.WEBSOURCE["Algae"]["Web"])
@@ -475,6 +480,7 @@ class Database:
                         unico.append(val_key.lower())
         return totAlgae,unico
 
+
     def isMicroAlgae(self,dataSource) -> tuple:
         rl = open(Global.WEBSOURCE["MicroAlgae"]["File"]).readlines()
         dataAlgae = []
@@ -489,7 +495,6 @@ class Database:
                 val_key = key.split(" ")[1]
             else:
                 val_key = key.split(" ")[0]
-
             for algae in dataAlgae:
                 if len(algae) > 1 and val_key.lower() in algae[2].lower():
                     totAlgae.append(key)
@@ -497,6 +502,7 @@ class Database:
                         unico.append(val_key.lower())
         return totAlgae,unico
     
+
     def toFasta(self,name):
         print(name)
         db = self.client["Biologia"]
@@ -530,11 +536,9 @@ class Database:
             if f["Type"] == "CDS":
                 if "protein_id" in f:
                     protein_id = f["protein_id"]
-
         if not protein_id:
             PrintWarning(5).stdout(f"Error searching {id}: Protein Not Found")
             return None
-        
         info = {"Id":protein_id}
         finder_data = collection_data.find_one(info)
         if not finder_data:
@@ -557,6 +561,7 @@ class Database:
         }
         return dataFind
     
+
     def taxonFind(self,id) -> dict:
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
@@ -572,7 +577,6 @@ class Database:
             if f["Type"] == "source":
                 if "db_xref" in f:
                     taxon_meta = f["db_xref"]
-
         if not taxon_meta:
             PrintWarning(5).stdout(f"Error searching {id}: db_xref Not Found")
             return None
@@ -587,30 +591,27 @@ class Database:
             return dataFind
         return finder_data
     
+
     def genomeFind(self,id) -> dict:
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
         info = {"Features":{"$elemMatch":{"Type":"CDS","db_xref":{"$exists":True}}}}
         finder_data = collection_data_nucleotide.find(info)
         genes = []
-        
         for finder in finder_data:
             gene_id = None
             for f in finder["Features"]:
                 if f["Type"] == "gene":
                     if "gene" in f:
                         gene_id = f["gene"]
-            
-            
             if gene_id != None:
                 print(gene_id)
                 dataFind = self.ncbiSearchGenome(gene_id,"genome")
                 print(dataFind)
                 # info = {"TaxId":gene_id}
                 # finder_data = collection_data.find_one(info)
-        
-        
         return finder_data
+
 
     def ncbiSearch(self,id:str,database:str) -> tuple:
         # NB: in futuro la composizione del link potrebbe cambiare nella sua struttura, in base alla gestione interna di NCBI.
@@ -618,22 +619,23 @@ class Database:
         handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
         record = SeqIO.read(handle, "genbank")
         p1,p2 = self.parse.parseGene(record)
-
         return p1,p2
+
 
     def ncbiSearchTaxon(self,id:str,database:str) ->tuple:
         handle = Entrez.efetch(db=database, id=id, retmode="xml")
         read = Entrez.read(handle)
         return read
     
+
     def ncbiSearchGenome(self,id:str,database:str) ->tuple:
         handle = Entrez.efetch(db=database, id=id, retmode="xml")
         read = Entrez.read(handle)
         #print(read)
         # handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
         # record = SeqIO.read(handle, "genbank")
-        
         return read
+
 
     def ritornodicose(self) -> None:
         finder = {"Id":"","Features":{"$elemMatch":{"Type":"CDS"}}}
@@ -642,8 +644,6 @@ class Database:
         data = collection_data_nucleotide.count_documents(finder)
         print(data)
 
-
-        
 
     def confronto(self): #CAMBIA NOME
         # for key in self.dataSource:
@@ -660,8 +660,7 @@ class Database:
                 #     PrintWarning(5).stdout(f"ID:{id}")
                 #     #return None
                 # else:
-                #     PrintWarning(3).stdout(f"Taxon ID:{id}")
-                    
+                #     PrintWarning(3).stdout(f"Taxon ID:{id}")     
         data = self.genomeFind(4)
                 # if not data:
                 #     PrintWarning(5).stdout(f"ID:{id}")
@@ -670,7 +669,7 @@ class Database:
                 #     PrintWarning(3).stdout(f"Genome ID:{id}")
                 
 
-                    
+#######################    
 
 
 class bcolors:
@@ -688,7 +687,9 @@ class bcolors:
     OK_BOX = OKBLUE + '[*] '
 
 
-
+#######################
+######---MAIN---#######
+#######################
 
 
 def main(args:dict) -> None:
