@@ -79,7 +79,7 @@ from time import ctime, perf_counter
 # Sequenziamento genetico
 # E' il processo di determinazione dell'ordine dei nucleotidi (Adenina, Citosina, Guanina e Timina) che 
 # costituiscono il frammento di DNA in analisi. Le tecniche principali di Squenziamento sono
-# Sanger e NGS.
+# Sanger e NGS (Illumina ne é un esempio).
 #
 #
 #
@@ -560,6 +560,7 @@ class Database:
 
     
     def save_on_json(self, fileName:str="dataSource.json") -> None:
+        '''Salva i dati su un file in formato .json'''
         with open(f"{Global.JSON['Path']}{fileName}","w") as js:
             json.dump(self.dataSource,js,indent=4)
     
