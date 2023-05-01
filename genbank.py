@@ -32,7 +32,7 @@ from time import ctime, perf_counter
 # Argparse:             "https://docs.python.org/3/library/argparse.html"
 # Pymongo:              "https://pymongo.readthedocs.io/en/stable/"
 # MongoDB CE "Jammy":   "https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/"
-
+# Nodejs:               "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
 
 
 # Fonti ufficiali:
@@ -796,6 +796,7 @@ class Database:
 
 def main(args:dict) -> None:
     v = False
+    print("Welcome! This script is intended to be used for parsing data from a .gbk file.\nAfter parsing process is completed, you can check and query results in the DB selected as argument.")
     if len(sys.argv) == 1:
         print("Please add an argument at least\nDigit -h or --help after calling genbank.py to show possible input and try again\nRETURN:")
     if args["verbose"]:
@@ -854,10 +855,10 @@ if __name__ == "__main__":
     parser.add_argument('-f', '--file')
     parser.add_argument('-n', '--nosql-mongo',
                         action='store_true',
-                        help='uses MongoDB as database to store data')
+                        help='uses MongoDB as database to store data. Do not select both mongo-db and sql for storing')
     parser.add_argument('-s', '--sqlite3',
                         action='store_true',
-                        help='uses SQLite3 as database to store data')
+                        help='uses SQLite3 as database to store data. Do not select both mongo-db and sql for storing')
     parser.add_argument('-j', '--json',
                         action='store_true',
                         help='uses json as file to store data')
