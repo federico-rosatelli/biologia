@@ -10,6 +10,7 @@ import sqlite3
 import requests
 import pandas as pd
 import smith_waterman
+import sys
 from Bio import SeqIO, Entrez
 from pymongo import MongoClient
 from time import ctime, perf_counter
@@ -795,6 +796,8 @@ class Database:
 
 def main(args:dict) -> None:
     v = False
+    if len(sys.argv) == 1:
+        print("Please add an argument at least\nDigit --help after recall genbank.py to show possible input and try again\nRETURN:")
     if args["verbose"]:
         v = True
     type = "nucleotide"
