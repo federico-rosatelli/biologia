@@ -797,7 +797,7 @@ class Database:
 def main(args:dict) -> None:
     v = False
     if len(sys.argv) == 1:
-        print("Please add an argument at least\nDigit --help after recall genbank.py to show possible input and try again\nRETURN:")
+        print("Please add an argument at least\nDigit -h or --help after calling genbank.py to show possible input and try again\nRETURN:")
     if args["verbose"]:
         v = True
     type = "nucleotide"
@@ -853,27 +853,37 @@ if __name__ == "__main__":
                         action='store_true')
     parser.add_argument('-f', '--file')
     parser.add_argument('-n', '--nosql-mongo',
-                        action='store_true')
+                        action='store_true',
+                        help='uses MongoDB as database to store data')
     parser.add_argument('-s', '--sqlite3',
-                        action='store_true')
+                        action='store_true',
+                        help='uses SQLite3 as database to store data')
     parser.add_argument('-j', '--json',
-                        action='store_true')
+                        action='store_true',
+                        help='uses json as file to store data')
     parser.add_argument('--find',
-                        action='store_true')
+                        action='store_true',
+                        help='to search some key field in data')
     parser.add_argument('-a','--algae',
-                        action='store_true')
+                        action='store_true',
+                        help='if we are using algae branch on data')
     parser.add_argument('-m','--micro-algae',
-                        action='store_true')
+                        action='store_true',
+                        help='if we are using micro-algae branch on data')
     parser.add_argument('-l','--list',
-                        action='store_true')
+                        action='store_true',
+                        help='show data as list')
     parser.add_argument('-p','--protein',
-                        action='store_true')
-    parser.add_argument('--alignment',nargs=2,
+                        action='store_true',
+                        help='change search archive from nucleotide to protein')
+    parser.add_argument('--alignment', nargs=2,
                         metavar=('fromfile', 'tofile'),
                         help='Align all organisms in __fromfile__ and save it in __tofile__',
                         )
-    parser.add_argument('--email')
-    parser.add_argument('--fasta')
+    parser.add_argument('--email',
+                        help='for authentication purposes (NCBI)')
+    parser.add_argument('--fasta',
+                        help='ask for FASTA format')
     args = vars(parser.parse_args())
     main(args)
     
