@@ -41,15 +41,14 @@ section, article, header, footer, nav, aside, hgroup { display:block; }
 /* BODY */
 
 body {  
-font-family: 'SansationRegular', Arial, Helvetica, sans-serif; font-size:14px; color:#fff; line-height:150%; text-align:left;
-background:
-url(images/clouds.png) repeat fixed 40% 40%, 
-url(images/clouds2.png) repeat fixed 25% 55%,
-url(images/clouds.png) repeat fixed 15% 15%,
-url(images/sun.png) no-repeat fixed 95% 5%;
-background-color:#b6dffd;
- 
-width:960px; margin:0 auto;
+	font-family: 'SansationRegular', Arial, Helvetica, sans-serif; font-size:14px; color:#fff; line-height:150%; text-align:left;
+	background-image: url(../Danio.jpg);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
+	
+	width:960px; margin:0 auto;
 }
 
 
