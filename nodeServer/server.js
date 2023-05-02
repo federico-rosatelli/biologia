@@ -9,7 +9,7 @@ const http = require('http');
 const server = http.createServer(app);
 
 app.use(express.static('public'))
-app.use(express.static(path.join(__dirname, 'views/')));
+app.use(express.static(path.join(__dirname, 'views/')));  // Permette al codice CSS di essere applicato alla pagina web.
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -29,7 +29,7 @@ const { MongoClient } = require('mongodb');
 const uri = "mongodb://localhost:27017";
 
 
-
+// Finder queries
 
 async function finder(query) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true ,useUnifiedTopology: true })
@@ -46,7 +46,7 @@ async function finder(query) {
   }
 }
 
-app.get('/',async(req,res)=>{
+app.get('/',async(req, res) => {
     let query = ""
     let rank = ""
     if (req.query.search == ""){
