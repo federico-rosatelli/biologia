@@ -25,7 +25,7 @@ from time import ctime, perf_counter
 # Credits
 # Authors: federico-rosatelli (Federico Rosatelli), AxnNxs (Mattia Di Gesaro)
 
-# Riferimenti ufficiali & Requisiti
+# Requisiti:
 # Anaconda:             "https://www.anaconda.com"
 # Biopython:            "https://biopython.org/wiki/Documentation"
 # Hashlib:              "https://docs.python.org/3/library/hashlib.html"
@@ -33,6 +33,7 @@ from time import ctime, perf_counter
 # Pymongo:              "https://pymongo.readthedocs.io/en/stable/"
 # MongoDB CE "Jammy":   "https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/"
 # Nodejs:               "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
+# Nodejs Express:       "http://expressjs.com/"
 
 
 # Fonti ufficiali:
@@ -52,12 +53,40 @@ from time import ctime, perf_counter
 
 
 
-# NOTES
+
+# Guida al primo utilizzo
+# Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si raccomanda Ubuntu):
+# 
+#   - Scaricare il progetto tramite git, o copiare il progetto all'indirizzo inserito tra "Altri link" sopra questo paragrafo.
+#   - Installare tutti i requisiti
+#   - Inizializzare MongoDB:
+#       - Dare i seguenti comandi da terminale:
+#           sudo chown -R mongodb:mongodb /var/lib/mongodb
+#           sudo chown mongodb:mongodb /tmp/mongodb-27017.sock
+#       dopodiché:
+#           sudo systemctl start mongod
+#   - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)
+#   - attendere il termine del salvataggio nel database locale
+#   - aprire il server, digitando su console all'interno della cartella nodeServer:
+#       node server.js
+#   - dopodiché aprire il browser e cercare il seguente indirizzo:
+#       localhost:3000
+#   è ora possibile effettuare le query di interesse.
+#
+#   NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (systemctl start mongod) e il server (node server.js)
+
+
+
+
+
+
+# Concetti utili:
 #
 # MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
 # a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
 # il db di interesse e mongorestore sulla nuova postazione, una volta importata la cartella generata.
 #
+# 
 #
 #
 # La rappresentazione FASTA e FASTQ
@@ -852,7 +881,8 @@ if __name__ == "__main__":
                     epilog='Text at the bottom of help')
     parser.add_argument('-v', '--verbose',
                         action='store_true')
-    parser.add_argument('-f', '--file')
+    parser.add_argument('-f', '--file',
+                        help='uses a file .gbk in input to retrieve data and store in local db.')
     parser.add_argument('-n', '--nosql-mongo',
                         action='store_true',
                         help='uses MongoDB as database to store data. Do not select both mongo-db and sql for storing')

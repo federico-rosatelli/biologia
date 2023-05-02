@@ -1,14 +1,47 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Biologia</title>
-  </head>
-  <body>
+<!doctype html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    
+    <title> Biologia DB </title>
+    <!--[if lt IE 9]> 
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script> 
+	<![endif]-->
+    <link rel="stylesheet" href="/css/reset.css" media="screen">
+    <link rel="stylesheet" href="/css/monitor.css" media="screen">
+ 	<link rel="stylesheet" href="/css/phone_landscape.css" 
+          media="screen and (max-device-width: 480px) and (orientation: landscape)">
+    <!--link rel="stylesheet" href="phone_portrait.css" 
+          media="screen and (max-device-width: 480px) and (orientation: portrait)"-->
+    <link rel="icon" href="standard.gif" sizes="16x16" type="image/giff">      
+    <link rel="icon" href="iphone.png"   sizes="57x57" type="image/png">
+    <link rel="icon" href="vector.svg"   sizes="any"   type="image/svg+xml"> 
+</head>
+<body>
+  <header>
+    <hgroup>
+        <h1>Biologia DB</h1>
+        <h2>Powered by MongoDB</h2>
+    </hgroup>
+    <nav>
+        <h1>Navigazione:</h1>
+        <ul>
+            <li><a href="http://localhost:3000">Home</a></li>
+            <!--li><a href="/about">Gli autori</a></li-->
+            <li><a href="https://github.com/federico-rosatelli/biologia">Progetto Github</a></li>
+            <li><a href="https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW">Archivio</a></li>
+        </ul>
+    </nav>
+  </header>
+  <section>
     <form>
-        <input type="search" name="search" placeholder="Search Taxonomy"/>
-        <input type="rank" name="rank" placeholder="Search Rank"/>
+        <input type="search" name="search" placeholder="Search for Taxonomy"/>
+        <input type="rank" name="rank" placeholder="Search for Rank"/>
+        <input type="rank" name="rank" placeholder="Search for "/>
         <button type="submit">Search</button>
     </form>
+  </section>
+  <section>
     <% if (find) { %>
       <h1><%= find.length %></h1>
         <% for (let i = 0; i < find.length; i++) { %>
@@ -50,5 +83,6 @@
             
         <%} %>
     <%} %>
-  </body>
+  </section>
+</body>
 </html>

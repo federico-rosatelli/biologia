@@ -1,0 +1,279 @@
+/* ..... global reset */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, address, cite, code, img, strong, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, header, nav, article, aside, footer, hgroup, section {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	text-decoration: none;
+}
+
+section, article, header, footer, nav, aside, hgroup { display:block; }
+
+/* ...... web font embedding */
+
+@font-face {
+	font-family: 'SansationRegular';
+	src: url('Sansation_Regular.eot?'),
+		url('Sansation_Regular.woff') format('woff'), 
+		url('Sansation_Regular.ttf') format('truetype'), 
+		url('Sansation_Regular.svg#webfontLr2B6u5e') format('svg');
+		
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'SansationBold';
+	src: url('Sansation_Bold.eot?'),
+		url('Sansation_Bold.woff') format('woff'), 
+		url('Sansation_Bold.ttf') format('truetype'), 
+		url('Sansation_Bold.svg#webfont8dfDl0fr') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+
+/* BODY */
+
+body {  
+font-family: 'SansationRegular', Arial, Helvetica, sans-serif; font-size:14px; color:#fff; line-height:150%; text-align:left;
+background:
+url(images/clouds.png) repeat fixed 40% 40%, 
+url(images/clouds2.png) repeat fixed 25% 55%,
+url(images/clouds.png) repeat fixed 15% 15%,
+url(images/sun.png) no-repeat fixed 95% 5%;
+background-color:#b6dffd;
+ 
+width:960px; margin:0 auto;
+}
+
+
+/* TIPOGRAPHY */
+
+h1, h2, h3, h4, h5, h6 { font-family:'SansationBold', Arial, Helvetica, sans-serif; line-height:120%; }
+
+
+
+time { color: #0099FF; font-size:12px; }
+
+
+a { text-decoration:none; }
+a:link, a:visited { color:#ffcc00;}
+a:hover, a:focus, a:active { color:#ffffff; }
+
+dl { display:inline; float:left; } 
+dt { float:left; display:inline; margin-right:10px; } 
+dd {float:left; display:inline; margin-right:20px; }
+
+mark { background:none; }
+
+/* ..... header */
+
+header { width:100%; float:left; display:inline; margin-bottom:20px; }
+
+
+hgroup { margin:20px 0; }
+hgroup h1 { font-size: 50px; color:#003399; line-height:100%;
+}
+
+hgroup h2 { font-size:24px; font-family:'SansationRegular', Arial, Helvetica, sans-serif;	color:#000000;}
+
+
+header > nav { float:left; display:inline; width:960px; 
+padding:20px;
+-moz-box-sizing:border-box;
+-webkit-box-sizing:border-box;
+box-sizing:border-box;
+background: rgba(0,0,0,0.6);
+
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+
+-webkit-box-shadow: 0 0 5px #0099FF;
+-moz-box-shadow: 0 0 5px #0099FF;
+box-shadow: 0 0 5px #0099FF;
+
+}
+
+
+header > nav h1 { float:left; font-size:16px; color:#CCCCCC  }
+
+header > nav ul { float:right; }
+header > nav li { display:inline; margin-right:20px; }
+header > nav li:last-child { margin-right:0; }
+
+header > nav li a { 
+padding:10px 20px; 
+font-size:16px; 
+font-family:'SansationBold', Arial, Helvetica, sans-serif; 
+-webkit-border-radius: 5px;
+-moz-border-radius:5px;
+border-radius: 5px;
+}
+
+
+header > nav a:link, header nav a:visited  { 
+color:#FFFFFF;  
+background:rgba(0,0,51,0.4);
+
+
+}
+header > nav a:hover, header nav a:focus, header nav a:active, header nav a.selected { 
+color:#ffcc00; 
+background:#000033;
+
+}
+
+
+
+/* CONTENUTI */
+article header { width:100%; float:left; display:inline;
+background:none;
+
+}
+
+
+section { width:350px; float:left; display:inline; margin:0 20px 20px 0; 
+padding:20px;
+-moz-box-sizing:border-box;
+-webkit-box-sizing:border-box;
+box-sizing:border-box;
+
+background: rgba(0,0,0,0.6);
+
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+-webkit-box-shadow: 0 0 5px #0099FF;
+-moz-box-shadow: 0 0 5px #0099FF;
+box-shadow: 0 0 5px #0099FF;
+}
+
+
+
+
+/*
+body > section:nth-of-type(1) { width: 420px;}
+body > section:nth-of-type(2) { width: 280px;}*/
+body > section:first-of-type { width: 420px;}
+body > section:last-of-type { width: 280px;}
+
+
+
+
+
+aside { width:220px; float:left; display:inline;
+padding:20px; 
+
+-moz-box-sizing:border-box;
+-webkit-box-sizing:border-box;
+box-sizing:border-box;
+
+background: rgba(0,0,0,0.6);
+
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+
+-webkit-box-shadow: 0 0 5px #0099FF;
+-moz-box-shadow: 0 0 5px #0099FF;
+box-shadow: 0 0 5px #0099FF;
+
+}
+
+aside ul { list-style-position:inside; margin-top:10px; font-size:16px; }
+
+
+section section, aside section, article section {width:auto; float:left; padding:0; margin:20px 0 0 0; background:none; -webkit-box-shadow: none;
+-moz-box-shadow: none;
+box-shadow: none; }
+
+
+article > section { margin-top:20px; }
+aside section { margin:20px 0 30px 0; }
+
+
+
+h1, aside section > h1 { font-size:18px; margin-bottom:5px; }
+section > h1, aside > h1 { font-size:24px; color:#cccccc; margin-bottom:10px; }
+
+
+article footer { width:100%; height:auto; float:left; display:inline;
+background:none; margin:0 0 10px; padding:0;
+-webkit-box-shadow: none;
+-moz-box-shadow: none;
+box-shadow: none;
+}
+
+
+
+
+
+
+
+footer { 
+width:100%; clear:both; margin:0 0 20px 0; 
+padding:20px;
+-moz-box-sizing:border-box;
+-webkit-box-sizing:border-box;
+box-sizing:border-box;
+height:70px;
+background: rgba(0,0,0,0.6);
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+-webkit-box-shadow: 0 0 5px #0099FF;
+-moz-box-shadow: 0 0 5px #0099FF;
+box-shadow: 0 0 5px #0099FF;
+}
+
+
+
+footer small { float:right; }
+
+
+
+
+
+
+/* form */
+legend { font-size:18px; color:#FFFF00; padding-bottom:5px; }
+label { float:left; clear:right; width:100%; }
+input, textarea { border:none; margin:0 0 10px 0; 
+padding:5px 0;
+float:left; display:inline;  
+-webkit-border-radius: 5px;
+-moz-border-radius:5px;
+border-radius: 5px; 
+width:100%; /* calc(100% - 30px) */  
+background:rgba(255,255,255,0.9);
+color:#000000;
+font-family:'SansationRegular', Arial, Helvetica, sans-serif;
+font-size:14px;
+}
+
+input[type="search"] { -webkit-appearance: textfield; }
+
+textarea { overflow:hidden; height:70px; }
+
+input:focus, textarea:focus { background:#FFFFFF; }
+
+input[type="submit"], input[type="reset"] {
+color:#FFFFFF; 
+margin:0 10px 0 0;
+background:rgba(0,0,51,0.4);
+padding:5px 10px;
+width:auto;
+
+}
+
+input[type="submit"]:hover, input[type="reset"]:hover {
+color:#FFFFFF; 
+background:#000033;
+}
