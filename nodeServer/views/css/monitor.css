@@ -223,7 +223,7 @@ padding:20px;
 -moz-box-sizing:border-box;
 -webkit-box-sizing:border-box;
 box-sizing:border-box;
-height:70px;
+height:170px;
 background: rgba(0,0,0,0.6);
 -webkit-border-radius: 10px;
 -moz-border-radius: 10px;
@@ -233,7 +233,10 @@ border-radius: 10px;
 box-shadow: 0 0 5px #0099FF;
 }
 
-
+footer {
+text-align: center;
+float: right;
+}
 
 footer small { float:right; }
 
