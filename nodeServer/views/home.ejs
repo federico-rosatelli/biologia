@@ -25,7 +25,7 @@
     <nav>
       <h1>Surf:</h1>
       <ul>
-        <li><a href="http://localhost:3000">Home</a></li>
+        <li><a href="/">Home</a></li>
         <!--li><a href="/about">Gli autori</a></li-->
         <li><a href="https://github.com/federico-rosatelli/biologia">Github Project</a></li>
         <li><a href="https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW">Archive</a></li>
@@ -137,6 +137,7 @@ ok ok, a presto :)-->
     <%} %>
     <% if (nucleotide) { %> 
       <h1>Total amount: <%= nucleotide.length %> of 86146</h1>
+      <%- JSON.stringify(nucleotide) %>
       <table id="table">
         <tr>
           <td>Organism</td>
@@ -150,7 +151,7 @@ ok ok, a presto :)-->
             <tr>
               <td><%=nucleotide[i].organism%></a></td>
               <td>#<%=nucleotide[i].organismCount%></td>
-              <td><%=nucleotide[i].protein%></td>
+              <td><%-JSON.stringify(nucleotide[i].proteins)%></td>
               <td>#<%=nucleotide[i].proteinCount%></td>
             </tr>
         <%} %>
