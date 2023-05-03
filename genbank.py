@@ -606,6 +606,13 @@ class Database:
     
 
     def isAlgae(self,dataSource,rewrite:bool=False) -> tuple:
+        ''' Questo metodo fa il confronto con i dati presenti nel db
+        locale e tra i record dei csv in database/Csv, prelevati
+        dal Database europeo per motivi di accessibilità.
+        Datasource è inserito nel path data/sourcejson/struct.txt ed
+        è fornito come esempio.
+        Se trova una corrispondenza, ritorna le liste delle Algae
+        trovate e delle specie uniche (senza eventuali codici) '''
         if not os.path.isfile(Global.WEBSOURCE["Algae"]["File"]) or rewrite:
             r = requests.get(Global.WEBSOURCE["Algae"]["Web"])
             with open(Global.WEBSOURCE["Algae"]["File"], "w") as wr:
@@ -641,7 +648,7 @@ class Database:
         dal Database europeo per motivi di accessibilità.
         Datasource è inserito nel path data/sourcejson/struct.txt ed
         è fornito come esempio.
-        Se trova una corrispondenza, ritorna le liste delle specie
+        Se trova una corrispondenza, ritorna le liste delle MicroAlgae
         trovate e delle specie uniche (senza eventuali codici) '''
         rl = open(Global.WEBSOURCE["MicroAlgae"]["File"]).readlines()
         dataAlgae = []
