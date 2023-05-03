@@ -636,6 +636,13 @@ class Database:
 
 
     def isMicroAlgae(self,dataSource) -> tuple:
+        ''' Questo metodo fa il confronto con i dati presenti nel db
+        locale e tra i record dei csv in database/Csv, prelevati
+        dal Database europeo per motivi di accessibilità.
+        Datasource è inserito nel path data/sourcejson/struct.txt ed
+        è fornito come esempio.
+        Se trova una corrispondenza, ritorna le liste delle specie
+        trovate e delle specie uniche (senza eventuali codici) '''
         rl = open(Global.WEBSOURCE["MicroAlgae"]["File"]).readlines()
         dataAlgae = []
         for i in range(len(rl)):
