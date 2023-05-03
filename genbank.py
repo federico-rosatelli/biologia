@@ -71,8 +71,15 @@ from time import ctime, perf_counter
 #       node server.js
 #   - dopodiché aprire il browser e cercare il seguente indirizzo:
 #       localhost:3000
-#   è ora possibile effettuare le query di interesse.
+#   è ora possibile effettuare le query di interesse, ma va inizializzato il database locale.
 #
+#   Per avere le specie con i dati genomici (versione MongoDB):
+#       python3 genbank.py --file "nomefile".gbk -n
+#   Per la taxonomy:
+#       python3 genbank.py --find -m --email (inserire email per accesso su ncbi, ammesso che si abbia accesso)
+
+
+
 #   NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (systemctl start mongod) e il server (node server.js)
 
 
@@ -495,7 +502,7 @@ class Database:
         # self.printDifferenceAlgae()
         # dataDiff = self.checkDifferenceAlgae()
         #return self.dataSource
-        #self.confronto()
+        self.confronto()
         return self.dataSource
     
 
@@ -766,7 +773,7 @@ class Database:
         # TO-DO: se questo metodo non ritorna i dati correttamente andrà aggiornata la procedura di reperimento dei dati.
         handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
         record = SeqIO.read(handle, "genbank")
-        p1,p2 = self.parse.parseGene(record)
+        p1,p2,errors = self.parse.parseGene(record)
         return p1,p2
 
 
@@ -794,22 +801,22 @@ class Database:
 
 
     def confronto(self): #CAMBIA NOME
-        # for key in self.dataSource:
-        #     for id in self.dataSource[key]:
-                # data = self.proteinFind(id)
-                # if not data:
-                #     PrintWarning(5).stdout(f"ID:{id}")
-                #     #return None
-                # else:
-                #     PrintWarning(3).stdout(f"Protein ID:{id}")
+        for key in self.dataSource:
+            for id in self.dataSource[key]:
+                data = self.proteinFind(id)
+                if not data:
+                    PrintWarning(5).stdout(f"ID:{id}")
+                    #return None
+                else:
+                    PrintWarning(3).stdout(f"Protein ID:{id}")
                 
-                # data = self.taxonFind(id)
-                # if not data:
-                #     PrintWarning(5).stdout(f"ID:{id}")
-                #     #return None
-                # else:
-                #     PrintWarning(3).stdout(f"Taxon ID:{id}")     
-        data = self.genomeFind(4)
+                data = self.taxonFind(id)
+                if not data:
+                    PrintWarning(5).stdout(f"ID:{id}")
+                    #return None
+                else:
+                    PrintWarning(3).stdout(f"Taxon ID:{id}")     
+        #data = self.genomeFind(4)
                 # if not data:
                 #     PrintWarning(5).stdout(f"ID:{id}")
                 #     #return None

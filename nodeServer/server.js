@@ -29,7 +29,7 @@ const { MongoClient } = require('mongodb');
 const uri = "mongodb://localhost:27017";
 
 
-// Finder queries
+// Finder methods
 
 async function finder(query) {
   const client = await MongoClient.connect(uri, { useNewUrlParser: true ,useUnifiedTopology: true })
@@ -46,10 +46,31 @@ async function finder(query) {
   }
 }
 
+async function finder_organism(query) {
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true ,useUnifiedTopology: true })
+  .catch(err => { console.log(err); });
+  try {
+    const database = client.db('Biologia');
+    const user = database.collection('nucleotide_data');
+    const result = await user.find(query).toArray();
+    await client.close();
+    return result;
+  }
+  catch{
+    console.log("error qui");
+  }
+}
+
 app.get('/',async(req, res) => {
     let query = ""
+    let taxonomy = ""
+    // let organism = ""
     let rank = ""
-    if (req.query.search == ""){
+    // let genome = ""
+    // let protein = ""
+    // let product = ""
+    if (req.query.taxonomy == ""){
+      console.log("No values entered. Begin process...\n")
       let info = {Lineage:{$regex:`${query}`}};
       var find = await finder(info)
         let count = {
@@ -87,13 +108,13 @@ app.get('/',async(req, res) => {
         }
         res.render('home',{find})
     }
-    else if (req.query.search) {
-        
-        query = req.query.search;
+    else if (req.query.taxonomy) {
+        console.log("Detected some key values in Search Field. Begin process...\n")
+        query = req.query.taxonomy;
         let info = {}
         if (req.query.rank){
+          console.log("Rank in input.\n")
           rank = req.query.rank;
-
           info = {Lineage:{$regex:`${query}`},LineageEx:{$elemMatch:{Rank:rank,ScientificName:query}}};
         }
         else{

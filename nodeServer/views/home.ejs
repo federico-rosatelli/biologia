@@ -32,17 +32,18 @@
   </header>
   <section>
     <form>
-        <input type="search" name="search" placeholder="Search for Taxonomy"/>
-        <input type="search" name="rank" placeholder="Search for Rank"/>
-        <input type="search" name="genome" placeholder="Search for Genome"/>
-        <input type="search" name="protein" placeholder="Search for Protein"/>
-        <input type="search" name="product" placeholder="Search for Product"/>
-        <button type="submit" onclick=""> Search </button>
+      <input type="search" name="organism" placeholder="Search for Organism/Species"/>
+      <input type="search" name="taxonomy" placeholder="Search for Taxonomy"/>
+      <input type="search" name="rank" placeholder="Search for Rank"/>
+      <input type="search" name="genome" placeholder="Search for Genome"/>
+      <input type="search" name="protein" placeholder="Search for Protein"/>
+      <input type="search" name="product" placeholder="Search for Product"/>
+      <button type="submit"> Search </button>
     </form>
   </section>
   <section>
     <% if (find) { %>
-      <h1><%= find.length %></h1>
+      <h1>Total amount: <%= find.length %></h1>
         <% for (let i = 0; i < find.length; i++) { %>
             <div>
                 <h3><%=find[i].ScientificName%></h3>
@@ -50,32 +51,32 @@
                 <% for( let k = 0; k < find[i].LineageEx.length; k++ ) { %>
                   <% if (!find[i].LineageEx[k].Rank.includes('no rank')) { %>
                     <div style="display: flex;">
-                      <div style="margin-left: 3%; ">
+                      <div style="margin-left: 50px; ">
                           <%= find[i].LineageEx[k].ScientificName %>
                       </div>
-                      <div style="margin-left: 12%;position: absolute;">
+                      <div style="margin-left: 250px; position: absolute;">
                         | <%= find[i].LineageEx[k].Rank %>
                       </div>
-                      <div style="margin-left: 18%;position: absolute;">
+                      <div style="margin-left: 450px; position: absolute;">
                         | <%= find[i].LineageEx[k].tot %>
                       </div>
                     </div>
                     <div></div>
                   <% } %>
-                  
+                
                     
                 <% } %>
                 <% if (!find[i].ScientificName.includes("sp.")) { %>
                   <div style="display: flex;">
-                    <div style="margin-left: 3%; ">
+                    <div style="margin-left: 50px; ">
                         <%= find[i].ScientificName.split(' ')[1] %>
                     </div>
-                    <div style="margin-left: 12%;position: absolute;">
+                    <div style="margin-left: 250px; position: absolute;">
                       | Specie
                     </div>
                   </div>
                 <% } %>
-                
+                <br>
                 <div></div>
                 <!-- <h5><%- JSON.stringify(find[i]) %></h5> -->
             </div>
