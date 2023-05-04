@@ -9,8 +9,10 @@
   <![endif]-->
   <link rel="stylesheet" href="/css/reset.css" media="screen">
   <link rel="stylesheet" href="/css/monitor.css" media="screen">
-  <link rel="stylesheet" href="/css/phone_landscape.css" 
+  <link rel="stylesheet" href="/css/phone_landscape.css"
         media="screen and (max-device-width: 480px) and (orientation: landscape)">
+  <link rel="stylesheet" type="text/css" href="css/table.css" />
+  
   <!--link rel="stylesheet" href="phone_portrait.css" 
         media="screen and (max-device-width: 480px) and (orientation: portrait)"-->
 </head>
@@ -135,11 +137,22 @@ ok ok, a presto :)-->
     <%} %>
     <% if (nucleotide) { %> 
       <h1>Total amount: <%= nucleotide.length %> of 86146</h1>
+      <table id="table">
+        <tr>
+          <td>Organism</td>
+          <td>Number of Organism</td>
+          <td>Proteins</td>
+          <td>Number of Proteins</td>
+        </tr>
+      
+      
         <% for (let i = 0; i < nucleotide.length; i++) { %>
-            <div>
-                
-                <h5><%- JSON.stringify(nucleotide[i]) %></h5>
-            </div>
+            <tr>
+              <td><%=nucleotide[i].organism%></a></td>
+              <td>#<%=nucleotide[i].organismCount%></td>
+              <td><%=nucleotide[i].protein%></td>
+              <td>#<%=nucleotide[i].proteinCount%></td>
+            </tr>
         <%} %>
     <%} %>
   </section>

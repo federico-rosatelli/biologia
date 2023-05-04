@@ -262,14 +262,13 @@ app.get('/',async(req, res) => {
       nucleotide = await finder(info, 'nucleotide_data');
       results = []
       let organismCount = {}
-      let proteinCount = {}
       for (let i = 0; i < nucleotide.length; i++) {
         let res = nucleotide[i]
+        let dataPush = {}
+        dataPush.proteins = []
         for (let k = 0; k < res.Features.length; k++) {
           let feature = res.Features[k]
-          let dataPush = {
-            
-          }
+          
           if (feature.Type == "source"){
             dataPush.organism = feature.organism
             if (!organismCount[feature.organism]){
@@ -280,24 +279,22 @@ app.get('/',async(req, res) => {
             }
           }
           else if (feature.Type == "CDS"){
-            dataPush.protein = feature.protein_id
-            if (!proteinCount[feature.protein_id]){
-              console.log("ENTRA IN CDS");
-              proteinCount[feature.protein_id] = 1
-            }
-            else{
-              proteinCount[feature.protein_id] += 1
-            }
+            dataPush.proteins.push(feature.protein_id)
+            // if (!proteinCount[feature.protein_id]){
+            //   console.log("ENTRA IN CDS");
+            //   proteinCount[feature.protein_id] = 1
+            // }
+            // else{
+            //   proteinCount[feature.protein_id] += 1
+            // }
           }
           dataPush.organismCount = 0
-          dataPush.proteinCount = 0
 
           results.push(dataPush)
         }
-        console.log(results);
         for (let i = 0; i < results.length; i++) {
           results[i].organismCount = organismCount[results[i].organism]
-          results[i].proteinCount = proteinCount[results[i].protein]
+          results[i].proteinCount = results[i].proteins.length
           
         }
         
