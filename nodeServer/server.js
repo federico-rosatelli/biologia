@@ -40,7 +40,9 @@ async function finder(query, collection) {
     const user = database.collection(collection);
     const result = await user.find(query).toArray();
     await client.close();
-    //console.log('Return result '+ result + "\n")
+    if (result == null) {
+      console.log('Value not found\n');
+    }
     return result;
   }
   catch(e){
@@ -74,39 +76,48 @@ app.get('/',async(req, res) => {
     if (req.query.data) {
       console.log("Data in input. Begin process...")
       data = req.query.data
-      let info = {Lineage:{$regex:`^${data}`,$options : 'i'}}; // potrebbe essere cosi? boh proviamo
+      let info = {ScientificName:{$regex:`${data}`}}; // potrebbe essere cosi? boh proviamo ,$options : 'i'
       var find1 = await finder(info, 'taxonomy_data')
       var array = []
       for (let i = 0; i < find1.length; i++) {
         let info2 = {Features:{$elemMatch:{Type:'source', db_xref:"taxon:"+find1[i].TaxId}}}
-        // qua si cerca un nucleotide in particolare giusto?
-        //io stavo pensando ad una cosa del tipo
-        // Chlorella Vulgaris: [
-        //    dato di nucleotide 1: []
-        //    dato di nucleotide 2: []
-        // ]
-        // è da fare ma per ora stavamo facendo un array e basta perché stiamo morendo e volevamo fare in fretta
-        // finder trova una lista di elementi mentre se ce ne serve solo uno dobbiamo utilizzare un metodo diverso
-        // ho creato la funzione finderOne che trova una solo occorrenza invece di many
-        // ahahha ok
-
-
         var find2 = await finder(info2, 'nucleotide_data')
-        if (find2[i] != undefined) {
-          for (let o = 0; o < find2.length; o++) {
-          // FOR DEBUGGING PURPOSE
-          // if (find2[i] != undefined) {
-          //   console.log(find2[i].Id)
-          // }
-          // else {
-          //   console.log("Found undefined! "+o)
-          // }
-            array.push(find2[i])
+        let ids = []
+        let array = []
+        if (!info2){
+          res.render('home', {find:taxonomy,nucleotide,error:true})
+          return
+        }
+        for (let k = 0; k < find2.length; k++) {
+          if (!ids.includes(find2[k].Id)){
+            try {
+              find2[i]["Lineage"] = find1[i].Lineage
+              ids.push(find2[k].Id)
+              array.push(find2[k])
+            }
+            catch {
+              console.log("Critical Error in search.")
+            }
+            
           }
-        }        
+        }
+        // if (find2[i] != undefined) {
+        //   for (let o = 0; o < find2.length; o++) {
+        //   // FOR DEBUGGING PURPOSE
+        //   // if (find2[i] != undefined) {
+        //   //   console.log(find2[i].Id)
+        //   // }
+        //   // else {
+        //   //   console.log("Found undefined! "+o)
+        //   // }
+        //     array.push(find2[i])
+        //   }
+        // }        
       }
+      //console.log(array);
       console.log("Query ended. Result displayed at localhost:3000")
-      res.render('home', {find:taxonomy,nucleotide:array})    // {find:array} prende array e gli dice che si chiama find  
+      res.render('home', {find:taxonomy,nucleotide:find2,error:false})    // {find:array} prende array e gli dice che si chiama find  
+      return
     }
     if (req.query.taxonomy == ''){
       console.log("No values entered. Begin process...")
@@ -146,8 +157,11 @@ app.get('/',async(req, res) => {
         //   }
         // }
         console.log("Query ended. Result displayed at localhost:3000")
-        res.render('home',{find,nucleotide})
+        res.render('home',{find,nucleotide,error:false})
+        return
     }
+    //  TO DO: Parsing di Taxonomy incompleto, fixare genbank.py per eliminare errore HTTP ERROR 400 quando trova undefined
+    //  Da aggiungere la ricerca per specie
     else if (req.query.taxonomy) {
         console.log("Detected some key values in Search Field Taxonomy. Begin process...")
         query = req.query.taxonomy;
@@ -200,14 +214,15 @@ app.get('/',async(req, res) => {
         //   }
         // }
         console.log("Query ended. Result displayed at localhost:3000")
-        res.render('home',{find,nucleotide})
+        res.render('home',{find,nucleotide,error:false})
+        return
     }
     else if (req.query.sequenceID) {
       console.log("Detected some key values in Search Field Product. Begin process...")
       query = req.query.sequenceID;
-      // if (query == ""){
-      //   query = "blabla";
-      // }
+      if (query == ""){
+        query = "blabla";
+      }
       let type = req.query.id;
       console.log(type);
       let id = null
@@ -219,26 +234,69 @@ app.get('/',async(req, res) => {
       // query = "small subunit ribosomal RNA"
       let dataType = {
       }
-      dataType[type] = {$regex:`${query}`};
-
-      if (type == "genome"){
-        dataType["Type"] = "CDS";
-        dataType["$exists"] = {"locus_tag":1}
+      
+      if (type == "any"){
+        dataType["$or"] = []
+        info1 = {}
+        info1["Type"] = "CDS";
+        info1["locus_tag"] = {$regex:`${query}`}
+        info2 = {}
+        info2["protein_id"] = {$regex:`${query}`};
+        info3 = {}
+        info3["product"] = {$regex:`${query}`};
+        dataType["$or"].push(info1,info2,info3)
       }
+
+      else if (type == "genome"){
+        dataType["Type"] = "CDS";
+        dataType["locus_tag"] = {$regex:`${query}`}
+      }
+      else{
+        dataType[type] = {$regex:`${query}`};
+      }
+
+      console.log(dataType);
 
       let info = {Features:{$elemMatch:dataType}};
       // let info = {"Features.$.product":`${query}`}
       nucleotide = await finder(info, 'nucleotide_data');
-      
-      res.render('home', {find,nucleotide});
+      results = []
+      let organismCount = {}
+      let proteinCount = {}
+      for (let i = 0; i < nucleotide.length; i++) {
+        let res = nucleotide[i]
+        for (let k = 0; k < res.Features.length; k++) {
+          let feature = res.Features[k]
+          let dataPush = {
+            
+          }
+          if (feature.Type == "source"){
+            dataPush.organism = feature.organism
+            if (!organismCount[feature.organism]){
+              organismCount[feature.organism] = 1
+            }
+          }
+          else if (feature.Type == "CDS"){
+            dataPush.protein = feature.protein_id
+          }
+          dataPush.organismCount = 0
+          dataPush.proteinCount = 0
+          results.push(dataPush)
+        }
+        
+      }
+      res.render('home', {find,nucleotide:results,error:false});
+      return
     }
-    else{
+    else if(req.query.sequenceID == "" || req.query.data == ""){
         find = null
         console.log("Result empty. Displayed at localhost:3000")
-        res.render('home',{find:null,nucleotide})
+        res.render('home',{find:null,nucleotide,error:true})
+        return
     }
     console.log("Return at Home\n")
-    
+    res.render('home',{find:null,nucleotide:null,error:false})
+    return
 
 })
 

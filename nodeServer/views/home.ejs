@@ -21,12 +21,12 @@
       <h2>Powered by MongoDB</h2>
     </hgroup>
     <nav>
-      <h1>Navigazione:</h1>
+      <h1>Surf:</h1>
       <ul>
         <li><a href="http://localhost:3000">Home</a></li>
         <!--li><a href="/about">Gli autori</a></li-->
-        <li><a href="https://github.com/federico-rosatelli/biologia">Progetto Github</a></li>
-        <li><a href="https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW">Archivio</a></li>
+        <li><a href="https://github.com/federico-rosatelli/biologia">Github Project</a></li>
+        <li><a href="https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW">Archive</a></li>
       </ul>
     </nav>
   </header>
@@ -54,13 +54,16 @@
       <label for="ID">Select an ID:</label><br>
       <select name="id" id="sequence">
         <option value="any">Any</option>
-        <option value="genome">Genome</option>
-        <option value="protein">Protein</option>
+        <option value="genome">Locus</option>
+        <option value="protein_id">Protein</option>
         <option value="product">Product</option>
       </select><br><br>
       <input type="search" name="sequenceID" placeholder="Search for"/>
       <button type="submit"> Search </button>
     </form>
+    <% if (error) { %>
+        <h1><br>Bad query, try again.</h1>
+    <% } %>
   </section>
   <section>
     <form>
@@ -134,7 +137,7 @@ ok ok, a presto :)-->
       <h1>Total amount: <%= nucleotide.length %> of 86146</h1>
         <% for (let i = 0; i < nucleotide.length; i++) { %>
             <div>
-                <h3><%=nucleotide[i].Name%></h3>
+                
                 <h5><%- JSON.stringify(nucleotide[i]) %></h5>
             </div>
         <%} %>
