@@ -91,7 +91,7 @@ app.get('/',async(req, res) => {
         for (let k = 0; k < find2.length; k++) {
           if (!ids.includes(find2[k].Id)){
             try {
-              find2[i]["Lineage"] = find1[i].Lineage
+              find2[k]["Lineage"] = find1[i].Lineage
               ids.push(find2[k].Id)
               array.push(find2[k])
             }
@@ -275,13 +275,30 @@ app.get('/',async(req, res) => {
             if (!organismCount[feature.organism]){
               organismCount[feature.organism] = 1
             }
+            else{
+              organismCount[feature.organism] += 1
+            }
           }
           else if (feature.Type == "CDS"){
             dataPush.protein = feature.protein_id
+            if (!proteinCount[feature.protein_id]){
+              console.log("ENTRA IN CDS");
+              proteinCount[feature.protein_id] = 1
+            }
+            else{
+              proteinCount[feature.protein_id] += 1
+            }
           }
           dataPush.organismCount = 0
           dataPush.proteinCount = 0
+
           results.push(dataPush)
+        }
+        console.log(results);
+        for (let i = 0; i < results.length; i++) {
+          results[i].organismCount = organismCount[results[i].organism]
+          results[i].proteinCount = proteinCount[results[i].protein]
+          
         }
         
       }
