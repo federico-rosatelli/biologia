@@ -792,8 +792,12 @@ class Database:
 
 
     def ncbiSearchTaxon(self,id:str,database:str) ->tuple:
-        handle = Entrez.efetch(db=database, id=id, retmode="xml")
-        read = Entrez.read(handle)
+        try:
+            handle = Entrez.efetch(db=database, id=id, retmode="xml")
+            read = Entrez.read(handle)
+        except Exception as e:
+            print(e)
+            os.sleep(20)
         return read
     
 

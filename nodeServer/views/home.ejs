@@ -17,33 +17,81 @@
 <body>
   <header>
     <hgroup>
-        <h1>Biologia DB</h1>
-        <h2>Powered by MongoDB</h2>
+      <h1>Biologia DB</h1>
+      <h2>Powered by MongoDB</h2>
     </hgroup>
     <nav>
-        <h1>Navigazione:</h1>
-        <ul>
-            <li><a href="http://localhost:3000">Home</a></li>
-            <!--li><a href="/about">Gli autori</a></li-->
-            <li><a href="https://github.com/federico-rosatelli/biologia">Progetto Github</a></li>
-            <li><a href="https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW">Archivio</a></li>
-        </ul>
+      <h1>Navigazione:</h1>
+      <ul>
+        <li><a href="http://localhost:3000">Home</a></li>
+        <!--li><a href="/about">Gli autori</a></li-->
+        <li><a href="https://github.com/federico-rosatelli/biologia">Progetto Github</a></li>
+        <li><a href="https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW">Archivio</a></li>
+      </ul>
     </nav>
   </header>
   <section>
     <form>
-      <input type="search" name="organism" placeholder="Search for Organism/Species"/>
-      <input type="search" name="taxonomy" placeholder="Search for Taxonomy"/>
-      <input type="search" name="rank" placeholder="Search for Rank"/>
-      <input type="search" name="genome" placeholder="Search for Genome"/>
-      <input type="search" name="protein" placeholder="Search for Protein"/>
-      <input type="search" name="product" placeholder="Search for Product"/>
+      <label for="taxon">Select a Rank:</label><br>
+      <select name="rank" id="taxon">
+        <option value="any">Any</option>
+        <option value="superkingdom">SuperKingdom</option>
+        <option value="kingdom">Kingdom</option>
+        <option value="phylum">Phylum</option>
+        <option value="clade">Clade</option>
+        <option value="class">Class</option>
+        <option value="order">Order</option>
+        <option value="family">Family</option>
+        <option value="genus">Genus</option>
+        <option value="specie">Specie</option>
+      </select><br><br>
+      <input type="search" name="taxonomy" placeholder="Search for"/>
       <button type="submit"> Search </button>
     </form>
   </section>
   <section>
-    <% if (find) { %>
-      <h1>Total amount: <%= find.length %></h1>
+    <form>
+      <label for="ID">Select an ID:</label><br>
+      <select name="id" id="sequence">
+        <option value="any">Any</option>
+        <option value="genome">Genome</option>
+        <option value="protein">Protein</option>
+        <option value="product">Product</option>
+      </select><br><br>
+      <input type="search" name="sequenceID" placeholder="Search for"/>
+      <button type="submit"> Search </button>
+    </form>
+  </section>
+  <section>
+    <form>
+      <label for="ID">View on data for:</label><br>
+      <input type="searchData" name="data" placeholder="Search for"/>
+      <button type="submit"> Search </button>
+    </form>
+  </section>
+  <section>
+    <!-- Eh si ahahah è questo che vi dicevo in server quando ritorno i dati devi stare attento
+    devi mettere {find:arry} se vuoi altri dati oltre che array lo puoi fare
+  {find:array, nucleotide:array2} ma ci devono essere per forza sia find che array
+si o semplicemente gli cambiate nome qua
+okok semplicemente cambiate nome
+perche è come se andasse a prendere il nome di un oggetto che non esiste
+ejs lavora su "oggetti" che gli passi quindi se gli dici di andare a prendere un dato che non esiste crasha
+ciaooo
+okok apposto
+stacco cosi puoi salvare tutto a dopo-->
+  <!--
+    Quindi volendo possiamo settare find a null o qualcosa del genere?
+    Il problema è che vogliamo anche find perché l'altra funzione lo usa
+    nucleotide è quello che dovremmo mettere sotto
+    find è come si chiama l'array che restituisce la query su taxonomy
+  io sto andando a pranzo adesso, ci sentiamo poi
+bye-->
+<!-- Fede vado anche io, stacchiamo un po' e poi ci rimettiamo al lavoro... lascio commentato tutto qui, 
+  così riprendiamo da dove ci eravamo fermati 
+ok ok, a presto :)-->
+    <% if (find) { %> 
+      <h1>Total amount: <%= find.length %> unique species of 86146 species in Nucleotide collection </h1>
         <% for (let i = 0; i < find.length; i++) { %>
             <div>
                 <h3><%=find[i].ScientificName%></h3>
@@ -51,15 +99,15 @@
                 <% for( let k = 0; k < find[i].LineageEx.length; k++ ) { %>
                   <% if (!find[i].LineageEx[k].Rank.includes('no rank')) { %>
                     <div style="display: flex;">
-                      <div style="margin-left: 50px; ">
-                          <%= find[i].LineageEx[k].ScientificName %>
-                      </div>
-                      <div style="margin-left: 250px; position: absolute;">
+                      <div style="margin-left: 50px; position: absolute;">
                         | <%= find[i].LineageEx[k].Rank %>
                       </div>
-                      <div style="margin-left: 450px; position: absolute;">
-                        | <%= find[i].LineageEx[k].tot %>
+                      <div style="margin-left: 200px; ">
+                          <%= find[i].LineageEx[k].ScientificName %>
                       </div>
+                      <!-- <div style="margin-left: 450px; position: absolute;">
+                        | <%= find[i].LineageEx[k].tot %>
+                      </div> -->
                     </div>
                     <div></div>
                   <% } %>
@@ -68,11 +116,11 @@
                 <% } %>
                 <% if (!find[i].ScientificName.includes("sp.")) { %>
                   <div style="display: flex;">
-                    <div style="margin-left: 50px; ">
-                        <%= find[i].ScientificName.split(' ')[1] %>
+                    <div style="margin-left: 50px; position: absolute;">
+                      | specie
                     </div>
-                    <div style="margin-left: 250px; position: absolute;">
-                      | Specie
+                    <div style="margin-left: 200px; ">
+                        <%= find[i].ScientificName.split(' ')[1] %>
                     </div>
                   </div>
                 <% } %>
@@ -80,7 +128,15 @@
                 <div></div>
                 <!-- <h5><%- JSON.stringify(find[i]) %></h5> -->
             </div>
-            
+        <%} %>
+    <%} %>
+    <% if (nucleotide) { %> 
+      <h1>Total amount: <%= nucleotide.length %> of 86146</h1>
+        <% for (let i = 0; i < nucleotide.length; i++) { %>
+            <div>
+                <h3><%=nucleotide[i].Name%></h3>
+                <h5><%- JSON.stringify(nucleotide[i]) %></h5>
+            </div>
         <%} %>
     <%} %>
   </section>
@@ -91,7 +147,7 @@
       </div>
     </div>
     <p>Authors: Team di Biologia Computazionale 2023, Università La Sapienza<br>
-    <a href="mailto:">digesaro.1702901ATstudenti.uniroma1.it</a></p>
+    <a href="mailto:">bio@bio.it</a></p>
   </footer>
 </body>
 </html>
