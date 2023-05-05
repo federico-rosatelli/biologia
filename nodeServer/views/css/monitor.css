@@ -38,7 +38,9 @@ section, article, header, footer, nav, aside, hgroup { display:block; }
 
 
 
-/* BODY */
+/* BODY 
+	PARTE PIÙ IMPORTANTE DEL PROGETTO
+*/
 
 body {  
 	font-family: 'SansationRegular', Arial, Helvetica, sans-serif; font-size:14px; color:#fff; line-height:150%; text-align:left;
