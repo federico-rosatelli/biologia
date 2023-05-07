@@ -91,8 +91,7 @@ from time import ctime, perf_counter
 #
 # MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
 # a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
-# il db di interesse e mongorestore sulla nuova postazione, una volta importata la cartella generata.
-# Utilizzare BSON con i file generati da mongodump per convertire in JSON.
+# il db di interesse e sudo mongorestore sul file bson generato dal mongodump una volta importata la cartella generata.
 # 
 #
 #

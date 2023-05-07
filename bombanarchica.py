@@ -67,7 +67,7 @@ def finderTaxon(fn):
             names.append(name)
     return
 
-taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
+#taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
 #db.taxonomy_data.deleteMany({"Lineage":{"$regex":"environmental samples"}})
 
 
@@ -129,7 +129,37 @@ def algo():
             new_collection.update_one({"TaxId":res["ParentTaxId"]},{"$push":{"SubClasses":newDataPush}})
 
 
-datas = new_collection.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
+#datas = new_collection.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
 
 
+def ncbiSearchNucleo(name:str) ->list:
+    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
+    # read = Entrez.read(handle)
+    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000, api_key=key)
+    record = Entrez.read(handle, validate=False)
+    handle.close()
+    if len(record["IdList"]) == 0:
+        raise Exception("List Empty")
+    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], retmode="xml", api_key=key)
+    read = Entrez.read(handle)
+    return read
+
+
+
+
+nucleo_collection = db["nucleotide_organism"]
+
+csvOrganism = open('OrganismList.csv').readlines()
+i = 0
+for organism in csvOrganism:
+    print(organism,f"{i} su {len(csvOrganism)}")
+    i += 1
+    try:
+        records = ncbiSearchNucleo(organism.strip())
+    except Exception as e:
+        print(e)
+        continue
+    for record in records:
+        if not nucleo_collection.find_one({"GBSeq_locus":record["GBSeq_locus"]}):
+            nucleo_collection.insert_one(record)
 
