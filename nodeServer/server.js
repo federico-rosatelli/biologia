@@ -73,6 +73,7 @@ app.post('/save',async(req,res) =>{
     let datas = req.body;
     let data = JSON.stringify(datas);
     fs.writeFileSync('public/data.json', data);
+    res.setHeader('Content-Length', 0);
     res.download(path.join(__dirname,'public/data.json'));
 })
 

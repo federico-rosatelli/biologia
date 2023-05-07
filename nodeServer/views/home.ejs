@@ -70,33 +70,12 @@
   </section>
   <section>
     <nav>
-      <h1>Surf:</h1>
       <ul>
         <li style="text-align:right">
-          <button onclick="saveFile()">Save</button>
+          <li onclick="saveFile()">Save</button>
         </li>
       </ul>
     </nav>
-    <!-- Eh si ahahah è questo che vi dicevo in server quando ritorno i dati devi stare attento
-    devi mettere {find:arry} se vuoi altri dati oltre che array lo puoi fare
-  {find:array, nucleotide:array2} ma ci devono essere per forza sia find che array
-si o semplicemente gli cambiate nome qua
-okok semplicemente cambiate nome
-perche è come se andasse a prendere il nome di un oggetto che non esiste
-ejs lavora su "oggetti" che gli passi quindi se gli dici di andare a prendere un dato che non esiste crasha
-ciaooo
-okok apposto
-stacco cosi puoi salvare tutto a dopo-->
-  <!--
-    Quindi volendo possiamo settare find a null o qualcosa del genere?
-    Il problema è che vogliamo anche find perché l'altra funzione lo usa
-    nucleotide è quello che dovremmo mettere sotto
-    find è come si chiama l'array che restituisce la query su taxonomy
-  io sto andando a pranzo adesso, ci sentiamo poi
-bye-->
-<!-- Fede vado anche io, stacchiamo un po' e poi ci rimettiamo al lavoro... lascio commentato tutto qui, 
-  così riprendiamo da dove ci eravamo fermati 
-ok ok, a presto :)-->
     <% if (find) { %> 
       <h1>Searching "<%= find.ScientificName %>" over 20.000 organisms</h1>
       <% let url = `https://ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=${find.TaxId}&lvl=3&lin=f&keep=1&srchmode=1&unlock` %>
