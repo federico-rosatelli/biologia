@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const path = require('path');
+const fs = require('fs')
 
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
@@ -14,6 +15,8 @@ app.use(express.static(path.join(__dirname, 'views/')));  // Permette al codice 
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.set('view engine','ejs')
@@ -65,6 +68,13 @@ async function finderOne(query, collection) {
     console.log("exception in finder(query)");
   }
 }
+
+app.post('/save',async(req,res) =>{
+    let datas = req.body;
+    let data = JSON.stringify(datas);
+    fs.writeFileSync('public/data.json', data);
+    res.download(path.join(__dirname,'public/data.json'));
+})
 
 app.get('/',async(req, res) => {
     let query = ""
@@ -164,23 +174,120 @@ app.get('/',async(req, res) => {
     //  Da aggiungere la ricerca per specie
     else if (req.query.taxonomy) {
         console.log("Detected some key values in Search Field Taxonomy. Begin process...")
-        query = req.query.taxonomy;
-        let info = {}
+        let taxon = req.query.taxonomy;
 
         //
         //  TO DO: dare in input al DB un testo e tradurlo in lowercase
         //  Da aggiungere la ricerca per specie
         //
-        if (req.query.rank){
-          console.log("Rank in input.")
-          rank = req.query.rank;
-          info = {LineageEx:{$elemMatch:{Rank:rank,ScientificName:query}}};
+        // if (req.query.rank){
+        //   console.log("Rank in input.")
+        //   rank = req.query.rank;
+        //   info = {LineageEx:{$elemMatch:{Rank:rank,ScientificName:query}}};
+        // }
+        // else{
+        //   console.log("No Rank in input.")
+        //   info = {Lineage:{$regex:`${query}`}}
+        // }
+        // var find = await finder(info, 'taxonomy_data')
+        let filter = req.query.filter
+        let search = {}
+        if (filter == "scientific_name"){
+          search["ScientificName"] = `${taxon}`
+        }
+        else if (filter == "taxid"){
+          search["TaxId"] = `${taxon}`
         }
         else{
-          console.log("No Rank in input.")
-          info = {Lineage:{$regex:`${query}`}}
+          res.render('home',{find:null,nucleotide,error:false})
+          return
         }
-        var find = await finder(info, 'taxonomy_data')
+        let find = await finderOne(search, 'taxonomy_tree')
+        if (!find){
+          res.render('home',{find:null,nucleotide,error:false})
+          return
+        }
+        let dataReturn = {}
+        dataReturn = {
+          'TaxId':find.TaxId,
+          'ScientificName': find.ScientificName,
+          'Rank':find.Rank,
+          'SubClasses':[]
+        }
+        let i1 = 0;
+        let i2 = 0;
+        let i3 = 0;
+        while(i1 < 50 && i1 <= find.SubClasses.length){
+          let dataClass1 = {}
+          let tx1 = find.SubClasses[i1]
+          if (!tx1){
+            i1++;
+            continue
+          }
+          dataClass1 = {
+            'TaxId':tx1.TaxId,
+            'ScientificName': tx1.ScientificName,
+            'Rank':tx1.Rank,
+            'SubClasses':[]
+          }
+          dataReturn.SubClasses.push(dataClass1)
+          let filter1 = {TaxId:`${tx1.TaxId}`}
+          let find1 = await finderOne(filter1, 'taxonomy_tree')
+          if (!find1){
+            i1++;
+            continue
+          }
+          while(i2 < 50 && i2 <= find1.SubClasses.length){
+            let dataClass2 = {}
+            let tx2 = find1.SubClasses[i2]
+            if (!tx2){
+              i2++;
+              continue
+            }
+            dataClass2 = {
+              'TaxId':tx2.TaxId,
+              'ScientificName': tx2.ScientificName,
+              'Rank':tx2.Rank,
+              'SubClasses':[]
+            }
+            dataClass1.SubClasses.push(dataClass2)
+            let filter2 = {TaxId:`${tx2.TaxId}`}
+            let find2 = await finderOne(filter2, 'taxonomy_tree')
+            if (!find2){
+              i2++;
+              continue
+            }
+            while(i3 < 50 && i3 <= find2.SubClasses.length){
+              let dataClass3 = {}
+              let tx3 = find2.SubClasses[i3]
+              if (!tx3){
+                i3++;
+                continue
+              }
+              dataClass3 = {
+                'TaxId':tx3.TaxId,
+                'ScientificName': tx3.ScientificName,
+                'Rank':tx3.Rank,
+              }
+              dataClass2.SubClasses.push(dataClass3)
+              let filter3 = {TaxId:`${tx3.TaxId}`}
+              let find3 = await finderOne(filter3, 'taxonomy_tree')
+              if (!find3){
+                i3++;
+                continue
+              }
+              
+              i3++;
+            }
+            i3 = 0;
+            
+            i2++;
+          }
+          i2 = 0;
+          
+          i1++;
+        }
+
         // let count = {
         //   superkingdom:{},
         //   kingdom:{},
@@ -214,7 +321,7 @@ app.get('/',async(req, res) => {
         //   }
         // }
         console.log("Query ended. Result displayed at localhost:3000")
-        res.render('home',{find,nucleotide,error:false})
+        res.render('home',{find:dataReturn,nucleotide,error:false})
         return
     }
     else if (req.query.sequenceID) {

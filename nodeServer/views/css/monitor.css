@@ -58,14 +58,33 @@ body {
 
 h1, h2, h3, h4, h5, h6 { font-family:'SansationBold', Arial, Helvetica, sans-serif; line-height:120%; }
 
-
+ul {
+    display: block;
+	margin-bottom: 5px;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+ul ul {
+    list-style-type: circle;
+	margin-bottom: 5px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+ul ul ul {
+    list-style-type: square;
+	margin-bottom: 5px;
+}
 
 time { color: #0099FF; font-size:12px; }
 
-
+a .button-a {color: #ffcc00;}
 a { text-decoration:none; }
-a:link, a:visited { color:#ffcc00;}
-a:hover, a:focus, a:active { color:#ffffff; }
+a:link, a:visited { color:#ffffff;}
+a:hover, a:focus, a:active { color:#ffcc00; }
 
 dl { display:inline; float:left; } 
 dt { float:left; display:inline; margin-right:10px; } 
@@ -247,8 +266,8 @@ footer small { float:right; }
 
 
 /* form */
-/* legend { font-size:20px; color:#00ffdd; padding-bottom:5px; }
-label { font-size:20px; float:left; clear:both; width:100%; }
+legend { font-size:20px; color:#00ffdd; padding-bottom:5px; }
+/*label { font-size:20px; float:left; clear:both; width:100%; }
 div {float: left} */
 input, textarea { border:none; margin:0 0 10px 0; 
 padding:5px 0;

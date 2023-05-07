@@ -1,5 +1,6 @@
 .row{
     display: flex;
+    gap: 5px;
    }
    #table {
     border-collapse: collapse;

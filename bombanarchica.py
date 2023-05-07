@@ -67,7 +67,7 @@ def finderTaxon(fn):
             names.append(name)
     return
 
-#taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
+taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
 #db.taxonomy_data.deleteMany({"Lineage":{"$regex":"environmental samples"}})
 
 
@@ -131,6 +131,5 @@ def algo():
 
 datas = new_collection.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
 
-print(len(datas["SubClasses"]))
 
 
