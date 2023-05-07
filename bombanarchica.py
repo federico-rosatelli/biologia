@@ -138,28 +138,43 @@ def ncbiSearchNucleo(name:str) ->list:
     handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000, api_key=key)
     record = Entrez.read(handle, validate=False)
     handle.close()
+    print(f"Len of IDLIST:{len(record['IdList'])}")
     if len(record["IdList"]) == 0:
         raise Exception("List Empty")
-    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], retmode="xml", api_key=key)
+    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=3, api_key=key)
     read = Entrez.read(handle)
+    print(f"Len of EFETCH:{len(read)}")
     return read
 
 
 
-
+taxon_collection = db["taxonomy_data"]
 nucleo_collection = db["nucleotide_organism"]
-
-csvOrganism = open('OrganismList.csv').readlines()
+# records = ncbiSearchNucleo("Scenedesmus bijugus")
+# print(records[0])
+csvOrganism = open('data/databaseCsv/microAlgaeDatabase.csv').readlines()
 i = 0
 for organism in csvOrganism:
+    organism = organism.split(";")
+    organism = organism[3]
+    organism.strip()
+    dataRank = taxon_collection.find_one({"ScientificName":organism})
+    if not dataRank or dataRank["Rank"] != "species" or dataRank["Division"] == "Bacteria":
+        continue
+    if organism.split(" ")[1] == "sp." and len(organism.split(" ")) == 2:
+        continue
+    print(organism)
+    if "_" in organism:
+        organism = organism.split("_")[0]
     print(organism,f"{i} su {len(csvOrganism)}")
     i += 1
     try:
-        records = ncbiSearchNucleo(organism.strip())
+        records = ncbiSearchNucleo(organism)
     except Exception as e:
         print(e)
         continue
     for record in records:
         if not nucleo_collection.find_one({"GBSeq_locus":record["GBSeq_locus"]}):
             nucleo_collection.insert_one(record)
+
 
