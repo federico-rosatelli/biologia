@@ -141,7 +141,7 @@ def ncbiSearchNucleo(name:str) ->list:
     print(f"Len of IDLIST:{len(record['IdList'])}")
     if len(record["IdList"]) == 0:
         raise Exception("List Empty")
-    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=3, api_key=key)
+    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1, api_key=key)
     read = Entrez.read(handle)
     print(f"Len of EFETCH:{len(read)}")
     return read
@@ -150,11 +150,14 @@ def ncbiSearchNucleo(name:str) ->list:
 
 taxon_collection = db["taxonomy_data"]
 nucleo_collection = db["nucleotide_organism"]
-# records = ncbiSearchNucleo("Scenedesmus bijugus")
-# print(records[0])
+records = ncbiSearchNucleo("Scenedesmus bijugus")
+print(records[0])
 csvOrganism = open('data/databaseCsv/microAlgaeDatabase.csv').readlines()
-i = 0
-for organism in csvOrganism:
+
+listCompl = [csvOrganism[data].split(";")[3].strip() for data in range(0,279)]
+for i in range(279,len(csvOrganism)):
+    organism = csvOrganism[i]
+    
     organism = organism.split(";")
     organism = organism[3]
     organism.strip()
@@ -163,17 +166,21 @@ for organism in csvOrganism:
         continue
     if organism.split(" ")[1] == "sp." and len(organism.split(" ")) == 2:
         continue
+    if organism in listCompl:
+        continue
     print(organism)
     if "_" in organism:
         organism = organism.split("_")[0]
     print(organism,f"{i} su {len(csvOrganism)}")
-    i += 1
+    
+    listCompl.append(organism)
     try:
         records = ncbiSearchNucleo(organism)
     except Exception as e:
         print(e)
         continue
     for record in records:
+        record.pop("GBSeq_sequence",None)
         if not nucleo_collection.find_one({"GBSeq_locus":record["GBSeq_locus"]}):
             nucleo_collection.insert_one(record)
 
