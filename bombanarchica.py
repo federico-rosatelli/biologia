@@ -61,7 +61,7 @@ def finderTaxon(name):
     except Exception as e:
         return
     
-finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
+#finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
 
 #taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
 #db.taxonomy_data.deleteMany({"Lineage":{"$regex":"environmental samples"}})
@@ -204,3 +204,39 @@ def genusList():
     with open('GenusList.csv', 'w') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(datas)
+
+
+nucleo_collection = db["nucleotide_organism"]
+query = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key":"CDS","GBFeature_quals":{"$elemMatch":{"GBQualifier_name":"protein_id"}}}}}
+filter = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key": "CDS"}}}
+res = nucleo_collection.aggregate([
+    {"$match": {'GBSeq_feature-table.GBFeature_key': 'CDS','GBSeq_feature-table.GBFeature_quals.GBQualifier_name':"protein_id"}},
+    {"$project": {
+        "GBSeq_feature-table": {"$filter": {
+            "input": '$GBSeq_feature-table',
+            "as": 'cds',
+            "cond": {"$eq": ['$$cds.GBFeature_key', 'CDS']}
+        }},
+        "_id": 0,
+    }}
+])
+#nucleos = nucleo_collection.count_documents(query,filter)
+#print(nucleos)
+proteins = []
+count = 0
+for nucleo in res:
+    print(count)
+    cdss = nucleo["GBSeq_feature-table"]
+    for cds in cdss:
+        for qual in cds["GBFeature_quals"]:
+            if qual["GBQualifier_name"] == "protein_id":
+                proteins.append(qual["GBQualifier_value"] in proteins)
+    count += 1
+
+def efetchProtein(ids):
+    handle = Entrez.efetch(db="protein", id=ids, rettype='gb',retmode="xml")
+    read = Entrez.read(handle)
+    return read
+
+results = efetchProtein(proteins)
+nucleo_collection.insert_many(results)
