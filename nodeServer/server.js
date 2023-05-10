@@ -176,7 +176,10 @@ app.get('/',async(req, res) => {
     else if (req.query.taxonomy) {
         console.log("Detected some key values in Search Field Taxonomy. Begin process...")
         let taxon = req.query.taxonomy;
-
+        if (taxon == ""){
+          res.render('home',{find:null,nucleotide,error:false})
+          return
+        }
         //
         //  TO DO: dare in input al DB un testo e tradurlo in lowercase
         //  Da aggiungere la ricerca per specie
