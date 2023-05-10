@@ -1,12 +1,11 @@
 # MicroAlgae Parsing & Searching
 
+Credits
 [`federico-rosatelli`](https://github.com/federico-rosatelli) [`Mat`](https://github.com/AxnNxs) [`Loriv3`](https://github.com/Loriv3) [`Samsey`](https://github.com/Samseys)
 
 
-Credits
-Authors: federico-rosatelli (Federico Rosatelli), AxnNxs (Mattia Di Gesaro)
 
-Requisiti:
+# Requisiti:
 Anaconda:             "https://www.anaconda.com"
 Biopython:            "https://biopython.org/wiki/Documentation"
 Hashlib:              "https://docs.python.org/3/library/hashlib.html"
@@ -17,8 +16,7 @@ Nodejs:               "https://docs.npmjs.com/downloading-and-installing-node-js
 Nodejs Express:       "http://expressjs.com/"
 
 
-Fonti ufficiali:
- 
+# Fonti ufficiali:
 Shigen:               "https://shigen.nig.ac.jp"         DB giapponese
 NCBI:                 "https://www.ncbi.nlm.nih.gov/"    DB americano
 
@@ -28,7 +26,7 @@ download.
 
 
 
-Altri link
+# Altri link:
 Drive:                "https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW"
 Github:               "https://github.com/federico-rosatelli/biologia"
 
@@ -69,7 +67,6 @@ NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (systemctl st
 
 
 # Concetti utili:
-
 MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
 a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
 il db di interesse e sudo mongorestore sul file bson generato dal mongodump una volta importata la cartella generata.
@@ -77,7 +74,6 @@ il db di interesse e sudo mongorestore sul file bson generato dal mongodump una 
 
 
 # La rappresentazione FASTA e FASTQ
- 
 FASTA conserva soltanto la Sequenza di nucleotidi o amminoacidi, codificando ogni gene in singole lettere
 per indice di posizione. Nella rappresentazione in Genbank, troviamo tale dato nel file JSON che salviamo
 in locale, alla voce translation per ogni Coding Sequence sotto ogni Specie, secondo la seguente gerarchia:
