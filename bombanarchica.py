@@ -16,7 +16,7 @@ def ncbiSearchTaxon(name:str) ->list:
     handle = Entrez.esearch(db='taxonomy', term=name, rettype='gb', retmode='text', retmax=10000)
     record = Entrez.read(handle, validate=False)
     handle.close()
-    print(record)
+    # print(record)
     if len(record["IdList"]) == 0:
         raise Exception("List Empty")
     #print(record["IdList"])
@@ -35,7 +35,7 @@ def aglo(name,rank):
 #     json.dump(taxon,jsw,indent=4)
 #print(taxon)
 
-def finderTaxon(fn):
+def finderTaxonFromFile(fn):
     names = []
     rd = open(fn).readlines()
     for i in range(len(rd)):
@@ -44,28 +44,23 @@ def finderTaxon(fn):
         if "_" in name:
             name = name.split("_")[0]
         if name != "" and name not in names:
-            print(name,'\t\t',i,len(rd))
-            try:
-                taxon = ncbiSearchTaxon(f"{name}[next level]")
-                for tax in taxon:
-                    if not collection_data.find_one({"TaxId":tax["TaxId"]}):
-                        collection_data.insert_one(tax)
-            except Exception as e:
-                print(e)
-                pass
-            for t in taxon:
-                nameT = t["ScientificName"]
-                print(nameT,'taxon\t\t')
-                try:
-                    newTaxon = ncbiSearchTaxon(f"{nameT}[next level]")
-                    for ntax in newTaxon:
-                        if not collection_data.find_one({"TaxId":ntax["TaxId"]}):
-                            collection_data.insert_one(ntax)
-                except Exception as e:
-                    print(e)
-                    continue
-            names.append(name)
-    return
+            finderTaxon(name)
+
+ignore_names = ["environmental samples"]
+def finderTaxon(name):
+    if name in ignore_names:
+        return
+    try:
+        taxon = ncbiSearchTaxon(f"{name}[next level]")
+        for tax in taxon:
+            if not collection_data.find_one({"TaxId":tax["TaxId"]} and tax["Rank"] == "species"):
+                    print(tax["ScientificName"])
+                    collection_data.insert_one(tax)
+            finderTaxon(tax["ScientificName"])
+    except Exception as e:
+        return
+    
+finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
 
 #taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
 #db.taxonomy_data.deleteMany({"Lineage":{"$regex":"environmental samples"}})
@@ -135,13 +130,13 @@ def algo():
 def ncbiSearchNucleo(name:str) ->list:
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
     # read = Entrez.read(handle)
-    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000, api_key=key)
+    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
     record = Entrez.read(handle, validate=False)
     handle.close()
     print(f"Len of IDLIST:{len(record['IdList'])}")
     if len(record["IdList"]) == 0:
         raise Exception("List Empty")
-    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1, api_key=key)
+    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
     read = Entrez.read(handle)
     print(f"Len of EFETCH:{len(read)}")
     return read
@@ -184,16 +179,16 @@ def ncbiSearchNucleo(name:str) ->list:
 #         if not nucleo_collection.find_one({"GBSeq_locus":record["GBSeq_locus"]}):
 #             nucleo_collection.insert_one(record)
 
-import re
-genus = collection_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
-"""SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
+# import re
+# genus = collection_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
+# """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
 
-datas = []
-for gene in genus:
-    dd = [gene["ScientificName"],gene["TaxId"],gene["Division"]]
-    #print(gene["ScientificName"],gene["Division"])
-    datas.append(dd)
+# datas = []
+# for gene in genus:
+#     dd = [gene["ScientificName"],gene["TaxId"],gene["Division"]]
+#     #print(gene["ScientificName"],gene["Division"])
+#     datas.append(dd)
 
-with open('GenusList.csv', 'w') as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerows(datas)
+# with open('GenusList.csv', 'w') as csvfile:
+#     writer = csv.writer(csvfile)
+#     writer.writerows(datas)
