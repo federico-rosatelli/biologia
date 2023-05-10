@@ -3,34 +3,34 @@
 [`federico-rosatelli`](https://github.com/federico-rosatelli) [`Mat`](https://github.com/AxnNxs) [`Loriv3`](https://github.com/Loriv3) [`Samsey`](https://github.com/Samseys)
 
 
-# Credits
-# Authors: federico-rosatelli (Federico Rosatelli), AxnNxs (Mattia Di Gesaro)
+Credits
+Authors: federico-rosatelli (Federico Rosatelli), AxnNxs (Mattia Di Gesaro)
 
-# Requisiti:
-# Anaconda:             "https://www.anaconda.com"
-# Biopython:            "https://biopython.org/wiki/Documentation"
-# Hashlib:              "https://docs.python.org/3/library/hashlib.html"
-# Argparse:             "https://docs.python.org/3/library/argparse.html"
-# Pymongo:              "https://pymongo.readthedocs.io/en/stable/"
-# MongoDB CE "Jammy":   "https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/"
-# Nodejs:               "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
-# Nodejs Express:       "http://expressjs.com/"
-
-
-# Fonti ufficiali:
-# 
-# Shigen:               "https://shigen.nig.ac.jp"         DB giapponese
-# NCBI:                 "https://www.ncbi.nlm.nih.gov/"    DB americano
-#
-# La maggior parte dei dati presenti localmente nel Database interno
-# sono stati scaricati manualmente a causa delle restrizioni sui
-# download.
+Requisiti:
+Anaconda:             "https://www.anaconda.com"
+Biopython:            "https://biopython.org/wiki/Documentation"
+Hashlib:              "https://docs.python.org/3/library/hashlib.html"
+Argparse:             "https://docs.python.org/3/library/argparse.html"
+Pymongo:              "https://pymongo.readthedocs.io/en/stable/"
+MongoDB CE "Jammy":   "https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/"
+Nodejs:               "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
+Nodejs Express:       "http://expressjs.com/"
 
 
+Fonti ufficiali:
+ 
+Shigen:               "https://shigen.nig.ac.jp"         DB giapponese
+NCBI:                 "https://www.ncbi.nlm.nih.gov/"    DB americano
 
-# Altri link
-# Drive:                "https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW"
-# Github:               "https://github.com/federico-rosatelli/biologia"
+La maggior parte dei dati presenti localmente nel Database interno
+sono stati scaricati manualmente a causa delle restrizioni sui
+download.
+
+
+
+Altri link
+Drive:                "https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW"
+Github:               "https://github.com/federico-rosatelli/biologia"
 
 
 
