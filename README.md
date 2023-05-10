@@ -2,6 +2,116 @@
 
 [`federico-rosatelli`](https://github.com/federico-rosatelli) [`Mat`](https://github.com/AxnNxs) [`Loriv3`](https://github.com/Loriv3) [`Samsey`](https://github.com/Samseys)
 
+
+# Credits
+# Authors: federico-rosatelli (Federico Rosatelli), AxnNxs (Mattia Di Gesaro)
+
+# Requisiti:
+# Anaconda:             "https://www.anaconda.com"
+# Biopython:            "https://biopython.org/wiki/Documentation"
+# Hashlib:              "https://docs.python.org/3/library/hashlib.html"
+# Argparse:             "https://docs.python.org/3/library/argparse.html"
+# Pymongo:              "https://pymongo.readthedocs.io/en/stable/"
+# MongoDB CE "Jammy":   "https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/"
+# Nodejs:               "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
+# Nodejs Express:       "http://expressjs.com/"
+
+
+# Fonti ufficiali:
+# 
+# Shigen:               "https://shigen.nig.ac.jp"         DB giapponese
+# NCBI:                 "https://www.ncbi.nlm.nih.gov/"    DB americano
+#
+# La maggior parte dei dati presenti localmente nel Database interno
+# sono stati scaricati manualmente a causa delle restrizioni sui
+# download.
+
+
+
+# Altri link
+# Drive:                "https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW"
+# Github:               "https://github.com/federico-rosatelli/biologia"
+
+
+
+
+# Guida al primo utilizzo
+# Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si raccomanda Ubuntu):
+# 
+#   - Scaricare il progetto tramite git, o copiare il progetto all'indirizzo inserito tra "Altri link" sopra questo paragrafo.
+#   - Installare tutti i requisiti
+#   - Inizializzare MongoDB:
+#       - Dare i seguenti comandi da terminale:
+#           sudo chown -R mongodb:mongodb /var/lib/mongodb
+#           sudo chown mongodb:mongodb /tmp/mongodb-27017.sock
+#       dopodiché:
+#           sudo systemctl start mongod
+#   - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)
+#   - attendere il termine del salvataggio nel database locale
+#   - aprire il server, digitando su console all'interno della cartella nodeServer:
+#       node server.js
+#   - dopodiché aprire il browser e cercare il seguente indirizzo:
+#       localhost:3000
+#   è ora possibile effettuare le query di interesse, ma va inizializzato il database locale.
+#
+#   Per avere le specie con i dati genomici (versione MongoDB):
+#       python3 genbank.py --file "nomefile".gbk -n
+#   Per la taxonomy:
+#       python3 genbank.py --find -m --email (inserire email per accesso su ncbi, ammesso che si abbia accesso)
+
+
+
+#   NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (systemctl start mongod) e il server (node server.js)
+
+
+
+
+
+
+# Concetti utili:
+#
+# MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
+# a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
+# il db di interesse e sudo mongorestore sul file bson generato dal mongodump una volta importata la cartella generata.
+# 
+#
+#
+# La rappresentazione FASTA e FASTQ
+# 
+# FASTA conserva soltanto la Sequenza di nucleotidi o amminoacidi, codificando ogni gene in singole lettere
+# per indice di posizione. Nella rappresentazione in Genbank, troviamo tale dato nel file JSON che salviamo
+# in locale, alla voce translation per ogni Coding Sequence sotto ogni Specie, secondo la seguente gerarchia:
+# 
+# SPECIE
+#   FEATURES
+#       CDS
+#           /translation="LSLAVGTTITLASYHWLL[...]""
+#
+# FASTQ è un "quality score" che associa alla sequenza, per ogni indice di posizione, un valore 
+# qualitativo codificato in ASCII. Un esempio a seguire:
+# @SRR64[...]       Name Sequence
+# CCTCGTCTA[...]    DNA Sequence
+# +SRR64[...]       Quality address
+# BBBBBFFFF[...]    Quality Score
+#
+#
+#
+# Sequenziamento genetico
+# E' il processo di determinazione dell'ordine dei nucleotidi (Adenina, Citosina, Guanina e Timina) che 
+# costituiscono il frammento di DNA in analisi. Le tecniche principali di Squenziamento sono
+# Sanger e NGS (Illumina ne é un esempio).
+#
+#
+#
+# Allineamento genetico
+# E' il processo di confronto di due o più sequenze di DNA o proteine per identificare regioni identiche
+# o simili per individuare eventuali relazioni funzionali, strutturali o filogenetiche.
+# Le tecniche di allineamento prevedono il confronto globale e locale.
+# Un'applicazione algoritmica di allineamento locale è data da Smith Waterman.
+# Un'applicazione algoritmica di allineamento globale é data da Needleman-Wunsch.
+
+
+
 ![Algae Project Struct](algaeStruct.png "Struct of the Project")
 
 
