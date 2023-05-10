@@ -45,6 +45,7 @@ def finderTaxonFromFile(fn):
             name = name.split("_")[0]
         if name != "" and name not in names:
             finderTaxon(name)
+        names.append(name)
 
 ignore_names = ["environmental samples"]
 def finderTaxon(name):
@@ -53,7 +54,7 @@ def finderTaxon(name):
     try:
         taxon = ncbiSearchTaxon(f"{name}[next level]")
         for tax in taxon:
-            if not collection_data.find_one({"TaxId":tax["TaxId"]} and tax["Rank"] == "species"):
+            if (not collection_data.find_one({"TaxId":tax["TaxId"]}) and tax["Rank"] == "species"):
                     print(tax["ScientificName"])
                     collection_data.insert_one(tax)
             finderTaxon(tax["ScientificName"])
