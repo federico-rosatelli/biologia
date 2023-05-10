@@ -61,7 +61,7 @@ Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si r
 
 
 
-#   NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (systemctl start mongod) e il server (node server.js)
+NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (systemctl start mongod) e il server (node server.js)
 
 
 
@@ -69,46 +69,46 @@ Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si r
 
 
 # Concetti utili:
-#
-# MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
-# a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
-# il db di interesse e sudo mongorestore sul file bson generato dal mongodump una volta importata la cartella generata.
-# 
-#
-#
+
+MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
+a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
+il db di interesse e sudo mongorestore sul file bson generato dal mongodump una volta importata la cartella generata.
+ 
+
+
 # La rappresentazione FASTA e FASTQ
-# 
-# FASTA conserva soltanto la Sequenza di nucleotidi o amminoacidi, codificando ogni gene in singole lettere
-# per indice di posizione. Nella rappresentazione in Genbank, troviamo tale dato nel file JSON che salviamo
-# in locale, alla voce translation per ogni Coding Sequence sotto ogni Specie, secondo la seguente gerarchia:
-# 
+ 
+FASTA conserva soltanto la Sequenza di nucleotidi o amminoacidi, codificando ogni gene in singole lettere
+per indice di posizione. Nella rappresentazione in Genbank, troviamo tale dato nel file JSON che salviamo
+in locale, alla voce translation per ogni Coding Sequence sotto ogni Specie, secondo la seguente gerarchia:
+ 
 # SPECIE
-#   FEATURES
-#       CDS
-#           /translation="LSLAVGTTITLASYHWLL[...]""
-#
-# FASTQ è un "quality score" che associa alla sequenza, per ogni indice di posizione, un valore 
-# qualitativo codificato in ASCII. Un esempio a seguire:
-# @SRR64[...]       Name Sequence
-# CCTCGTCTA[...]    DNA Sequence
-# +SRR64[...]       Quality address
-# BBBBBFFFF[...]    Quality Score
-#
-#
-#
+##   FEATURES
+###       CDS
+####           /translation="LSLAVGTTITLASYHWLL[...]""
+
+FASTQ è un "quality score" che associa alla sequenza, per ogni indice di posizione, un valore 
+qualitativo codificato in ASCII. Un esempio a seguire:
+@SRR64[...]       Name Sequence
+CCTCGTCTA[...]    DNA Sequence
++SRR64[...]       Quality address
+BBBBBFFFF[...]    Quality Score
+
+
+
 # Sequenziamento genetico
-# E' il processo di determinazione dell'ordine dei nucleotidi (Adenina, Citosina, Guanina e Timina) che 
-# costituiscono il frammento di DNA in analisi. Le tecniche principali di Squenziamento sono
-# Sanger e NGS (Illumina ne é un esempio).
-#
-#
-#
+E' il processo di determinazione dell'ordine dei nucleotidi (Adenina, Citosina, Guanina e Timina) che 
+costituiscono il frammento di DNA in analisi. Le tecniche principali di Squenziamento sono
+Sanger e NGS (Illumina ne é un esempio).
+
+
+
 # Allineamento genetico
-# E' il processo di confronto di due o più sequenze di DNA o proteine per identificare regioni identiche
-# o simili per individuare eventuali relazioni funzionali, strutturali o filogenetiche.
-# Le tecniche di allineamento prevedono il confronto globale e locale.
-# Un'applicazione algoritmica di allineamento locale è data da Smith Waterman.
-# Un'applicazione algoritmica di allineamento globale é data da Needleman-Wunsch.
+E' il processo di confronto di due o più sequenze di DNA o proteine per identificare regioni identiche
+o simili per individuare eventuali relazioni funzionali, strutturali o filogenetiche.
+Le tecniche di allineamento prevedono il confronto globale e locale.
+Un'applicazione algoritmica di allineamento locale è data da Smith Waterman.
+Un'applicazione algoritmica di allineamento globale é data da Needleman-Wunsch.
 
 
 
