@@ -218,7 +218,7 @@ app.get('/',async(req, res) => {
         let i1 = 0;
         let i2 = 0;
         let i3 = 0;
-        while(i1 < 50 && i1 <= find.SubClasses.length){
+        while(i1 <= find.SubClasses.length){
           let dataClass1 = {}
           let tx1 = find.SubClasses[i1]
           if (!tx1){
@@ -238,7 +238,7 @@ app.get('/',async(req, res) => {
             i1++;
             continue
           }
-          while(i2 < 50 && i2 <= find1.SubClasses.length){
+          while(i2 <= find1.SubClasses.length){
             let dataClass2 = {}
             let tx2 = find1.SubClasses[i2]
             if (!tx2){
@@ -258,7 +258,7 @@ app.get('/',async(req, res) => {
               i2++;
               continue
             }
-            while(i3 < 50 && i3 <= find2.SubClasses.length){
+            while(i3 <= find2.SubClasses.length){
               let dataClass3 = {}
               let tx3 = find2.SubClasses[i3]
               if (!tx3){
