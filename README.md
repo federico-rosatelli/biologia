@@ -51,10 +51,11 @@ Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si r
    - Scaricare il progetto tramite git, o copiare il progetto all'indirizzo inserito tra "Altri link" sopra questo paragrafo.
    - Installare tutti i requisiti
    - Inizializzare MongoDB:
-       - Dare i seguenti comandi da terminale:
-           ``sudo chown -R mongodb:mongodb /var/lib/mongodb``
+        Dare i seguenti comandi da terminale:
+  
+        ``sudo chown -R mongodb:mongodb /var/lib/mongodb``
 
-           ``sudo chown mongodb:mongodb /tmp/mongodb-27017.sock``
+        ``sudo chown mongodb:mongodb /tmp/mongodb-27017.sock``
 
        dopodiché:
         
