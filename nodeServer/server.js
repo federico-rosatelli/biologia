@@ -130,53 +130,11 @@ app.get('/',async(req, res) => {
       res.render('home', {find:taxonomy,nucleotide:find2,error:false})    // {find:array} prende array e gli dice che si chiama find  
       return
     }
-    if (req.query.taxonomy == ''){
-      console.log("No values entered. Begin process...")
-      let info = {Lineage:{$regex:`${query}`}};
-      var find = await finder(info, 'taxonomy_data')
-        // let count = {
-        //   superkingdom:{},
-        //   kingdom:{},
-        //   phylum:{},
-        //   clade:{},
-        //   class:{},
-        //   clade:{},
-        //   order:{},
-        //   family:{},
-        //   genus:{},
-        //   "no rank":{},
-        //   subfamily:{},
-        //   subclass:{},
-        //   species:{}
-        // }
-        // for (let i = 0; i < find.length; i++) {
-        //   let data = find[i]
-        //   for (let j = 0; j < data.LineageEx.length; j++) {
-        //     if(data.LineageEx[j].ScientificName in count[data.LineageEx[j].Rank]){
-        //       count[data.LineageEx[j].Rank][data.LineageEx[j].ScientificName] += 1;
-        //     }
-        //     else{
-        //       count[data.LineageEx[j].Rank][data.LineageEx[j].ScientificName] = 1;
-        //     }
-        //   }
-        // }
-        // for (let i = 0; i < find.length; i++) {
-        //   let data = find[i]
-        //   for (let j = 0; j < data.LineageEx.length; j++) {
-
-        //       find[i].LineageEx[j]["tot"] = count[data.LineageEx[j].Rank][data.LineageEx[j].ScientificName]
-        //   }
-        // }
-        console.log("Query ended. Result displayed at localhost:3000")
-        res.render('home',{find,nucleotide,error:false})
-        return
-    }
-    //  TO DO: Parsing di Taxonomy incompleto, fixare genbank.py per eliminare errore HTTP ERROR 400 quando trova undefined
-    //  Da aggiungere la ricerca per specie
     else if (req.query.taxonomy) {
         console.log("Detected some key values in Search Field Taxonomy. Begin process...")
         let taxon = req.query.taxonomy;
-        if (taxon == ""){
+        console.log(taxon);
+        if (taxon == "" || !taxon){
           res.render('home',{find:null,nucleotide,error:false})
           return
         }

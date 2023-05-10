@@ -85,13 +85,11 @@
             <%= find.ScientificName %>
           </h2>
         </a>
-        <% if (find.SubClasses == null) { %>
-        <% } else if (find.SubClasses.length > 0) { %>
+        <% if (find.SubClasses.length > 0) { %>
           <h2>[<%= find.SubClasses.length %>]</h2>
-        <% } %>
+          <% } %>
       </div>
       <ul>
-        <% if (!find.SubClasses == null) { %>
           <% for( let i = 0; i < find.SubClasses.length; i++ ) { %>
             <% let sub1 = find.SubClasses[i] %>
             <% let url = `https://ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=${sub1.TaxId}&lvl=3&lin=f&keep=1&srchmode=1&unlock` %>
@@ -140,7 +138,6 @@
           <% } %>
         <% } %>
       </ul>
-    <%} %>
     <% if (nucleotide) { %> 
       <h1>Total amount: <%= nucleotide.length %> of 86146</h1>
       <%- JSON.stringify(nucleotide) %>
