@@ -52,26 +52,35 @@ Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si r
    - Installare tutti i requisiti
    - Inizializzare MongoDB:
        - Dare i seguenti comandi da terminale:
-           sudo chown -R mongodb:mongodb /var/lib/mongodb
-           sudo chown mongodb:mongodb /tmp/mongodb-27017.sock
+           ``sudo chown -R mongodb:mongodb /var/lib/mongodb``
+
+           ``sudo chown mongodb:mongodb /tmp/mongodb-27017.sock``
+
        dopodiché:
-           sudo systemctl start mongod
+        
+        ``sudo systemctl start mongod``
    - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)
    - attendere il termine del salvataggio nel database locale
    - aprire il server, digitando su console all'interno della cartella nodeServer:
-       node server.js
+
+       ``node server.js``
    - dopodiché aprire il browser e cercare il seguente indirizzo:
+
        localhost:3000
+
    è ora possibile effettuare le query di interesse, ma va inizializzato il database locale.
 
    Per avere le specie con i dati genomici (versione MongoDB):
-       python3 genbank.py --file "nomefile".gbk -n
+
+``python3 genbank.py --file "nomefile".gbk -n``
+
    Per la taxonomy:
-       python3 genbank.py --find -m --email (inserire email per accesso su ncbi, ammesso che si abbia accesso)
+
+``python3 genbank.py --find -m --email`` (inserire email per accesso su ncbi, ammesso che si abbia accesso)
 
 
 
-NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (systemctl start mongod) e il server (node server.js)
+NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (``systemctl start mongod``) e il server (``node server.js``)
 
 
 
