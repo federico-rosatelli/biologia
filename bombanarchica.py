@@ -183,17 +183,6 @@ def nucleoImport():
 # genus = collection_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
 # """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
 
-<<<<<<< HEAD
-# datas = []
-# for gene in genus:
-#     dd = [gene["ScientificName"],gene["TaxId"],gene["Division"]]
-#     #print(gene["ScientificName"],gene["Division"])
-#     datas.append(dd)
-
-# with open('GenusList.csv', 'w') as csvfile:
-#     writer = csv.writer(csvfile)
-#     writer.writerows(datas)
-
 def efetchTaxon(id):
     handle = Entrez.efetch(db="taxonomy", id=id, rettype='gb',retmode="xml")
     read = Entrez.read(handle)
@@ -214,21 +203,3 @@ def genusList():
     with open('GenusList.csv', 'w') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(datas)
-
-#genusList()
-#nucleoImport()
-=======
-# import re
-# genus = collection_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
-# """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
-
-# datas = []
-# for gene in genus:
-#     dd = [gene["ScientificName"],gene["TaxId"],gene["Division"]]
-#     #print(gene["ScientificName"],gene["Division"])
-#     datas.append(dd)
-
-# with open('GenusList.csv', 'w') as csvfile:
-#     writer = csv.writer(csvfile)
-#     writer.writerows(datas)
->>>>>>> 99fcfde316003dd1374d669c4667ceb1e6a7637a
