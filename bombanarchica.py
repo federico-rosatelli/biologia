@@ -2,6 +2,7 @@ import csv
 import json
 from pymongo import MongoClient
 from Bio import SeqIO, Entrez
+import requests
 
 CLUSTER = "localhost:27017"
 client = MongoClient('localhost', 27017)
@@ -60,7 +61,7 @@ def finderTaxon(name):
             finderTaxon(tax["ScientificName"])
     except Exception as e:
         return
-    
+
 #finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
 
 #taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
@@ -153,7 +154,7 @@ def nucleoImport():
     listCompl = [csvOrganism[data].split(";")[3].strip() for data in range(0,200)]
     for i in range(200,len(csvOrganism)):
         organism = csvOrganism[i]
-        
+
         organism = organism.split(";")
         organism = organism[3]
         organism.strip()
@@ -168,7 +169,7 @@ def nucleoImport():
         if "_" in organism:
             organism = organism.split("_")[0]
         print(organism,f"{i} su {len(csvOrganism)}")
-        
+
         listCompl.append(organism)
         try:
             records = ncbiSearchNucleo(organism)
@@ -222,21 +223,43 @@ res = nucleo_collection.aggregate([
 ])
 #nucleos = nucleo_collection.count_documents(query,filter)
 #print(nucleos)
-proteins = []
-count = 0
-for nucleo in res:
-    print(count)
-    cdss = nucleo["GBSeq_feature-table"]
-    for cds in cdss:
-        for qual in cds["GBFeature_quals"]:
-            if qual["GBQualifier_name"] == "protein_id":
-                proteins.append(qual["GBQualifier_value"] in proteins)
-    count += 1
+# proteins = []
+# count = 0
+# for nucleo in res:
+#     print(count)
+#     cdss = nucleo["GBSeq_feature-table"]
+#     for cds in cdss:
+#         for qual in cds["GBFeature_quals"]:
+#             if qual["GBQualifier_name"] == "protein_id":
+#                 proteins.append(qual["GBQualifier_value"] in proteins)
+#     count += 1
 
-def efetchProtein(ids):
-    handle = Entrez.efetch(db="protein", id=ids, rettype='gb',retmode="xml")
-    read = Entrez.read(handle)
-    return read
+# def efetchProtein(ids):
+#     handle = Entrez.efetch(db="protein", id=ids, rettype='gb',retmode="xml")
+#     read = Entrez.read(handle)
+#     return read
 
-results = efetchProtein(proteins)
-nucleo_collection.insert_many(results)
+# results = efetchProtein(proteins)
+# nucleo_collection.insert_many(results)
+
+
+def efetchGenome(taxId):
+    res = requests.get(f"https://ncbi.nlm.nih.gov/genome/?term={taxId}").text
+    tot = ""
+    try:
+        findIndex = res.index("_genomic.gff.gz")
+        lastHttp = res[:findIndex]
+        firstHttpIndex = lastHttp.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot = lastHttp[firstHttpIndex:]+"_genomic.gff.gz"
+
+    except Exception as e:
+        print(e)
+
+    return tot
+
+
+listIdTaxon = ["txid554065","txid3077"]
+
+dataLink = []
+for idTaxon in listIdTaxon:
+    dataLink.append((idTaxon,efetchGenome(idTaxon)))
