@@ -76,6 +76,9 @@
         </li>
       </ul>
     </nav>
+    <% if (data) { %>
+        <%- JSON.stringify(data) %>
+    <% } %>
     <% if (find) { %> 
       <h1>Searching "<%= find.ScientificName %>" over 20.000 organisms</h1>
       <% let url = `https://ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=${find.TaxId}&lvl=3&lin=f&keep=1&srchmode=1&unlock` %>
@@ -172,7 +175,7 @@
 </body>
 <script>
   let saveFile = async() => {
-      let data = <%-  JSON.stringify(find) %>;
+      //let data = <%-  JSON.stringify(find) %>;
       console.log(data);
       await fetch("/save", {
         method: "POST",

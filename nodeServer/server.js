@@ -80,54 +80,17 @@ app.post('/save',async(req,res) =>{
 app.get('/',async(req, res) => {
     let query = ""
     //let taxonomy = ""
-    let data = ""
+    let data = null
     let nucleotide = null
     let taxonomy = null
     // let rank = ""
     if (req.query.data) {
-      console.log("Data in input. Begin process...")
-      data = req.query.data
-      let info = {ScientificName:{$regex:`${data}`}}; // potrebbe essere cosi? boh proviamo ,$options : 'i'
-      var find1 = await finder(info, 'taxonomy_data')
-      var array = []
-      for (let i = 0; i < find1.length; i++) {
-        let info2 = {Features:{$elemMatch:{Type:'source', db_xref:"taxon:"+find1[i].TaxId}}}
-        var find2 = await finder(info2, 'nucleotide_data')
-        let ids = []
-        let array = []
-        if (!info2){
-          res.render('home', {find:taxonomy,nucleotide,error:true})
-          return
-        }
-        for (let k = 0; k < find2.length; k++) {
-          if (!ids.includes(find2[k].Id)){
-            try {
-              find2[k]["Lineage"] = find1[i].Lineage
-              ids.push(find2[k].Id)
-              array.push(find2[k])
-            }
-            catch {
-              console.log("Critical Error in search.")
-            }
-            
-          }
-        }
-        // if (find2[i] != undefined) {
-        //   for (let o = 0; o < find2.length; o++) {
-        //   // FOR DEBUGGING PURPOSE
-        //   // if (find2[i] != undefined) {
-        //   //   console.log(find2[i].Id)
-        //   // }
-        //   // else {
-        //   //   console.log("Found undefined! "+o)
-        //   // }
-        //     array.push(find2[i])
-        //   }
-        // }        
-      }
+      let data = req.query.data
+      let qq = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key": "source","GBFeature_quals":{"$elemMatch":{"GBQualifier_name":"country","GBQualifier_value":{"$regex":data}}}}}}
+      let ff = await finder(qq,"nucleotide_organism")
       //console.log(array);
       console.log("Query ended. Result displayed at localhost:3000")
-      res.render('home', {find:taxonomy,nucleotide:find2,error:false})    // {find:array} prende array e gli dice che si chiama find  
+      res.render('home', {find:taxonomy,nucleotide,error:false,data:ff})    // {find:array} prende array e gli dice che si chiama find  
       return
     }
     else if (req.query.taxonomy) {
@@ -135,7 +98,7 @@ app.get('/',async(req, res) => {
         let taxon = req.query.taxonomy;
         console.log(taxon);
         if (taxon == "" || !taxon){
-          res.render('home',{find:null,nucleotide,error:false})
+          res.render('home',{find:null,nucleotide,error:false,data})
           return
         }
         //
@@ -161,12 +124,12 @@ app.get('/',async(req, res) => {
           search["TaxId"] = `${taxon}`
         }
         else{
-          res.render('home',{find:null,nucleotide,error:false})
+          res.render('home',{find:null,nucleotide,error:false,data})
           return
         }
         let find = await finderOne(search, 'taxonomy_tree')
         if (!find){
-          res.render('home',{find:null,nucleotide,error:false})
+          res.render('home',{find:null,nucleotide,error:false,data})
           return
         }
         let dataReturn = {}
@@ -283,7 +246,7 @@ app.get('/',async(req, res) => {
         //   }
         // }
         console.log("Query ended. Result displayed at localhost:3000")
-        res.render('home',{find:dataReturn,nucleotide,error:false})
+        res.render('home',{find:dataReturn,nucleotide,error:false,data})
         return
     }
     else if (req.query.sequenceID) {
@@ -368,17 +331,17 @@ app.get('/',async(req, res) => {
         }
         
       }
-      res.render('home', {find,nucleotide:results,error:false});
+      res.render('home', {find,nucleotide:results,error:false,data});
       return
     }
     else if(req.query.sequenceID == "" || req.query.data == ""){
         find = null
         console.log("Result empty. Displayed at localhost:3000")
-        res.render('home',{find:null,nucleotide,error:true})
+        res.render('home',{find:null,nucleotide,error:true,data})
         return
     }
     console.log("Return at Home\n")
-    res.render('home',{find:null,nucleotide:null,error:false})
+    res.render('home',{find:null,nucleotide:null,error:false,data})
     return
 
 })
