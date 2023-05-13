@@ -23,6 +23,8 @@ Nodejs:               "https://docs.npmjs.com/downloading-and-installing-node-js
 
 Nodejs Express:       "http://expressjs.com/"
 
+GoLang:               "https://go.dev/doc/install"
+
 
 # Fonti ufficiali:
 
