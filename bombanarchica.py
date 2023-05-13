@@ -207,20 +207,20 @@ def genusList():
         writer.writerows(datas)
 
 
-nucleo_collection = db["nucleotide_organism"]
-query = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key":"CDS","GBFeature_quals":{"$elemMatch":{"GBQualifier_name":"protein_id"}}}}}
-filter = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key": "CDS"}}}
-res = nucleo_collection.aggregate([
-    {"$match": {'GBSeq_feature-table.GBFeature_key': 'CDS','GBSeq_feature-table.GBFeature_quals.GBQualifier_name':"protein_id"}},
-    {"$project": {
-        "GBSeq_feature-table": {"$filter": {
-            "input": '$GBSeq_feature-table',
-            "as": 'cds',
-            "cond": {"$eq": ['$$cds.GBFeature_key', 'CDS']}
-        }},
-        "_id": 0,
-    }}
-])
+# nucleo_collection = db["nucleotide_organism"]
+# query = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key":"CDS","GBFeature_quals":{"$elemMatch":{"GBQualifier_name":"protein_id"}}}}}
+# filter = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key": "CDS"}}}
+# res = nucleo_collection.aggregate([
+#     {"$match": {'GBSeq_feature-table.GBFeature_key': 'CDS','GBSeq_feature-table.GBFeature_quals.GBQualifier_name':"protein_id"}},
+#     {"$project": {
+#         "GBSeq_feature-table": {"$filter": {
+#             "input": '$GBSeq_feature-table',
+#             "as": 'cds',
+#             "cond": {"$eq": ['$$cds.GBFeature_key', 'CDS']}
+#         }},
+#         "_id": 0,
+#     }}
+# ])
 #nucleos = nucleo_collection.count_documents(query,filter)
 #print(nucleos)
 # proteins = []
@@ -258,8 +258,36 @@ def efetchGenome(taxId):
     return tot
 
 
-listIdTaxon = ["txid554065","txid3077"]
+# listIdTaxon = ["txid554065","txid3077"]
 
-dataLink = []
-for idTaxon in listIdTaxon:
-    dataLink.append((idTaxon,efetchGenome(idTaxon)))
+# dataLink = []
+# for idTaxon in listIdTaxon:
+#     dataLink.append((idTaxon,efetchGenome(idTaxon)))
+
+
+def ncbiSearchNucleo1(name:str) ->list:
+    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
+    # read = Entrez.read(handle)
+    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
+    record = Entrez.read(handle, validate=False)
+    handle.close()
+    print(f"Len of IDLIST:{len(record['IdList'])}")
+    if len(record["IdList"]) == 0:
+        raise Exception("List Empty")
+    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
+    read = Entrez.read(handle)
+    print(f"Len of EFETCH:{len(read)}")
+    return read
+
+def nucleoImport():
+    nucleo_collection = db["nucleotide_organism"]
+    all_data = collection_data.find({},{"TaxId":1,"_id":0})
+    for data in all_data:
+        print(f"txid{data['TaxId']}")
+        try:
+            insertDatas = ncbiSearchNucleo1(f"txid{data['TaxId']}[Organism:exp]")
+            nucleo_collection.insert_many(insertDatas)
+        except Exception as e:
+            print(e)
+
+nucleoImport()
