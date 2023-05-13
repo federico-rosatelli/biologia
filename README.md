@@ -76,10 +76,10 @@ Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si r
         
         ``sudo systemctl enable mongod.service``
         
-   - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)
+   - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3) [DEPRECATED]
    - attendere il termine del salvataggio nel database locale
    - aprire il server, digitando su console all'interno della cartella nodeServer:
-
+       ``npm install --save express`` per il primo avvio;
        ``node server.js``
    - dopodiché aprire il browser e cercare il seguente indirizzo:
 
