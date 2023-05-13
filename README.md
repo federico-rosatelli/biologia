@@ -34,6 +34,7 @@ Docker:               "https://docs.docker.com/engine/install/ubuntu/"
 Docker compose:       "https://docs.docker.com/desktop/install/linux-install/" (Integrato in Desktop)
 
 
+
 # Fonti ufficiali:
 
 Shigen:               "https://shigen.nig.ac.jp"         DB giapponese
@@ -59,7 +60,7 @@ Github:               "https://github.com/federico-rosatelli/biologia"
 Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si raccomanda Ubuntu):
  
    - Scaricare il progetto tramite git, o copiare il progetto all'indirizzo inserito tra "Altri link" sopra questo paragrafo.
-   - Installare tutti i requisiti
+   - Installare tutti i requisiti, settando le variabili di ambiente a livello globale
    - Inizializzare MongoDB:
         Dare i seguenti comandi da terminale:
   
@@ -67,9 +68,14 @@ Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si r
 
         ``sudo chown mongodb:mongodb /tmp/mongodb-27017.sock``
 
-       dopodiché:
+        dopodiché:
         
         ``sudo systemctl start mongod``
+        
+        per rendere automatico l'avvio di mongod in fase di accensione dell'SO:
+        
+        ``sudo systemctl enable mongod.service``
+        
    - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)
    - attendere il termine del salvataggio nel database locale
    - aprire il server, digitando su console all'interno della cartella nodeServer:
