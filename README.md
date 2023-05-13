@@ -25,6 +25,8 @@ Nodejs Express:       "http://expressjs.com/"
 
 GoLang:               "https://go.dev/doc/install"
 
+VUEjs:                "https://cli.vuejs.org/guide/installation.html"
+
 Docker:               "https://docs.docker.com/engine/install/ubuntu/"
 
 Docker compose:       "https://docs.docker.com/desktop/install/linux-install/" (Integrato in Desktop)
