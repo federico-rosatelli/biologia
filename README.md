@@ -19,6 +19,8 @@ Pymongo:              "https://pymongo.readthedocs.io/en/stable/"
 
 MongoDB CE "Jammy":   "https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/"
 
+NVM:                  "https://www.linode.com/docs/guides/how-to-install-use-node-version-manager-nvm/"
+
 Nodejs:               "https://github.com/nodejs/help/wiki/Installation"
 
 NPM:                  "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
