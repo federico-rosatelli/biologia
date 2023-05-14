@@ -280,14 +280,46 @@ def ncbiSearchNucleo1(name:str) ->list:
     return read
 
 def nucleoImport():
-    nucleo_collection = db["nucleotide_organism"]
+    daora = False
+    nucleo_collection = db["nucleotide_data"]
     all_data = collection_data.find({},{"TaxId":1,"_id":0})
     for data in all_data:
-        print(f"txid{data['TaxId']}")
-        try:
-            insertDatas = ncbiSearchNucleo1(f"txid{data['TaxId']}[Organism:exp]")
-            nucleo_collection.insert_many(insertDatas)
-        except Exception as e:
-            print(e)
+        if f"txid{data['TaxId']}" == "txid1411642":
+            daora = True
+        else:
+            print("No",f"txid{data['TaxId']}")
+        if daora:
+            print(f"txid{data['TaxId']}")
+            try:
+                insertDatas = ncbiSearchNucleo1(f"txid{data['TaxId']}[Organism:exp]")
+                for ins in insertDatas:
+                    ins.pop("GBSeq_sequence",None)
+                    nucleo_collection.insert_one(ins)
+                #nucleo_collection.insert_many(insertDatas)
+            except Exception as e:
+                print(e)
+#nucleoImport()
+# "txid257627"
+# "txid257627"
+# nucleo_collection = db["nucleotide_data"]
+# tot = ncbiSearchNucleo1("txid257627[Organism:exp]")
+# i = 0
+# for t in tot:
+#     print(i)
+#     t.pop("GBSeq_sequence",None)
+#     nucleo_collection.insert_one(t)
+#     i += 1
+# nucleo_collection = db["nucleotide_data"]
 
-nucleoImport()
+# dataAll = nucleo_collection.find({},{"GBSeq_locus":1,"_id":1})
+# for data in dataAll:
+#     query = {
+#         "_id": { "$ne": data["_id"] },
+#         "GBSeq_locus": data["GBSeq_locus"]
+#     }
+#     print(nucleo_collection.find_one(query))
+# data = db.nucleo_collection.aggregate([
+#     {"$group" : { "_id": "$GBSeq_locus", "count": { "$sum": 1 } } },
+#     {"$match": {"_id" :{ "$ne" : None } , "count" : {"$gt": 1} } }, 
+#     {"$project": {"name" : "$_id", "_id" : 0} }
+# ])
