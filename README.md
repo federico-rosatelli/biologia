@@ -19,9 +19,22 @@ Pymongo:              "https://pymongo.readthedocs.io/en/stable/"
 
 MongoDB CE "Jammy":   "https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/"
 
-Nodejs:               "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
+NVM:                  "https://www.linode.com/docs/guides/how-to-install-use-node-version-manager-nvm/"
+
+Nodejs:               "https://github.com/nodejs/help/wiki/Installation"
+
+NPM:                  "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
 
 Nodejs Express:       "http://expressjs.com/"
+
+GoLang:               "https://go.dev/doc/install"
+
+VUEjs:                "https://cli.vuejs.org/guide/installation.html"
+
+Docker:               "https://docs.docker.com/engine/install/ubuntu/"
+
+Docker compose:       "https://docs.docker.com/desktop/install/linux-install/" (Integrato in Desktop)
+
 
 
 # Fonti ufficiali:
@@ -49,7 +62,7 @@ Github:               "https://github.com/federico-rosatelli/biologia"
 Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si raccomanda Ubuntu):
  
    - Scaricare il progetto tramite git, o copiare il progetto all'indirizzo inserito tra "Altri link" sopra questo paragrafo.
-   - Installare tutti i requisiti
+   - Installare tutti i requisiti, settando le variabili di ambiente a livello globale
    - Inizializzare MongoDB:
         Dare i seguenti comandi da terminale:
   
@@ -57,13 +70,18 @@ Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si r
 
         ``sudo chown mongodb:mongodb /tmp/mongodb-27017.sock``
 
-       dopodiché:
+        dopodiché:
         
         ``sudo systemctl start mongod``
-   - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)
+        
+        per rendere automatico l'avvio di mongod in fase di accensione dell'SO:
+        
+        ``sudo systemctl enable mongod.service``
+        
+   - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3) [DEPRECATED]
    - attendere il termine del salvataggio nel database locale
    - aprire il server, digitando su console all'interno della cartella nodeServer:
-
+       ``npm install --save express`` per il primo avvio;
        ``node server.js``
    - dopodiché aprire il browser e cercare il seguente indirizzo:
 
