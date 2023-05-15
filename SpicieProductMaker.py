@@ -54,17 +54,25 @@ def jsonList():
 
 def csvWrite(dataResult):
     tot_data = []
+    num = []
     for dataN in dataResult:
         print(dataN["GBSeq_organism"])
         for data in dataN["GBSeq_feature-table"]:
             if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
                 for prod in data["GBFeature_quals"]:
-                    if prod["GBQualifier_name"] == "product" and [prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()] not in tot_data:
+                    if prod["GBQualifier_name"] == "product":
+                        number = 0
+                        if [prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()] in tot_data:
+                            iii = tot_data.index([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
+                            number = num[iii]
                         tot_data.append([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
+                        num.append(number)
         print(len(tot_data))
-    
+    tot_tot = []
+    for i in range(len(tot_data)):
+        tot_tot.append(tot_data[i]+num[i])
     with open('SpecieProduct.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerows(tot_data)
+        writer.writerows(tot_tot)
 
 csvWrite(dataResult)

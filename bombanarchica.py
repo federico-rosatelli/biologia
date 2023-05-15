@@ -263,7 +263,23 @@ def efetchGenome(taxId):
 # dataLink = []
 # for idTaxon in listIdTaxon:
 #     dataLink.append((idTaxon,efetchGenome(idTaxon)))
+def genomeFind(name:str):
+    handle = Entrez.esearch(db='genome', term=name, rettype='gb', retmode='text', retmax=10000)
+    record = Entrez.read(handle, validate=False)
+    handle.close()
+    # print(f"Len of IDLIST:{len(record['IdList'])}")
+    # if len(record["IdList"]) == 0:
+    #     raise Exception("List Empty")
+    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
+    read = Entrez.read(handle)
+    json_object = json.loads(f"{read}")
 
+    json_formatted_str = json.dumps(json_object, indent=2)
+    # print(f"Len of EFETCH:{len(read)}")
+    # return read
+    print(json_formatted_str)
+
+genomeFind("Chlorella variabilis")
 
 def ncbiSearchNucleo1(name:str) ->list:
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
