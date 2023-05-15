@@ -64,9 +64,10 @@ def csvWrite(dataResult):
                         number = 1
                         if [prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()] in tot_data:
                             iii = tot_data.index([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
-                            number = num[iii]+1
-                        tot_data.append([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
-                        num.append(number)
+                            num[iii] = num[iii]+1
+                        else:
+                            tot_data.append([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
+                            num.append(number)
         print(len(tot_data))
     tot_tot = []
     for i in range(len(tot_data)):
