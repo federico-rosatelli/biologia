@@ -61,10 +61,10 @@ def csvWrite(dataResult):
             if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
                 for prod in data["GBFeature_quals"]:
                     if prod["GBQualifier_name"] == "product":
-                        number = 0
+                        number = 1
                         if [prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()] in tot_data:
                             iii = tot_data.index([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
-                            number = num[iii]
+                            number = num[iii]+1
                         tot_data.append([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
                         num.append(number)
         print(len(tot_data))
