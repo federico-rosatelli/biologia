@@ -323,3 +323,72 @@ def nucleoImport():
 #     {"$match": {"_id" :{ "$ne" : None } , "count" : {"$gt": 1} } }, 
 #     {"$project": {"name" : "$_id", "_id" : 0} }
 # ])
+
+
+
+
+def parseToNucleotideBasic() -> list:
+    taxon_collection = db["taxonomy_data"]
+    nucleo_collection = db["nucleotide_data"]
+    nucleo_collection1 = db["nucleotide_basic"]
+    dataRank = taxon_collection.find({},{"ScientificName":1,"_id":0})
+    control = 0
+    for data in dataRank:
+        name = data["ScientificName"]
+        print(control,name)
+        totNucl = nucleo_collection.find({"GBSeq_source":{"$regex":name}},{"GBSeq_locus":1, "_id":0})
+        totNucl = list(totNucl)
+        print(len(totNucl))
+        nucleo_collection1.insert_one({
+            name:totNucl
+        })
+        control += 1   
+    
+    # per ogni ScientificName in Nucleotide:
+        # popola "nucleotide_basic" con
+            # GBSeq_locus
+    return
+
+
+#parseToNucleotideBasic()
+
+def fattoBene():
+    tt = db["nucleotide_basic"]
+    tt1 = db["nucleotide_basic1"]
+    tot = tt.find({},{"_id":0})
+    for t in tot:
+        for k in t:
+            print(k)
+            var = {
+                "ScientificName":k,
+                "GBSeq_locus":t[k]
+            }
+            tt1.insert_one(var)
+
+#fattoBene()
+        
+def ncbiSearchNucleo123(name:str) ->bool:
+    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
+    # read = Entrez.read(handle)
+    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
+    record = Entrez.read(handle, validate=False)
+    handle.close()
+    print(f"Len of IDLIST:{len(record['IdList'])} di {name}")
+
+    if len(record['IdList']) == 0:
+        return True
+    # if len(record["IdList"]) == 0:
+    #     raise Exception("List Empty")
+    # handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
+    # read = Entrez.read(handle)
+    # print(f"Len of EFETCH:{len(read)}")
+    # return read
+    return False
+
+taxon_collection = db["taxonomy_data"]
+dataRank = taxon_collection.find({},{"ScientificName":1,"_id":0})
+d = []
+for data in dataRank:
+    if ncbiSearchNucleo123(data["ScientificName"]):
+        d.append(data["ScientificName"])
+print(d)

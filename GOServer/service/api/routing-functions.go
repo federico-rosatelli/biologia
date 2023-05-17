@@ -33,3 +33,38 @@ func (rt *_router) Taxonomy(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 }
+
+func (rt *_router) TaxonomyTree(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Header().Set("content-type", "application/json")
+
+	search := r.URL.Query().Get("search")
+	Println(search)
+	p, err := rt.db.FindTaxonTree(search)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if errJson := json.NewEncoder(w).Encode(p); errJson != nil {
+		http.Error(w, errJson.Error(), http.StatusBadRequest)
+		return
+	}
+}
+
+func (rt *_router) Taxon_Term(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Header().Set("content-type", "application/json")
+
+	search := r.URL.Query().Get("search")
+	typeSearch := r.URL.Query().Get("type")
+	Println(search)
+	p, err := rt.db.FindNucleotide(search, typeSearch)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if errJson := json.NewEncoder(w).Encode(p); errJson != nil {
+		http.Error(w, errJson.Error(), http.StatusBadRequest)
+		return
+	}
+}
