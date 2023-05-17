@@ -65,7 +65,6 @@ def csvWrite(dataResult):
     
     with open('SpecieProduct.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        for row in tot_data:
-            writer.writerow([row])
+        writer.writerows(tot_data)
 
 csvWrite(dataResult)
