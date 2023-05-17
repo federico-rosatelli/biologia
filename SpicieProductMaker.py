@@ -59,13 +59,12 @@ def csvWrite(dataResult):
         for data in dataN["GBSeq_feature-table"]:
             if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
                 for prod in data["GBFeature_quals"]:
-                    if prod["GBQualifier_name"] == "product" and prod["GBQualifier_value"].lower() not in tot_data:
-                        tot_data.append(prod["GBQualifier_value"].lower())
+                    if prod["GBQualifier_name"] == "product" and [prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()] not in tot_data:
+                        tot_data.append([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
         print(len(tot_data))
     
     with open('SpecieProduct.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        for row in tot_data:
-            writer.writerow([row])
+        writer.writerows(tot_data)
 
 csvWrite(dataResult)

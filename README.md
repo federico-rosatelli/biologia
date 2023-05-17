@@ -103,20 +103,27 @@ NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (``systemctl 
 
 
 
-
-
-
 # Concetti utili:
 MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
 a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
 il db di interesse e sudo mongorestore sul file bson generato dal mongodump una volta importata la cartella generata.
  
+ 
+ 
+# Le collections trattate:
+- nucleotide_data    contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla voce Nucleotide;
+- nucleotide_basic   contiene i dati, allegeriti soltanto a nome e NCBI_ID, per questioni di performance quando si effettuano query di conteggio;
+- taxonomy_data      contiene tutti i dati delle microalghe che sono riscontrabili su NCBI ala voce Taxonomy;
+- taxonomy_tree      contiene i dati parsati per singola specie, mostrandone di volta in volta i link di Lineage.
+
 
 
 # La rappresentazione FASTA e FASTQ
 FASTA conserva soltanto la Sequenza di nucleotidi o amminoacidi, codificando ogni gene in singole lettere
 per indice di posizione. Nella rappresentazione in Genbank, troviamo tale dato nel file JSON che salviamo
 in locale, alla voce translation per ogni Coding Sequence sotto ogni Specie, secondo la seguente gerarchia:
+ 
+ 
  
 # SPECIE
 ##   FEATURES
