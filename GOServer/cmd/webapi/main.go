@@ -34,37 +34,26 @@ func run() error {
 	}
 
 	logger := logrus.New()
-	if cfg.Debug {
-		logger.SetLevel(logrus.DebugLevel)
-	} else {
-		logger.SetLevel(logrus.InfoLevel)
-	}
-
-	logger.Infof("Application Initializing...")
-
+	logger.Infof("Project \t%s", cfg.Name)
+	logger.Infof("Version \t%s", cfg.Version)
+	logger.Infof("Server:%s Starting on Port: %d", cfg.Server.ServerIp, cfg.Server.ServerPort)
 	var db database.AppDatabase
 
-	if cfg.DevRun {
-		logger.Println("Initializing Database Support")
-		dbconn := options.Client().ApplyURI("mongodb://localhost:27017/")
-		client, err := mongo.Connect(context.TODO(), dbconn)
-		if err != nil {
-			logger.WithError(err).Error("error connetting to mongo DB")
-			return fmt.Errorf("opening mongoDb: %w", err)
-		}
-		defer func() {
-			logger.Debug("database stopping")
-			_ = client.Disconnect(context.TODO())
-		}()
-
-		db, err = database.InitDatabase(client)
-
-		if err != nil {
-			logger.WithError(err).Error("error creating mongo DB")
-			return fmt.Errorf("opening mongoDb: %w", err)
-		}
-	} else {
-		db = nil
+	logger.Println("Initializing Database Support")
+	dbconn := options.Client().ApplyURI("mongodb://localhost:27017/")
+	client, err := mongo.Connect(context.TODO(), dbconn)
+	if err != nil {
+		logger.WithError(err).Error("error connetting to mongo DB")
+		return fmt.Errorf("opening mongoDb: %w", err)
+	}
+	defer func() {
+		logger.Debug("database stopping")
+		_ = client.Disconnect(context.TODO())
+	}()
+	db, err = database.InitDatabase(client)
+	if err != nil {
+		logger.WithError(err).Error("error creating mongo DB")
+		return fmt.Errorf("opening mongoDb: %w", err)
 	}
 
 	shutdown := make(chan os.Signal, 1)
@@ -92,15 +81,15 @@ func run() error {
 	router = applyCORSHandler(router)
 
 	apiserver := http.Server{
-		Addr:              cfg.WebAPI.ServerAddr,
+		Addr:              cfg.Server.ServerAddress,
 		Handler:           router,
-		ReadTimeout:       cfg.WebAPI.ServerConfig.ReadTimeout,
-		ReadHeaderTimeout: cfg.WebAPI.ServerConfig.ReadTimeout,
-		WriteTimeout:      cfg.WebAPI.ServerConfig.WriteTimeout,
+		ReadTimeout:       cfg.Server.ServerConfig.ReadTimeout,
+		ReadHeaderTimeout: cfg.Server.ServerConfig.ReadTimeout,
+		WriteTimeout:      cfg.Server.ServerConfig.WriteTimeout,
 	}
 
 	go func() {
-		logger.Infof("API listening on port: %d", cfg.WebAPI.ServerPort)
+		logger.Infof("API listening on port: %d", cfg.Server.ServerPort)
 		serverErrors <- apiserver.ListenAndServe()
 		logger.Infof("stopping API server")
 	}()
@@ -118,7 +107,7 @@ func run() error {
 			logger.WithError(err).Warning("graceful shutdown of apirouter error")
 		}
 
-		ctx, cancel := context.WithTimeout(context.Background(), cfg.WebAPI.ServerConfig.ShutdownTimeout)
+		ctx, cancel := context.WithTimeout(context.Background(), cfg.Server.ServerConfig.ShutdownTimeout)
 		defer cancel()
 
 		err = apiserver.Shutdown(ctx)
