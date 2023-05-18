@@ -1,56 +1,62 @@
 package database
 
 import (
+	errorM "GOServer/service/ErrManager"
+	str "GOServer/service/structures"
 	"context"
-	"errors"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (db *appDB) FindNucleotide(search string, typeS string) ([]map[string]interface{}, error) {
-	var ttt []map[string]interface{}
+func (db *appDB) TableOrganism(search string, typeS string) ([]str.OrganismTable, errorM.Errors) {
+	var orgTable []str.OrganismTable
 	filter := bson.M{}
 	if typeS == "id" {
-		filter["GBSeq_locus"] = search
+		filter["GBSeq_locus"] = bson.D{{Key: "$elemMatch", Value: bson.D{{Key: "GBSeq_locus", Value: search}}}}
 	} else if typeS == "scientific_name" {
-		filter["GBSeq_source"] = search
+		filter["ScientificName"] = bson.D{{Key: "$regex", Value: search}}
 	} else {
-		return ttt, errors.New("only id|scientific_name allowed")
+		return orgTable, errorM.NewError("Only id|scientific_name allowed", errorM.StatusBadRequest)
 	}
-	// db.collection.aggregate( [
-	// 	{ $group: { _id: null, myCount: { $sum: 1 } } },
-	// 	{ $project: { _id: 0 } }
-	//  ] )
-	// { "$group": {
-	// 	"_id": "$_id",
-	// 	"name": { "$first": "$name" },  //$first accumulator
-	// 	"count": { "$sum": 1 },  //$sum accumulator
-	// 	"totalValue": { "$sum": "$value" }  //$sum accumulator
-	//   }}
-	// groupStage := bson.D{{Key: "$group", Value: bson.M{"_id": "$GBSeq_locus", "myCount": bson.M{"$sum": 1}}}}
-	// finder := bson.D{{Key: "$match", Value: bson.D{{Key: "GBSeq_locus", Value: search}}}}
-	// //err := db.nucleotide_data.FindOne(context.TODO(), filter).Decode(&nucleo)
-	tt, err := db.nucleotide_data.Find(context.TODO(), bson.D{{Key: "GBSeq_locus", Value: search}})
-	// tt, err := db.nucleotide_data.Aggregate(context.TODO(), mongo.Pipeline{groupStage, finder})
-	print("MA QUII??")
+
+	groupStage := bson.D{{Key: "$project", Value: bson.M{"QtyNucleotides": bson.M{"$size": "$GBSeq_locus"}, "_id": 0, "ScientificName": 1}}}
+	match := bson.D{{Key: "$match", Value: filter}}
+
+	tt, err := db.nucleotide_base.Aggregate(context.TODO(), mongo.Pipeline{match, groupStage})
+
 	if err != nil {
-		print(err.Error(), "LO SAPEVO")
-		return ttt, err
-	}
-	print("EH MA QUA ARRIVA")
-	if err != nil {
-		print(err.Error(), "  LO SAPEVO123")
-		return ttt, err
+		return orgTable, errorM.NewError("Database Error", errorM.StatusInternalServerError)
 	}
 	for tt.Next(context.TODO()) {
-		var me map[string]interface{}
+		var me str.OrganismTable
+		var tax str.Taxonomy
 		err = tt.Decode(&me)
 		if err != nil {
-			print(err.Error())
-			return ttt, err
+			return orgTable, errorM.NewError("Can't Decode Result", errorM.StatusInternalServerError)
 		}
-		ttt = append(ttt, me)
+		err = db.taxonomy_data.FindOne(context.TODO(), bson.D{{Key: "ScientificName", Value: me.ScientificName}}).Decode(&tax)
+		if err != nil {
+			return orgTable, errorM.NewError("Can't Find Taxon Id", errorM.StatusInternalServerError)
+		}
+		me.TaxId = tax.TaxID
+		orgTable = append(orgTable, me)
 	}
-	print(ttt)
-	return ttt, err
+
+	return orgTable, nil
+}
+
+func (db *appDB) FindNucleotidesId(taxonId string) (str.NucleotideBasic, errorM.Errors) {
+	var nBasic str.NucleotideBasic
+	var tax str.Taxonomy
+	errM := db.taxonomy_data.FindOne(context.TODO(), bson.D{{Key: "TaxId", Value: taxonId}}).Decode(&tax)
+	if errM != nil {
+		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
+	}
+	errM = db.nucleotide_base.FindOne(context.TODO(), bson.D{{Key: "ScientificName", Value: tax.ScientificName}}).Decode(&nBasic)
+	if errM != nil {
+		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
+	}
+	return nBasic, nil
+
 }

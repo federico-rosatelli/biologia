@@ -1,3 +1,7 @@
 
 ### HOMEPAGE
-GET http://127.0.0.1:8080/taxonomy1?search=MK975476&type=id
+GET http://127.0.0.1:8080/taxon_term?search=Chlorella&type=scientific_name
+
+### HOMEPAGE
+GET http://127.0.0.1:8080/organism/2911188/nucleotides
+

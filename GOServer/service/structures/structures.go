@@ -89,3 +89,10 @@ type Nucleotide struct {
 	GBSeqTopology     string `bson:"GBSeq_topology"`
 	GBSeqUpdateDate   string `bson:"GBSeq_update-date"`
 }
+
+type NucleotideBasic struct {
+	ScientificName string `bson:"ScientificName"`
+	GBSeq_locus    []struct {
+		GBSeq_locus string `bson:"GBSeq_locus"`
+	} `bson:"GBSeq_locus"`
+}

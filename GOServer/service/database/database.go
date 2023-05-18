@@ -1,6 +1,7 @@
 package database
 
 import (
+	errorM "GOServer/service/ErrManager"
 	str "GOServer/service/structures"
 	"errors"
 
@@ -13,12 +14,14 @@ type AppDatabase interface {
 
 	FindTaxon(search string, typeS string) (str.Taxonomy, error)
 	FindTaxonTree(search string) (str.TaxonomyTree, error)
-	FindNucleotide(search string, typeS string) ([]map[string]interface{}, error)
+	TableOrganism(search string, typeS string) ([]str.OrganismTable, errorM.Errors)
+	FindNucleotidesId(taxonId string) (str.NucleotideBasic, errorM.Errors)
 }
 
 type appDB struct {
 	client          *mongo.Client
 	nucleotide_data *mongo.Collection
+	nucleotide_base *mongo.Collection
 	taxonomy_data   *mongo.Collection
 	taxonomy_tree   *mongo.Collection
 }
@@ -26,6 +29,10 @@ type appDB struct {
 func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 	collectionNucleotide := client.Database("Biologia").Collection("nucleotide_data")
 	if collectionNucleotide == nil {
+		return nil, errors.New("error Creating users Collection")
+	}
+	collectionNucleotideBase := client.Database("Biologia").Collection("nucleotide_basic1")
+	if collectionNucleotideBase == nil {
 		return nil, errors.New("error Creating users Collection")
 	}
 	collectionTaxonomy := client.Database("Biologia").Collection("taxonomy_data")
@@ -39,6 +46,7 @@ func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 	return &appDB{
 		client:          client,
 		nucleotide_data: collectionNucleotide,
+		nucleotide_base: collectionNucleotideBase,
 		taxonomy_data:   collectionTaxonomy,
 		taxonomy_tree:   collectionTaxonomyTree,
 	}, nil
