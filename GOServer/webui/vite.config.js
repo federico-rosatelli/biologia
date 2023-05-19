@@ -13,18 +13,18 @@ export default defineConfig(({command, mode, ssrBuild}) => {
 			}
 		},
 		devServer: {
-			proxy: 'http://localhost:8080/',
+			proxy: 'http://localhost:3000/',
 			port:8080,
 		},
-		publicPath: JSON.stringify("http://localhost:8080")
+		publicPath: JSON.stringify("http://localhost:3000")
 	};
 	if (command === 'serve') {
 		ret.define = {
-			"__API_URL__": JSON.stringify("http://localhost:8080"),
+			"__API_URL__": JSON.stringify("http://localhost:3000"),
 		};
 	} else {
 		ret.define = {
-			"__API_URL__": JSON.stringify("http://localhost:8080"),
+			"__API_URL__": JSON.stringify("http://localhost:3000"),
 		};
 	}
 	return ret;

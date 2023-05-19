@@ -10,16 +10,11 @@ import './assets/main.css'
 import './assets/login.css'
 import './assets/modal.css'
 import './assets/dropdown.css'
+import './assets/monitor.css'
 console.log("PROVAAA");
 const app = createApp(App)
 app.config.globalProperties.$axios = axios;
 app.component("ErrorMsg", ErrorMsg);
 app.use(router)
-//app.use(BModal)
-// app.component("b-modal",BModal)
-// app.component("b-button",BButton)
-//app.use(IconsPlugin)
-
-//app.component('b-modal', BModal)
 app.mount('#app')
 
