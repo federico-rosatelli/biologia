@@ -4,3 +4,4 @@
 *.txt
 __pycache__/
 !GOServer/webui/package.json
+!GOServer/vendor/modules.txt
