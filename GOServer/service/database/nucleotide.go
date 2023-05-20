@@ -57,3 +57,13 @@ func (db *appDB) FindNucleotidesId(taxonId string) (str.NucleotideBasic, errorM.
 	return nBasic, nil
 
 }
+
+func (db *appDB) FindNucleotideByLocus(locus string) (str.Nucleotide, errorM.Errors) {
+	var nucleo str.Nucleotide
+	errM := db.nucleotide_data.FindOne(context.TODO(), bson.D{{Key: "GBSeq_locus", Value: locus}}).Decode(&nucleo)
+	if errM != nil {
+		return nucleo, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
+	}
+	return nucleo, nil
+
+}

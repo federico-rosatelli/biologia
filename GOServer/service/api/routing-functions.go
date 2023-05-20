@@ -83,3 +83,19 @@ func (rt *_router) Get_Nucleotides_Id(w http.ResponseWriter, r *http.Request, ps
 		return
 	}
 }
+
+func (rt *_router) Get_Nucleotide_From_Locus(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Header().Set("content-type", "application/json")
+
+	id := ps.ByName("locus")
+	p, err := rt.db.FindNucleotideByLocus(id)
+	if err != nil {
+		http.Error(w, err.Error(), err.Type())
+		return
+	}
+
+	if errJson := json.NewEncoder(w).Encode(p); errJson != nil {
+		http.Error(w, errJson.Error(), http.StatusBadRequest)
+		return
+	}
+}

@@ -46,12 +46,6 @@ export default {
 
 <template>
   <div>
-
-    <div class="input">
-      <label for="search-input">Input here</label>
-      <input type="text" id="search-input" v-model="search" />
-    </div>
-
     <div class="dropdown">
       <label for="dropdown">Type:</label>
       <select id="dropdown" v-model="type">
@@ -59,9 +53,12 @@ export default {
         <option value="id">Taxom Id</option>
       </select>
     </div>
-
-  </div>
+    <div class="input">
+      <label for="search-input">Input here</label>
+      <input type="text" id="search-input" v-model="search" />
+    </div>
     <button type="button" @click="nucleotideSearch()"> Search</button>
+  </div>
 
 
 <!--TABELLA -->
@@ -86,28 +83,27 @@ export default {
       </thead>
         <tr v-for="item in response" :key="item.TaxId">
           <td>
-            <a :href="'/organism/'+item.TaxId + '/taxon'">
+            <RouterLink :to="'/organism/'+item.TaxId + '/taxon'">
               {{ item.ScientificName }}
-            </a>
+					  </RouterLink>
           </td>
 
           <td>
-            <a :href="'/organism/'+item.TaxId+'/nucleotides'">
-
+            <RouterLink :to="'/organism/'+item.TaxId+'/nucleotides'">
               {{ item.QtyNucleotides === 9999 ? item.QtyNucleotides+"+" : item.QtyNucleotides}}
-            </a>
+					  </RouterLink>
           </td>
 
           <td>
-            <a :href="'/organism/'+item.TaxId + '/proteins'">
+            <RouterLink :to="'/organism/'+item.TaxId + '/proteins'">
               {{ item.QtyProteins === 9999 ? item.QtyProteins+"+" : item.QtyProteins}}
-            </a>
+            </RouterLink>
           </td>
 
           <td>
-            <a :href="'/organism/'+item.TaxId + '/products'">
+            <RouterLink :to="'/organism/'+item.TaxId + '/products'">
               {{ item.QtyProducts === 9999 ? item.QtyProducts+"+" : item.QtyProducts}}
-            </a>
+            </RouterLink>
           </td>
             
           <td>{{ item.Genomes }}</td>
@@ -172,8 +168,5 @@ button:hover {
     
    }
    
-#table a{
-    color: #000;
-}
    
 </style>

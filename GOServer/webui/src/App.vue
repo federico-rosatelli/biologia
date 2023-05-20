@@ -31,12 +31,20 @@ export default{
         </hgroup>
         <nav>
             <ul class="right">
-                <li><a href="/">Home</a></li>
+                <li>
+                    <RouterLink to="/">
+                        Home
+					</RouterLink>
+                </li>
                 <li><a class="button-a" target=”_blank” href="https://github.com/federico-rosatelli/biologia">Github Project</a></li>
                 <li><a class="button-a" target=”_blank” href="https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW">Archive</a></li>
             </ul>
             <ul class="left">
-                <li><a href="/taxon">Search</a></li>
+                <li>
+                    <RouterLink to="/taxon">
+                        Search
+					</RouterLink>
+                </li>
             </ul>
         </nav>
     </header>
@@ -44,7 +52,7 @@ export default{
     <footer>
     <div id="banner" style="overflow:hidden; display: inline-block;">
       <div class="image">
-        <img src="images/Stemma_sapienza.png" style="width:30%; height:30%">
+        <img src="/public/images/Stemma_sapienza.png" style="width:30%; height:30%">
       </div>
     </div>
     <p>Authors: Team di Biologia Computazionale 2023, Università La Sapienza<br>

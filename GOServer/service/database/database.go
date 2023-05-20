@@ -16,6 +16,7 @@ type AppDatabase interface {
 	FindTaxonTree(search string) (str.TaxonomyTree, error)
 	TableOrganism(search string, typeS string) ([]str.OrganismTable, errorM.Errors)
 	FindNucleotidesId(taxonId string) (str.NucleotideBasic, errorM.Errors)
+	FindNucleotideByLocus(locus string) (str.Nucleotide, errorM.Errors)
 }
 
 type appDB struct {
