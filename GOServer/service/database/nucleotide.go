@@ -20,10 +20,10 @@ func (db *appDB) TableOrganism(search string, typeS string) ([]str.OrganismTable
 		return orgTable, errorM.NewError("Only id|scientific_name allowed", errorM.StatusBadRequest)
 	}
 
-	groupStage := bson.D{{Key: "$project", Value: bson.M{"QtyNucleotides": bson.M{"$size": "$GBSeq_locus"}, "_id": 0, "ScientificName": 1}}}
+	groupStage := bson.D{{Key: "$project", Value: bson.M{"QtyNucleotides": bson.M{"$size": "$Nucleotides"}, "QtyProteins": bson.M{"$size": "$Proteins"}, "_id": 0, "ScientificName": 1, "TaxId": 1}}}
 	match := bson.D{{Key: "$match", Value: filter}}
 
-	tt, err := db.nucleotide_base.Aggregate(context.TODO(), mongo.Pipeline{match, groupStage})
+	tt, err := db.table_basic.Aggregate(context.TODO(), mongo.Pipeline{match, groupStage})
 
 	if err != nil {
 		return orgTable, errorM.NewError("Database Error", errorM.StatusInternalServerError)
@@ -53,7 +53,7 @@ func (db *appDB) FindNucleotidesId(taxonId string) (str.NucleotideBasic, errorM.
 	if errM != nil {
 		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
 	}
-	errM = db.nucleotide_base.FindOne(context.TODO(), bson.D{{Key: "ScientificName", Value: tax.ScientificName}}).Decode(&nBasic)
+	errM = db.table_basic.FindOne(context.TODO(), bson.D{{Key: "ScientificName", Value: tax.ScientificName}}).Decode(&nBasic)
 	if errM != nil {
 		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
 	}

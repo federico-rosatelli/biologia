@@ -92,7 +92,11 @@ type Nucleotide struct {
 
 type NucleotideBasic struct {
 	ScientificName string `bson:"ScientificName"`
-	GBSeq_locus    []struct {
+	TaxId          string `bson:"TaxId"`
+	Nucleotides    []struct {
 		GBSeq_locus string `bson:"GBSeq_locus"`
-	} `bson:"GBSeq_locus"`
+	} `bson:"Nucleotides"`
+	Proteins []struct {
+		GBSeq_locus string `bson:"GBSeq_locus"`
+	} `bson:"Proteins"`
 }

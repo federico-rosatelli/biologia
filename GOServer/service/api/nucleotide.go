@@ -45,7 +45,7 @@ func (rt *_router) GetNucleotides(taxId string) (str.NucleotideBasic, ErrManager
 }
 
 func (nucl myNucleotideBasic) auxNucleoBasic() ErrManager.Errors {
-	if len(nucl.GBSeq_locus) == 0 {
+	if len(nucl.Nucleotides) == 0 {
 		return ErrManager.NewError("No Content To Show", ErrManager.StatusServiceUnavailable)
 	}
 	if nucl.ScientificName == "" {

@@ -21,7 +21,7 @@ type AppDatabase interface {
 type appDB struct {
 	client          *mongo.Client
 	nucleotide_data *mongo.Collection
-	nucleotide_base *mongo.Collection
+	table_basic     *mongo.Collection
 	taxonomy_data   *mongo.Collection
 	taxonomy_tree   *mongo.Collection
 }
@@ -31,8 +31,8 @@ func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 	if collectionNucleotide == nil {
 		return nil, errors.New("error Creating users Collection")
 	}
-	collectionNucleotideBase := client.Database("Biologia").Collection("nucleotide_basic1")
-	if collectionNucleotideBase == nil {
+	collectionTableBasic := client.Database("Biologia").Collection("table_basic")
+	if collectionTableBasic == nil {
 		return nil, errors.New("error Creating users Collection")
 	}
 	collectionTaxonomy := client.Database("Biologia").Collection("taxonomy_data")
@@ -46,7 +46,7 @@ func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 	return &appDB{
 		client:          client,
 		nucleotide_data: collectionNucleotide,
-		nucleotide_base: collectionNucleotideBase,
+		table_basic:     collectionTableBasic,
 		taxonomy_data:   collectionTaxonomy,
 		taxonomy_tree:   collectionTaxonomyTree,
 	}, nil

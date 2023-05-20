@@ -279,7 +279,7 @@ def genomeFind(name:str):
     # return read
     print(json_formatted_str)
 
-genomeFind("Chlorella variabilis")
+#genomeFind("Chlorella variabilis")
 
 def ncbiSearchNucleo1(name:str) ->list:
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
@@ -343,21 +343,31 @@ def nucleoImport():
 
 
 
-def parseToNucleotideBasic() -> list:
+def parseToBasic() -> list:
     taxon_collection = db["taxonomy_data"]
     nucleo_collection = db["nucleotide_data"]
-    nucleo_collection1 = db["nucleotide_basic"]
-    dataRank = taxon_collection.find({},{"ScientificName":1,"_id":0})
+    tableBasic_collection = db["table_basic"]
+    protein_collection = db["protein_data"]
+    dataRank = taxon_collection.find({},{"ScientificName":1,"TaxId":1,"_id":0})
     control = 0
     for data in dataRank:
-        name = data["ScientificName"]
-        print(control,name)
-        totNucl = nucleo_collection.find({"GBSeq_source":{"$regex":name}},{"GBSeq_locus":1, "_id":0})
+        id = data["TaxId"]
+        print(control,data["ScientificName"])
+        finder = {"GBSeq_feature-table.GBFeature_quals.GBQualifier_value":f"taxon:{id}"}
+        totNucl = nucleo_collection.find(finder,{"GBSeq_locus":1, "_id":0})
         totNucl = list(totNucl)
-        print(len(totNucl))
-        nucleo_collection1.insert_one({
-            name:totNucl
-        })
+        print("Tot Nucleotides",len(totNucl))
+        finder = {"GBSeq_feature-table.GBFeature_quals.GBQualifier_value":f"taxon:{id}"}
+        proteins = protein_collection.find(finder,{"GBSeq_locus":1,"_id":0})
+        proteins = list(proteins)
+        print("Tot Proteins",len(proteins))
+        inserter = {
+            "ScientificName":data["ScientificName"],
+            "TaxId":data["TaxId"],
+            "Nucleotides":totNucl,
+            "Proteins":proteins
+        }
+        tableBasic_collection.insert_one(inserter)
         control += 1   
     
     # per ogni ScientificName in Nucleotide:
@@ -365,8 +375,8 @@ def parseToNucleotideBasic() -> list:
             # GBSeq_locus
     return
 
+parseToBasic()
 
-#parseToNucleotideBasic()
 
 def fattoBene():
     tt = db["nucleotide_basic"]
@@ -401,10 +411,34 @@ def ncbiSearchNucleo123(name:str) ->bool:
     # return read
     return False
 
-taxon_collection = db["taxonomy_data"]
-dataRank = taxon_collection.find({},{"ScientificName":1,"_id":0})
-d = []
-for data in dataRank:
-    if ncbiSearchNucleo123(data["ScientificName"]):
-        d.append(data["ScientificName"])
-print(d)
+
+def ncbiProtein(name:str) ->list:
+    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
+    # read = Entrez.read(handle)
+    handle = Entrez.esearch(db='protein', term=name, rettype='gb', retmode='text', retmax=10000)
+    record = Entrez.read(handle, validate=False)
+    handle.close()
+    print(f"Len of IDLIST:{len(record['IdList'])}")
+    if len(record["IdList"]) == 0:
+        raise Exception("List Empty")
+    handle = Entrez.efetch(db="protein", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
+    read = Entrez.read(handle)
+    print(f"Len of EFETCH:{len(read)}")
+    return read
+
+
+def proteinFind():
+    protein_collection = db["protein_data"]
+    taxon_collection = db["taxonomy_data"]
+    findTax = taxon_collection.find({},{"TaxId":1,"_id":0})
+    for data in findTax:
+        tax = f"txid{data['TaxId']}"
+        print(tax)
+        try:
+            allData = ncbiProtein(tax)
+            for prot in allData:
+                prot.pop("GBSeq_sequence",None)
+                protein_collection.insert_one(prot)
+        except Exception as e:
+            print(e)
+#proteinFind()
