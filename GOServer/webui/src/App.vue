@@ -36,7 +36,7 @@ export default{
                 <li><a class="button-a" target=”_blank” href="https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW">Archive</a></li>
             </ul>
             <ul class="left">
-                <li><a href="/taxon">Taxon</a></li>
+                <li><a href="/taxon">Search</a></li>
             </ul>
         </nav>
     </header>
