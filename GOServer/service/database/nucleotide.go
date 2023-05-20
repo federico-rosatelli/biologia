@@ -7,13 +7,14 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func (db *appDB) TableOrganism(search string, typeS string) ([]str.OrganismTable, errorM.Errors) {
 	var orgTable []str.OrganismTable
 	filter := bson.M{}
 	if typeS == "id" {
-		filter["GBSeq_locus"] = bson.D{{Key: "$elemMatch", Value: bson.D{{Key: "GBSeq_locus", Value: search}}}}
+		filter["TaxId"] = search
 	} else if typeS == "scientific_name" {
 		filter["ScientificName"] = bson.D{{Key: "$regex", Value: search}}
 	} else {
@@ -48,12 +49,8 @@ func (db *appDB) TableOrganism(search string, typeS string) ([]str.OrganismTable
 
 func (db *appDB) FindNucleotidesId(taxonId string) (str.NucleotideBasic, errorM.Errors) {
 	var nBasic str.NucleotideBasic
-	var tax str.Taxonomy
-	errM := db.taxonomy_data.FindOne(context.TODO(), bson.D{{Key: "TaxId", Value: taxonId}}).Decode(&tax)
-	if errM != nil {
-		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
-	}
-	errM = db.table_basic.FindOne(context.TODO(), bson.D{{Key: "ScientificName", Value: tax.ScientificName}}).Decode(&nBasic)
+	proj := options.FindOne().SetProjection(bson.D{{Key: "Proteins", Value: 0}})
+	errM := db.table_basic.FindOne(context.TODO(), bson.D{{Key: "TaxId", Value: taxonId}}, proj).Decode(&nBasic)
 	if errM != nil {
 		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
 	}
