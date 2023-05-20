@@ -5,3 +5,4 @@
 __pycache__/
 !GOServer/webui/package.json
 !GOServer/vendor/modules.txt
+!GOServer/webui/public/images/Danio.jpg

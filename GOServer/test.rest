@@ -1,6 +1,6 @@
 
 ### HOMEPAGE
-GET http://127.0.0.1:3000/taxon_term?search=2722869&type=id
+GET http://2.35.186.59:3000/taxon_term?search=2722869&type=id
 
 ### HOMEPAGE
 GET http://127.0.0.1:3000/organism/2722869/nucleotides

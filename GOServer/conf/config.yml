@@ -2,8 +2,8 @@ Name:     "Biologia"
 Version:  "a0.0.2"
 Server:
   ServerPort:     3000
-  ServerIp:       "127.0.0.1"
-  ServerAddress:  "127.0.0.1:3000"
+  ServerIp:       "2.35.186.59"
+  ServerAddress:  ":3000"
   ServerConfig:
     ReadTimeout:      "5s"
     WriteTimeout:     "5s"
