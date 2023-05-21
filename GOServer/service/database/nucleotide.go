@@ -47,15 +47,14 @@ func (db *appDB) TableOrganism(search string, typeS string) ([]str.OrganismTable
 	return orgTable, nil
 }
 
-func (db *appDB) FindNucleotidesId(taxonId string) (str.NucleotideBasic, errorM.Errors) {
-	var nBasic str.NucleotideBasic
+func (db *appDB) FindNucleotidesId(taxonId string) (str.TableBasic, errorM.Errors) {
+	var nBasic str.TableBasic
 	proj := options.FindOne().SetProjection(bson.D{{Key: "Proteins", Value: 0}})
 	errM := db.table_basic.FindOne(context.TODO(), bson.D{{Key: "TaxId", Value: taxonId}}, proj).Decode(&nBasic)
 	if errM != nil {
 		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
 	}
 	return nBasic, nil
-
 }
 
 func (db *appDB) FindNucleotideTableByLocus(taxId string, locus string) (str.TableComplete, errorM.Errors) {

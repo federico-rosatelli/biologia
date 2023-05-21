@@ -101,3 +101,37 @@ func (rt *_router) Get_Nucleotide_From_Locus(w http.ResponseWriter, r *http.Requ
 	}
 
 }
+
+func (rt *_router) Get_Proteins_Id(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Header().Set("content-type", "application/json")
+
+	id := ps.ByName("id")
+	p, err := rt.GetProteins(id)
+	if err != nil {
+		http.Error(w, err.Error(), err.Type())
+		return
+	}
+
+	if errJson := json.NewEncoder(w).Encode(p); errJson != nil {
+		http.Error(w, errJson.Error(), http.StatusBadRequest)
+		return
+	}
+}
+
+func (rt *_router) Get_Protein_From_Locus(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Header().Set("content-type", "application/json")
+
+	id := ps.ByName(("id"))
+	locus := ps.ByName("locus")
+	table, err := rt.GetProteinFromTable(id, locus)
+	if err != nil {
+		http.Error(w, err.Error(), err.Type())
+		return
+	}
+
+	if errJson := json.NewEncoder(w).Encode(table); errJson != nil {
+		http.Error(w, errJson.Error(), http.StatusBadRequest)
+		return
+	}
+
+}

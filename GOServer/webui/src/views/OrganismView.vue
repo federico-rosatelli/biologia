@@ -9,24 +9,28 @@ export default {
             search: null,
             type: null,
             response: [],
-            nucleo:null
+            nucleo:null,
+            dataArray: []
 
 		}
 	},
     
 	methods: {
         async findLocus(locus){
+            this.loading = true
             if (this.nucleo){
                 this.close(this.nucleo.GBSeqLocus)
             }
             try{
                 let taxId = this.$route.params.taxid;
-                let nucleo = await this.$axios.get(`organism/${taxId}/nucleotide/${locus}`);
-                this.nucleo=nucleo.data.Nucleotides[0]
+                let typof = this.$route.path.split("/").pop();
+                let nucleo = await this.$axios.get(`organism/${taxId}/${typof}/${locus}`);
+                this.nucleo= typof == "proteins" ? nucleo.data.Proteins[0] : nucleo.data.Nucleotides[0]
             } catch(e){
-                this.errormsg = e.response.data
+                this.errormsg = e.nucleo
             }
             document.getElementById("popup-"+locus).style.display = "flex"
+            this.loading = false
         },
         close(locus){
             document.getElementById("popup-"+locus).style.display = "none"
@@ -35,12 +39,16 @@ export default {
     },
     async mounted(){
         let taxId = this.$route.params.taxid;
+        let typof = this.$route.path.split("/").pop();
         try{
-            let response = await this.$axios.get(`/organism/${taxId}/nucleotides`);
+            let response = await this.$axios.get(`/organism/${taxId}/${typof}`);
             this.response=response.data
         } catch(e){
             this.errormsg = e.response.data
         }
+
+        this.dataArray = typof == "proteins" ? this.response.Proteins : this.response.Nucleotides
+
     },
 }
 
@@ -57,8 +65,9 @@ export default {
                 {{ response.ScientificName }}
             </h2>
         </div>
+        <LoadingSpinner :loading="this.loading"/>
         <ul>
-            <div v-for="item in response.Nucleotides">
+            <div v-for="item in this.dataArray">
                 <div @click="findLocus(item.GBSeq_locus)" class="clickable">
                     {{ item.GBSeq_locus }}
                 </div>

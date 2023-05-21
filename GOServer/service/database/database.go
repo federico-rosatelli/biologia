@@ -15,14 +15,18 @@ type AppDatabase interface {
 	FindTaxon(search string, typeS string) (str.Taxonomy, error)
 	FindTaxonTree(search string) (str.TaxonomyTree, error)
 	TableOrganism(search string, typeS string) ([]str.OrganismTable, errorM.Errors)
-	FindNucleotidesId(taxonId string) (str.NucleotideBasic, errorM.Errors)
+	FindNucleotidesId(taxonId string) (str.TableBasic, errorM.Errors)
 	FindNucleotideTableByLocus(taxId string, locus string) (str.TableComplete, errorM.Errors)
 	FindNucleotideByLocus(locus string) (str.Nucleotide, errorM.Errors)
+	FindProteinsId(taxonId string) (str.TableBasic, errorM.Errors)
+	FindProteinTableByLocus(taxId string, locus string) (str.TableComplete, errorM.Errors)
+	FindProteinByLocus(locus string) (str.Protein, errorM.Errors)
 }
 
 type appDB struct {
 	client          *mongo.Client
 	nucleotide_data *mongo.Collection
+	protein_data    *mongo.Collection
 	table_basic     *mongo.Collection
 	table_complete  *mongo.Collection
 	taxonomy_data   *mongo.Collection
@@ -32,6 +36,10 @@ type appDB struct {
 func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 	collectionNucleotide := client.Database("Biologia").Collection("nucleotide_data")
 	if collectionNucleotide == nil {
+		return nil, errors.New("error Creating users Collection")
+	}
+	collectionProtein := client.Database("Biologia").Collection("protein_data")
+	if collectionProtein == nil {
 		return nil, errors.New("error Creating users Collection")
 	}
 	collectionTableBasic := client.Database("Biologia").Collection("table_basic")
@@ -53,6 +61,7 @@ func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 	return &appDB{
 		client:          client,
 		nucleotide_data: collectionNucleotide,
+		protein_data:    collectionProtein,
 		table_basic:     collectionTableBasic,
 		table_complete:  collectionTableComplete,
 		taxonomy_data:   collectionTaxonomy,

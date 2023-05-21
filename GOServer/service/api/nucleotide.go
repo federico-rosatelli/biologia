@@ -5,7 +5,7 @@ import (
 	str "GOServer/service/structures"
 )
 
-type myNucleotideBasic str.NucleotideBasic
+type myNucleotideBasic str.TableBasic
 
 type myOrganismTable []str.OrganismTable
 
@@ -34,7 +34,7 @@ func (table myOrganismTable) auxOrganismTable() ErrManager.Errors {
 	return nil
 }
 
-func (rt *_router) GetNucleotides(taxId string) (str.NucleotideBasic, ErrManager.Errors) {
+func (rt *_router) GetNucleotides(taxId string) (str.TableBasic, ErrManager.Errors) {
 	nBasic, err := rt.db.FindNucleotidesId(taxId)
 	if err != nil {
 		return nBasic, err

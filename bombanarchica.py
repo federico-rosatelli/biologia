@@ -572,3 +572,49 @@ def proteinFind():
         except Exception as e:
             print(e)
 #proteinFind()
+
+
+
+def newCollectionBene():
+    new_collection = db["table_complete1"]
+    old_collection = db["table_basic"]
+    nucleotide_collection = db["nucleotide_data"]
+    protein_collection = db["protein_data"]
+
+    findAll = old_collection.find({})
+    for data in findAll:
+        nucleotides = [t["GBSeq_locus"] for t in data["Nucleotides"]]
+        proteins = [t["GBSeq_locus"] for t in data["Proteins"]]
+        print(f"{data['ScientificName']}; N: {len(nucleotides)}; P:{len(proteins)}")
+
+        allDataN = nucleotide_collection.find({"GBSeq_locus":{"$in":nucleotides}})
+        allDataP = protein_collection.find({"GBSeq_locus":{"$in":proteins}})
+
+        allDataN = list(allDataN)
+        allDataP = list(allDataP)
+
+        dataInsert = {
+            "ScientificName":data["ScientificName"],
+            "TaxId":data["TaxId"],
+            "Nucleotides":allDataN,
+            "Proteins":allDataP
+        }
+        try:
+            new_collection.insert_one(dataInsert)
+        except Exception:
+            print("TROPPO GROSSO")
+            dataInsert = {
+                "ScientificName":data["ScientificName"],
+                "TaxId":data["TaxId"],
+                "Nucleotides":[],
+                "Proteins":[]
+            }
+            new_collection.insert_one(dataInsert)
+            # for n in allDataN:
+            #     new_collection.update_one({"TaxId":data["TaxId"]},{"$push":{"Nucleotides":n}})
+            # for n in allDataP:
+            #     new_collection.update_one({"TaxId":data["TaxId"]},{"$push":{"Proteins":n}})
+
+        
+
+newCollectionBene()

@@ -90,7 +90,9 @@ type Nucleotide struct {
 	GBSeqUpdateDate   string `bson:"GBSeq_update-date"`
 }
 
-type NucleotideBasic struct {
+type Protein Nucleotide
+
+type TableBasic struct {
 	ScientificName string `bson:"ScientificName"`
 	TaxId          string `bson:"TaxId"`
 	Nucleotides    []struct {
@@ -105,7 +107,5 @@ type TableComplete struct {
 	ScientificName string       `bson:"ScientificName"`
 	TaxId          string       `bson:"TaxId"`
 	Nucleotides    []Nucleotide `bson:"Nucleotides"`
-	Proteins       []struct {
-		GBSeq_locus string `bson:"GBSeq_locus"`
-	} `bson:"Proteins"`
+	Proteins       []Protein    `bson:"Proteins"`
 }
