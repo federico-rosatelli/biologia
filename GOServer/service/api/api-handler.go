@@ -10,6 +10,6 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.GET("/taxonomy", rt.Taxonomy)
 	rt.router.GET("/taxon_term", rt.Taxon_Term)
 	rt.router.GET("/organism/:id/nucleotides", rt.Get_Nucleotides_Id)
-	rt.router.GET("/nucleotide/:locus", rt.Get_Nucleotide_From_Locus)
+	rt.router.GET("/organism/:id/nucleotide/:locus", rt.Get_Nucleotide_From_Locus)
 	return rt.router
 }

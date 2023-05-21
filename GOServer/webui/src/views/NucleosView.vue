@@ -20,8 +20,9 @@ export default {
                 this.close(this.nucleo.GBSeqLocus)
             }
             try{
-                let nucleo = await this.$axios.get(`/nucleotide/${locus}`);
-                this.nucleo=nucleo.data
+                let taxId = this.$route.params.taxid;
+                let nucleo = await this.$axios.get(`organism/${taxId}/nucleotide/${locus}`);
+                this.nucleo=nucleo.data.Nucleotides[0]
             } catch(e){
                 this.errormsg = e.response.data
             }

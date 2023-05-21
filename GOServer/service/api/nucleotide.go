@@ -53,3 +53,16 @@ func (nucl myNucleotideBasic) auxNucleoBasic() ErrManager.Errors {
 	}
 	return nil
 }
+
+func (rt *_router) GetNucleotideFromTable(taxId string, locus string) (str.TableComplete, ErrManager.Errors) {
+	var tableNucleo str.TableComplete
+	tableNucleo, err := rt.db.FindNucleotideTableByLocus(taxId, locus)
+	if err != nil {
+		nucleo, errM := rt.db.FindNucleotideByLocus(locus)
+		if errM != nil {
+			return tableNucleo, errM
+		}
+		tableNucleo.Nucleotides = append(tableNucleo.Nucleotides, nucleo)
+	}
+	return tableNucleo, nil
+}

@@ -100,3 +100,12 @@ type NucleotideBasic struct {
 		GBSeq_locus string `bson:"GBSeq_locus"`
 	} `bson:"Proteins"`
 }
+
+type TableComplete struct {
+	ScientificName string       `bson:"ScientificName"`
+	TaxId          string       `bson:"TaxId"`
+	Nucleotides    []Nucleotide `bson:"Nucleotides"`
+	Proteins       []struct {
+		GBSeq_locus string `bson:"GBSeq_locus"`
+	} `bson:"Proteins"`
+}

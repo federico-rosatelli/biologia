@@ -50,14 +50,15 @@ export default{
     </header>
     <RouterView />
     <footer>
-    <div id="banner" style="overflow:hidden; display: inline-block;">
-      <div class="image">
-        <img src="/public/images/Stemma_sapienza.png" style="width:30%; height:30%">
-      </div>
-    </div>
-    <p>Authors: Team di Biologia Computazionale 2023, Università La Sapienza<br>
-    <a href="mailto:">bio@bio.it</a></p>
-  </footer>
+        <div id="banner" style="overflow:hidden; display: inline-block;">
+            <div class="image">
+                <img src="/public/images/Stemma_sapienza.png" style="width:30%; height:30%">
+            </div>
+        </div>
+        <p>Authors: Team di Biologia Computazionale 2023, Università La Sapienza<br>
+            <a href="mailto:">bio@bio.it</a>
+        </p>
+    </footer>
 </template>
 
 <style>

@@ -6,9 +6,9 @@ export default {
 		return {
 			errormsg: null,
 			loading: false,
-            search: null,
-            type: null,
-            response: []
+      search: null,
+      type: "scientific_name",
+      response: []
 
 		}
 	},
@@ -48,16 +48,15 @@ export default {
   <div>
     <div class="dropdown">
       <label for="dropdown">Type:</label>
-      <select id="dropdown" v-model="type">
-        <option value="scientific_name">Scientific Name</option>
+      <select id="dropdown" name="drop" v-model="type">
+        <option value="scientific_name" selected>Scientific Name</option>
         <option value="id">Taxom Id</option>
       </select>
     </div>
     <div class="input">
-      <label for="search-input">Input here</label>
-      <input type="text" id="search-input" v-model="search" />
+      <input type="text" id="search-input" placeholder="Input here" v-model="search" />
+      <button type="button" @click="nucleotideSearch()"> Search</button>
     </div>
-    <button type="button" @click="nucleotideSearch()"> Search</button>
   </div>
 
 
@@ -90,19 +89,19 @@ export default {
 
           <td>
             <RouterLink :to="'/organism/'+item.TaxId+'/nucleotides'">
-              {{ item.QtyNucleotides === 9999 ? item.QtyNucleotides+"+" : item.QtyNucleotides}}
+              {{ item.QtyNucleotides >= 9999 ? 9999+"+" : item.QtyNucleotides}}
 					  </RouterLink>
           </td>
 
           <td>
             <RouterLink :to="'/organism/'+item.TaxId + '/proteins'">
-              {{ item.QtyProteins === 9999 ? item.QtyProteins+"+" : item.QtyProteins}}
+              {{ item.QtyProteins >= 9999 ? 9999+"+" : item.QtyProteins}}
             </RouterLink>
           </td>
 
           <td>
             <RouterLink :to="'/organism/'+item.TaxId + '/products'">
-              {{ item.QtyProducts === 9999 ? item.QtyProducts+"+" : item.QtyProducts}}
+              {{ item.QtyProducts >= 9999 ? 9999+"+" : item.QtyProducts}}
             </RouterLink>
           </td>
             
@@ -129,9 +128,10 @@ export default {
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #0d1aad;
+  padding: 10px;
+  background-color: #003399;
   color: white;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
 }
@@ -167,6 +167,14 @@ button:hover {
     background-color: #04aa6d;
     
    }
-   
+
+   .input input[type="text"] {
+    width: 40%;
+    padding: 10px;
+    left: 50%;
+    border: 1px solid #dddddd;
+    margin-bottom: 15px;
+    box-sizing:border-box;
+  }
    
 </style>

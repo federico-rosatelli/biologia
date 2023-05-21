@@ -16,6 +16,7 @@ type AppDatabase interface {
 	FindTaxonTree(search string) (str.TaxonomyTree, error)
 	TableOrganism(search string, typeS string) ([]str.OrganismTable, errorM.Errors)
 	FindNucleotidesId(taxonId string) (str.NucleotideBasic, errorM.Errors)
+	FindNucleotideTableByLocus(taxId string, locus string) (str.TableComplete, errorM.Errors)
 	FindNucleotideByLocus(locus string) (str.Nucleotide, errorM.Errors)
 }
 
@@ -23,6 +24,7 @@ type appDB struct {
 	client          *mongo.Client
 	nucleotide_data *mongo.Collection
 	table_basic     *mongo.Collection
+	table_complete  *mongo.Collection
 	taxonomy_data   *mongo.Collection
 	taxonomy_tree   *mongo.Collection
 }
@@ -34,6 +36,10 @@ func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 	}
 	collectionTableBasic := client.Database("Biologia").Collection("table_basic")
 	if collectionTableBasic == nil {
+		return nil, errors.New("error Creating users Collection")
+	}
+	collectionTableComplete := client.Database("Biologia").Collection("table_complete")
+	if collectionTableComplete == nil {
 		return nil, errors.New("error Creating users Collection")
 	}
 	collectionTaxonomy := client.Database("Biologia").Collection("taxonomy_data")
@@ -48,6 +54,7 @@ func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 		client:          client,
 		nucleotide_data: collectionNucleotide,
 		table_basic:     collectionTableBasic,
+		table_complete:  collectionTableComplete,
 		taxonomy_data:   collectionTaxonomy,
 		taxonomy_tree:   collectionTaxonomyTree,
 	}, nil
