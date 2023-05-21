@@ -3,6 +3,10 @@ import json
 from pymongo import MongoClient
 from Bio import SeqIO, Entrez
 import requests
+import urllib.request as download
+import os
+import shutil
+import gzip
 
 CLUSTER = "localhost:27017"
 client = MongoClient('localhost', 27017)
@@ -245,24 +249,150 @@ def genusList():
 
 def efetchGenome(taxId):
     res = requests.get(f"https://ncbi.nlm.nih.gov/genome/?term={taxId}").text
-    tot = ""
-    try:
-        findIndex = res.index("_genomic.gff.gz")
-        lastHttp = res[:findIndex]
-        firstHttpIndex = lastHttp.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
-        tot = lastHttp[firstHttpIndex:]+"_genomic.gff.gz"
+    tot = []
 
+    try:
+        findIndex1 = res.index("_genomic.gff.gz")
+        lastHttp1 = res[:findIndex1]
+        firstHttpIndex1 = lastHttp1.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot.append(lastHttp1[firstHttpIndex1:]+"_genomic.gff.gz")
     except Exception as e:
-        print(e)
+        print(f"GFF {e}")
+
+    try:
+        findIndex2 = res.index("_genomic.gbff.gz")
+        lastHttp2 = res[:findIndex2]
+        firstHttpIndex2 = lastHttp2.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot.append(lastHttp2[firstHttpIndex2:]+"_genomic.gbff.gz")
+    except Exception as e:
+        print(f"GBFF {e}")
+
+    try:
+        findIndex3 = res.index("_genomic.fna.gz")
+        lastHttp3 = res[:findIndex3]
+        firstHttpIndex3 = lastHttp3.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot.append(lastHttp3[firstHttpIndex3:]+"_genomic.fna.gz")
+    except Exception as e:
+        print(f"FNA {e}")
 
     return tot
 
 
-# listIdTaxon = ["txid554065","txid3077"]
 
-# dataLink = []
-# for idTaxon in listIdTaxon:
-#     dataLink.append((idTaxon,efetchGenome(idTaxon)))
+
+
+
+# creation directory for downloading process
+directory = "genomes/"
+temp = "temp/"
+parent = "./data"
+path = os.path.join(parent, directory)
+try:
+    os.mkdir(path)
+    print("Directory '% s' created" % path)
+except OSError as e:
+    print(e)
+
+path2 = os.path.join(parent, temp)
+try:
+    os.mkdir(path2)
+    print("Directory '% s' created" % path2)
+except OSError as e:
+    print(e)
+
+
+# creation list taxid
+listId = []
+taxonomyD = db["taxonomy_data"]
+myquery = taxonomyD.find({},{"TaxId":1,"_id":0})
+for data in myquery:
+    tax = f"txid{data['TaxId']}"
+    # print(tax)
+    listId.append(tax)
+
+
+# print(listId)
+for i in listId:
+    print(f"\nSearching for GFF, GBFF and FNA of {i} on [Genome] NCBI platform")
+    # dataLink.append((i,efetchGenome(i)))
+    dst = path + i
+
+    if os.path.exists(dst):
+        print(f"WARNING: Path already exists")
+        if os.path.exists(dst + "/" + i + ".fna.gz"):
+            print(f"WARNING: File FNA already downloaded\n")
+        if os.path.exists(dst + "/" + i + ".gff.gz"):
+            print(f"WARNING: File GFF already downloaded\n")
+        if os.path.exists(dst + "/" + i + ".gbff.gz"):
+            print(f"WARNING: File GBFF already downloaded\n")
+
+    if efetchGenome(i) == []:
+        continue
+    
+    dataLink = efetchGenome(i)
+    for l in dataLink:
+        if "gff" in l:
+            d = download.urlretrieve(l, f'./data/temp/{i}' + '.gff.gz')
+        elif "gbff" in l:
+            d = download.urlretrieve(l, f'./data/temp/{i}' + '.gbff.gz')
+        elif "fna" in l:
+            d = download.urlretrieve(l, f'./data/temp/{i}' + '.fna.gz')
+        print(d)
+
+    if os.path.exists(path + i):
+        print(f"Directory on path {path + i} already exists")
+    else:
+        try:
+            os.mkdir(path + i)
+            print("Directory '% s' created" % dst)
+        except OSError as e:
+            print(e)
+    # print(dst)
+    try:
+        shutil.move("./data/temp/" + i + ".fna.gz", dst)
+        shutil.move("./data/temp/" + i + ".gbff.gz", dst)
+        shutil.move("./data/temp/" + i + ".gff.gz", dst)
+        print(f"File .gz copied to path {dst}")
+        os.remove("./data/temp/" + i + ".gff.gz")
+        os.remove("./data/temp/" + i + ".gbff.gz")
+        os.remove("./data/temp/" + i + ".fna.gz")
+        print(f"Deleted .gz file in path {path}")
+
+    except OSError as e:
+        print(e)
+
+    print(f"Transfer process for {i} complete\n")
+    # decompression
+    # print(dst)
+    for j in os.walk(dst + "/"):
+        # print(j)
+        out = ''
+        if "gff" in j:
+            out = open(dst + "/" + i + ".gff", "w")
+            format = ".gff"
+        elif "gbff" in j:
+            out = open(dst + "/" + i +  ".gbff", "w")
+            format = ".gbff"
+        elif "fna" in j:
+            out = open(dst + "/" + i + ".fna", "w")
+            format = ".fna"
+        with gzip.open(dst + "/" + i + format) as gz:
+            out.write(gz.read().decode("utf-8"))
+            out.close()
+        
+
+    # for file in dataLink:
+    #     print(f'{file}')
+
+
+
+
+
+
+
+
+
+
 def genomeFind(name:str):
     handle = Entrez.esearch(db='genome', term=name, rettype='gb', retmode='text', retmax=10000)
     record = Entrez.read(handle, validate=False)
@@ -375,7 +505,7 @@ def parseToBasic() -> list:
             # GBSeq_locus
     return
 
-parseToBasic()
+# parseToBasic()
 
 
 def fattoBene():
