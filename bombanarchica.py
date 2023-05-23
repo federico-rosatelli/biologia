@@ -281,108 +281,108 @@ def efetchGenome(taxId):
 
 
 
-
-# creation directory for downloading process
-directory = "genomes/"
-temp = "temp/"
-parent = "./data"
-path = os.path.join(parent, directory)
-try:
-    os.mkdir(path)
-    print("Directory '% s' created" % path)
-except OSError as e:
-    print(e)
-
-path2 = os.path.join(parent, temp)
-try:
-    os.mkdir(path2)
-    print("Directory '% s' created" % path2)
-except OSError as e:
-    print(e)
-
-
-# creation list taxid
-listId = []
-taxonomyD = db["taxonomy_data"]
-myquery = taxonomyD.find({},{"TaxId":1,"_id":0})
-for data in myquery:
-    tax = f"txid{data['TaxId']}"
-    # print(tax)
-    listId.append(tax)
-
-
-# print(listId)
-for i in listId:
-    print(f"\nSearching for GFF, GBFF and FNA of {i} on [Genome] NCBI platform")
-    # dataLink.append((i,efetchGenome(i)))
-    dst = path + i
-
-    if os.path.exists(dst):
-        print(f"WARNING: Path already exists")
-        if os.path.exists(dst + "/" + i + ".fna.gz"):
-            print(f"WARNING: File FNA already downloaded\n")
-        if os.path.exists(dst + "/" + i + ".gff.gz"):
-            print(f"WARNING: File GFF already downloaded\n")
-        if os.path.exists(dst + "/" + i + ".gbff.gz"):
-            print(f"WARNING: File GBFF already downloaded\n")
-
-    if efetchGenome(i) == []:
-        continue
-    
-    dataLink = efetchGenome(i)
-    for l in dataLink:
-        if "gff" in l:
-            d = download.urlretrieve(l, f'./data/temp/{i}' + '.gff.gz')
-        elif "gbff" in l:
-            d = download.urlretrieve(l, f'./data/temp/{i}' + '.gbff.gz')
-        elif "fna" in l:
-            d = download.urlretrieve(l, f'./data/temp/{i}' + '.fna.gz')
-        print(d)
-
-    if os.path.exists(path + i):
-        print(f"Directory on path {path + i} already exists")
-    else:
-        try:
-            os.mkdir(path + i)
-            print("Directory '% s' created" % dst)
-        except OSError as e:
-            print(e)
-    # print(dst)
+def GFF():
+    # creation directory for downloading process
+    directory = "genomes/"
+    temp = "temp/"
+    parent = "./data"
+    path = os.path.join(parent, directory)
     try:
-        shutil.move("./data/temp/" + i + ".fna.gz", dst)
-        shutil.move("./data/temp/" + i + ".gbff.gz", dst)
-        shutil.move("./data/temp/" + i + ".gff.gz", dst)
-        print(f"File .gz copied to path {dst}")
-        os.remove("./data/temp/" + i + ".gff.gz")
-        os.remove("./data/temp/" + i + ".gbff.gz")
-        os.remove("./data/temp/" + i + ".fna.gz")
-        print(f"Deleted .gz file in path {path}")
-
+        os.mkdir(path)
+        print("Directory '% s' created" % path)
     except OSError as e:
         print(e)
 
-    print(f"Transfer process for {i} complete\n")
-    # decompression
-    # print(dst)
-    for j in os.walk(dst + "/"):
-        # print(j)
-        out = ''
-        if "gff" in j:
-            out = open(dst + "/" + i + ".gff", "w")
-            format = ".gff"
-        elif "gbff" in j:
-            out = open(dst + "/" + i +  ".gbff", "w")
-            format = ".gbff"
-        elif "fna" in j:
-            out = open(dst + "/" + i + ".fna", "w")
-            format = ".fna"
-        with gzip.open(dst + "/" + i + format) as gz:
-            out.write(gz.read().decode("utf-8"))
-            out.close()
-        
+    path2 = os.path.join(parent, temp)
+    try:
+        os.mkdir(path2)
+        print("Directory '% s' created" % path2)
+    except OSError as e:
+        print(e)
 
-    # for file in dataLink:
-    #     print(f'{file}')
+
+    # creation list taxid
+    listId = []
+    taxonomyD = db["taxonomy_data"]
+    myquery = taxonomyD.find({},{"TaxId":1,"_id":0})
+    for data in myquery:
+        tax = f"txid{data['TaxId']}"
+        # print(tax)
+        listId.append(tax)
+
+
+    # print(listId)
+    for i in listId:
+        print(f"\nSearching for GFF, GBFF and FNA of {i} on [Genome] NCBI platform")
+        # dataLink.append((i,efetchGenome(i)))
+        dst = path + i
+
+        if os.path.exists(dst):
+            print(f"WARNING: Path already exists")
+            if os.path.exists(dst + "/" + i + ".fna.gz"):
+                print(f"WARNING: File FNA already downloaded\n")
+            if os.path.exists(dst + "/" + i + ".gff.gz"):
+                print(f"WARNING: File GFF already downloaded\n")
+            if os.path.exists(dst + "/" + i + ".gbff.gz"):
+                print(f"WARNING: File GBFF already downloaded\n")
+
+        if efetchGenome(i) == []:
+            continue
+        
+        dataLink = efetchGenome(i)
+        for l in dataLink:
+            if "gff" in l:
+                d = download.urlretrieve(l, f'./data/temp/{i}' + '.gff.gz')
+            elif "gbff" in l:
+                d = download.urlretrieve(l, f'./data/temp/{i}' + '.gbff.gz')
+            elif "fna" in l:
+                d = download.urlretrieve(l, f'./data/temp/{i}' + '.fna.gz')
+            print(d)
+
+        if os.path.exists(path + i):
+            print(f"Directory on path {path + i} already exists")
+        else:
+            try:
+                os.mkdir(path + i)
+                print("Directory '% s' created" % dst)
+            except OSError as e:
+                print(e)
+        # print(dst)
+        try:
+            shutil.move("./data/temp/" + i + ".fna.gz", dst)
+            shutil.move("./data/temp/" + i + ".gbff.gz", dst)
+            shutil.move("./data/temp/" + i + ".gff.gz", dst)
+            print(f"File .gz copied to path {dst}")
+            os.remove("./data/temp/" + i + ".gff.gz")
+            os.remove("./data/temp/" + i + ".gbff.gz")
+            os.remove("./data/temp/" + i + ".fna.gz")
+            print(f"Deleted .gz file in path {path}")
+
+        except OSError as e:
+            print(e)
+
+        print(f"Transfer process for {i} complete\n")
+        # decompression
+        # print(dst)
+        for j in os.walk(dst + "/"):
+            # print(j)
+            out = ''
+            if "gff" in j:
+                out = open(dst + "/" + i + ".gff", "w")
+                format = ".gff"
+            elif "gbff" in j:
+                out = open(dst + "/" + i +  ".gbff", "w")
+                format = ".gbff"
+            elif "fna" in j:
+                out = open(dst + "/" + i + ".fna", "w")
+                format = ".fna"
+            with gzip.open(dst + "/" + i + format) as gz:
+                out.write(gz.read().decode("utf-8"))
+                out.close()
+            
+
+        # for file in dataLink:
+        #     print(f'{file}')
 
 
 
@@ -617,4 +617,24 @@ def newCollectionBene():
 
         
 
-newCollectionBene()
+#newCollectionBene()
+
+def productsTable():
+    products = open("SpecieProduct.csv").readlines()
+    complete_collection = db["table_complete"]
+    basic_collection = db["table_basic"]
+    for i in range(len(products)):
+        splt = products[i].split("|")
+        product,name,qua = splt[0],splt[1].capitalize(),splt[2].strip()
+        print(i,name)
+        inserBasic = {
+            "ProductName":product
+        }
+        insertComplete = {
+            "ProductName":product,
+            "QtyProduct":qua
+        }
+        basic_collection.update_one({"ScientificName":name},{"$push":{"Products":inserBasic}})
+        complete_collection.update_one({"ScientificName":name},{"$push":{"Products":insertComplete}})
+
+productsTable()

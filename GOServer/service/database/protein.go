@@ -11,11 +11,18 @@ import (
 
 func (db *appDB) FindProteinsId(taxonId string) (str.TableBasic, errorM.Errors) {
 	var nBasic str.TableBasic
+	var nCompl str.TableBasic
 	proj := options.FindOne().SetProjection(bson.D{{Key: "Nucleotides", Value: 0}})
 	errM := db.table_basic.FindOne(context.TODO(), bson.D{{Key: "TaxId", Value: taxonId}}, proj).Decode(&nBasic)
 	if errM != nil {
 		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
 	}
+	proj = options.FindOne().SetProjection(bson.D{{Key: "Products", Value: 1}})
+	errM = db.table_complete.FindOne(context.TODO(), bson.D{{Key: "TaxId", Value: taxonId}}, proj).Decode(&nCompl)
+	if errM != nil {
+		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
+	}
+	nBasic.Products = nCompl.Products
 	return nBasic, nil
 }
 

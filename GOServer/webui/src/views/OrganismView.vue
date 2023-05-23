@@ -1,6 +1,6 @@
 <!--IDEA: Vue delle ricerche con funzine che prende tipo di ricerca e input e ritorna tabella -->
 <script>
-
+import $ from 'jquery'
 export default {
 	data: function() {
 		return {
@@ -29,7 +29,7 @@ export default {
                 let nucleo = await this.$axios.get(`organism/${taxId}/${typof}/${locus}`);
                 this.nucleo= typof == "proteins" ? nucleo.data.Proteins[0] : nucleo.data.Nucleotides[0]
             } catch(e){
-                this.errormsg = e.nucleo
+                this.errormsg = e.response.data
             }
             document.getElementById("popup-"+locus).style.display = "flex"
             this.loading = false
@@ -37,6 +37,12 @@ export default {
         close(locus){
             document.getElementById("popup-"+locus).style.display = "none"
             this.nucleo = null
+        },
+        clip(name){
+            navigator.clipboard.writeText(name);
+            var popup = document.getElementById("myPopup-clip");
+            popup.style.visibility = "visible"
+            setTimeout(() => popup.style.visibility = "hidden" , 1200);
         }
     },
     async mounted(){
@@ -142,6 +148,28 @@ export default {
                 
             </div>
         </div>
+        <div v-if="this.response.Products && this.response.Products.length > 0">
+            <div class="title-down">
+                Products
+            </div>
+            <div style="display: flex;">
+                <div class="product">
+                    <div v-for="prod in this.response.Products" style="display: flex;">
+                        <div class="copyToken clickable" @click="clip(prod.ProductName)">
+                            <h2>
+                                {{ prod.ProductName }}
+                            </h2>
+                        </div>
+                        <h3 style="margin-left: 5%;">
+                            {{ prod.QtyProduct }}
+                        </h3>
+                    </div>
+                </div>
+                <div class="popup-clip">
+                    <span class="popuptext-clip" id="myPopup-clip">Product Copied to ClipBoard!</span>
+                </div>
+            </div>
+        </div>
     </div>
     
 
@@ -152,6 +180,11 @@ export default {
 
 .block-organism {
     display: flex;
+}
+.title-down{
+    bottom: -45px;
+    position:relative;
+    font-weight: bold;
 }
 .title-left{
     margin-right: auto;
@@ -177,12 +210,26 @@ export default {
 .block-organism .right {
     width: 40%;
     margin-left: auto;
+    max-height: 500px;
+    overflow-y: auto;
     background: rgba(0, 0, 0, 0.6);
     /* overflow: auto;
     max-height: 100%; */
     justify-content: center;
     align-items: center;
     border: 2px solid black;
+}
+.product {
+    width: 50%;
+    margin-top: 5%;
+    position: relative;
+    max-height: 500px;
+    justify-content: left;
+    align-items: center;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid black;
+
 }
 
 .popup{
@@ -238,5 +285,59 @@ export default {
     border-radius: 50%;
     box-shadow: 6px 6px 29px -4px rgba(0,0,0,0.75);
     cursor: pointer;
+}
+.popup-clip {
+  position: relative;
+  display:block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup-clip .popuptext-clip {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  top: -16px;
+  left: -90px;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+/* Popup arrow */
+.popup-clip .popuptext-clip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 15%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup-clip .show-clip {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
 }
 </style>

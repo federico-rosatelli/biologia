@@ -73,7 +73,7 @@ def csvWrite(dataResult):
     for i in range(len(tot_data)):
         tot_tot.append(tot_data[i]+[num[i]])
     with open('SpecieProduct.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
+        writer = csv.writer(csvfile,delimiter="|")
         writer.writerows(tot_tot)
 
 csvWrite(dataResult)

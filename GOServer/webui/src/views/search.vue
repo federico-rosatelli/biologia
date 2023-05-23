@@ -33,6 +33,7 @@ export default {
                 this.response = response.data;
             }
             catch (e) {
+                this.loading = false;
                 this.errormsg = e.response.data;
                 this.response = []
             }

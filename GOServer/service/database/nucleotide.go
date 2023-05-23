@@ -25,7 +25,7 @@ func (db *appDB) TableOrganism(search string, typeS string, listTaxId []string) 
 		filter["TaxId"] = bson.D{{Key: "$in", Value: listTaxId}}
 	}
 
-	groupStage := bson.D{{Key: "$project", Value: bson.M{"QtyNucleotides": bson.M{"$size": "$Nucleotides"}, "QtyProteins": bson.M{"$size": "$Proteins"}, "_id": 0, "ScientificName": 1, "TaxId": 1}}}
+	groupStage := bson.D{{Key: "$project", Value: bson.M{"QtyNucleotides": bson.M{"$size": "$Nucleotides"}, "QtyProteins": bson.M{"$size": "$Proteins"}, "QtyProducts": bson.M{"$size": "$Products"}, "_id": 0, "ScientificName": 1, "TaxId": 1}}}
 	match := bson.D{{Key: "$match", Value: filter}}
 
 	tt, err := db.table_basic.Aggregate(context.TODO(), mongo.Pipeline{match, groupStage})
@@ -53,11 +53,18 @@ func (db *appDB) TableOrganism(search string, typeS string, listTaxId []string) 
 
 func (db *appDB) FindNucleotidesId(taxonId string) (str.TableBasic, errorM.Errors) {
 	var nBasic str.TableBasic
+	var nCompl str.TableBasic
 	proj := options.FindOne().SetProjection(bson.D{{Key: "Proteins", Value: 0}})
 	errM := db.table_basic.FindOne(context.TODO(), bson.D{{Key: "TaxId", Value: taxonId}}, proj).Decode(&nBasic)
 	if errM != nil {
 		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
 	}
+	proj = options.FindOne().SetProjection(bson.D{{Key: "Products", Value: 1}})
+	errM = db.table_complete.FindOne(context.TODO(), bson.D{{Key: "TaxId", Value: taxonId}}, proj).Decode(&nCompl)
+	if errM != nil {
+		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
+	}
+	nBasic.Products = nCompl.Products
 	return nBasic, nil
 }
 

@@ -97,6 +97,10 @@ type TableBasic struct {
 	Proteins []struct {
 		GBSeq_locus string `bson:"GBSeq_locus"`
 	} `bson:"Proteins"`
+	Products []struct {
+		ProductName string `bson:"ProductName"`
+		QtyProduct  string `bson:"QtyProduct"`
+	} `bson:"Products"`
 }
 
 type TableComplete struct {
@@ -104,4 +108,8 @@ type TableComplete struct {
 	TaxId          string       `bson:"TaxId"`
 	Nucleotides    []Nucleotide `bson:"Nucleotides"`
 	Proteins       []Protein    `bson:"Proteins"`
+	Products       []struct {
+		ProductName string `bson:"ProductName"`
+		QtyProduct  string `bson:"QtyProduct"`
+	} `bson:"Products"`
 }
