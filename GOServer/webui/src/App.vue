@@ -41,6 +41,11 @@ export default{
             </ul>
             <ul class="left">
                 <li>
+                    <RouterLink to="/taxonomy">
+                        Taxonomy
+					</RouterLink>
+                </li>
+                <li>
                     <RouterLink to="/taxon">
                         Search
 					</RouterLink>
@@ -49,6 +54,8 @@ export default{
         </nav>
     </header>
     <RouterView />
+    <br/>
+    <br/>
     <footer>
         <div id="banner" style="overflow:hidden; display: inline-block;">
             <div class="image">

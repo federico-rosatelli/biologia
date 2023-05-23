@@ -3,18 +3,44 @@ package api
 import (
 	"GOServer/service/ErrManager"
 	str "GOServer/service/structures"
+	"strings"
 )
 
-type myNucleotideBasic str.TableBasic
+type myTableBasic str.TableBasic
 
 type myOrganismTable []str.OrganismTable
 
-func (rt *_router) GetOrganisms(search string, nType string) ([]str.OrganismTable, ErrManager.Errors) {
+func (rt *_router) GetOrganisms(search string, nType string, location string, product string) ([]str.OrganismTable, ErrManager.Errors) {
 	var p []str.OrganismTable
-	if search == "" || search == " " || nType == "" {
+	if nType == "" {
 		return p, ErrManager.NewError("Search & Type Cannot Be Empty", ErrManager.StatusBadRequest)
 	}
-	p, err := rt.db.TableOrganism(search, nType)
+	if (search == "" || strings.TrimSpace(search) == "") && (location == "" || strings.TrimSpace(location) == "") && (product == "" || strings.TrimSpace(product) == "") {
+		return p, ErrManager.NewError("Error Empty String", ErrManager.StatusBadRequest)
+	}
+	var listTaxId []string
+	if product != "" {
+		listTaxId_aux, err := rt.db.TableOrganismByProduct(product)
+		if err != nil {
+			return p, err
+		}
+		if len(listTaxId_aux) == 0 {
+			return p, ErrManager.NewError("Product Not Found", ErrManager.StatusBadRequest)
+		}
+		listTaxId = append(listTaxId, listTaxId_aux...)
+	}
+	if location != "" {
+		listTaxId_aux, err := rt.db.TableOrganismByLocation(location)
+		if err != nil {
+			return p, err
+		}
+		if len(listTaxId_aux) == 0 {
+			return p, ErrManager.NewError("Location Not Found", ErrManager.StatusBadRequest)
+		}
+		listTaxId = append(listTaxId, listTaxId_aux...)
+	}
+
+	p, err := rt.db.TableOrganism(search, nType, listTaxId)
 	if err != nil {
 		return p, err
 	}
@@ -39,12 +65,12 @@ func (rt *_router) GetNucleotides(taxId string) (str.TableBasic, ErrManager.Erro
 	if err != nil {
 		return nBasic, err
 	}
-	nu := myNucleotideBasic(nBasic)
+	nu := myTableBasic(nBasic)
 
 	return nBasic, nu.auxNucleoBasic()
 }
 
-func (nucl myNucleotideBasic) auxNucleoBasic() ErrManager.Errors {
+func (nucl myTableBasic) auxNucleoBasic() ErrManager.Errors {
 	if len(nucl.Nucleotides) == 0 {
 		return ErrManager.NewError("No Content To Show", ErrManager.StatusServiceUnavailable)
 	}

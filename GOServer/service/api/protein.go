@@ -10,12 +10,12 @@ func (rt *_router) GetProteins(taxId string) (str.TableBasic, ErrManager.Errors)
 	if err != nil {
 		return nBasic, err
 	}
-	nu := myNucleotideBasic(nBasic)
+	nu := myTableBasic(nBasic)
 
 	return nBasic, nu.auxProteinBasic()
 }
 
-func (nucl myNucleotideBasic) auxProteinBasic() ErrManager.Errors {
+func (nucl myTableBasic) auxProteinBasic() ErrManager.Errors {
 	if len(nucl.Proteins) == 0 {
 		return ErrManager.NewError("No Content To Show", ErrManager.StatusServiceUnavailable)
 	}

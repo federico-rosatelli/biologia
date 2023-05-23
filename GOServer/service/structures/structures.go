@@ -26,14 +26,10 @@ type Taxonomy struct {
 }
 
 type TaxonomyTree struct {
-	TaxId          string `bson:"TaxId"`
-	Rank           string `bson:"Rank"`
-	ScientificName string `bson:"ScientificName"`
-	SubClasses     []struct {
-		TaxID          string `bson:"TaxId"`
-		ScientificName string `bson:"ScientificName"`
-		Rank           string `bson:"Rank"`
-	} `bson:"SubClasses"`
+	TaxId          string         `bson:"TaxId"`
+	Rank           string         `bson:"Rank"`
+	ScientificName string         `bson:"ScientificName"`
+	SubClasses     []TaxonomyTree `bson:"SubClasses"`
 }
 
 type OrganismTable struct {

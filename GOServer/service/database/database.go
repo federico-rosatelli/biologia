@@ -12,9 +12,11 @@ type AppDatabase interface {
 	// GetName() (string, error)
 	// SetName(name string) error
 
-	FindTaxon(search string, typeS string) (str.Taxonomy, error)
-	FindTaxonTree(search string) (str.TaxonomyTree, error)
-	TableOrganism(search string, typeS string) ([]str.OrganismTable, errorM.Errors)
+	FindTaxon(search string) (str.Taxonomy, error)
+	FindTaxonTree(taxId string) (str.TaxonomyTree, error)
+	TableOrganism(search string, typeS string, listTaxId []string) ([]str.OrganismTable, errorM.Errors)
+	TableOrganismByProduct(product string) ([]string, errorM.Errors)
+	TableOrganismByLocation(location string) ([]string, errorM.Errors)
 	FindNucleotidesId(taxonId string) (str.TableBasic, errorM.Errors)
 	FindNucleotideTableByLocus(taxId string, locus string) (str.TableComplete, errorM.Errors)
 	FindNucleotideByLocus(locus string) (str.Nucleotide, errorM.Errors)

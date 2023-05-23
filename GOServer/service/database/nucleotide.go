@@ -4,21 +4,25 @@ import (
 	errorM "GOServer/service/ErrManager"
 	str "GOServer/service/structures"
 	"context"
+	"strings"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (db *appDB) TableOrganism(search string, typeS string) ([]str.OrganismTable, errorM.Errors) {
+func (db *appDB) TableOrganism(search string, typeS string, listTaxId []string) ([]str.OrganismTable, errorM.Errors) {
 	var orgTable []str.OrganismTable
 	filter := bson.M{}
 	if typeS == "id" {
 		filter["TaxId"] = search
 	} else if typeS == "scientific_name" {
-		filter["ScientificName"] = bson.D{{Key: "$regex", Value: search}}
+		filter["ScientificName"] = bson.D{{Key: "$regex", Value: search}, {Key: "$options", Value: "i"}}
 	} else {
 		return orgTable, errorM.NewError("Only id|scientific_name allowed", errorM.StatusBadRequest)
+	}
+	if len(listTaxId) > 0 {
+		filter["TaxId"] = bson.D{{Key: "$in", Value: listTaxId}}
 	}
 
 	groupStage := bson.D{{Key: "$project", Value: bson.M{"QtyNucleotides": bson.M{"$size": "$Nucleotides"}, "QtyProteins": bson.M{"$size": "$Proteins"}, "_id": 0, "ScientificName": 1, "TaxId": 1}}}
@@ -76,4 +80,70 @@ func (db *appDB) FindNucleotideByLocus(locus string) (str.Nucleotide, errorM.Err
 	}
 	return nucleo, nil
 
+}
+
+func (db *appDB) TableOrganismByProduct(product string) ([]string, errorM.Errors) {
+	var listTaxId []string
+	proj := options.Find().SetProjection(bson.D{{Key: "GBSeq_feature-table", Value: 1}})
+	finder := bson.M{"GBSeq_feature-table.GBFeature_key": "CDS",
+		"GBSeq_feature-table.GBFeature_quals.GBQualifier_name": "product",
+		"GBSeq_feature-table.GBFeature_quals.GBQualifier_value": bson.M{
+			"$regex": product, "$options": "i"}}
+	cursor, errM := db.nucleotide_data.Find(context.TODO(), finder, proj)
+	if errM != nil {
+		return listTaxId, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
+	}
+
+	for cursor.Next(context.TODO()) {
+		var nucleo str.Nucleotide
+		err := cursor.Decode(&nucleo)
+		if err != nil {
+			return listTaxId, errorM.NewError("Can't Decode Result", errorM.StatusInternalServerError)
+		}
+		taxId := ""
+		quals := nucleo.GBSeqFeatureTable[0].GBFeatureQuals
+		for i := 0; i < len(quals); i++ {
+			if quals[i].GBQualifierName == "db_xref" {
+				taxId = strings.Split(quals[i].GBQualifierValue, ":")[1]
+			}
+		}
+		if taxId != "" {
+			listTaxId = append(listTaxId, taxId)
+		}
+	}
+
+	return listTaxId, nil
+}
+
+func (db *appDB) TableOrganismByLocation(location string) ([]string, errorM.Errors) {
+	var listTaxId []string
+	proj := options.Find().SetProjection(bson.D{{Key: "GBSeq_feature-table", Value: 1}})
+	finder := bson.M{"GBSeq_feature-table.GBFeature_key": "source",
+		"GBSeq_feature-table.GBFeature_quals.GBQualifier_name": "country",
+		"GBSeq_feature-table.GBFeature_quals.GBQualifier_value": bson.M{
+			"$regex": location, "$options": "i"}}
+	cursor, errM := db.nucleotide_data.Find(context.TODO(), finder, proj)
+	if errM != nil {
+		return listTaxId, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
+	}
+
+	for cursor.Next(context.TODO()) {
+		var nucleo str.Nucleotide
+		err := cursor.Decode(&nucleo)
+		if err != nil {
+			return listTaxId, errorM.NewError("Can't Decode Result", errorM.StatusInternalServerError)
+		}
+		taxId := ""
+		quals := nucleo.GBSeqFeatureTable[0].GBFeatureQuals
+		for i := 0; i < len(quals); i++ {
+			if quals[i].GBQualifierName == "db_xref" {
+				taxId = strings.Split(quals[i].GBQualifierValue, ":")[1]
+			}
+		}
+		if taxId != "" {
+			listTaxId = append(listTaxId, taxId)
+		}
+	}
+
+	return listTaxId, nil
 }

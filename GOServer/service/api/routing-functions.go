@@ -20,9 +20,8 @@ func (rt *_router) Taxonomy(w http.ResponseWriter, r *http.Request, ps httproute
 	w.Header().Set("content-type", "application/json")
 
 	search := r.URL.Query().Get("search")
-	typeSearch := r.URL.Query().Get("type")
 	Println(search)
-	p, err := rt.db.FindTaxon(search, typeSearch)
+	p, err := rt.db.FindTaxon(search)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -56,7 +55,9 @@ func (rt *_router) Taxon_Term(w http.ResponseWriter, r *http.Request, ps httprou
 
 	search := r.URL.Query().Get("search")
 	typeSearch := r.URL.Query().Get("type")
-	p, err := rt.GetOrganisms(search, typeSearch)
+	location := r.URL.Query().Get("location")
+	product := r.URL.Query().Get("product")
+	p, err := rt.GetOrganisms(search, typeSearch, location, product)
 	if err != nil {
 		http.Error(w, err.Error(), err.Type())
 		return

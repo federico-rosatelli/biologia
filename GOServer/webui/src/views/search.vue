@@ -1,45 +1,45 @@
 <!--IDEA: Vue delle ricerche con funzine che prende tipo di ricerca e input e ritorna tabella -->
 <script>
+import LoadingSpinner from '../components/LoadingSpinner.vue';
+
 
 export default {
-	data: function() {
-		return {
-			errormsg: null,
-			loading: false,
-      search: null,
-      type: "scientific_name",
-      response: []
-
-		}
-	},
-	methods: {
+    data: function () {
+        return {
+            errormsg: null,
+            loading: false,
+            search: null,
+            product: null,
+            location: null,
+            type: "scientific_name",
+            response: []
+        };
+    },
+    methods: {
         // ricerca con "stringa input" and "type": taxomID or scientific name
-		async nucleotideSearch() {
-			this.loading = true;
-			this.errormsg = null;
-			try {
-				//  
-				let response = await this.$axios.get("/taxon_term", 
-                {
-                    params: 
-                    {
+        async nucleotideSearch() {
+            this.loading = true;
+            this.errormsg = null;
+            try {
+                //  
+                let response = await this.$axios.get("/taxon_term", {
+                    params: {
                         search: this.search,
-                        type: this.type
+                        type: this.type,
+                        product: this.product,
+                        location: this.location,
                     }
-                    
-				});
-                this.response=response.data
-			
-			} catch (e) {
-				this.errormsg = e.response.data
-        
-				}
-
-			this.loading = false;
-		},
-	},
-
-
+                });
+                this.response = response.data;
+            }
+            catch (e) {
+                this.errormsg = e.response.data;
+                this.response = []
+            }
+            this.loading = false;
+        },
+    },
+    components: { LoadingSpinner }
 }
 
 </script>
@@ -54,20 +54,27 @@ export default {
       </select>
     </div>
     <div class="input">
-      <input type="text" id="search-input" placeholder="Input here" v-model="search" />
+      <input type="text" id="search-input" placeholder="Input here" v-model="search" v-on:keyup.enter="nucleotideSearch()"/>
+      <input type="text" id="search-input" placeholder="Filter for product" v-model="product" v-on:keyup.enter="nucleotideSearch()"/>
+      <input type="text" id="search-input" placeholder="Filter for location" v-model="location" v-on:keyup.enter="nucleotideSearch()"/>
       <button type="button" @click="nucleotideSearch()"> Search</button>
     </div>
   </div>
 
 
 <!--TABELLA -->
-    <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+<br/>
+<br/>
+<br/>
+<br/>
+  <LoadingSpinner :loading="this.loading"/>
+  <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+  <div v-if="response.length > 0">
     <div>
+      <h1>{{ response.length }} Results</h1>
+    </div>
     <table id="table">
       <thead>
-        <tr>
-          <th class="title" colspan="10">Datas</th>
-        </tr>
         <tr>
           <th>Scientific Name</th>
           <th>Qty Nucleotides</th>
