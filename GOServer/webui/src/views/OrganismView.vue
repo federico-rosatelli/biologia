@@ -183,7 +183,7 @@ export default {
 }
 .title-down{
     bottom: -45px;
-    position:relative;
+    margin-top: 5%;
     font-weight: bold;
 }
 .title-left{
@@ -221,9 +221,8 @@ export default {
 }
 .product {
     width: 50%;
-    margin-top: 5%;
-    position: relative;
     max-height: 500px;
+    min-height: 50px;
     justify-content: left;
     align-items: center;
     overflow-y: auto;
@@ -303,7 +302,7 @@ export default {
   background-color: #555;
   color: #fff;
   text-align: center;
-  top: -16px;
+  top: -67px;
   left: -90px;
   border-radius: 6px;
   padding: 8px 0;

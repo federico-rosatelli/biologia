@@ -8,6 +8,7 @@ export default {
 			loading: false,
             search: null,
             data: null,
+            type: "scientific_name",
 
 		}
 	},
@@ -19,7 +20,8 @@ export default {
             try{
                 let data = await this.$axios.get(`taxonomy_tree`, {
                     params: {
-                        search:this.search
+                        search:this.search,
+                        type: this.type
                     }
                 });
                 this.data = data.data
@@ -40,7 +42,8 @@ export default {
         try{
             let data = await this.$axios.get(`taxonomy_tree`, {
                 params: {
-                        search:taxId
+                        search:taxId,
+                        type: 'id'
                 }
             });
             this.data = data.data
@@ -57,7 +60,17 @@ export default {
 
 <template>
     <LoadingSpinner :loading="this.loading"/>
-    
+    <div class="dropdown">
+      <label for="dropdown">
+        <h1>
+          Type:
+        </h1>
+      </label>
+      <select id="dropdown" name="drop minimal" v-model="type">
+        <option value="scientific_name" selected>Scientific Name</option>
+        <option value="id">Taxom Id</option>
+      </select>
+    </div>
     <div class="input">
       <input type="text" id="search-input" placeholder="Input here" v-model="search" v-on:keyup.enter="searchTax()"/>
       <button type="button" @click="searchTax()"> Search</button>

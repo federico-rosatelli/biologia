@@ -26,8 +26,7 @@ export default{
 <template>
     <header>
         <hgroup>
-            <h1>Danio Rerio DB</h1>
-            <h2>Powered by MongoDB</h2>
+            <h1>Micro Algae DB</h1>
         </hgroup>
         <nav>
             <ul class="right">

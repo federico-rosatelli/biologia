@@ -48,8 +48,12 @@ export default {
 <template>
   <div>
     <div class="dropdown">
-      <label for="dropdown">Type:</label>
-      <select id="dropdown" name="drop" v-model="type">
+      <label for="dropdown">
+        <h1>
+          Type:
+        </h1>
+      </label>
+      <select id="dropdown" name="drop minimal" v-model="type">
         <option value="scientific_name" selected>Scientific Name</option>
         <option value="id">Taxom Id</option>
       </select>
@@ -90,7 +94,7 @@ export default {
       </thead>
         <tr v-for="item in response" :key="item.TaxId">
           <td>
-            <RouterLink :to="'/organism/'+item.TaxId + '/taxon'">
+            <RouterLink :to="'/organism/'+item.TaxId + '/nucleotides'">
               {{ item.ScientificName }}
 					  </RouterLink>
           </td>
@@ -108,7 +112,7 @@ export default {
           </td>
 
           <td>
-            <RouterLink :to="'/organism/'+item.TaxId + '/products'">
+            <RouterLink :to="'/organism/'+item.TaxId + '/nucleotides'">
               {{ item.QtyProducts >= 9999 ? 9999+"+" : item.QtyProducts}}
             </RouterLink>
           </td>

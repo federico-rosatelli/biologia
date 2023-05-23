@@ -20,8 +20,7 @@ func (rt *_router) Taxonomy(w http.ResponseWriter, r *http.Request, ps httproute
 	w.Header().Set("content-type", "application/json")
 
 	search := r.URL.Query().Get("search")
-	Println(search)
-	p, err := rt.db.FindTaxon(search)
+	p, err := rt.GetTaxonomy(search)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -37,8 +36,8 @@ func (rt *_router) TaxonomyTree(w http.ResponseWriter, r *http.Request, ps httpr
 	w.Header().Set("content-type", "application/json")
 
 	search := r.URL.Query().Get("search")
-	Println(search)
-	p, err := rt.db.FindTaxonTree(search)
+	typeSearch := r.URL.Query().Get("type")
+	p, err := rt.GetTaxonomyTree(search, typeSearch)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

@@ -12,8 +12,8 @@ type AppDatabase interface {
 	// GetName() (string, error)
 	// SetName(name string) error
 
-	FindTaxon(search string) (str.Taxonomy, error)
-	FindTaxonTree(taxId string) (str.TaxonomyTree, error)
+	FindTaxon(search string) (str.Taxonomy, errorM.Errors)
+	FindTaxonTree(taxId string, typeN string) (str.TaxonomyTree, errorM.Errors)
 	TableOrganism(search string, typeS string, listTaxId []string) ([]str.OrganismTable, errorM.Errors)
 	TableOrganismByProduct(product string) ([]string, errorM.Errors)
 	TableOrganismByLocation(location string) ([]string, errorM.Errors)
