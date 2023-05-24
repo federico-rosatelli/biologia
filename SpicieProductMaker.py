@@ -76,4 +76,39 @@ def csvWrite(dataResult):
         writer = csv.writer(csvfile,delimiter="|")
         writer.writerows(tot_tot)
 
-csvWrite(dataResult)
+#csvWrite(dataResult)
+
+datasTaxon = [
+    (2961,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2961",True,True,False),
+    (145388,"https://www.ncbi.nlm.nih.gov/genome/?term=txid145388",True,True,True),
+    (72520,"https://www.ncbi.nlm.nih.gov/genome/?term=txid72520",True,True,True),
+    (70448,"https://www.ncbi.nlm.nih.gov/genome/?term=txid70448",True,True,True),
+    (44056,"https://www.ncbi.nlm.nih.gov/genome/?term=txid44056",True,True,True),
+    (41880,"https://www.ncbi.nlm.nih.gov/genome/?term=txid41880",True,True,False),
+    (41875,"https://www.ncbi.nlm.nih.gov/genome/?term=txid41875",True,True,True),
+    (36894,"https://www.ncbi.nlm.nih.gov/genome/?term=txid36894",True,True,False),
+    (35677,"https://www.ncbi.nlm.nih.gov/genome/?term=txid35677",True,True,True),
+    (3077,"https://www.ncbi.nlm.nih.gov/genome/?term=txid3077",True,True,True),
+    (1764295,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1764295",True,True,True),
+    (1650286,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1650286",True,True,True),
+    (1486918,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1486918",True,True,False),
+    (1093141,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1093141",True,True,True),
+    (574566,"https://www.ncbi.nlm.nih.gov/genome/?term=txid574566",True,True,True),
+    (554065,"https://www.ncbi.nlm.nih.gov/genome/?term=txid554065",True,True,True),
+    (426638,"https://www.ncbi.nlm.nih.gov/genome/?term=txid426638",True,True,True),
+    (265525,"https://www.ncbi.nlm.nih.gov/genome/?term=txid265525",True,True,False),
+    (257627,"https://www.ncbi.nlm.nih.gov/genome/?term=txid257627",True,True,False),
+    (2009235,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2009235",True,True,False),
+    (2730355,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2730355",True,True,False),
+]
+
+new_collection = db["table_basic"]
+
+for data in datasTaxon:
+    dataPush = {
+        "Link":data[1],
+        "GBFF":data[2],
+        "FNA":data[3],
+        "GFF":data[4]
+    }
+    new_collection.update_one({"TaxId":str(data[0])},{"$push":{"Genomes":dataPush}})
