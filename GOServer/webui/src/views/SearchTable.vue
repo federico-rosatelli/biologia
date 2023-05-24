@@ -100,9 +100,7 @@ export default {
           </td>
 
           <td>
-            <RouterLink :to="'/organism/'+item.TaxId+'/nucleotides'">
               {{ item.QtyNucleotides >= 9999 ? 9999+"+" : item.QtyNucleotides}}
-					  </RouterLink>
           </td>
 
           <td>
