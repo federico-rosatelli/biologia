@@ -131,6 +131,21 @@ download da parte delle piattaforme dei Riferimenti Ufficiali. Tali metodi sono 
 
 
 
+# Dati esterni al DB:
+Per motivi di performance e trattamento di grandi moli di dati, si é deciso di:
+
+- Per la collection nucleotide_data, le specie a cui fanno riferimento più di 10.000 entry su NCBI sono state tagliate.
+Ciò perché NCBI limita fortemente la velocità di download e a livello prettamente numerico il peso del DB locale sarebbe
+salito di un ordine di grandezza. Le voci sono incomplete se al numero di occorrenze viene accodato un "+" nella view
+di nucleotide consultabile da interfaccia web. Le voci mancanti possono essere inserite, per singola specie, utilizzando
+le funzioni efetch ed esearch di biopython e incrementando il parametro retstart al precedente retmax (il massimo è appunto
+10.000). Un ulteriore requisito é essere registrati su NCBI e inserire le proprie credenziali per fare le consultazioni:
+
+    ``Entrez.email = <email_registered_on_NCBI>``
+    ``Entrez.api_key = "cc030996838fc52dd1a2653fad76bf5fe408"``
+
+
+
 # La rappresentazione FASTA e FASTQ
 FASTA conserva soltanto la Sequenza di nucleotidi o amminoacidi, codificando ogni gene in singole lettere
 per indice di posizione. Nella rappresentazione in Genbank, troviamo tale dato nel file JSON che salviamo
