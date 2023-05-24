@@ -23,7 +23,7 @@ func (db *appDB) TableOrganism(search string, typeS string, listTaxId []string) 
 		filter["TaxId"] = bson.D{{Key: "$in", Value: listTaxId}}
 	}
 
-	groupStage := bson.D{{Key: "$project", Value: bson.M{"QtyNucleotides": bson.M{"$size": "$Nucleotides"}, "QtyProteins": bson.M{"$size": "$Proteins"}, "QtyProducts": bson.M{"$size": "$Products"}, "_id": 0, "ScientificName": 1, "TaxId": 1}}}
+	groupStage := bson.D{{Key: "$project", Value: bson.M{"QtyNucleotides": bson.M{"$size": "$Nucleotides"}, "QtyProteins": bson.M{"$size": "$Proteins"}, "QtyProducts": bson.M{"$size": "$Products"}, "_id": 0, "ScientificName": 1, "TaxId": 1, "Genomes": 1}}}
 	match := bson.D{{Key: "$match", Value: filter}}
 
 	tt, err := db.table_basic.Aggregate(context.TODO(), mongo.Pipeline{match, groupStage})

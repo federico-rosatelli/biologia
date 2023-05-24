@@ -38,11 +38,16 @@ type OrganismTable struct {
 	QtyNucleotides int
 	QtyProteins    int
 	QtyProducts    int
-	Genomes        []string
-	Annotations    []string
-	Trascriptome   []string
-	SraWgs         int
-	SraTran        int
+	Genomes        []struct {
+		Link string
+		GBFF bool
+		FNA  bool
+		GFF  bool
+	}
+	Annotations  []string
+	Trascriptome []string
+	SraWgs       int
+	SraTran      int
 }
 
 type Nucleotide struct {
