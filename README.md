@@ -4,8 +4,16 @@ Credits
 [`federico-rosatelli`](https://github.com/federico-rosatelli) [`Mat`](https://github.com/AxnNxs) [`Loriv3`](https://github.com/Loriv3) [`Samsey`](https://github.com/Samseys) [`Calli`] (https://github.com/BboyCaligola)
 
 
+# Requisiti Hardware:
+Questo progetto ospiterà una grande quantità di dati, dovuta principalmente a n sequenze FASTA 
+e/o FASTQ di una vasta varietà di organismi. Pertanto si consiglia di disporre di:
 
-# Requisiti:
+1. PC ad-hoc connesso costantemente a internet, dove verrà trasferito il DB e il Server virtuale
+2. Archiviazione da 1+ TB per ospitare tutti i dati
+
+
+
+# Requisiti Software:
 
 Anaconda:             "https://www.anaconda.com"
 
@@ -43,13 +51,12 @@ Shigen:               "https://shigen.nig.ac.jp"         DB giapponese
 
 NCBI:                 "https://www.ncbi.nlm.nih.gov/"    DB americano
 
-La maggior parte dei dati presenti localmente nel Database interno
-sono stati scaricati manualmente a causa delle restrizioni sui
-download.
+EBI:                  "https://www.ebi.ac.uk/"           DB europeo
 
 
 
-# Altri link:
+
+# Altri link e Repository:
 
 Drive:                "https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW"
 
@@ -59,54 +66,51 @@ Github:               "https://github.com/federico-rosatelli/biologia"
 
 
 # Guida al primo utilizzo
-Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si raccomanda Ubuntu):
+Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi:
  
-   - Scaricare il progetto tramite git, o copiare il progetto all'indirizzo inserito tra "Altri link" sopra questo paragrafo.
-   - Installare tutti i requisiti, settando le variabili di ambiente a livello globale
-   - Inizializzare MongoDB:
-        Dare i seguenti comandi da terminale:
+- Scaricare/clonare il progetto tramite git alla repository "https://github.com/federico-rosatelli/biologia"
+- Installare tutti i Requisiti Software, settando, se necessario, le variabili di ambiente a livello globale
+- Inizializzare MongoDB. Dare i seguenti comandi da terminale per evitare problemi di permessi di scrittura:
   
-        ``sudo chown -R mongodb:mongodb /var/lib/mongodb``
+    ``sudo chown -R mongodb:mongodb /var/lib/mongodb``          Setting di permessi
 
-        ``sudo chown mongodb:mongodb /tmp/mongodb-27017.sock``
-
-        dopodiché:
+    ``sudo chown mongodb:mongodb /tmp/mongodb-27017.sock``      Setting di permessi
         
-        ``sudo systemctl start mongod``
+    ``sudo systemctl start mongod``                             Avviare MongoDB
         
-        per rendere automatico l'avvio di mongod in fase di accensione dell'SO:
+    ``sudo systemctl enable mongod.service``                    Per rendere automatico l'avvio
         
-        ``sudo systemctl enable mongod.service``
-        
-   - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3) [DEPRECATED]
-   - attendere il termine del salvataggio nel database locale
-   - aprire il server, digitando su console all'interno della cartella nodeServer:
-       ``npm install --save express`` per il primo avvio;
-       ``node server.js``
-   - dopodiché aprire il browser e cercare il seguente indirizzo:
+- [DEPRECATED] ~~runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)~~ 
 
-       localhost:5173
+[COMMENT]: # La maggior parte dei dati presenti nel Database del progetto sono stati scaricati manualmente a causa delle restrizioni sui
+download da parte delle piattaforme dei Riferimenti Ufficiali. Tali metodi sono elencati in parsingMethods.py. In seguito, si é proceduto a eliminare le voci che non erano interesse del progetto,come per esempio il ramo tassonomico dei Bacteria, intervenendo a livello di DB interno con i comandi forniti da MongoDB, effettuando query dei dati tramite regex e ranking tassonomico.
 
-   è ora possibile effettuare le query di interesse, ma va inizializzato il database locale.
+- MongoDB conserva i dati implicitamente in memoria. Effettuare il download dei dump del DB presenti al link [INSERIRELINK!], decomprimere gli archivi e lanciare, per ogni cartella decompressa:
 
-   Per avere le specie con i dati genomici (versione MongoDB):
+    ``mongorestore --db=Biologia <path_to_folder_extracted>``
 
-``python3 genbank.py --file "nomefile".gbk -n``
+- [DEPRECATED] ~~Aprire il server, digitando su console all'interno della cartella nodeServer:~~
+    ~~``npm install --save express`` per il primo avvio;~~
+    ~~``node server.js``~~
+    
+- dopodiché aprire il browser e cercare il seguente indirizzo:
 
-   Per la taxonomy:
+    ``http://localhost:5173``
 
-``python3 genbank.py --find -m --email`` (inserire email per accesso su ncbi, ammesso che si abbia accesso)
+è ora possibile effettuare le query di interesse, ma va inizializzato il database locale.
+
+Per avere le specie con i dati genomici (versione MongoDB):
+
+    ``python3 genbank.py --file "nomefile".gbk -n``
+
+Per la taxonomy:
+
+    ``python3 genbank.py --find -m --email`` (inserire email per accesso su ncbi, ammesso che si abbia accesso)
 
 
 
 NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (``systemctl start mongod``) e il server (``node server.js``)
 
-
-
-# Concetti utili:
-MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
-a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
-il db di interesse e sudo mongorestore sul file bson generato dal mongodump una volta importata la cartella generata.
  
  
  
