@@ -118,3 +118,9 @@ type TableComplete struct {
 		QtyProduct  string `bson:"QtyProduct"`
 	} `bson:"Products"`
 }
+
+type Markdown struct {
+	Title    string `bson:"Title"`
+	Versione string `bson:"Versione"`
+	Text     string `bson:"Text"`
+}

@@ -23,6 +23,7 @@ type AppDatabase interface {
 	FindProteinsId(taxonId string) (str.TableBasic, errorM.Errors)
 	FindProteinTableByLocus(taxId string, locus string) (str.TableComplete, errorM.Errors)
 	FindProteinByLocus(locus string) (str.Protein, errorM.Errors)
+	WelcomeMarkDown() (str.Markdown, errorM.Errors)
 }
 
 type appDB struct {
@@ -33,6 +34,7 @@ type appDB struct {
 	table_complete  *mongo.Collection
 	taxonomy_data   *mongo.Collection
 	taxonomy_tree   *mongo.Collection
+	markdown        *mongo.Collection
 }
 
 func InitDatabase(client *mongo.Client) (AppDatabase, error) {
@@ -60,6 +62,10 @@ func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 	if collectionTaxonomyTree == nil {
 		return nil, errors.New("error Creating users Collection")
 	}
+	collectionMarkDown := client.Database("Biologia").Collection("markdown")
+	if collectionMarkDown == nil {
+		return nil, errors.New("error Creating users Collection")
+	}
 	return &appDB{
 		client:          client,
 		nucleotide_data: collectionNucleotide,
@@ -68,5 +74,6 @@ func InitDatabase(client *mongo.Client) (AppDatabase, error) {
 		table_complete:  collectionTableComplete,
 		taxonomy_data:   collectionTaxonomy,
 		taxonomy_tree:   collectionTaxonomyTree,
+		markdown:        collectionMarkDown,
 	}, nil
 }

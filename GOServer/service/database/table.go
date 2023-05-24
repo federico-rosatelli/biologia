@@ -48,3 +48,12 @@ func (db *appDB) TableOrganism(search string, typeS string, listTaxId []string) 
 
 	return orgTable, nil
 }
+
+func (db *appDB) WelcomeMarkDown() (str.Markdown, errorM.Errors) {
+	var mark str.Markdown
+	err := db.markdown.FindOne(context.TODO(), bson.D{{}}).Decode(&mark)
+	if err != nil {
+		return mark, errorM.NewError("Can't find Markdown info", errorM.StatusBadRequest)
+	}
+	return mark, nil
+}

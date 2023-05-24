@@ -1,5 +1,6 @@
 
 import json
+import time
 from pymongo import MongoClient
 import csv
 
@@ -102,13 +103,19 @@ datasTaxon = [
     (2730355,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2730355",True,True,False),
 ]
 
-new_collection = db["table_basic"]
+# new_collection = db["table_basic"]
 
-for data in datasTaxon:
-    dataPush = {
-        "Link":data[1],
-        "GBFF":data[2],
-        "FNA":data[3],
-        "GFF":data[4]
-    }
-    new_collection.update_one({"TaxId":str(data[0])},{"$push":{"Genomes":dataPush}})
+# for data in datasTaxon:
+#     dataPush = {
+#         "Link":data[1],
+#         "GBFF":data[2],
+#         "FNA":data[3],
+#         "GFF":data[4]
+#     }
+#     new_collection.update_one({"TaxId":str(data[0])},{"$push":{"Genomes":dataPush}})
+
+new_new_collection = db["markdown"]
+
+mrk = open("README.md").read()
+
+new_new_collection.update_one({"Title":"Markdown v.0.0.1"},{"$set":{"Text":mrk}})

@@ -1,5 +1,5 @@
 Name:     "Biologia"
-Version:  "a0.0.2"
+Version:  "a1.0.1"
 Server:
   ServerPort:     3000
   ServerIp:       "2.35.186.59"

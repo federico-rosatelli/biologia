@@ -9,7 +9,12 @@ import (
 
 func (rt *_router) Welcome(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	w.Header().Set("content-type", "application/json")
-	if errJson := json.NewEncoder(w).Encode("OK"); errJson != nil {
+	mr, err := rt.db.WelcomeMarkDown()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	if errJson := json.NewEncoder(w).Encode(mr); errJson != nil {
 		http.Error(w, errJson.Error(), http.StatusBadRequest)
 		return
 	}
