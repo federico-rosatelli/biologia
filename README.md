@@ -1,7 +1,7 @@
 # MicroAlgae Parsing & Searching
 
 Credits
-[`federico-rosatelli`](https://github.com/federico-rosatelli) [`Mat`](https://github.com/AxnNxs) [`Loriv3`](https://github.com/Loriv3) [`Samsey`](https://github.com/Samseys)
+[`federico-rosatelli`](https://github.com/federico-rosatelli) [`Mat`](https://github.com/AxnNxs) [`Loriv3`](https://github.com/Loriv3) [`Samsey`](https://github.com/Samseys) [`Calli`] (https://github.com/BboyCaligola)
 
 
 
@@ -85,7 +85,7 @@ Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si r
        ``node server.js``
    - dopodiché aprire il browser e cercare il seguente indirizzo:
 
-       localhost:3000
+       localhost:5173
 
    è ora possibile effettuare le query di interesse, ma va inizializzato il database locale.
 
