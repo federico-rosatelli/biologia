@@ -67,49 +67,58 @@ Github:               "https://github.com/federico-rosatelli/biologia"
 
 # Guida al primo utilizzo
 Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi:
- 
+
+[TODO] Docker image [TODO] 
 - Scaricare/clonare il progetto tramite git alla repository "https://github.com/federico-rosatelli/biologia"
 - Installare tutti i Requisiti Software, settando, se necessario, le variabili di ambiente a livello globale
 - Inizializzare MongoDB. Dare i seguenti comandi da terminale per evitare problemi di permessi di scrittura:
   
     ``sudo chown -R mongodb:mongodb /var/lib/mongodb``          Setting di permessi
-
-    ``sudo chown mongodb:mongodb /tmp/mongodb-27017.sock``      Setting di permessi
         
     ``sudo systemctl start mongod``                             Avviare MongoDB
         
     ``sudo systemctl enable mongod.service``                    Per rendere automatico l'avvio
         
-- [DEPRECATED] ~~runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)~~ 
-
-[COMMENT]: # La maggior parte dei dati presenti nel Database del progetto sono stati scaricati manualmente a causa delle restrizioni sui
+- [DEPRECATED] ~~runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)~~ [COMMENT]: # La maggior parte dei dati presenti nel Database del progetto sono stati scaricati manualmente a causa delle restrizioni sui
 download da parte delle piattaforme dei Riferimenti Ufficiali. Tali metodi sono elencati in parsingMethods.py. In seguito, si é proceduto a eliminare le voci che non erano interesse del progetto,come per esempio il ramo tassonomico dei Bacteria, intervenendo a livello di DB interno con i comandi forniti da MongoDB, effettuando query dei dati tramite regex e ranking tassonomico.
 
 - MongoDB conserva i dati implicitamente in memoria. Effettuare il download dei dump del DB presenti al link [INSERIRELINK!], decomprimere gli archivi e lanciare, per ogni cartella decompressa:
 
     ``mongorestore --db=Biologia <path_to_folder_extracted>``
+    
+    Da questo momento é possibile consultare il DB da terminale.
+
 
 - [DEPRECATED] ~~Aprire il server, digitando su console all'interno della cartella nodeServer:~~
     ~~``npm install --save express`` per il primo avvio;~~
-    ~~``node server.js``~~
+    ~~``node server.js``~~ [COMMENT]: # Il backend è stato sostituito da una versione più completa e consistente scritta in GoLang.
+
+- Inizializzare il server, digitando, all'interno della cartella GOServer:
+
+    ``go build ./cmd/webapi/``                                  Per avviare il backend
+
+    ``run npm dev``                                             Per avviare il frontend
+
+
+
+
+
+
+
+- Ora é possibile consultare il DB da terminale. Si riportano alcuni comandi utili allo scopo:
     
-- dopodiché aprire il browser e cercare il seguente indirizzo:
+    ``mongosh``                                                 Per utilizzare MongoDB
+    ``show dbs``                                                Per visualizzare i DB attivi
+    ``use Biologia``                                            Per entrare nel DB creato durante il mongorestore
+    ``show collections``                                        Per visualizzare le collezioni di elementi del DB
+    ``db.<collection_name>.find()``                             Query che ritorna tutte le occorrenze se vuota
+    ``db.<collection_name>.findOne()``                          Query che ritorna la prima occorrenza dell'input
+
+
+
+- Ora é possibile consultare il DB da interfaccia web al seguente indirizzo:
 
     ``http://localhost:5173``
-
-è ora possibile effettuare le query di interesse, ma va inizializzato il database locale.
-
-Per avere le specie con i dati genomici (versione MongoDB):
-
-    ``python3 genbank.py --file "nomefile".gbk -n``
-
-Per la taxonomy:
-
-    ``python3 genbank.py --find -m --email`` (inserire email per accesso su ncbi, ammesso che si abbia accesso)
-
-
-
-NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (``systemctl start mongod``) e il server (``node server.js``)
 
  
  
@@ -117,8 +126,8 @@ NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (``systemctl 
 # Le collections trattate:
 - nucleotide_data    contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla voce Nucleotide;
 - nucleotide_basic   contiene i dati, allegeriti soltanto a nome e NCBI_ID, per questioni di performance quando si effettuano query di conteggio;
-- taxonomy_data      contiene tutti i dati delle microalghe che sono riscontrabili su NCBI ala voce Taxonomy;
-- taxonomy_tree      contiene i dati parsati per singola specie, mostrandone di volta in volta i link di Lineage.
+- taxonomy_data      contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Taxonomy;
+- taxonomy_tree      contiene i link di Lineage per singola specie.
 
 
 
