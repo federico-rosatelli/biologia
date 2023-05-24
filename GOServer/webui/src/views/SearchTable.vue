@@ -117,9 +117,9 @@ export default {
             </RouterLink>
           </td>
             
-          <td>{{ item.Genomes }}</td>
-          <td>{{ item.Annotations }}</td>
-          <td>{{ item.Trascriptome }}</td>
+          <td>{{ item.Genomes }}</td>      <!--link ncbi -->
+          <td>{{ item.Annotations }}</td>  <!--link download gff -->
+          <td>{{ item.Trascriptome }}</td> <!--link tsa ncbi  -->
           <td>{{ item.SraWgs }}</td>
           <td>{{ item.SraTran }}</td>
         </tr>
