@@ -64,6 +64,15 @@ Github:               "https://github.com/federico-rosatelli/biologia"
 
 
 
+# Struttura del Progetto:
+L'insieme di questi 4 moduli hanno dato vita al progetto qui in opera:
+
+- Database: MongoDB
+- Parser:   Bioparse.py
+- Backend:  GoServer
+- Frontend: VueJS
+
+
 
 # Guida al primo utilizzo
 Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi:
