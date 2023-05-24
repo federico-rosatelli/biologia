@@ -89,6 +89,11 @@ download da parte delle piattaforme dei Riferimenti Ufficiali. Tali metodi sono 
     Da questo momento é possibile consultare il DB da terminale.
 
 
+- Scaricare i dati mancanti di Genome insieme alle analisi prodotte dal software BUSCO dal link [INSERIRELINK!]
+- Scaricare i dati mancanti di TSA ed SRA eseguendo lo script [INSERIRELINK!]
+
+
+
 - [DEPRECATED] ~~Aprire il server, digitando su console all'interno della cartella nodeServer:~~
     ~~``npm install --save express`` per il primo avvio;~~
     ~~``node server.js``~~ [COMMENT]: # Il backend è stato sostituito da una versione più completa e consistente scritta in GoLang.
