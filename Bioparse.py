@@ -1,19 +1,24 @@
-import csv
-import json
 from pymongo import MongoClient
 from Bio import SeqIO, Entrez
+import csv
+import json
 import requests
 import urllib.request as download
 import os
 import shutil
 import gzip
 
+
+# Dichiarazione e inizializzazione delle variabili globali #
+
 CLUSTER = "localhost:27017"
 client = MongoClient('localhost', 27017)
 db = client["Biologia"]
 collection_data = db["taxonomy_data"]
+ignore_names = ["environmental samples"]
 Entrez.email = 'russo.1864451@studenti.uniroma1.it'
 Entrez.api_key = "cc030996838fc52dd1a2653fad76bf5fe408"
+
 
 def ncbiSearchTaxon(name:str) ->list:
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
@@ -52,7 +57,6 @@ def finderTaxonFromFile(fn):
             finderTaxon(name)
         names.append(name)
 
-ignore_names = ["environmental samples"]
 def finderTaxon(name):
     if name in ignore_names:
         return
@@ -66,20 +70,22 @@ def finderTaxon(name):
     except Exception as e:
         return
 
-#finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
 
-#taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
-#db.taxonomy_data.deleteMany({"Lineage":{"$regex":"environmental samples"}})
+def unwrappingSpecies():
+    finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
+
+    taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
+    db.taxonomy_data.deleteMany({"Lineage":{"$regex":"environmental samples"}})
 
 
-# allBomb = collection_data.find({},{"ScientificName":1,"_id":0})
+    allBomb = collection_data.find({},{"ScientificName":1,"_id":0})
 
-# listTuple = [[i["ScientificName"]] for i in allBomb]
+    listTuple = [[i["ScientificName"]] for i in allBomb]
 
-# with open('OrganismList.csv', 'w') as csvfile:
-#     writer = csv.writer(csvfile)
-#     writer.writerows(listTuple)
-
+    with open('OrganismList.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(listTuple)
+    return
 
 new_collection = db["taxonomy_tree"]
 
@@ -129,7 +135,7 @@ def algo():
                     }
             new_collection.update_one({"TaxId":res["ParentTaxId"]},{"$push":{"SubClasses":newDataPush}})
 
-#algo()
+
 #datas = new_collection.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
 
 
@@ -211,40 +217,42 @@ def genusList():
         writer.writerows(datas)
 
 
-# nucleo_collection = db["nucleotide_organism"]
-# query = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key":"CDS","GBFeature_quals":{"$elemMatch":{"GBQualifier_name":"protein_id"}}}}}
-# filter = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key": "CDS"}}}
-# res = nucleo_collection.aggregate([
-#     {"$match": {'GBSeq_feature-table.GBFeature_key': 'CDS','GBSeq_feature-table.GBFeature_quals.GBQualifier_name':"protein_id"}},
-#     {"$project": {
-#         "GBSeq_feature-table": {"$filter": {
-#             "input": '$GBSeq_feature-table',
-#             "as": 'cds',
-#             "cond": {"$eq": ['$$cds.GBFeature_key', 'CDS']}
-#         }},
-#         "_id": 0,
-#     }}
-# ])
-#nucleos = nucleo_collection.count_documents(query,filter)
-#print(nucleos)
-# proteins = []
-# count = 0
-# for nucleo in res:
-#     print(count)
-#     cdss = nucleo["GBSeq_feature-table"]
-#     for cds in cdss:
-#         for qual in cds["GBFeature_quals"]:
-#             if qual["GBQualifier_name"] == "protein_id":
-#                 proteins.append(qual["GBQualifier_value"] in proteins)
-#     count += 1
+def testNucleo():
+    nucleo_collection = db["nucleotide_organism"]
+    query = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key":"CDS","GBFeature_quals":{"$elemMatch":{"GBQualifier_name":"protein_id"}}}}}
+    filter = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key": "CDS"}}}
+    res = nucleo_collection.aggregate([
+        {"$match": {'GBSeq_feature-table.GBFeature_key': 'CDS','GBSeq_feature-table.GBFeature_quals.GBQualifier_name':"protein_id"}},
+        {"$project": {
+            "GBSeq_feature-table": {"$filter": {
+                "input": '$GBSeq_feature-table',
+                "as": 'cds',
+                "cond": {"$eq": ['$$cds.GBFeature_key', 'CDS']}
+            }},
+            "_id": 0,
+        }}
+    ])
+    nucleos = nucleo_collection.count_documents(query,filter)
+    print(nucleos)
+    proteins = []
+    count = 0
+    for nucleo in res:
+        print(count)
+        cdss = nucleo["GBSeq_feature-table"]
+        for cds in cdss:
+            for qual in cds["GBFeature_quals"]:
+                if qual["GBQualifier_name"] == "protein_id":
+                    proteins.append(qual["GBQualifier_value"] in proteins)
+        count += 1
 
-# def efetchProtein(ids):
-#     handle = Entrez.efetch(db="protein", id=ids, rettype='gb',retmode="xml")
-#     read = Entrez.read(handle)
-#     return read
+    def efetchProtein(ids):
+        handle = Entrez.efetch(db="protein", id=ids, rettype='gb',retmode="xml")
+        read = Entrez.read(handle)
+        return read
 
-# results = efetchProtein(proteins)
-# nucleo_collection.insert_many(results)
+    results = efetchProtein(proteins)
+    nucleo_collection.insert_many(results)
+    return
 
 
 def efetchGenome(taxId):
@@ -388,11 +396,6 @@ def GFF():
 
 
 
-
-
-
-
-
 def genomeFind(name:str):
     handle = Entrez.esearch(db='genome', term=name, rettype='gb', retmode='text', retmax=10000)
     record = Entrez.read(handle, validate=False)
@@ -409,7 +412,7 @@ def genomeFind(name:str):
     # return read
     print(json_formatted_str)
 
-#genomeFind("Chlorella variabilis")
+
 
 def ncbiSearchNucleo1(name:str) ->list:
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
@@ -444,31 +447,34 @@ def nucleoImport():
                 #nucleo_collection.insert_many(insertDatas)
             except Exception as e:
                 print(e)
-#nucleoImport()
-# "txid257627"
-# "txid257627"
-# nucleo_collection = db["nucleotide_data"]
-# tot = ncbiSearchNucleo1("txid257627[Organism:exp]")
-# i = 0
-# for t in tot:
-#     print(i)
-#     t.pop("GBSeq_sequence",None)
-#     nucleo_collection.insert_one(t)
-#     i += 1
-# nucleo_collection = db["nucleotide_data"]
 
-# dataAll = nucleo_collection.find({},{"GBSeq_locus":1,"_id":1})
-# for data in dataAll:
-#     query = {
-#         "_id": { "$ne": data["_id"] },
-#         "GBSeq_locus": data["GBSeq_locus"]
-#     }
-#     print(nucleo_collection.find_one(query))
-# data = db.nucleo_collection.aggregate([
-#     {"$group" : { "_id": "$GBSeq_locus", "count": { "$sum": 1 } } },
-#     {"$match": {"_id" :{ "$ne" : None } , "count" : {"$gt": 1} } }, 
-#     {"$project": {"name" : "$_id", "_id" : 0} }
-# ])
+def nucleoResult():
+    nucleoImport()
+    # "txid257627"
+    # "txid257627"
+    nucleo_collection = db["nucleotide_data"]
+    tot = ncbiSearchNucleo1("txid257627[Organism:exp]")
+    i = 0
+    for t in tot:
+        print(i)
+        t.pop("GBSeq_sequence",None)
+        nucleo_collection.insert_one(t)
+        i += 1
+    nucleo_collection = db["nucleotide_data"]
+
+    dataAll = nucleo_collection.find({},{"GBSeq_locus":1,"_id":1})
+    for data in dataAll:
+        query = {
+            "_id": { "$ne": data["_id"] },
+            "GBSeq_locus": data["GBSeq_locus"]
+        }
+        print(nucleo_collection.find_one(query))
+    data = db.nucleo_collection.aggregate([
+        {"$group" : { "_id": "$GBSeq_locus", "count": { "$sum": 1 } } },
+        {"$match": {"_id" :{ "$ne" : None } , "count" : {"$gt": 1} } }, 
+        {"$project": {"name" : "$_id", "_id" : 0} }
+    ])
+    return
 
 
 
@@ -505,7 +511,7 @@ def parseToBasic() -> list:
             # GBSeq_locus
     return
 
-# parseToBasic()
+
 
 
 def fattoBene():
@@ -521,7 +527,7 @@ def fattoBene():
             }
             tt1.insert_one(var)
 
-#fattoBene()
+
         
 def ncbiSearchNucleo123(name:str) ->bool:
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
@@ -571,7 +577,7 @@ def proteinFind():
                 protein_collection.insert_one(prot)
         except Exception as e:
             print(e)
-#proteinFind()
+
 
 
 
@@ -617,7 +623,7 @@ def newCollectionBene():
 
         
 
-#newCollectionBene()
+
 
 def productsTable():
     products = open("SpecieProduct.csv").readlines()
@@ -637,4 +643,25 @@ def productsTable():
         basic_collection.update_one({"ScientificName":name},{"$push":{"Products":inserBasic}})
         complete_collection.update_one({"ScientificName":name},{"$push":{"Products":insertComplete}})
 
-productsTable()
+
+
+
+
+
+#######################
+######---MAIN---#######
+#######################
+
+def main(args:dict) -> None:
+    #unwrappingSpecies()
+    #algo()
+    #testNucleo()
+    #GFF()
+    #nucleoResult()
+    #genomeFind("Chlorella variabilis")
+    #parseToBasic()
+    #fattoBene()
+    #proteinFind()
+    #newCollectionBene()
+    #productsTable()
+    return

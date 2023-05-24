@@ -4,8 +4,16 @@ Credits
 [`federico-rosatelli`](https://github.com/federico-rosatelli) [`Mat`](https://github.com/AxnNxs) [`Loriv3`](https://github.com/Loriv3) [`Samsey`](https://github.com/Samseys) [`Calli`](https://github.com/BboyCaligola)
 
 
+# Requisiti Hardware:
+Questo progetto ospiterà una grande quantità di dati, dovuta principalmente a n sequenze FASTA 
+e/o FASTQ di una vasta varietà di organismi. Pertanto si consiglia di disporre di:
 
-# Requisiti:
+1. PC ad-hoc connesso costantemente a internet, dove verrà trasferito il DB e il Server virtuale
+2. Archiviazione da 1+ TB per ospitare tutti i dati
+
+
+
+# Requisiti Software:
 
 Anaconda:             "https://www.anaconda.com"
 
@@ -43,13 +51,12 @@ Shigen:               "https://shigen.nig.ac.jp"         DB giapponese
 
 NCBI:                 "https://www.ncbi.nlm.nih.gov/"    DB americano
 
-La maggior parte dei dati presenti localmente nel Database interno
-sono stati scaricati manualmente a causa delle restrizioni sui
-download.
+EBI:                  "https://www.ebi.ac.uk/"           DB europeo
 
 
 
-# Altri link:
+
+# Altri link e Repository:
 
 Drive:                "https://drive.google.com/drive/folders/19RXRHEb-7-O9gaUjXz5ho-Q2_HsbKlEW"
 
@@ -57,64 +64,99 @@ Github:               "https://github.com/federico-rosatelli/biologia"
 
 
 
+# Struttura del Progetto:
+L'insieme di questi 4 moduli hanno dato vita al progetto qui in opera:
+
+- Database: MongoDB
+- Parser:   Bioparse.py
+- Backend:  GoServer
+- Frontend: VueJS
+
+
 
 # Guida al primo utilizzo
-Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi (si raccomanda Ubuntu):
- 
-   - Scaricare il progetto tramite git, o copiare il progetto all'indirizzo inserito tra "Altri link" sopra questo paragrafo.
-   - Installare tutti i requisiti, settando le variabili di ambiente a livello globale
-   - Inizializzare MongoDB:
-        Dare i seguenti comandi da terminale:
+Per la prima installazione su un qualsiasi PC, seguire i seguenti passaggi:
+
+[TODO] Docker image [TODO] 
+- Scaricare/clonare il progetto tramite git alla repository "https://github.com/federico-rosatelli/biologia"
+- Installare tutti i Requisiti Software, settando, se necessario, le variabili di ambiente a livello globale
+- Inizializzare MongoDB. Dare i seguenti comandi da terminale per evitare problemi di permessi di scrittura:
   
-        ``sudo chown -R mongodb:mongodb /var/lib/mongodb``
-
-        ``sudo chown mongodb:mongodb /tmp/mongodb-27017.sock``
-
-        dopodiché:
+    ``sudo chown -R mongodb:mongodb /var/lib/mongodb``          Setting di permessi
         
-        ``sudo systemctl start mongod``
+    ``sudo systemctl start mongod``                             Avviare MongoDB
         
-        per rendere automatico l'avvio di mongod in fase di accensione dell'SO:
+    ``sudo systemctl enable mongod.service``                    Per rendere automatico l'avvio
         
-        ``sudo systemctl enable mongod.service``
-        
-   - runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3) [DEPRECATED]
-   - attendere il termine del salvataggio nel database locale
-   - aprire il server, digitando su console all'interno della cartella nodeServer:
-       ``npm install --save express`` per il primo avvio;
-       ``node server.js``
-   - dopodiché aprire il browser e cercare il seguente indirizzo:
+- [DEPRECATED] ~~runnare lo script genbank.py, specificando un file .gbk sorgente e selezionando il tipo di database desiderato (-n per MongoDB, -s per SQLite3)~~ [COMMENT]: # La maggior parte dei dati presenti nel Database del progetto sono stati scaricati manualmente a causa delle restrizioni sui
+download da parte delle piattaforme dei Riferimenti Ufficiali. Tali metodi sono elencati in parsingMethods.py. In seguito, si é proceduto a eliminare le voci che non erano interesse del progetto,come per esempio il ramo tassonomico dei Bacteria, intervenendo a livello di DB interno con i comandi forniti da MongoDB, effettuando query dei dati tramite regex e ranking tassonomico.
 
-       localhost:5173
+- MongoDB conserva i dati implicitamente in memoria. Effettuare il download dei dump del DB presenti al link [INSERIRELINK!], decomprimere gli archivi e lanciare, per ogni cartella decompressa:
 
-   è ora possibile effettuare le query di interesse, ma va inizializzato il database locale.
+    ``mongorestore --db=Biologia <path_to_folder_extracted>``
+    
+    Da questo momento é possibile consultare il DB da terminale.
 
-   Per avere le specie con i dati genomici (versione MongoDB):
 
-``python3 genbank.py --file "nomefile".gbk -n``
-
-   Per la taxonomy:
-
-``python3 genbank.py --find -m --email`` (inserire email per accesso su ncbi, ammesso che si abbia accesso)
+- Scaricare i dati mancanti di Genome insieme alle analisi prodotte dal software BUSCO dal link [INSERIRELINK!]
+- Scaricare i dati mancanti di TSA ed SRA eseguendo lo script [INSERIRELINK!]
 
 
 
-NOTA: a ogni riavvio del sistema, è necessario riattivare mongodb (``systemctl start mongod``) e il server (``node server.js``)
+- [DEPRECATED] ~~Aprire il server, digitando su console all'interno della cartella nodeServer:~~
+    ~~``npm install --save express`` per il primo avvio;~~
+    ~~``node server.js``~~ [COMMENT]: # Il backend è stato sostituito da una versione più completa e consistente scritta in GoLang.
+
+- Inizializzare il server, digitando, all'interno della cartella GOServer:
+
+    ``go build ./cmd/webapi/``                                  Per avviare il backend
+
+    ``run npm dev``                                             Per avviare il frontend
 
 
 
-# Concetti utili:
-MONGODB conserva i dati implicitamente in una memoria virtuale. Per trasportarli da un sistema
-a un altro è necessario utilizzare il comando mongodump per generare una cartella contenente
-il db di interesse e sudo mongorestore sul file bson generato dal mongodump una volta importata la cartella generata.
+
+
+
+
+- Ora é possibile consultare il DB da terminale. Si riportano alcuni comandi utili allo scopo:
+    
+    ``mongosh``                                                 Per utilizzare MongoDB
+    ``show dbs``                                                Per visualizzare i DB attivi
+    ``use Biologia``                                            Per entrare nel DB creato durante il mongorestore
+    ``show collections``                                        Per visualizzare le collezioni di elementi del DB
+    ``db.<collection_name>.find()``                             Query che ritorna tutte le occorrenze se vuota
+    ``db.<collection_name>.findOne()``                          Query che ritorna la prima occorrenza dell'input
+
+
+
+- Ora é possibile consultare il DB da interfaccia web al seguente indirizzo:
+
+    ``http://localhost:5173``
+
  
  
  
 # Le collections trattate:
 - nucleotide_data    contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla voce Nucleotide;
 - nucleotide_basic   contiene i dati, allegeriti soltanto a nome e NCBI_ID, per questioni di performance quando si effettuano query di conteggio;
-- taxonomy_data      contiene tutti i dati delle microalghe che sono riscontrabili su NCBI ala voce Taxonomy;
-- taxonomy_tree      contiene i dati parsati per singola specie, mostrandone di volta in volta i link di Lineage.
+- taxonomy_data      contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Taxonomy;
+- taxonomy_tree      contiene i link di Lineage per singola specie.
+
+
+
+# Dati esterni al DB:
+Per motivi di performance e trattamento di grandi moli di dati, si é deciso di:
+
+- Per la collection nucleotide_data, le specie a cui fanno riferimento più di 10.000 entry su NCBI sono state tagliate.
+Ciò perché NCBI limita fortemente la velocità di download e a livello prettamente numerico il peso del DB locale sarebbe
+salito di un ordine di grandezza. Le voci sono incomplete se al numero di occorrenze viene accodato un "+" nella view
+di nucleotide consultabile da interfaccia web. Le voci mancanti possono essere inserite, per singola specie, utilizzando
+le funzioni efetch ed esearch di biopython e incrementando il parametro retstart al precedente retmax (il massimo è appunto
+10.000). Un ulteriore requisito é essere registrati su NCBI e inserire le proprie credenziali per fare le consultazioni:
+
+    ``Entrez.email = <email_registered_on_NCBI>``
+    ``Entrez.api_key = "cc030996838fc52dd1a2653fad76bf5fe408"``
 
 
 
@@ -123,19 +165,18 @@ FASTA conserva soltanto la Sequenza di nucleotidi o amminoacidi, codificando ogn
 per indice di posizione. Nella rappresentazione in Genbank, troviamo tale dato nel file JSON che salviamo
 in locale, alla voce translation per ogni Coding Sequence sotto ogni Specie, secondo la seguente gerarchia:
  
- 
- 
-# SPECIE
-##   FEATURES
-###       CDS
-####           /translation="LSLAVGTTITLASYHWLL[...]""
+- SPECIE
+    - FEATURES
+        - CDS
+            - /translation="LSLAVGTTITLASYHWLL[...]""
 
 FASTQ è un "quality score" che associa alla sequenza, per ogni indice di posizione, un valore 
 qualitativo codificato in ASCII. Un esempio a seguire:
-@SRR64[...]       Name Sequence
-CCTCGTCTA[...]    DNA Sequence
-+SRR64[...]       Quality address
-BBBBBFFFF[...]    Quality Score
+
+- @SRR64[...]       Name Sequence
+- CCTCGTCTA[...]    DNA Sequence
+- +SRR64[...]       Quality address
+- BBBBBFFFF[...]    Quality Score
 
 
 
