@@ -13,7 +13,6 @@ import './assets/login.css'
 import './assets/modal.css'
 import './assets/dropdown.css'
 import './assets/monitor.css'
-console.log("PROVAAA");
 const app = createApp(App)
 app.config.globalProperties.$axios = axios;
 app.component("ErrorMsg", ErrorMsg);

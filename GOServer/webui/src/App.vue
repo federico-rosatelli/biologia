@@ -26,7 +26,7 @@ export default{
 <template>
     <header>
         <hgroup>
-            <h1>Micro Algae DB</h1>
+            <h1>MicroAlgae DB</h1>
         </hgroup>
         <nav>
             <ul class="right">

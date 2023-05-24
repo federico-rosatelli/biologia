@@ -75,7 +75,7 @@ export default {
 <template>
 <!--TABELLA -->
     <div>
-        <a v-if="otherRouterLink" :href="otherRouterLink">{{otherRouterLink}}</a>
+        Go to {{ this.response.ScientificName }}<a v-if="otherRouterLink" :href="otherRouterLink"> {{this.$route.path.split('/').pop() == 'nucleotides' ? '/proteins': '/nucleotides'}} </a>
     </div>
     <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
     <div v-if="this.dataArray">
@@ -149,7 +149,7 @@ export default {
         </div>
         <div v-if="this.response.Products && this.response.Products.length > 0">
             <div class="title-down">
-                Products
+                Products and occurences
             </div>
             <div style="display: flex;">
                 <div class="product">
