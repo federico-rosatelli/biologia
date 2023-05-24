@@ -39,9 +39,26 @@ export default {
             }
             this.loading = false;
         },
+        mouseOver(id,item){
+          if (!item || item.length == 0){
+            return
+          }
+          let fin = document.getElementById(id)
+          console.log(fin);
+          fin.style.visibility = "visible"
+        },
+        mouseNotOver(id,item){
+          if (!item || item.length == 0){
+            return
+          }
+          let fin = document.getElementById(id)
+          console.log(fin);
+          fin.style.visibility = "hidden"
+        },
     },
     components: { LoadingSpinner }
 }
+
 
 </script>
 
@@ -55,7 +72,7 @@ export default {
       </label>
       <select id="dropdown" name="drop minimal" v-model="type">
         <option value="scientific_name" selected>Scientific Name</option>
-        <option value="id">Taxom Id</option>
+        <option value="id">Taxon Id</option>
       </select>
     </div>
     <div class="input">
@@ -117,7 +134,25 @@ export default {
             </RouterLink>
           </td>
             
-          <td>{{ item.Genomes }}</td>      <!--link ncbi -->
+          <td @mouseleave="mouseNotOver('genome-'+item.TaxId,item.Genomes)" @mouseover="mouseOver('genome-'+item.TaxId,item.Genomes)">
+            {{ !item.Genomes || item.Genomes.length > 0 ? 'Link' : '-' }}
+            <div class="dropdown-genome">
+              <div :id="'genome-'+item.TaxId" class="dropdown-content-genome">
+                <a v-if="item.Genomes && item.Genomes.length > 0" :href="item.Genomes[0].Link" target=”_blank”>
+                  <div :style="item.Genomes[0].GBFF ? 'background-color:green;' : 'background-color:red;'">
+                    GCFF
+                  </div>
+                  <div :style="item.Genomes[0].FNA ? 'background-color:green;' : 'background-color:red;'">
+                    FNA
+                  </div>
+                  <div :style="item.Genomes[0].GFF ? 'background-color:green;' : 'background-color:red;'">
+                    GFF
+                  </div>
+                </a>
+              </div>
+            </div>
+            
+          </td>
           <td>{{ item.Annotations }}</td>  <!--link download gff -->
           <td>{{ item.Trascriptome }}</td> <!--link tsa ncbi  -->
           <td>{{ item.SraWgs }}</td>
@@ -164,6 +199,7 @@ button:hover {
    #table td, #table th {
     border: 1px solid #6cace1;
     padding: 20px;
+    align-content: center;
    }
    #table .title{
      font-size: 25px;
@@ -180,13 +216,31 @@ button:hover {
     
    }
 
-   .input input[type="text"] {
+.input input[type="text"] {
     width: 40%;
     padding: 10px;
     left: 50%;
     border: 1px solid #dddddd;
     margin-bottom: 15px;
     box-sizing:border-box;
-  }
-   
+}
+
+.dropdown-genome {
+  position: relative;
+  display: block;
+  margin-right: 25px;
+}
+
+.dropdown-content-genome {
+  visibility: hidden;
+  position: absolute;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  align-content: center;
+}
+
+.dropdown-genome:hover .dropdown-content-genome {
+  display: block;
+}
 </style>

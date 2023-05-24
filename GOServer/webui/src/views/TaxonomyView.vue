@@ -68,7 +68,7 @@ export default {
       </label>
       <select id="dropdown" name="drop minimal" v-model="type">
         <option value="scientific_name" selected>Scientific Name</option>
-        <option value="id">Taxom Id</option>
+        <option value="id">Taxon Id</option>
       </select>
     </div>
     <div class="input">
