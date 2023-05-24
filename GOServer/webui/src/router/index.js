@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import SearchView from '../views/search.vue'
+import SearchTable from '../views/SearchTable.vue'
 import HomeView from '../views/Home.vue'
 import Taxonomy from '../views/TaxonomyView.vue'
 import OrganismView from '../views/OrganismView.vue'
@@ -10,7 +10,7 @@ const router = createRouter({
 		{path: '/', component: HomeView},
 		{path: '/taxonomy', component: Taxonomy},
 		{path: '/taxonomy/:taxid', component: Taxonomy},
-		{path: '/taxon', component: SearchView},
+		{path: '/taxon', component: SearchTable},
 		{path: '/organism/:taxid/nucleotides', component: OrganismView},
 		{path: '/organism/:taxid/proteins', component: OrganismView},
 

@@ -6,13 +6,23 @@ import (
 	"strings"
 )
 
+type myTaxonomy str.Taxonomy
+
 func (rt *_router) GetTaxonomy(taxId string) (str.Taxonomy, ErrManager.Errors) {
 	var taxonomy str.Taxonomy
 	taxonomy, err := rt.db.FindTaxon(taxId)
 	if err != nil {
 		return taxonomy, err
 	}
-	return taxonomy, nil
+	tax := myTaxonomy(taxonomy)
+	return taxonomy, tax.auxGetTaxonomy()
+}
+
+func (tx myTaxonomy) auxGetTaxonomy() ErrManager.Errors {
+	if tx.ScientificName == "" || tx.TaxID == "" || len(tx.LineageEx) == 0 {
+		return ErrManager.NewError("Can't decode taxonomy", ErrManager.StatusBadRequest)
+	}
+	return nil
 }
 
 func (rt *_router) GetTaxonomyTree(search string, nType string) (str.TaxonomyTree, ErrManager.Errors) {

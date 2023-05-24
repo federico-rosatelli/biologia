@@ -1,4 +1,3 @@
-<!--IDEA: Vue delle ricerche con funzine che prende tipo di ricerca e input e ritorna tabella -->
 <script>
 import $ from 'jquery'
 export default {
