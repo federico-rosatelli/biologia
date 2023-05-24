@@ -156,19 +156,18 @@ FASTA conserva soltanto la Sequenza di nucleotidi o amminoacidi, codificando ogn
 per indice di posizione. Nella rappresentazione in Genbank, troviamo tale dato nel file JSON che salviamo
 in locale, alla voce translation per ogni Coding Sequence sotto ogni Specie, secondo la seguente gerarchia:
  
- 
- 
-# SPECIE
-##   FEATURES
-###       CDS
-####           /translation="LSLAVGTTITLASYHWLL[...]""
+- SPECIE
+    - FEATURES
+        - CDS
+            - /translation="LSLAVGTTITLASYHWLL[...]""
 
 FASTQ è un "quality score" che associa alla sequenza, per ogni indice di posizione, un valore 
 qualitativo codificato in ASCII. Un esempio a seguire:
-@SRR64[...]       Name Sequence
-CCTCGTCTA[...]    DNA Sequence
-+SRR64[...]       Quality address
-BBBBBFFFF[...]    Quality Score
+
+- @SRR64[...]       Name Sequence
+- CCTCGTCTA[...]    DNA Sequence
+- +SRR64[...]       Quality address
+- BBBBBFFFF[...]    Quality Score
 
 
 
