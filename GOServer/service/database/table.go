@@ -63,8 +63,8 @@ func (db *appDB) WelcomeMarkDown() (str.Markdown, errorM.Errors) {
 func (db *appDB) TableOrganismByProduct(product string) ([]string, errorM.Errors) {
 	var listTaxId []string
 	proj := options.Find().SetProjection(bson.D{{Key: "TaxId", Value: 1}})
-	finder := bson.M{"Products": bson.M{"$elemMatch": bson.M{
-		"$regex": product, "$options": "i"}}}
+	finder := bson.M{"Products.ProductName": bson.M{
+		"$regex": product, "$options": "i"}}
 	cursor, errM := db.table_basic.Find(context.TODO(), finder, proj)
 	if errM != nil {
 		return listTaxId, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
