@@ -86,7 +86,7 @@ func (db *appDB) TableOrganismByLocation(location string) ([]string, errorM.Erro
 	proj := options.Find().SetProjection(bson.D{{Key: "TaxId", Value: 1}})
 	finder := bson.M{"Country.CountryName": bson.M{
 		"$regex": location, "$options": "i"}}
-	cursor, errM := db.nucleotide_data.Find(context.TODO(), finder, proj)
+	cursor, errM := db.table_basic.Find(context.TODO(), finder, proj)
 	if errM != nil {
 		return listTaxId, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
 	}
