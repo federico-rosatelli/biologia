@@ -106,6 +106,9 @@ type TableBasic struct {
 		ProductName string `bson:"ProductName"`
 		QtyProduct  string `bson:"QtyProduct"`
 	} `bson:"Products"`
+	Country []struct {
+		CountryName string `bson:"CountryName"`
+	} `bson:"Country"`
 }
 
 type TableComplete struct {
@@ -117,6 +120,9 @@ type TableComplete struct {
 		ProductName string `bson:"ProductName"`
 		QtyProduct  string `bson:"QtyProduct"`
 	} `bson:"Products"`
+	Country []struct {
+		CountryName string `bson:"CountryName"`
+	} `bson:"Country"`
 }
 
 type Markdown struct {

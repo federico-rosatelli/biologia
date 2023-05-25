@@ -644,7 +644,30 @@ def productsTable():
         complete_collection.update_one({"ScientificName":name},{"$push":{"Products":insertComplete}})
 
 
-
+def countryTable():
+    nucleo_collection = db["nucleotide_data"]
+    complete_collection = db["table_complete"]
+    basic_collection = db["table_basic"]
+    filter = {"GBSeq_feature-table.GBFeature_key":"source","GBSeq_feature-table.GBFeature_quals.GBQualifier_name": "country"}
+    proj = {"GBSeq_feature-table":1}
+    all_data = nucleo_collection.find(filter,proj)
+    for data in all_data:
+        taxId = ""
+        country = ""
+        for features in data["GBSeq_feature-table"]:
+            if features["GBFeature_key"] == "source":
+                for quals in features["GBFeature_quals"]:
+                    if quals["GBQualifier_name"] == "db_xref":
+                        taxId = quals["GBQualifier_value"].split(":")[1]
+                    if quals["GBQualifier_name"] == "country":
+                        country = quals["GBQualifier_value"]
+        
+        inserBasic = {
+            "CountryName":country
+        }
+        print(taxId,country)
+        basic_collection.update_one({"TaxId":taxId},{"$push":{"Country":inserBasic}})
+        complete_collection.update_one({"TaxId":taxId},{"$push":{"Country":inserBasic}})
 
 
 
