@@ -687,4 +687,5 @@ def main(args:dict) -> None:
     #proteinFind()
     #newCollectionBene()
     #productsTable()
+    countryTable()
     return
