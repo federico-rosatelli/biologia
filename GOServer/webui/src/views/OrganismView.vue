@@ -74,8 +74,14 @@ export default {
 
 <template>
 <!--TABELLA -->
-    <div>
-        Go to {{ this.response.ScientificName }}<a v-if="otherRouterLink" :href="otherRouterLink"> {{this.$route.path.split('/').pop() == 'nucleotides' ? '/proteins': '/nucleotides'}} </a>
+    <div class="TitlePage">
+        {{this.$route.path.split('/').pop() == 'nucleotides' ? 'Nucleotide': 'Protein'}} 
+    </div>
+    <div class="infoPage">
+        of {{ this.response.ScientificName }}
+    </div>
+    <div class="otherLink">
+        Looking for {{this.$route.path.split('/').pop() == 'nucleotides' ? 'proteins': 'nucleotides'}} ? Go to <a v-if="otherRouterLink" :href="otherRouterLink">{{ this.response.ScientificName }} {{this.$route.path.split('/').pop() == 'nucleotides' ? '/proteins': '/nucleotides'}} </a>
     </div>
     <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
     <div v-if="this.dataArray">
@@ -169,12 +175,54 @@ export default {
                 </div>
             </div>
         </div>
+        <div v-if="this.response.Country && this.response.Country.length > 0">
+            <div class="title-down">
+                Country
+            </div>
+            <div style="display: flex;">
+                <div class="product">
+                    <div v-for="prod in this.response.Country" style="display: flex;">
+                        <div class="clickable">
+                            <h2>
+                                <a :href="'https://www.google.com/maps/place/'+prod.CountryName+'/'" target=”_blank”>
+                                    {{ prod.CountryName }}
+                                </a>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="popup-clip">
+                    <span class="popuptext-clip" id="myPopup-clip">Product Copied to ClipBoard!</span>
+                </div>
+            </div>
+        </div>
     </div>
     
 
 </template>
 
 <style>
+.TitlePage {
+    font-size: 38px;
+    color: orange;
+    max-width: 100px;
+}
+.TitlePage:hover, .TitlePage:focus, .TitlePage:active { 
+    /* color:#ffcc00;  */
+    text-shadow: 0 2px 3px #000;
+    
+}
+
+.infoPage{
+    padding-top: 5px;
+    font-size: 25px;
+}
+
+.otherLink{
+    padding-top: 10px;
+    font-size: 15px;
+}
+
 .clickable:hover, .clickable:focus, .clickable:active { color:#ffcc00; }
 
 .block-organism {
