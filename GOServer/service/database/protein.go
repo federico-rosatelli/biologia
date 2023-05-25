@@ -17,12 +17,13 @@ func (db *appDB) FindProteinsId(taxonId string) (str.TableBasic, errorM.Errors) 
 	if errM != nil {
 		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
 	}
-	proj = options.FindOne().SetProjection(bson.D{{Key: "Products", Value: 1}})
+	proj = options.FindOne().SetProjection(bson.D{{Key: "Products", Value: 1}, {Key: "Country", Value: 1}})
 	errM = db.table_complete.FindOne(context.TODO(), bson.D{{Key: "TaxId", Value: taxonId}}, proj).Decode(&nCompl)
 	if errM != nil {
 		return nBasic, errorM.NewError(errM.Error(), errorM.StatusBadRequest)
 	}
 	nBasic.Products = nCompl.Products
+	nBasic.Country = nCompl.Country
 	return nBasic, nil
 }
 
