@@ -30,7 +30,7 @@ import sys
 # Init and Declaration of Global variables
 ########################################################################################
 
-Global = ""
+Global = ""                                                 # Deprecated?
 client = MongoClient('localhost', 27017)
 db = client["Biologia"]
 collection_taxonomy_data = db["taxonomy_data"]
@@ -250,6 +250,7 @@ class Alignment:
         return 0
 
 
+#FOR TESTING PURPOSE:
 # a = Alignment("AGTCCCTGATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTCCCTGATTT",
 # "TTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGT",show_table=True)
 # a.localAlignment(save_table=True)
@@ -521,7 +522,7 @@ class Database:
     
 
     def alignmentSeq(self, f1_key:str, f2_key:str) -> str:
-        '''Use Smith-Waterman Alignment to make comparison between sequences'''
+        '''Function that use Smith-Waterman Alignment to make comparison between sequences'''
         db = self.client["Biologia"]
         collection_taxonomy_data = db["genetic_data"]
         collection_convert = db["hex_to_seq"]
@@ -562,7 +563,7 @@ class Database:
     
 
     def saveFileSeq(self, name:str, seq1:str, seq2:str) -> None:
-        '''Test'''
+        '''Function used in alignment() that given in input two sequence FASTA return a file with those sequences'''
         seq1_fasta = ""
         for i in range(len(seq1)):
             if i%100 == 0 and i != 0:
@@ -581,8 +582,8 @@ class Database:
             wr.write(seq1_fasta+"\n\n//\n\n"+seq2_fasta)
     
 
-    def alignment(self,fileIn,fileOut) -> None:
-        '''Test'''
+    def alignment(self, fileIn, fileOut) -> None:
+        '''[DEPRECATED] Function that given a file sequence make an alignement'''
         rd = open(fileIn).readlines()
         for i in range(len(rd)):
             for j in range(i+1,len(rd)):
@@ -617,13 +618,13 @@ class Database:
 
     
     def save_on_json(self, fileName:str="dataSource.json") -> None:
-        '''Save the data to a file in .json format'''
+        '''Save data to a file in .json format'''
         with open(f"{Global.JSON['Path']}{fileName}","w") as js:
             json.dump(self.dataSource,js,indent=4)
     
 
     def isAlgae(self,dataSource,rewrite:bool=False) -> tuple:
-        ''' This method compares with the data present in the db
+        ''' [DEPRECATED] This method compares with the data present in the db
         local and among the csv records in database/Csv, fetched
         from the European Database for accessibility reasons.
         Datasource is inserted in the path data/sourcejson/struct.txt ed
@@ -660,7 +661,7 @@ class Database:
 
 
     def isMicroAlgae(self,dataSource) -> tuple:
-        ''' This method compares with the data present in the db
+        ''' [DEPRECATED] This method compares with the data present in the db
         local and among the csv records in database/Csv, fetched
         from the European Database for accessibility reasons.
         Datasource is inserted in the path data/sourcejson/struct.txt ed
@@ -701,11 +702,6 @@ class Database:
             PrintWarning(5).stdout(f"Error searching {name}: Organism Not Found")
             return None, None
         cds = []
-
-
-    def file_exists(self)-> bool:
-        '''Test'''
-        return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
 
     
     def proteinFind(self, id) -> dict:
@@ -861,6 +857,10 @@ class Database:
 
 ########################################################################################
 
+def file_exists(self)-> bool:
+    '''check file existence in path'''
+    return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
+
 
 def csvWrite(dataResult):
     '''Custom function that, using csv library, return a file with field of interests
@@ -944,10 +944,10 @@ def saveTable(table, trace=[]):
     return
 
 
-# NOT-DEPRECATED: SpecieProductMaker.py
-
 def SpecieProductMaker():
-    '''TEST'''
+    '''Function that scan local DB in collection taxonomy_data and generate a file
+    lists/SpecieProduct.csv that contains all product (proteins, transcriptomes,
+    genes etc.) listed per species.'''
     filter = {"Features.product": {"$exists": True}}
     projection= {"_id":0, "Features.organism": 1, "Features.product": 1}
     dataResult = collection_taxonomy_data.find(filter, projection)
@@ -970,8 +970,9 @@ def SpecieProductMaker():
     proj = {"GBSeq_feature-table":1,"GBSeq_organism":1}
     dataResult = collection_nucleotide_data.find(filter, proj)
 
+
     def jsonList():
-        '''TEST'''
+        '''Inner function (not used) that create a json file from the precedent processed data'''
         tot_data = {}
         for dataN in dataResult:
             print(dataN["GBSeq_organism"])
