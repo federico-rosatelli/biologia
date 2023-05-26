@@ -29,15 +29,41 @@ import sys
 # Init and Declaration of Global variables
 ########################################################################################
 
-CLUSTER = "localhost:27017"
 client = MongoClient('localhost', 27017)
 db = client["Biologia"]
 collection_data = db["taxonomy_data"]
+collection_data2 = db["nucleotide_data"]
 new_collection = db["taxonomy_tree"]
+new_collection2 = db["table_basic"]
 ignore_names = ["environmental samples"]                    # taxonomy ID to be avoided in collection_data
 Entrez.api_key = "cc030996838fc52dd1a2653fad76bf5fe408"
 Entrez.email = ""
 pattern = r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?"            # pattern passed for checking email format purpose
+
+
+CLUSTER = "localhost:27017"
+WEBSOURCE = {
+    "Algae":{
+        "Web":"https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt",
+        "File":"data/databaseCsv/algaeDatabase.csv"
+    },
+    "MicroAlgae":{
+        "Web":"",
+        "File":"data/databaseCsv/microAlgaeDatabase.csv"
+    }
+}
+SQL = {
+    "Init":"data/DBs/init.sql",
+    "Store":"Biologia.db"
+}
+JSON = {
+    "Path":"data/src/",
+    "Type":"JSONFile"
+}
+ALIGNMENT = {
+    "Path":"data/src/alignments/",
+    "Type":"TXTFile"
+}
 
 
 
@@ -136,32 +162,85 @@ class  PrintWarning:
             self.error = self.error[1:]
         print(bcolors.BOLD + f"{plus}[{ctime()}] " + bcolors.ENDC + self.color + self.error +  bcolors.ENDC)
 
+########################################################################################
 
 
-#################################################################################
-# Output files methods (mainly .csv)
-#################################################################################
+def csvWrite(dataResult):
+    '''Custom function that, using csv library, return a file with field of interests
+    from a given list of data, parsed as NCBI Json structure'''
+    tot_data = []
+    num = []
+    for dataN in dataResult:
+        print(dataN["GBSeq_organism"])
+        for data in dataN["GBSeq_feature-table"]:
+            if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
+                for prod in data["GBFeature_quals"]:
+                    if prod["GBQualifier_name"] == "product":
+                        number = 1
+                        if [prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()] in tot_data:
+                            iii = tot_data.index([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
+                            num[iii] = num[iii]+1
+                        else:
+                            tot_data.append([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
+                            num.append(number)
+        print(len(tot_data))
+    tot_tot = []
+    for i in range(len(tot_data)):
+        tot_tot.append(tot_data[i]+[num[i]])
+    with open('SpecieProduct.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile,delimiter="|")
+        writer.writerows(tot_tot)
 
-def productsTable():
-    '''Function that take data from lists/SpecieProduct.csv and parse
-    new collections (table_complete and table_basic) with those datas
-    [Legacy procedure]'''
-    products = open("./lists/SpecieProduct.csv").readlines()
-    complete_collection = db["table_complete"]
-    basic_collection = db["table_basic"]
-    for i in range(len(products)):
-        splt = products[i].split("|")
-        product,name,qua = splt[0],splt[1].capitalize(),splt[2].strip()
-        print(i,name)
-        inserBasic = {
-            "ProductName":product
-        }
-        insertComplete = {
-            "ProductName":product,
-            "QtyProduct":qua
-        }
-        basic_collection.update_one({"ScientificName":name},{"$push":{"Products":inserBasic}})
-        complete_collection.update_one({"ScientificName":name},{"$push":{"Products":insertComplete}})
+
+
+def printTable(table, gene, trace=[]):
+    #print([i for i in range(len(table[0]))])
+    indx = "  "
+    for i in range(trace[len(trace)-1][1],trace[len(trace)-1][1]+10):
+        indx += gene[1][i]+" "*3
+    print(indx)
+    print('_'*10*4)
+    for i in range(trace[len(trace)-1][0],trace[len(trace)-1][0]+10):
+        print("| ",end="")
+        for j in range(trace[len(trace)-1][1],trace[len(trace)-1][1]+10):
+            #print(table[i][j])
+            if (i,j) in trace:
+                print(bcolors.OKGREEN+str(table[i][j])+bcolors.ENDC+" "*(2-len(str(table[i][j]))),end="| ")
+            else:
+                print(str(table[i][j])+" "*(2-len(str(table[i][j]))),end="| ")
+        if i != 0:
+            print(gene[0][i])
+        else:
+            print("")
+    print('\n')
+
+
+def saveTable(table, trace=[]):
+    if len(table)<40 or len(table[0])<40:
+        return
+    tableCopy = []
+    for i in range(10,40):
+        tbCp = []
+        for j in range(10,40):
+            tbCp.append(table[i][j])
+        tableCopy.append(tbCp)
+    color = [["w" for j in range(len(tableCopy[0]))]for i in range(len(tableCopy))]
+    for i in range(len(tableCopy)):
+        for j in range(len(tableCopy[i])):
+            if (i+10,j+10) in trace:
+                color[i][j] = "#56b5fd"
+    # for i in range(10,20):
+    #     color[trace[len(trace)-i-1][0]][trace[len(trace)-i-1][1]] = "#56b5fd"
+    
+    fig,ax = plt.subplots()
+    fig.patch.set_visible(False)
+    ax.axis('off')
+    ax.axis('tight')
+    df = pd.DataFrame(tableCopy)
+    ax.table(cellText=df.values,cellColours=color,colLabels=df.columns,loc='center')
+    #fig.tight_layout()
+    plt.savefig('table.png',bbox_inches='tight')
+    #plt.show()
 
 
 
@@ -171,7 +250,7 @@ def productsTable():
 
 def ncbiSearchNucleo(name:str) ->list:
     '''Function that submit queries with given a ScientificName to NCBI platform, section Nucleotide.
-    Return the data read'''
+    Return data read'''
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
     # read = Entrez.read(handle)
     handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
@@ -188,7 +267,7 @@ def ncbiSearchNucleo(name:str) ->list:
 
 def ncbiSearchTaxon(name:str) -> list:
     '''Function that submit queries with given TaxonomyIDs to NCBI platform, section Taxonomy.
-    Return the data read'''
+    Return data read'''
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
     # read = Entrez.read(handle)
     handle = Entrez.esearch(db='taxonomy', term=name, rettype='gb', retmode='text', retmax=10000)
@@ -218,11 +297,6 @@ def finderTaxon(name):
     except Exception as e:
         return
 
-
-
-#################################################################################
-# Offline Query methods (MongoDB)
-#################################################################################
 
 def genomeRetrieve():
     '''Function that search on NCBI, for all occurrencies in taxonomy_data, if
@@ -321,96 +395,6 @@ def genomeRetrieve():
         #     print(f'{file}')
 
 
-def searchForRank(name = '', rank = ''):
-    '''Function that search for input with a mongo-query in local DB'''
-    filter = {}
-    if (name != '' and rank != ''):
-        filter = {name, rank}
-    elif (name != ''):
-        filter = {name}
-    elif (rank != ''):
-        filter = {rank}
-    dataResult = collection_data.find(filter)
-    return
-
-
-def finderTaxonFromFile(fn):
-    '''Function that, given a file path in input, scan for species and datas.
-    File has to be formatted like those present in path ./data./databaseCsv'''
-    names = []
-    rd = open(fn).readlines()
-    for i in range(len(rd)):
-        data = rd[i].split(";")
-        name = data[3].split(" ")[0]
-        if "_" in name:
-            name = name.split("_")[0]
-        if name != "" and name not in names:
-            finderTaxon(name)
-        names.append(name)
-
-
-def unwrappingSpecies():
-    '''TESTING'''
-    finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
-    taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
-    db.taxonomy_data.deleteMany({"Lineage":{"$regex":"environmental samples"}})
-    allBomb = collection_data.find({},{"ScientificName":1,"_id":0})
-    listTuple = [[i["ScientificName"]] for i in allBomb]
-    with open('OrganismList.csv', 'w') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerows(listTuple)
-    return
-
-
-def taxTreeMaker():
-    '''Function that retrieves datas from collection_data of MongoDB and
-    create a new collection, taxonomy_tree, that contain the Lineage for
-    each specie'''
-    results = collection_data.find({})
-    iter = 0
-    for res in results:
-        print(iter)
-        iter += 1
-        # if new_collection.find_one({"TaxId":res["ParentTaxId"]}):
-        #     dataPush = {
-        #             "TaxId":LineageEx["TaxId"],
-        #             "Rank":LineageEx["Rank"],
-        #             "ScientificName":LineageEx["ScientificName"],
-        #             "SubClasses":[]
-        #         }
-        #     new_collection.insert_one(dataPush)
-        for i in range(1, len(res["LineageEx"])):
-            #for LineageEx in res["LineageEx"]:
-            LineageEx = res["LineageEx"][i]
-            if not new_collection.find_one({"TaxId":LineageEx["TaxId"]}):
-                dataPush = {
-                    "TaxId":LineageEx["TaxId"],
-                    "Rank":LineageEx["Rank"],
-                    "ScientificName":LineageEx["ScientificName"],
-                    "SubClasses":[]
-                }
-                new_collection.insert_one(dataPush)
-            if (i == 1):
-                continue
-            LineageExPrev = res["LineageEx"][i-1]
-
-            if new_collection.find_one({"TaxId":LineageExPrev["TaxId"], "SubClasses":{"$elemMatch":{"TaxId":LineageEx["TaxId"]}}}):
-                continue
-            newDataPush = {
-                    "TaxId":LineageEx["TaxId"],
-                    "Rank":LineageEx["Rank"],
-                    "ScientificName":LineageEx["ScientificName"],
-                    }
-            new_collection.update_one({"TaxId":LineageExPrev["TaxId"]},{"$push":{"SubClasses":newDataPush}})
-        if not new_collection.find_one({"TaxId":res["ParentTaxId"], "SubClasses":{"$elemMatch":{"TaxId":res["TaxId"]}}}):
-            newDataPush = {
-                    "TaxId":res["TaxId"],
-                    "Rank":res["Rank"],
-                    "ScientificName":res["ScientificName"],
-                    }
-            new_collection.update_one({"TaxId":res["ParentTaxId"]},{"$push":{"SubClasses":newDataPush}})
-
-
 def nucleoImport():
     '''TESTING'''
     taxon_collection = db["taxonomy_data"]
@@ -453,23 +437,6 @@ def efetchTaxon(id):
     handle = Entrez.efetch(db="taxonomy", id=id, rettype='gb',retmode="xml")
     read = Entrez.read(handle)
     return read
-
-
-def genusList():
-    '''TESTING'''
-    import re
-    new_collection = db["taxonomy_tree"]
-    genus = new_collection.find({"Rank":"genus"})
-    datas = [["Scientific Name","Taxon Id","Division"]]
-    for gene in genus:
-        print(gene["ScientificName"])
-        taxons = efetchTaxon(gene["TaxId"])
-        for taxon in taxons:
-            if taxon["Division"] != "Bacteria":
-                datas.append([taxon["ScientificName"],taxon["TaxId"],taxon["Division"]])
-    with open('GenusList.csv', 'w') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerows(datas)
 
 
 def testNucleo():
@@ -627,55 +594,52 @@ def nucleoResult():
     return
 
 
-def parseToBasic() -> list:
-    '''TESTING'''
-    taxon_collection = db["taxonomy_data"]
-    nucleo_collection = db["nucleotide_data"]
-    tableBasic_collection = db["table_basic"]
-    protein_collection = db["protein_data"]
-    dataRank = taxon_collection.find({},{"ScientificName":1,"TaxId":1,"_id":0})
-    control = 0
-    for data in dataRank:
-        id = data["TaxId"]
-        print(control,data["ScientificName"])
-        finder = {"GBSeq_feature-table.GBFeature_quals.GBQualifier_value":f"taxon:{id}"}
-        totNucl = nucleo_collection.find(finder,{"GBSeq_locus":1, "_id":0})
-        totNucl = list(totNucl)
-        print("Tot Nucleotides",len(totNucl))
-        finder = {"GBSeq_feature-table.GBFeature_quals.GBQualifier_value":f"taxon:{id}"}
-        proteins = protein_collection.find(finder,{"GBSeq_locus":1,"_id":0})
-        proteins = list(proteins)
-        print("Tot Proteins",len(proteins))
-        inserter = {
-            "ScientificName":data["ScientificName"],
-            "TaxId":data["TaxId"],
-            "Nucleotides":totNucl,
-            "Proteins":proteins
-        }
-        tableBasic_collection.insert_one(inserter)
-        control += 1   
-    
-    # per ogni ScientificName in Nucleotide:
-        # popola "nucleotide_basic" con
-            # GBSeq_locus
+def finderTaxonFromFile(fn):
+    '''Function that, given a file path in input, scan for species and datas.
+    File has to be formatted like those present in path ./data./databaseCsv'''
+    names = []
+    rd = open(fn).readlines()
+    for i in range(len(rd)):
+        data = rd[i].split(";")
+        name = data[3].split(" ")[0]
+        if "_" in name:
+            name = name.split("_")[0]
+        if name != "" and name not in names:
+            finderTaxon(name)
+        names.append(name)
+
+
+def unwrappingSpecies():
+    '''Function that, using finderTaxonFromFile scan, nake a new OrganismList.csv file
+    that contain contents parsed and cleaned in a readable format for humans.'''
+    finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
+    taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
+    collection_data.delete_many({"Lineage":{"$regex":"environmental samples"}})
+    parsed_file = collection_data.find({},{"ScientificName":1,"_id":0})
+    listTuple = [[i["ScientificName"]] for i in parsed_file]
+    with open('./lists/OrganismList.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(listTuple)
     return
 
 
-def fattoBene():
+def genusList():
     '''TESTING'''
-    tt = db["nucleotide_basic"]
-    tt1 = db["nucleotide_basic1"]
-    tot = tt.find({},{"_id":0})
-    for t in tot:
-        for k in t:
-            print(k)
-            var = {
-                "ScientificName":k,
-                "GBSeq_locus":t[k]
-            }
-            tt1.insert_one(var)
+    import re
+    new_collection = db["taxonomy_tree"]
+    genus = new_collection.find({"Rank":"genus"})
+    datas = [["Scientific Name","Taxon Id","Division"]]
+    for gene in genus:
+        print(gene["ScientificName"])
+        taxons = efetchTaxon(gene["TaxId"])
+        for taxon in taxons:
+            if taxon["Division"] != "Bacteria":
+                datas.append([taxon["ScientificName"],taxon["TaxId"],taxon["Division"]])
+    with open('GenusList.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(datas)
 
-        
+
 def ncbiSearchNucleo123(name:str) ->bool:
     '''TESTING'''
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
@@ -729,6 +693,145 @@ def proteinFind():
             print(e)
 
 
+
+#################################################################################
+# Offline Query methods (MongoDB)
+#################################################################################
+
+
+def productsTable():
+    '''Function that take data from lists/SpecieProduct.csv and parse
+    new collections (table_complete and table_basic) with those datas
+    [Legacy procedure]'''
+    products = open("./lists/SpecieProduct.csv").readlines()
+    complete_collection = db["table_complete"]
+    basic_collection = db["table_basic"]
+    for i in range(len(products)):
+        splt = products[i].split("|")
+        product,name,qua = splt[0],splt[1].capitalize(),splt[2].strip()
+        print(i,name)
+        inserBasic = {
+            "ProductName":product
+        }
+        insertComplete = {
+            "ProductName":product,
+            "QtyProduct":qua
+        }
+        basic_collection.update_one({"ScientificName":name},{"$push":{"Products":inserBasic}})
+        complete_collection.update_one({"ScientificName":name},{"$push":{"Products":insertComplete}})
+
+
+def searchForRank(name = '', rank = ''):
+    '''Function that search for input with a mongo-query in local DB'''
+    filter = {}
+    if (name != '' and rank != ''):
+        filter = {name, rank}
+    elif (name != ''):
+        filter = {name}
+    elif (rank != ''):
+        filter = {rank}
+    dataResult = collection_data.find(filter)
+    return
+
+
+def taxTreeMaker():
+    '''Function that retrieves datas from collection_data of MongoDB and
+    create a new collection, taxonomy_tree, that contain the Lineage for
+    each specie'''
+    results = collection_data.find({})
+    iter = 0
+    for res in results:
+        print(iter)
+        iter += 1
+        # if new_collection.find_one({"TaxId":res["ParentTaxId"]}):
+        #     dataPush = {
+        #             "TaxId":LineageEx["TaxId"],
+        #             "Rank":LineageEx["Rank"],
+        #             "ScientificName":LineageEx["ScientificName"],
+        #             "SubClasses":[]
+        #         }
+        #     new_collection.insert_one(dataPush)
+        for i in range(1, len(res["LineageEx"])):
+            #for LineageEx in res["LineageEx"]:
+            LineageEx = res["LineageEx"][i]
+            if not new_collection.find_one({"TaxId":LineageEx["TaxId"]}):
+                dataPush = {
+                    "TaxId":LineageEx["TaxId"],
+                    "Rank":LineageEx["Rank"],
+                    "ScientificName":LineageEx["ScientificName"],
+                    "SubClasses":[]
+                }
+                new_collection.insert_one(dataPush)
+            if (i == 1):
+                continue
+            LineageExPrev = res["LineageEx"][i-1]
+
+            if new_collection.find_one({"TaxId":LineageExPrev["TaxId"], "SubClasses":{"$elemMatch":{"TaxId":LineageEx["TaxId"]}}}):
+                continue
+            newDataPush = {
+                    "TaxId":LineageEx["TaxId"],
+                    "Rank":LineageEx["Rank"],
+                    "ScientificName":LineageEx["ScientificName"],
+                    }
+            new_collection.update_one({"TaxId":LineageExPrev["TaxId"]},{"$push":{"SubClasses":newDataPush}})
+        if not new_collection.find_one({"TaxId":res["ParentTaxId"], "SubClasses":{"$elemMatch":{"TaxId":res["TaxId"]}}}):
+            newDataPush = {
+                    "TaxId":res["TaxId"],
+                    "Rank":res["Rank"],
+                    "ScientificName":res["ScientificName"],
+                    }
+            new_collection.update_one({"TaxId":res["ParentTaxId"]},{"$push":{"SubClasses":newDataPush}})
+
+
+def parseToBasic() -> list:
+    '''TESTING'''
+    taxon_collection = db["taxonomy_data"]
+    nucleo_collection = db["nucleotide_data"]
+    tableBasic_collection = db["table_basic"]
+    protein_collection = db["protein_data"]
+    dataRank = taxon_collection.find({},{"ScientificName":1,"TaxId":1,"_id":0})
+    control = 0
+    for data in dataRank:
+        id = data["TaxId"]
+        print(control,data["ScientificName"])
+        finder = {"GBSeq_feature-table.GBFeature_quals.GBQualifier_value":f"taxon:{id}"}
+        totNucl = nucleo_collection.find(finder,{"GBSeq_locus":1, "_id":0})
+        totNucl = list(totNucl)
+        print("Tot Nucleotides",len(totNucl))
+        finder = {"GBSeq_feature-table.GBFeature_quals.GBQualifier_value":f"taxon:{id}"}
+        proteins = protein_collection.find(finder,{"GBSeq_locus":1,"_id":0})
+        proteins = list(proteins)
+        print("Tot Proteins",len(proteins))
+        inserter = {
+            "ScientificName":data["ScientificName"],
+            "TaxId":data["TaxId"],
+            "Nucleotides":totNucl,
+            "Proteins":proteins
+        }
+        tableBasic_collection.insert_one(inserter)
+        control += 1   
+    
+    # per ogni ScientificName in Nucleotide:
+        # popola "nucleotide_basic" con
+            # GBSeq_locus
+    return
+
+
+def fattoBene():
+    '''TESTING'''
+    tt = db["nucleotide_basic"]
+    tt1 = db["nucleotide_basic1"]
+    tot = tt.find({},{"_id":0})
+    for t in tot:
+        for k in t:
+            print(k)
+            var = {
+                "ScientificName":k,
+                "GBSeq_locus":t[k]
+            }
+            tt1.insert_one(var)
+
+
 def newCollectionBene():
     '''TESTING'''
     new_collection = db["table_complete1"]
@@ -767,13 +870,171 @@ def newCollectionBene():
             #     new_collection.update_one({"TaxId":data["TaxId"]},{"$push":{"Proteins":n}})
 
 
+def updateByGenomes(datasTaxon=''):
+    '''Function that take a list where FNA files were found on NCBI platform
+    through genomeRetrieve() and insert those link on local DB. It can be
+    speciefied a new list in input'''
+    if datasTaxon == '':
+        datasTaxon = [(2961,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2961",True,True,False),
+            (145388,"https://www.ncbi.nlm.nih.gov/genome/?term=txid145388",True,True,True),
+            (72520,"https://www.ncbi.nlm.nih.gov/genome/?term=txid72520",True,True,True),
+            (70448,"https://www.ncbi.nlm.nih.gov/genome/?term=txid70448",True,True,True),
+            (44056,"https://www.ncbi.nlm.nih.gov/genome/?term=txid44056",True,True,True),
+            (41880,"https://www.ncbi.nlm.nih.gov/genome/?term=txid41880",True,True,False),
+            (41875,"https://www.ncbi.nlm.nih.gov/genome/?term=txid41875",True,True,True),
+            (36894,"https://www.ncbi.nlm.nih.gov/genome/?term=txid36894",True,True,False),
+            (35677,"https://www.ncbi.nlm.nih.gov/genome/?term=txid35677",True,True,True),
+            (3077,"https://www.ncbi.nlm.nih.gov/genome/?term=txid3077",True,True,True),
+            (1764295,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1764295",True,True,True),
+            (1650286,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1650286",True,True,True),
+            (1486918,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1486918",True,True,False),
+            (1093141,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1093141",True,True,True),
+            (574566,"https://www.ncbi.nlm.nih.gov/genome/?term=txid574566",True,True,True),
+            (554065,"https://www.ncbi.nlm.nih.gov/genome/?term=txid554065",True,True,True),
+            (426638,"https://www.ncbi.nlm.nih.gov/genome/?term=txid426638",True,True,True),
+            (265525,"https://www.ncbi.nlm.nih.gov/genome/?term=txid265525",True,True,False),
+            (257627,"https://www.ncbi.nlm.nih.gov/genome/?term=txid257627",True,True,False),
+            (2009235,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2009235",True,True,False),
+            (2730355,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2730355",True,True,False)]
+    for data in datasTaxon:
+        dataPush = {
+            "Link":data[1],
+            "GBFF":data[2],
+            "FNA":data[3],
+            "GFF":data[4]
+        }
+        new_collection2.update_one({"TaxId":str(data[0])},{"$push":{"Genomes":dataPush}})
+    return
 
 
 
 
 
 
-#DEPRECATED: finder.py
+
+
+
+# NOT-DEPRECATED: smith_waterman.py
+
+
+class Alignment:
+
+    def __init__(self, *seqs:str, gap:int=1, show_table:bool=False) -> None:
+        if len(seqs)<2:
+            print(bcolors.FAIL+f"MinMaxError: input len for sequences must be >= 2, got {len(seqs)}"+bcolors.ENDC)
+            return
+        self.seqs = [Seq(i) for i in seqs]
+        self.seq1 = seqs[0]
+        self.seq2 = seqs[1]
+        self.gap = gap
+        self.show_table = show_table
+    
+
+    def __str__(self) -> str:
+        return '\n'.join(self.seqs)
+
+
+    def __len__(self) -> int:
+        x = 1
+        for i in self.seqs:
+            x *= len(i)
+        return x
+    
+
+    def __call__(self, seq:str) -> list:
+        self.seqs.append(seq)
+        return self.seqs
+
+
+    def createScoreMatrix(self, lnSeq1:int, lnSeq2:int) -> tuple:
+        score_matrix = [[0 for _ in range(lnSeq2 + 1)] for _ in range(lnSeq1 + 1)]
+
+        max_score = 0
+        max_index = (0,0)
+        for i in range(1, lnSeq1 + 1):
+            for j in range(1, lnSeq2 + 1):
+                score = 1 if self.seq1[i-1] == self.seq2[j-1] else -1
+
+                score_matrix[i][j] = max(
+                    0,
+                    score_matrix[i-1][j-1] + score,
+                    score_matrix[i-1][j] - self.gap,
+                    score_matrix[i][j-1] - self.gap
+                )
+
+                if score_matrix[i][j] > max_score:
+                    max_score = score_matrix[i][j]
+                    max_index = (i, j)
+        return score_matrix,max_index
+
+
+    def localAlignment(self, save_table:bool=False) -> tuple:
+        if len(self.seqs)>2:
+            print(bcolors.WARN_BOX+f"Warning! Only 2 arguments were expected, but got {len(self.seqs)}.\n\t-The algorithm will use only the first 2 sequences..."+bcolors.ENDC)
+        aligned_seq1 = ""
+        aligned_seq2 = ""
+
+        score_matrix, max_index_score_matrix = self.createScoreMatrix(len(self.seq1),len(self.seq2))
+
+        i, j = max_index_score_matrix
+        traceback = []
+        print(f"Table length. First sequence:{len(self.seq1)}, Second sequence:{len(self.seq2)}")
+        print(f"Max term: {score_matrix[i][j]}; in index: {max_index_score_matrix}")
+        f1 = 0
+        while score_matrix[i][j] != 0:
+            traceback.append((i,j))
+            if score_matrix[i-1][j-1] >= score_matrix[i-1][j] and score_matrix[i-1][j-1] >= score_matrix[i][j-1]:
+                aligned_seq1 = self.seq1[i-1] + aligned_seq1
+                aligned_seq2 = self.seq2[j-1] + aligned_seq2
+                i, j = i-1, j-1
+                f1 += 1
+            elif score_matrix[i-1][j] >= score_matrix[i-1][j-1] and score_matrix[i-1][j] >= score_matrix[i][j-1]:
+                aligned_seq1 = self.seq1[i-1] + aligned_seq1
+                aligned_seq2 = '-' + aligned_seq2
+                i -= 1
+            else:
+                aligned_seq1 = '-' + aligned_seq1
+                aligned_seq2 = self.seq2[j-1] + aligned_seq2
+                j -= 1
+        
+        if self.show_table:
+            printTable(score_matrix,(self.seq1,self.seq2),trace=traceback)
+            if save_table:
+                saveTable(score_matrix,trace=traceback)
+        print(f"{(f1/len(aligned_seq1))*100}% of alignment")
+        return aligned_seq1, aligned_seq2
+    
+
+    def globalAlignment(self):
+        return 0
+
+
+# a = Alignment("AGTCCCTGATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTCCCTGATTT",
+# "TTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGT",show_table=True)
+# a.localAlignment(save_table=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # # # # # # Questa classe comprende al suo interno i metodi di interrogazione del database
 # # # # # # attraverso l'interfaccia accessibile via web all'indirizzo localhost:3000.
@@ -791,38 +1052,6 @@ def newCollectionBene():
 # # # # #     for i in dataFind:
 # # # # #         print(i)
 
-
-# # # # # PER ORA SONO SOLO COPIE DI findTaxon
-
-# # # # # def findGenome(key):
-# # # # #     client = MongoClient('localhost', 27017)
-# # # # #     db = client["Biologia"]
-# # # # #     collection_taxon = db["taxonomy_data"]
-# # # # #     rgx = re.compile(f'{key}', re.IGNORECASE)
-# # # # #     info = {"Lineage":rgx}
-# # # # #     dataFind = collection_taxon.find(info)
-# # # # #     for i in dataFind:
-# # # # #         print(i)
-
-# # # # # def findProtein(key):
-# # # # #     client = MongoClient('localhost', 27017)
-# # # # #     db = client["Biologia"]
-# # # # #     collection_taxon = db["taxonomy_data"]
-# # # # #     rgx = re.compile(f'{key}', re.IGNORECASE)
-# # # # #     info = {"Lineage":rgx}
-# # # # #     dataFind = collection_taxon.find(info)
-# # # # #     for i in dataFind:
-# # # # #         print(i)
-
-# # # # # def findProduct(key):
-# # # # #     client = MongoClient('localhost', 27017)
-# # # # #     db = client["Biologia"]
-# # # # #     collection_taxon = db["taxonomy_data"]
-# # # # #     rgx = re.compile(f'{key}', re.IGNORECASE)
-# # # # #     info = {"Lineage":rgx}
-# # # # #     dataFind = collection_taxon.find(info)
-# # # # #     for i in dataFind:
-# # # # #         print(i)
 
 # # # # # findTaxon("Eukaryota")
 
@@ -848,40 +1077,6 @@ def newCollectionBene():
 
 
 #DEPRECATED: genbank.py
-
-
-# # # # # #######################
-
-
-# # # # # class Global:
-# # # # #     '''Per l'accesso globale a costanti e risorse. I link qui preseti prelevano i dati direttamente
-# # # # #     dalle piattaforme web che forniscono i database contenenti i dati genomici.'''
-
-
-# # # # #     CLUSTER = "localhost:27017"
-# # # # #     WEBSOURCE = {
-# # # # #         "Algae":{
-# # # # #             "Web":"https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt",
-# # # # #             "File":"data/databaseCsv/algaeDatabase.csv"
-# # # # #         },
-# # # # #         "MicroAlgae":{
-# # # # #             "Web":"",
-# # # # #             "File":"data/databaseCsv/microAlgaeDatabase.csv"
-# # # # #         }
-# # # # #     }
-# # # # #     SQL = {
-# # # # #         "Init":"init.sql",
-# # # # #         "Store":"Biologia.db"
-# # # # #     }
-# # # # #     JSON = {
-# # # # #         "Path":"data/sourceJson/",
-# # # # #         "Type":"JSONFile"
-# # # # #     }
-# # # # #     ALIGNMENT = {
-# # # # #         "Path":"data/alignments/",
-# # # # #         "Type":"TXTFile"
-# # # # #     }
-
 
 
 # # # # # class Parsing(object):
@@ -1483,6 +1678,183 @@ def newCollectionBene():
 # # # # #                 #     PrintWarning(3).stdout(f"Genome ID:{id}")
 
 
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# DEPRECATED: jsonCreate.py
+
+
+# # # # # fileJ = "data/sourceJson/microAlgaeSource.json"
+
+# # # # # with open(fileJ) as jsr:
+# # # # #     data:list[str] = json.load(jsr)
+
+
+# # # # # dataFinal = {}
+
+# # # # # for d in data:
+# # # # #     if "sp." in d:
+# # # # #         splt = d.split("sp.")
+# # # # #         if not splt[0] in dataFinal:
+# # # # #             dataFinal[splt[0]] = []
+# # # # #         dataFinal[splt[0]].append(splt[1])
+# # # # #     else:
+# # # # #         dataFinal[d] = []
+
+
+# # # # # with open("uniqueGeneMicroAlgae.json","w") as jsw:
+# # # # #     json.dump(dataFinal,jsw,indent=4)
+
+
+
+# # # # CLUSTER = "localhost:27017"
+# # # # client = MongoClient('localhost', 27017)
+# # # # db = client["Biologia"]
+# # # # collection_data = db["protein_data"]
+
+# # # # filter = {}
+# # # # dataResult = collection_data.find(filter,{"Id":1})
+# # # # collection_data = db["genetic_data"]
+
+# # # # list_res = []
+
+
+# # # # for protein in dataResult:
+# # # #     filter = {"Features":{"$elemMatch":{"Type":"CDS","protein_id":protein["Id"]}}}
+# # # #     result = collection_data.find_one(filter)
+# # # #     if result:
+# # # #         list_res.append(protein["Id"])
+
+# # # # print(list_res)
+
+
+
+
+
+
+
+
+
+
+    
+
+# NOT-DEPRECATED: SpecieProductMaker.py
+
+filter = {"Features.product": {"$exists": True}}
+projection= {"_id":0, "Features.organism": 1, "Features.product": 1}
+dataResult = collection_data.find(filter, projection)
+list_res = list(dataResult)
+flat_data= []
+
+for diz in list_res:
+    organism=diz["Features"][0]["organism"]
+    indexProduct=1
+    while (diz["Features"][indexProduct]=={}):
+        indexProduct+=1
+    product=diz["Features"][indexProduct]["product"]
+    tupla=(organism, product)
+    flat_data.append(tupla)
+    continue
+
+with open('SpecieProduct.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+
+    for row in flat_data:
+        writer.writerow(row)
+
+filter = {"GBSeq_feature-table.GBFeature_key":"CDS","GBSeq_feature-table.GBFeature_quals.GBQualifier_name":"product"}
+proj = {"GBSeq_feature-table":1,"GBSeq_organism":1}
+
+dataResult = collection_data2.find(filter, proj)
+def jsonList():
+    tot_data = {}
+    for dataN in dataResult:
+        print(dataN["GBSeq_organism"])
+        if dataN["GBSeq_organism"] not in tot_data:
+            tot_data[dataN["GBSeq_organism"]] = []
+        for data in dataN["GBSeq_feature-table"]:
+            if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
+                for prod in data["GBFeature_quals"]:
+                    if prod["GBQualifier_name"] == "product" and (data["GBFeature_key"],prod["GBQualifier_value"]) not in tot_data[dataN["GBSeq_organism"]]:
+                        tot_data[dataN["GBSeq_organism"]].append((data["GBFeature_key"],prod["GBQualifier_value"]))
+        print(len(tot_data[dataN["GBSeq_organism"]]))
+
+    with open('Species.json', "w") as jswr:
+        json.dump(tot_data,jswr,indent=4)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+def main(args:dict) -> None:
+
+    # genus = collection_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
+    # """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
+    #datas = new_collection.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
+
+    # taxon = ncbiSearchTaxon("chlorella[next level]")
+    # with open("taxonMeta.json","w") as jsw:
+    #     json.dump(taxon,jsw,indent=4)
+    #print(taxon)
+    name = input('Please insert something to search of')
+    nb = input('Please insert email')
+    #unwrappingSpecies()
+    #taxTreeMaker()                 #previously named algo()
+    #searchForRank()                #previously named aglo()
+    #testNucleo()
+    #genomeRetrieve()               #previously named GFF()
+    #nucleoResult()
+    #genomeFind(name)
+    #parseToBasic()
+    #fattoBene() 
+    #proteinFind()
+    #newCollectionBene()
+    #productsTable()
+    #csvWrite(dataResult)
+    #updateByGenomes()
+    return
+
+
+
+
 
 # # # # # #######################
 # # # # # ######---MAIN---#######
@@ -1583,414 +1955,3 @@ def newCollectionBene():
 # # # # #                         help='ask for FASTA format')
 # # # # #     args = vars(parser.parse_args())
 # # # # #     main(args)
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# DEPRECATED: jsonCreate.py
-
-
-# # # # # fileJ = "data/sourceJson/microAlgaeSource.json"
-
-# # # # # with open(fileJ) as jsr:
-# # # # #     data:list[str] = json.load(jsr)
-
-
-# # # # # dataFinal = {}
-
-# # # # # for d in data:
-# # # # #     if "sp." in d:
-# # # # #         splt = d.split("sp.")
-# # # # #         if not splt[0] in dataFinal:
-# # # # #             dataFinal[splt[0]] = []
-# # # # #         dataFinal[splt[0]].append(splt[1])
-# # # # #     else:
-# # # # #         dataFinal[d] = []
-
-
-# # # # # with open("uniqueGeneMicroAlgae.json","w") as jsw:
-# # # # #     json.dump(dataFinal,jsw,indent=4)
-
-
-
-# # # # CLUSTER = "localhost:27017"
-# # # # client = MongoClient('localhost', 27017)
-# # # # db = client["Biologia"]
-# # # # collection_data = db["protein_data"]
-
-# # # # filter = {}
-# # # # dataResult = collection_data.find(filter,{"Id":1})
-# # # # collection_data = db["genetic_data"]
-
-# # # # list_res = []
-
-
-# # # # for protein in dataResult:
-# # # #     filter = {"Features":{"$elemMatch":{"Type":"CDS","protein_id":protein["Id"]}}}
-# # # #     result = collection_data.find_one(filter)
-# # # #     if result:
-# # # #         list_res.append(protein["Id"])
-
-# # # # print(list_res)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# NOT-DEPRECATED: SpicieProductMaker.py
-
-
-# # # # import json
-# # # # from pymongo import MongoClient
-# # # # import csv
-
-# # # # CLUSTER = "localhost:27017"
-# # # # client = MongoClient('localhost', 27017)
-# # # # db = client["Biologia"]
-# # # # collection_data = db["nucleotide_data"]
-
-# # # # # filter = {"Features.product": {"$exists": True}}
-# # # # # projection= {"_id":0, "Features.organism": 1, "Features.product": 1}
-# # # # # dataResult = collection_data.find(filter, projection)
-
-# # # # # list_res = list(dataResult)
-# # # # # flat_data= []
-# # # # # for diz in list_res:
-# # # # #     organism=diz["Features"][0]["organism"]
-# # # # #     indexProduct=1
-# # # # #     while (diz["Features"][indexProduct]=={}):
-# # # # #         indexProduct+=1
-# # # # #     product=diz["Features"][indexProduct]["product"]
-# # # # #     tupla=(organism, product)
-# # # # #     flat_data.append(tupla)
-# # # # #     continue
-
-# # # # # with open('SpecieProduct.csv', 'w', newline='') as csvfile:
-# # # # #     writer = csv.writer(csvfile)
-
-# # # # #     for row in flat_data:
-# # # # #         writer.writerow(row)
-
-# # # # filter = {"GBSeq_feature-table.GBFeature_key":"CDS","GBSeq_feature-table.GBFeature_quals.GBQualifier_name":"product"}
-# # # # proj = {"GBSeq_feature-table":1,"GBSeq_organism":1}
-
-# # # # dataResult = collection_data.find(filter, proj)
-# # # # def jsonList():
-# # # #     tot_data = {}
-# # # #     for dataN in dataResult:
-# # # #         print(dataN["GBSeq_organism"])
-# # # #         if dataN["GBSeq_organism"] not in tot_data:
-# # # #             tot_data[dataN["GBSeq_organism"]] = []
-# # # #         for data in dataN["GBSeq_feature-table"]:
-# # # #             if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
-# # # #                 for prod in data["GBFeature_quals"]:
-# # # #                     if prod["GBQualifier_name"] == "product" and (data["GBFeature_key"],prod["GBQualifier_value"]) not in tot_data[dataN["GBSeq_organism"]]:
-# # # #                         tot_data[dataN["GBSeq_organism"]].append((data["GBFeature_key"],prod["GBQualifier_value"]))
-# # # #         print(len(tot_data[dataN["GBSeq_organism"]]))
-
-# # # #     with open('Species.json', "w") as jswr:
-# # # #         json.dump(tot_data,jswr,indent=4)
-
-
-
-# # # # def csvWrite(dataResult):
-# # # #     tot_data = []
-# # # #     num = []
-# # # #     for dataN in dataResult:
-# # # #         print(dataN["GBSeq_organism"])
-# # # #         for data in dataN["GBSeq_feature-table"]:
-# # # #             if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
-# # # #                 for prod in data["GBFeature_quals"]:
-# # # #                     if prod["GBQualifier_name"] == "product":
-# # # #                         number = 1
-# # # #                         if [prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()] in tot_data:
-# # # #                             iii = tot_data.index([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
-# # # #                             num[iii] = num[iii]+1
-# # # #                         else:
-# # # #                             tot_data.append([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
-# # # #                             num.append(number)
-# # # #         print(len(tot_data))
-# # # #     tot_tot = []
-# # # #     for i in range(len(tot_data)):
-# # # #         tot_tot.append(tot_data[i]+[num[i]])
-# # # #     with open('SpecieProduct.csv', 'w', newline='') as csvfile:
-# # # #         writer = csv.writer(csvfile,delimiter="|")
-# # # #         writer.writerows(tot_tot)
-
-# # # # #csvWrite(dataResult)
-
-# # # # datasTaxon = [
-# # # #     (2961,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2961",True,True,False),
-# # # #     (145388,"https://www.ncbi.nlm.nih.gov/genome/?term=txid145388",True,True,True),
-# # # #     (72520,"https://www.ncbi.nlm.nih.gov/genome/?term=txid72520",True,True,True),
-# # # #     (70448,"https://www.ncbi.nlm.nih.gov/genome/?term=txid70448",True,True,True),
-# # # #     (44056,"https://www.ncbi.nlm.nih.gov/genome/?term=txid44056",True,True,True),
-# # # #     (41880,"https://www.ncbi.nlm.nih.gov/genome/?term=txid41880",True,True,False),
-# # # #     (41875,"https://www.ncbi.nlm.nih.gov/genome/?term=txid41875",True,True,True),
-# # # #     (36894,"https://www.ncbi.nlm.nih.gov/genome/?term=txid36894",True,True,False),
-# # # #     (35677,"https://www.ncbi.nlm.nih.gov/genome/?term=txid35677",True,True,True),
-# # # #     (3077,"https://www.ncbi.nlm.nih.gov/genome/?term=txid3077",True,True,True),
-# # # #     (1764295,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1764295",True,True,True),
-# # # #     (1650286,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1650286",True,True,True),
-# # # #     (1486918,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1486918",True,True,False),
-# # # #     (1093141,"https://www.ncbi.nlm.nih.gov/genome/?term=txid1093141",True,True,True),
-# # # #     (574566,"https://www.ncbi.nlm.nih.gov/genome/?term=txid574566",True,True,True),
-# # # #     (554065,"https://www.ncbi.nlm.nih.gov/genome/?term=txid554065",True,True,True),
-# # # #     (426638,"https://www.ncbi.nlm.nih.gov/genome/?term=txid426638",True,True,True),
-# # # #     (265525,"https://www.ncbi.nlm.nih.gov/genome/?term=txid265525",True,True,False),
-# # # #     (257627,"https://www.ncbi.nlm.nih.gov/genome/?term=txid257627",True,True,False),
-# # # #     (2009235,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2009235",True,True,False),
-# # # #     (2730355,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2730355",True,True,False),
-# # # # ]
-
-# # # # new_collection = db["table_basic"]
-
-# # # # for data in datasTaxon:
-# # # #     dataPush = {
-# # # #         "Link":data[1],
-# # # #         "GBFF":data[2],
-# # # #         "FNA":data[3],
-# # # #         "GFF":data[4]
-# # # #     }
-# # # #     new_collection.update_one({"TaxId":str(data[0])},{"$push":{"Genomes":dataPush}})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# NOT-DEPRECATED: smith_waterman.py
-
-
-
-
-
-# # # # def printTable(table,gene,trace=[]):
-# # # #     #print([i for i in range(len(table[0]))])
-# # # #     indx = "  "
-# # # #     for i in range(trace[len(trace)-1][1],trace[len(trace)-1][1]+10):
-# # # #         indx += gene[1][i]+" "*3
-# # # #     print(indx)
-# # # #     print('_'*10*4)
-# # # #     for i in range(trace[len(trace)-1][0],trace[len(trace)-1][0]+10):
-# # # #         print("| ",end="")
-# # # #         for j in range(trace[len(trace)-1][1],trace[len(trace)-1][1]+10):
-# # # #             #print(table[i][j])
-# # # #             if (i,j) in trace:
-# # # #                 print(bcolors.OKGREEN+str(table[i][j])+bcolors.ENDC+" "*(2-len(str(table[i][j]))),end="| ")
-# # # #             else:
-# # # #                 print(str(table[i][j])+" "*(2-len(str(table[i][j]))),end="| ")
-# # # #         if i != 0:
-# # # #             print(gene[0][i])
-# # # #         else:
-# # # #             print("")
-# # # #     print('\n')
-
-
-# # # # def saveTable(table, trace=[]):
-# # # #     if len(table)<40 or len(table[0])<40:
-# # # #         return
-# # # #     tableCopy = []
-# # # #     for i in range(10,40):
-# # # #         tbCp = []
-# # # #         for j in range(10,40):
-# # # #             tbCp.append(table[i][j])
-# # # #         tableCopy.append(tbCp)
-# # # #     color = [["w" for j in range(len(tableCopy[0]))]for i in range(len(tableCopy))]
-# # # #     for i in range(len(tableCopy)):
-# # # #         for j in range(len(tableCopy[i])):
-# # # #             if (i+10,j+10) in trace:
-# # # #                 color[i][j] = "#56b5fd"
-# # # #     # for i in range(10,20):
-# # # #     #     color[trace[len(trace)-i-1][0]][trace[len(trace)-i-1][1]] = "#56b5fd"
-    
-# # # #     fig,ax = plt.subplots()
-# # # #     fig.patch.set_visible(False)
-# # # #     ax.axis('off')
-# # # #     ax.axis('tight')
-# # # #     df = pd.DataFrame(tableCopy)
-# # # #     ax.table(cellText=df.values,cellColours=color,colLabels=df.columns,loc='center')
-# # # #     #fig.tight_layout()
-# # # #     plt.savefig('table.png',bbox_inches='tight')
-# # # #     #plt.show()
-
-
-# # # # class Alignment:
-
-
-# # # #     def __init__(self, *seqs:str, gap:int=1, show_table:bool=False) -> None:
-# # # #         if len(seqs)<2:
-# # # #             print(bcolors.FAIL+f"MinMaxError: input len for sequences must be >= 2, got {len(seqs)}"+bcolors.ENDC)
-# # # #             return
-# # # #         self.seqs = [Seq(i) for i in seqs]
-# # # #         self.seq1 = seqs[0]
-# # # #         self.seq2 = seqs[1]
-# # # #         self.gap = gap
-# # # #         self.show_table = show_table
-    
-
-# # # #     def __str__(self) -> str:
-# # # #         return '\n'.join(self.seqs)
-
-
-# # # #     def __len__(self) -> int:
-# # # #         x = 1
-# # # #         for i in self.seqs:
-# # # #             x *= len(i)
-# # # #         return x
-    
-
-# # # #     def __call__(self, seq:str) -> list:
-# # # #         self.seqs.append(seq)
-# # # #         return self.seqs
-
-
-# # # #     def createScoreMatrix(self, lnSeq1:int, lnSeq2:int) -> tuple:
-# # # #         score_matrix = [[0 for _ in range(lnSeq2 + 1)] for _ in range(lnSeq1 + 1)]
-
-# # # #         max_score = 0
-# # # #         max_index = (0,0)
-# # # #         for i in range(1, lnSeq1 + 1):
-# # # #             for j in range(1, lnSeq2 + 1):
-# # # #                 score = 1 if self.seq1[i-1] == self.seq2[j-1] else -1
-
-# # # #                 score_matrix[i][j] = max(
-# # # #                     0,
-# # # #                     score_matrix[i-1][j-1] + score,
-# # # #                     score_matrix[i-1][j] - self.gap,
-# # # #                     score_matrix[i][j-1] - self.gap
-# # # #                 )
-
-# # # #                 if score_matrix[i][j] > max_score:
-# # # #                     max_score = score_matrix[i][j]
-# # # #                     max_index = (i, j)
-# # # #         return score_matrix,max_index
-
-
-# # # #     def localAlignment(self, save_table:bool=False) -> tuple:
-# # # #         if len(self.seqs)>2:
-# # # #             print(bcolors.WARN_BOX+f"Warning! Only 2 arguments were expected, but got {len(self.seqs)}.\n\t-The algorithm will use only the first 2 sequences..."+bcolors.ENDC)
-# # # #         aligned_seq1 = ""
-# # # #         aligned_seq2 = ""
-
-# # # #         score_matrix, max_index_score_matrix = self.createScoreMatrix(len(self.seq1),len(self.seq2))
-
-# # # #         i, j = max_index_score_matrix
-# # # #         traceback = []
-# # # #         print(f"Table length. First sequence:{len(self.seq1)}, Second sequence:{len(self.seq2)}")
-# # # #         print(f"Max term: {score_matrix[i][j]}; in index: {max_index_score_matrix}")
-# # # #         f1 = 0
-# # # #         while score_matrix[i][j] != 0:
-# # # #             traceback.append((i,j))
-# # # #             if score_matrix[i-1][j-1] >= score_matrix[i-1][j] and score_matrix[i-1][j-1] >= score_matrix[i][j-1]:
-# # # #                 aligned_seq1 = self.seq1[i-1] + aligned_seq1
-# # # #                 aligned_seq2 = self.seq2[j-1] + aligned_seq2
-# # # #                 i, j = i-1, j-1
-# # # #                 f1 += 1
-# # # #             elif score_matrix[i-1][j] >= score_matrix[i-1][j-1] and score_matrix[i-1][j] >= score_matrix[i][j-1]:
-# # # #                 aligned_seq1 = self.seq1[i-1] + aligned_seq1
-# # # #                 aligned_seq2 = '-' + aligned_seq2
-# # # #                 i -= 1
-# # # #             else:
-# # # #                 aligned_seq1 = '-' + aligned_seq1
-# # # #                 aligned_seq2 = self.seq2[j-1] + aligned_seq2
-# # # #                 j -= 1
-        
-# # # #         if self.show_table:
-# # # #             printTable(score_matrix,(self.seq1,self.seq2),trace=traceback)
-# # # #             if save_table:
-# # # #                 saveTable(score_matrix,trace=traceback)
-# # # #         print(f"{(f1/len(aligned_seq1))*100}% of alignment")
-# # # #         return aligned_seq1, aligned_seq2
-    
-
-# # # #     def globalAlignment(self):
-# # # #         return 0
-
-
-# # # # # a = Alignment("AGTCCCTGATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTCCCTGATTT","TTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGT",show_table=True)
-# # # # # a.localAlignment(save_table=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#######################
-######---MAIN---#######
-#######################
-
-def main(args:dict) -> None:
-
-    # genus = collection_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
-    # """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
-    #datas = new_collection.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
-
-    # taxon = ncbiSearchTaxon("chlorella[next level]")
-    # with open("taxonMeta.json","w") as jsw:
-    #     json.dump(taxon,jsw,indent=4)
-    #print(taxon)
-
-    nb = input('Please insert email')
-    #unwrappingSpecies()
-    #taxTreeMaker()                 #previously named algo()
-    #searchForRank()                #previously named aglo()
-    #testNucleo()
-    #genomeRetrieve()               #previously named GFF()
-    #nucleoResult()
-    #genomeFind("Chlorella variabilis")
-    #parseToBasic()
-    #fattoBene() 
-    #proteinFind()
-    #newCollectionBene()
-    #productsTable()
-    return
