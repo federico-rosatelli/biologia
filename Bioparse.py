@@ -667,22 +667,6 @@ def genomeFind(name:str):
     print(json_formatted_str)
 
 
-def ncbiSearchNucleo1(name:str) ->list:
-    '''TESTING'''
-    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
-    # read = Entrez.read(handle)
-    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
-    record = Entrez.read(handle, validate=False)
-    handle.close()
-    print(f"Len of IDLIST:{len(record['IdList'])}")
-    if len(record["IdList"]) == 0:
-        raise Exception("List Empty")
-    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
-    read = Entrez.read(handle)
-    print(f"Len of EFETCH:{len(read)}")
-    return read
-
-
 def nucleoImport():
     '''Sub-function that add new entries in nucleotide_data collection searching for them
     on NCBI platform'''
@@ -697,7 +681,7 @@ def nucleoImport():
         if daora:
             print(f"txid{data['TaxId']}")
             try:
-                insertDatas = ncbiSearchNucleo1(f"txid{data['TaxId']}[Organism:exp]")
+                insertDatas = ncbiSearchNucleo(f"txid{data['TaxId']}[Organism:exp]")
                 for ins in insertDatas:
                     ins.pop("GBSeq_sequence",None)
                     nucleo_collection.insert_one(ins)
@@ -713,7 +697,7 @@ def nucleoResult():
     # "txid257627"
     # "txid257627"
     nucleo_collection = db["nucleotide_data"]
-    tot = ncbiSearchNucleo1("txid257627[Organism:exp]")
+    tot = ncbiSearchNucleo("txid257627[Organism:exp]")
     i = 0
     for t in tot:
         print(i)
@@ -781,24 +765,6 @@ def genusList():
         writer = csv.writer(csvfile)
         writer.writerows(datas)
 
-
-def ncbiSearchNucleo123(name:str) ->bool:
-    '''TESTING'''
-    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
-    # read = Entrez.read(handle)
-    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
-    record = Entrez.read(handle, validate=False)
-    handle.close()
-    print(f"Len of IDLIST:{len(record['IdList'])} di {name}")
-    if len(record['IdList']) == 0:
-        return True
-    # if len(record["IdList"]) == 0:
-    #     raise Exception("List Empty")
-    # handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
-    # read = Entrez.read(handle)
-    # print(f"Len of EFETCH:{len(read)}")
-    # return read
-    return False
 
 
 def ncbiProtein(name:str) ->list:
