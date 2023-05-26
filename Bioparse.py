@@ -167,6 +167,22 @@ def productsTable():
 # Online Query methods (NCBI), require login method to be saved before
 #################################################################################
 
+def ncbiSearchNucleo(name:str) ->list:
+    '''Function that submit queries with given a ScientificName to NCBI platform, section Nucleotide'''
+    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
+    # read = Entrez.read(handle)
+    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
+    record = Entrez.read(handle, validate=False)
+    handle.close()
+    print(f"Len of IDLIST:{len(record['IdList'])}")
+    if len(record["IdList"]) == 0:
+        raise Exception("List Empty")
+    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
+    read = Entrez.read(handle)
+    print(f"Len of EFETCH:{len(read)}")
+    return read
+
+
 def ncbiSearchTaxon(name:str) -> list:
     '''Function that submit queries with given TaxonomyIDs to NCBI platform, section Taxonomy'''
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
@@ -197,7 +213,7 @@ def finderTaxon(name):
             finderTaxon(tax["ScientificName"])
     except Exception as e:
         return
-    
+
 
 
 #################################################################################
@@ -205,7 +221,11 @@ def finderTaxon(name):
 #################################################################################
 
 def genomeRetrieve():
-    '''TESTING'''
+    '''Function that search on NCBI, for all occurrencies in taxonomy_data, if
+    there are links to GFF, GBFF and FNA files containing genomic sequences
+    for eache specie; in that case, carry out the download in ./data/temp
+    folder, unwrap the files and move the extracted content in ./data/genomes/<txid>
+    where <txid> is the relative id found in taxonomy_data for that specie'''
     # creation directory for downloading process
     directory = "genomes/"
     temp = "temp/"
@@ -386,22 +406,6 @@ def taxTreeMaker():
                     "ScientificName":res["ScientificName"],
                     }
             new_collection.update_one({"TaxId":res["ParentTaxId"]},{"$push":{"SubClasses":newDataPush}})
-
-
-def ncbiSearchNucleo(name:str) ->list:
-    '''TESTING'''
-    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
-    # read = Entrez.read(handle)
-    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
-    record = Entrez.read(handle, validate=False)
-    handle.close()
-    print(f"Len of IDLIST:{len(record['IdList'])}")
-    if len(record["IdList"]) == 0:
-        raise Exception("List Empty")
-    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
-    read = Entrez.read(handle)
-    print(f"Len of EFETCH:{len(read)}")
-    return read
 
 
 def nucleoImport():
