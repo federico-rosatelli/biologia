@@ -25,6 +25,8 @@ Argparse:             "https://docs.python.org/3/library/argparse.html"
 
 Pymongo:              "https://pymongo.readthedocs.io/en/stable/"
 
+Matplotlib:           "https://matplotlib.org/"
+
 MongoDB CE "Jammy":   "https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/"
 
 NVM:                  "https://www.linode.com/docs/guides/how-to-install-use-node-version-manager-nvm/"
