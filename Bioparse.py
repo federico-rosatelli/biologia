@@ -37,7 +37,7 @@ new_collection = db["taxonomy_tree"]
 ignore_names = ["environmental samples"]
 Entrez.api_key = "cc030996838fc52dd1a2653fad76bf5fe408"
 Entrez.email = ""
-pattern = r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?"                                                # pattern passed for checking email format purpose
+pattern = r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?"            # pattern passed for checking email format purpose
 
 
 
@@ -48,7 +48,9 @@ pattern = r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?"                                
 def test_email(your_pattern):
   '''Function to check for valid email address'''
   pattern = re.compile(your_pattern)
-  emails = ["john@example.com", "python-list@python.org", "wha.t.`1an?ug{}ly@email.com"]        # here is an example list of email to check it at the end
+  emails = ["john@example.com", 
+            "python-list@python.org", 
+            "wha.t.`1an?ug{}ly@email.com"]                  # here is an example list of email to check it at the end
   for email in emails:
     if not re.match(pattern, email):
         print ("You failed to match %s" % (email))
@@ -59,7 +61,7 @@ def test_email(your_pattern):
 
 
 def read_kbd_input(inputQueue):
-    '''Function to detect input text.'''
+    '''Function to detect input text'''
     print('Ready for keyboard input: ')
     while (True):
         input_str = input()
@@ -70,7 +72,7 @@ def read_kbd_input(inputQueue):
 ########################################################################################
 
 class bcolors:
-    '''Codici di errore, intesa da utilizzare entro class Error e PrintWarning'''
+    '''Error codes, intended to be used inside <class Error> and <PrintWarning>'''
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
@@ -88,9 +90,12 @@ class bcolors:
 ########################################################################################
 
 class  PrintWarning:
-    """ Applicazione della classe di bcolors. Con questa classe possiamo stampare a video
-    vari codici di errore/warning con colori diversi e tenere traccia visivamente di vari eventi."""
+    '''Class in cooperation with bcolors class. Various code errors and warning with different colors
+    can be printed to track events and logs'''
+
+
     def __init__(self, type:int, error:str="") -> None:
+        '''Constructor that assign colors to number IDs'''
         self.error = error
         self.color = None
         if type == 0:
@@ -116,21 +121,20 @@ class  PrintWarning:
         if type == 10:
             self.color = bcolors.OK_BOX
 
+
+    def __str__(self) -> str:
+        '''Internal use for print errors'''
+        return self.error
+
     
     def stdout(self, *strings:any) -> None:
-        '''Metodo custom di stampa a video dei nostri codici di errore, in cui riportiamo il timestamp
-        e la descrizione dell'errore con un colore fissato per utilizzo informativo. '''
+        '''Custom print methods of error codes and timestamp to advise developers'''
         self.error = ' '.join(str(i) for i in strings)
         plus = ""
         if self.error[:1] == "\n":
             plus = "\n"
             self.error = self.error[1:]
         print(bcolors.BOLD + f"{plus}[{ctime()}] " + bcolors.ENDC + self.color + self.error +  bcolors.ENDC)
-    
-
-    def __str__(self) -> str:
-        '''Utilizzato internamente per richiamare gli errori dal Costruttore'''
-        return self.error
 
 
 
