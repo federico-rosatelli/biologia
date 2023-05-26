@@ -143,8 +143,10 @@ class  PrintWarning:
 #################################################################################
 
 def productsTable():
-    '''Function that produce SpecieProduct.csv in lists/ folder'''
-    products = open("SpecieProduct.csv").readlines()
+    '''Function that take data from lists/SpecieProduct.csv and parse
+    new collections (table_complete and table_basic) with those datas
+    [Legacy procedure]'''
+    products = open("./lists/SpecieProduct.csv").readlines()
     complete_collection = db["table_complete"]
     basic_collection = db["table_basic"]
     for i in range(len(products)):
@@ -168,7 +170,8 @@ def productsTable():
 #################################################################################
 
 def ncbiSearchNucleo(name:str) ->list:
-    '''Function that submit queries with given a ScientificName to NCBI platform, section Nucleotide'''
+    '''Function that submit queries with given a ScientificName to NCBI platform, section Nucleotide.
+    Return the data read'''
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
     # read = Entrez.read(handle)
     handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
@@ -184,7 +187,8 @@ def ncbiSearchNucleo(name:str) ->list:
 
 
 def ncbiSearchTaxon(name:str) -> list:
-    '''Function that submit queries with given TaxonomyIDs to NCBI platform, section Taxonomy'''
+    '''Function that submit queries with given TaxonomyIDs to NCBI platform, section Taxonomy.
+    Return the data read'''
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
     # read = Entrez.read(handle)
     handle = Entrez.esearch(db='taxonomy', term=name, rettype='gb', retmode='text', retmax=10000)
@@ -256,7 +260,6 @@ def genomeRetrieve():
         print(f"\nSearching for GFF, GBFF and FNA of {i} on [Genome] NCBI platform")
         # dataLink.append((i,efetchGenome(i)))
         dst = path + i
-
         if os.path.exists(dst):
             print(f"WARNING: Path already exists")
             if os.path.exists(dst + "/" + i + ".fna.gz"):
