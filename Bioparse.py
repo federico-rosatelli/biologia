@@ -69,19 +69,9 @@ ALIGNMENT = {
 
 
 
-########################################################################################
-# Utility classes and methods
-########################################################################################
 
-def check_email() -> str:
-    nb = input('Please insert email: ')
-    while(re.fullmatch(regex, nb) == None):
-        nb = input('Invalid Email, please retry: ')
-        if (re.fullmatch(regex, nb) != None):
-            break
-    print(f"Valid Email, Passing --> {nb} <-- to NCBI platform")
-    return nb
-
+########################################################################################
+# Classes
 ########################################################################################
 
 class bcolors:
@@ -249,11 +239,11 @@ class Alignment:
         '''TEST check'''
         return 0
 
-
-#FOR TESTING PURPOSE:
+#FOR TESTING PURPOSES:
 # a = Alignment("AGTCCCTGATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTCCCTGATTT",
 # "TTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGT",show_table=True)
 # a.localAlignment(save_table=True)
+
 
 
 ########################################################################################
@@ -356,8 +346,8 @@ class Parsing(object):
                         },js,indent=4)
 
 
-########################################################################################
 
+########################################################################################
 
 class Database:
     '''In this class are managed the different types of DB on which the data
@@ -624,7 +614,7 @@ class Database:
     
 
     def isAlgae(self,dataSource,rewrite:bool=False) -> tuple:
-        ''' [DEPRECATED] This method compares with the data present in the db
+        '''[DEPRECATED] This method compares with the data present in the db
         local and among the csv records in database/Csv, fetched
         from the European Database for accessibility reasons.
         Datasource is inserted in the path data/sourcejson/struct.txt ed
@@ -661,7 +651,7 @@ class Database:
 
 
     def isMicroAlgae(self,dataSource) -> tuple:
-        ''' [DEPRECATED] This method compares with the data present in the db
+        '''[DEPRECATED] This method compares with the data present in the db
         local and among the csv records in database/Csv, fetched
         from the European Database for accessibility reasons.
         Datasource is inserted in the path data/sourcejson/struct.txt ed
@@ -690,7 +680,7 @@ class Database:
     
 
     def toFasta(self,name):
-        '''Test'''
+        '''TEST TEST TEST'''
         print(name)
         db = self.client["Biologia"]
         collection_taxonomy_data = db["genetic_data"]
@@ -747,6 +737,7 @@ class Database:
     
 
     def taxonFind(self,id) -> dict:
+        '''TEST TEST TEST'''
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
         info = {"Id":id,"Features":{"$elemMatch":{"Type":"source"}}}
@@ -776,6 +767,7 @@ class Database:
     
 
     def genomeFind(self,id) -> dict:
+        '''TEST TEST TEST'''
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
         info = {"Features":{"$elemMatch":{"Type":"CDS","db_xref":{"$exists":True}}}}
@@ -797,6 +789,7 @@ class Database:
 
 
     def ritornodicose(self) -> None:
+        '''TEST TEST TEST'''
         finder = {"Id":"","Features":{"$elemMatch":{"Type":"CDS"}}}
         db = self.client["Biologia"]
         collection_data_nucleotide = db["nucleotide_data"]
@@ -804,7 +797,8 @@ class Database:
         print(data)
 
 
-    def confronto(self): #CAMBIA NOME
+    def confronto(self):
+        '''TEST TEST TEST'''
         for key in self.dataSource:
             for id in self.dataSource[key]:
                 data = self.proteinFind(id)
@@ -827,7 +821,9 @@ class Database:
                 # else:
                 #     PrintWarning(3).stdout(f"Genome ID:{id}")
 
+
     def ncbiSearch(self,id:str,database:str) -> tuple:
+        '''TEST TEST TEST'''
         # NB: in futuro la composizione del link potrebbe cambiare nella sua struttura, in base alla gestione interna di NCBI.
         # TO-DO: se questo metodo non ritorna i dati correttamente andrà aggiornata la procedura di reperimento dei dati.
         handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
@@ -837,6 +833,7 @@ class Database:
 
 
     def ncbiSearchTaxon(self,id:str,database:str) ->tuple:
+        '''TEST TEST TEST'''
         try:
             handle = Entrez.efetch(db=database, id=id, retmode="xml")
             read = Entrez.read(handle)
@@ -847,6 +844,7 @@ class Database:
     
 
     def ncbiSearchGenome(self,id:str,database:str) ->tuple:
+        '''TEST TEST TEST'''
         handle = Entrez.efetch(db=database, id=id, retmode="xml")
         read = Entrez.read(handle)
         #print(read)
@@ -855,7 +853,20 @@ class Database:
         return read
 
 
+
 ########################################################################################
+# Utility Methods
+########################################################################################
+
+def check_email() -> str:
+    nb = input('Please insert email: ')
+    while(re.fullmatch(regex, nb) == None):
+        nb = input('Invalid Email, please retry: ')
+        if (re.fullmatch(regex, nb) != None):
+            break
+    print(f"Valid Email, Passing --> {nb} <-- to NCBI platform")
+    return nb
+
 
 def file_exists(self)-> bool:
     '''check file existence in path'''
@@ -993,7 +1004,7 @@ def SpecieProductMaker():
 
 
 #################################################################################
-# Online Query methods (NCBI), require login method to be saved before
+# Online Query Methods (NCBI), require login method to be saved before
 #################################################################################
 
 def ncbiSearch(name:str, db="nucleotide") ->list:
@@ -1126,7 +1137,10 @@ def genomeRetrieve():
 
 
 def nucleoImport():
-    '''TESTING'''
+    '''Function that make comparison between datas present in microAlgaeDatabase.csv
+    and those present in taxonomy_data collection and then try to find that record
+    on Nucleotide section of NCBI. At the end, if the record is not present in
+    nucleotide_data collection locally, the data is inserted in DB'''
     taxon_collection = db["taxonomy_data"]
     nucleo_collection = db["nucleotide_organism"]
     records = ncbiSearch("Scenedesmus bijugus")
@@ -1163,7 +1177,8 @@ def nucleoImport():
 
 
 def efetchTaxon(id):
-    '''TESTING'''
+    '''Simple function that use BioPython library to retrieve, for a given id, its data
+    from Taxonomy section on NCBI'''
     handle = Entrez.efetch(db="taxonomy", id=id, rettype='gb',retmode="xml")
     read = Entrez.read(handle)
     return read
