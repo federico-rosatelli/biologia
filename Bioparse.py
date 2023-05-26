@@ -7,6 +7,7 @@ from Bio import SeqIO, Entrez
 from time import ctime, perf_counter
 from Bio.Seq import Seq
 from matplotlib import pyplot as plt
+from validate_email import validate_email
 import urllib.request as download
 import pandas as pd
 import csv
@@ -31,15 +32,15 @@ import sys
 
 client = MongoClient('localhost', 27017)
 db = client["Biologia"]
-collection_data = db["taxonomy_data"]
-collection_data2 = db["nucleotide_data"]
-new_collection = db["taxonomy_tree"]
-new_collection2 = db["table_basic"]
-ignore_names = ["environmental samples"]                    # taxonomy ID to be avoided in collection_data
+collection_taxonomy_data = db["taxonomy_data"]
+collection_nucleotide_data = db["nucleotide_data"]
+collection_taxonomy_tree = db["taxonomy_tree"]
+collection_table_basic = db["table_basic"]
+collection_protein_data = db["protein_data"]
+ignore_names = ["environmental samples"]                    # taxonomy ID to be avoided in collection_taxonomy_data
 Entrez.api_key = "cc030996838fc52dd1a2653fad76bf5fe408"
 Entrez.email = ""
-pattern = r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?"            # pattern passed for checking email format purpose
-
+regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
 CLUSTER = "localhost:27017"
 WEBSOURCE = {
@@ -71,29 +72,14 @@ ALIGNMENT = {
 # Utility classes and methods
 ########################################################################################
 
-def test_email(your_pattern):
-  '''Function that check if the input text is a valid email address'''
-  pattern = re.compile(your_pattern)
-  emails = ["john@example.com", 
-            "python-list@python.org", 
-            "wha.t.`1an?ug{}ly@email.com"]                  # here is an example list of email to check it at the end
-  for email in emails:
-    if not re.match(pattern, email):
-        print ("You failed to match %s" % (email))
-    elif not your_pattern:
-        print("Forgot to enter a pattern!")
-    else:
-        print("Pass")
-
-
-def read_kbd_input(inputQueue):
-    '''Function that detect input text'''
-    print('Ready for keyboard input: ')
-    while (True):
-        input_str = input()
-        inputQueue.put(input_str)
-
-
+def check_email() -> str:
+    nb = input('Please insert email: ')
+    while(re.fullmatch(regex, nb) == None):
+        nb = input('Invalid Email, please retry: ')
+        if (re.fullmatch(regex, nb) != None):
+            break
+    print(f"Valid Email, Passing --> {nb} <-- to NCBI platform")
+    return nb
 
 ########################################################################################
 
@@ -146,7 +132,8 @@ class  PrintWarning:
             self.color = bcolors.WARN_BOX
         if type == 10:
             self.color = bcolors.OK_BOX
-
+        return
+    
 
     def __str__(self) -> str:
         '''Internal use for print errors'''
@@ -161,6 +148,7 @@ class  PrintWarning:
             plus = "\n"
             self.error = self.error[1:]
         print(bcolors.BOLD + f"{plus}[{ctime()}] " + bcolors.ENDC + self.color + self.error +  bcolors.ENDC)
+        return
 
 ########################################################################################
 
@@ -190,7 +178,7 @@ def csvWrite(dataResult):
     with open('SpecieProduct.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile,delimiter="|")
         writer.writerows(tot_tot)
-
+    return
 
 
 def printTable(table, gene, trace=[]):
@@ -213,6 +201,7 @@ def printTable(table, gene, trace=[]):
         else:
             print("")
     print('\n')
+    return
 
 
 def saveTable(table, trace=[]):
@@ -241,6 +230,55 @@ def saveTable(table, trace=[]):
     #fig.tight_layout()
     plt.savefig('table.png',bbox_inches='tight')
     #plt.show()
+    return
+
+
+# NOT-DEPRECATED: SpecieProductMaker.py
+
+def SpecieProductMaker():
+    filter = {"Features.product": {"$exists": True}}
+    projection= {"_id":0, "Features.organism": 1, "Features.product": 1}
+    dataResult = collection_taxonomy_data.find(filter, projection)
+    list_res = list(dataResult)
+    flat_data= []
+
+    for diz in list_res:
+        organism=diz["Features"][0]["organism"]
+        indexProduct=1
+        while (diz["Features"][indexProduct]=={}):
+            indexProduct+=1
+        product=diz["Features"][indexProduct]["product"]
+        tupla=(organism, product)
+        flat_data.append(tupla)
+        continue
+
+    with open('SpecieProduct.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+
+        for row in flat_data:
+            writer.writerow(row)
+
+    filter = {"GBSeq_feature-table.GBFeature_key":"CDS","GBSeq_feature-table.GBFeature_quals.GBQualifier_name":"product"}
+    proj = {"GBSeq_feature-table":1,"GBSeq_organism":1}
+
+    dataResult = collection_nucleotide_data.find(filter, proj)
+
+    def jsonList():
+        tot_data = {}
+        for dataN in dataResult:
+            print(dataN["GBSeq_organism"])
+            if dataN["GBSeq_organism"] not in tot_data:
+                tot_data[dataN["GBSeq_organism"]] = []
+            for data in dataN["GBSeq_feature-table"]:
+                if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
+                    for prod in data["GBFeature_quals"]:
+                        if prod["GBQualifier_name"] == "product" and (data["GBFeature_key"],prod["GBQualifier_value"]) not in tot_data[dataN["GBSeq_organism"]]:
+                            tot_data[dataN["GBSeq_organism"]].append((data["GBFeature_key"],prod["GBQualifier_value"]))
+            print(len(tot_data[dataN["GBSeq_organism"]]))
+
+        with open('Species.json', "w") as jswr:
+            json.dump(tot_data,jswr,indent=4)
+    return
 
 
 
@@ -283,16 +321,16 @@ def ncbiSearchTaxon(name:str) -> list:
 
 
 def finderTaxon(name):
-    '''Function that, given a Taxonomy ID, add the relative specie to collection_data branch in Biologia DB,
+    '''Function that, given a Taxonomy ID, add the relative specie to collection_taxonomy_data branch in Biologia DB,
     if it is not already present in list'''
     if name in ignore_names:
         return
     try:
         taxon = ncbiSearchTaxon(f"{name}[next level]")
         for tax in taxon:
-            if (not collection_data.find_one({"TaxId":tax["TaxId"]}) and tax["Rank"] == "species"):
+            if (not collection_taxonomy_data.find_one({"TaxId":tax["TaxId"]}) and tax["Rank"] == "species"):
                     print(tax["ScientificName"])
-                    collection_data.insert_one(tax)
+                    collection_taxonomy_data.insert_one(tax)
             finderTaxon(tax["ScientificName"])
     except Exception as e:
         return
@@ -547,7 +585,7 @@ def nucleoImport():
     '''TESTING'''
     daora = False
     nucleo_collection = db["nucleotide_data"]
-    all_data = collection_data.find({},{"TaxId":1,"_id":0})
+    all_data = collection_taxonomy_data.find({},{"TaxId":1,"_id":0})
     for data in all_data:
         if f"txid{data['TaxId']}" == "txid1411642":
             daora = True
@@ -614,8 +652,8 @@ def unwrappingSpecies():
     that contain contents parsed and cleaned in a readable format for humans.'''
     finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
     taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
-    collection_data.delete_many({"Lineage":{"$regex":"environmental samples"}})
-    parsed_file = collection_data.find({},{"ScientificName":1,"_id":0})
+    collection_taxonomy_data.delete_many({"Lineage":{"$regex":"environmental samples"}})
+    parsed_file = collection_taxonomy_data.find({},{"ScientificName":1,"_id":0})
     listTuple = [[i["ScientificName"]] for i in parsed_file]
     with open('./lists/OrganismList.csv', 'w') as csvfile:
         writer = csv.writer(csvfile)
@@ -625,9 +663,7 @@ def unwrappingSpecies():
 
 def genusList():
     '''TESTING'''
-    import re
-    new_collection = db["taxonomy_tree"]
-    genus = new_collection.find({"Rank":"genus"})
+    genus = collection_taxonomy_tree.find({"Rank":"genus"})
     datas = [["Scientific Name","Taxon Id","Division"]]
     for gene in genus:
         print(gene["ScientificName"])
@@ -678,8 +714,7 @@ def ncbiProtein(name:str) ->list:
 
 def proteinFind():
     '''TESTING'''
-    protein_collection = db["protein_data"]
-    taxon_collection = db["taxonomy_data"]
+    taxon_collection = collection_taxonomy_data
     findTax = taxon_collection.find({},{"TaxId":1,"_id":0})
     for data in findTax:
         tax = f"txid{data['TaxId']}"
@@ -688,9 +723,17 @@ def proteinFind():
             allData = ncbiProtein(tax)
             for prot in allData:
                 prot.pop("GBSeq_sequence",None)
-                protein_collection.insert_one(prot)
+                collection_protein_data.insert_one(prot)
         except Exception as e:
             print(e)
+
+
+def findTaxon(key):
+    rgx = re.compile(f'{key}', re.IGNORECASE)
+    info = {"Lineage":rgx}
+    dataFind = collection_taxonomy_data.find(info)
+    for i in dataFind:
+        print(i)
 
 
 
@@ -730,57 +773,57 @@ def searchForRank(name = '', rank = ''):
         filter = {name}
     elif (rank != ''):
         filter = {rank}
-    dataResult = collection_data.find(filter)
+    dataResult = collection_taxonomy_data.find(filter)
     return
 
 
 def taxTreeMaker():
-    '''Function that retrieves datas from collection_data of MongoDB and
+    '''Function that retrieves datas from collection_taxonomy_data of MongoDB and
     create a new collection, taxonomy_tree, that contain the Lineage for
     each specie'''
-    results = collection_data.find({})
+    results = collection_taxonomy_data.find({})
     iter = 0
     for res in results:
         print(iter)
         iter += 1
-        # if new_collection.find_one({"TaxId":res["ParentTaxId"]}):
+        # if collection_taxonomy_tree.find_one({"TaxId":res["ParentTaxId"]}):
         #     dataPush = {
         #             "TaxId":LineageEx["TaxId"],
         #             "Rank":LineageEx["Rank"],
         #             "ScientificName":LineageEx["ScientificName"],
         #             "SubClasses":[]
         #         }
-        #     new_collection.insert_one(dataPush)
+        #     collection_taxonomy_tree.insert_one(dataPush)
         for i in range(1, len(res["LineageEx"])):
             #for LineageEx in res["LineageEx"]:
             LineageEx = res["LineageEx"][i]
-            if not new_collection.find_one({"TaxId":LineageEx["TaxId"]}):
+            if not collection_taxonomy_tree.find_one({"TaxId":LineageEx["TaxId"]}):
                 dataPush = {
                     "TaxId":LineageEx["TaxId"],
                     "Rank":LineageEx["Rank"],
                     "ScientificName":LineageEx["ScientificName"],
                     "SubClasses":[]
                 }
-                new_collection.insert_one(dataPush)
+                collection_taxonomy_tree.insert_one(dataPush)
             if (i == 1):
                 continue
             LineageExPrev = res["LineageEx"][i-1]
 
-            if new_collection.find_one({"TaxId":LineageExPrev["TaxId"], "SubClasses":{"$elemMatch":{"TaxId":LineageEx["TaxId"]}}}):
+            if collection_taxonomy_tree.find_one({"TaxId":LineageExPrev["TaxId"], "SubClasses":{"$elemMatch":{"TaxId":LineageEx["TaxId"]}}}):
                 continue
             newDataPush = {
                     "TaxId":LineageEx["TaxId"],
                     "Rank":LineageEx["Rank"],
                     "ScientificName":LineageEx["ScientificName"],
                     }
-            new_collection.update_one({"TaxId":LineageExPrev["TaxId"]},{"$push":{"SubClasses":newDataPush}})
-        if not new_collection.find_one({"TaxId":res["ParentTaxId"], "SubClasses":{"$elemMatch":{"TaxId":res["TaxId"]}}}):
+            collection_taxonomy_tree.update_one({"TaxId":LineageExPrev["TaxId"]},{"$push":{"SubClasses":newDataPush}})
+        if not collection_taxonomy_tree.find_one({"TaxId":res["ParentTaxId"], "SubClasses":{"$elemMatch":{"TaxId":res["TaxId"]}}}):
             newDataPush = {
                     "TaxId":res["TaxId"],
                     "Rank":res["Rank"],
                     "ScientificName":res["ScientificName"],
                     }
-            new_collection.update_one({"TaxId":res["ParentTaxId"]},{"$push":{"SubClasses":newDataPush}})
+            collection_taxonomy_tree.update_one({"TaxId":res["ParentTaxId"]},{"$push":{"SubClasses":newDataPush}})
 
 
 def parseToBasic() -> list:
@@ -788,7 +831,7 @@ def parseToBasic() -> list:
     taxon_collection = db["taxonomy_data"]
     nucleo_collection = db["nucleotide_data"]
     tableBasic_collection = db["table_basic"]
-    protein_collection = db["protein_data"]
+    protein_collection = collection_protein_data
     dataRank = taxon_collection.find({},{"ScientificName":1,"TaxId":1,"_id":0})
     control = 0
     for data in dataRank:
@@ -835,9 +878,9 @@ def fattoBene():
 def newCollectionBene():
     '''TESTING'''
     new_collection = db["table_complete1"]
-    old_collection = db["table_basic"]
+    old_collection = collection_taxonomy_tree
     nucleotide_collection = db["nucleotide_data"]
-    protein_collection = db["protein_data"]
+    protein_collection = collection_protein_data
     findAll = old_collection.find({})
     for data in findAll:
         nucleotides = [t["GBSeq_locus"] for t in data["Nucleotides"]]
@@ -903,7 +946,7 @@ def updateByGenomes(datasTaxon=''):
             "FNA":data[3],
             "GFF":data[4]
         }
-        new_collection2.update_one({"TaxId":str(data[0])},{"$push":{"Genomes":dataPush}})
+        collection_table_basic.update_one({"TaxId":str(data[0])},{"$push":{"Genomes":dataPush}})
     return
 
 
@@ -1042,15 +1085,7 @@ class Alignment:
 # # # # # # servizio di mongodb che istanziare il server.js come illustrato in genbank.py. 
 
 
-# # # # # def findTaxon(key):
-# # # # #     client = MongoClient('localhost', 27017)
-# # # # #     db = client["Biologia"]
-# # # # #     collection_taxon = db["taxonomy_data"]
-# # # # #     rgx = re.compile(f'{key}', re.IGNORECASE)
-# # # # #     info = {"Lineage":rgx}
-# # # # #     dataFind = collection_taxon.find(info)
-# # # # #     for i in dataFind:
-# # # # #         print(i)
+
 
 
 # # # # # findTaxon("Eukaryota")
@@ -1224,7 +1259,7 @@ class Alignment:
 # # # # #         PrintWarning(8).stdout("\nStart saving on database")
 # # # # #         db = self.client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
 # # # # #         print(self.mongo_collections)
-# # # # #         collection_data = db[self.mongo_collections[0]]
+# # # # #         collection_taxonomy_data = db[self.mongo_collections[0]]
 # # # # #         collection_convert = db[self.mongo_collections[1]]
 # # # # #         count = 0
 # # # # #         last = -1
@@ -1234,9 +1269,9 @@ class Alignment:
 # # # # #                 print("[%-50s] %d%%" % ('='*((last+1)//2),last+1),end="\r")
 # # # # #                 last +=1
 # # # # #             filter = {"Name":tuple_of_array[0][i]["Name"]}
-# # # # #             check_name = collection_data.find_one(filter)
+# # # # #             check_name = collection_taxonomy_data.find_one(filter)
 # # # # #             if not check_name:
-# # # # #                 collection_data.insert_one(tuple_of_array[0][i])
+# # # # #                 collection_taxonomy_data.insert_one(tuple_of_array[0][i])
 # # # # #             if tuple_of_array[1][i] != {}:
 # # # # #                 filter = {"Seq_Hex":tuple_of_array[1][i]["Seq_Hex"]}
 # # # # #                 check_hex = collection_convert.find_one(filter)
@@ -1249,13 +1284,13 @@ class Alignment:
 # # # # #         '''Come il metodo save_on_mongo(), ma con sensibilità per singolo record.
 # # # # #         In questo modo, possiamo aggiungere manualmente i dati di interesse.'''
 # # # # #         db = self.client["Biologia"]
-# # # # #         collection_data_name = collection + "_data"
+# # # # #         collection_taxonomy_data = collection + "_data"
 # # # # #         collection_hex_name = collection + "_hex"
-# # # # #         collection_data = db[collection_data_name]
+# # # # #         collection_taxonomy_data = db[collection_taxonomy_data]
 # # # # #         collection_hex = db[collection_hex_name]
 # # # # #         data = struct["data"]
 # # # # #         hex = struct["hex"]
-# # # # #         collection_data.insert_one(data)
+# # # # #         collection_taxonomy_data.insert_one(data)
 # # # # #         collection_hex.insert_one(hex)
 # # # # #         self.printWarning.stdout("Saved correctly on mongo")
 
@@ -1296,9 +1331,9 @@ class Alignment:
 # # # # #             port = int(CLUSTER.split(":")[1])
 # # # # #             self.client = MongoClient(f'{ip}', port)
 # # # # #         db = self.client["Biologia"]
-# # # # #         collection_data = db[self.mongo_collections[0]]
+# # # # #         collection_taxonomy_data = db[self.mongo_collections[0]]
 # # # # #         collection_convert = db[self.mongo_collections[1]]
-# # # # #         finder = collection_data.find(info)
+# # # # #         finder = collection_taxonomy_data.find(info)
 # # # # #         dataSource = {}
 # # # # #         for x in finder:
 # # # # #             #print(x["Features"])
@@ -1344,11 +1379,11 @@ class Alignment:
 
 # # # # #     def alignmentSeq(self, f1_key:str, f2_key:str) -> str:
 # # # # #         db = self.client["Biologia"]
-# # # # #         collection_data = db["genetic_data"]
+# # # # #         collection_taxonomy_data = db["genetic_data"]
 # # # # #         collection_convert = db["hex_to_seq"]
 # # # # #         info = {"Features":{"$elemMatch":{"Type":"source","organism":f1_key}}}
 # # # # #         # FIND PROTEIN
-# # # # #         finder = collection_data.find_one(info)
+# # # # #         finder = collection_taxonomy_data.find_one(info)
 # # # # #         if not finder:
 # # # # #             PrintWarning(5).stdout(f"Error searching {f1_key}: Organism Not Found")
 # # # # #             return None, None
@@ -1357,7 +1392,7 @@ class Alignment:
 # # # # #             return None, None
 # # # # #         hex1 = finder['Seq_Hex']
 # # # # #         info2 = {"Features":{"$elemMatch":{"Type":"source","organism":f2_key}}}
-# # # # #         finder2 = collection_data.find_one(info2)
+# # # # #         finder2 = collection_taxonomy_data.find_one(info2)
 # # # # #         if not finder2:
 # # # # #             PrintWarning(5).stdout(f"Error searching {f2_key}: Organism Not Found")
 # # # # #             return None, None
@@ -1510,11 +1545,11 @@ class Alignment:
 # # # # #     def toFasta(self,name):
 # # # # #         print(name)
 # # # # #         db = self.client["Biologia"]
-# # # # #         collection_data = db["genetic_data"]
+# # # # #         collection_taxonomy_data = db["genetic_data"]
 # # # # #         collection_convert = db["hex_to_seq"]
 # # # # #         info = {"Features":{"$elemMatch":{"Type":"source","organism":name}}}
 # # # # #         # FIND PROTEIN
-# # # # #         finder = collection_data.find(info)
+# # # # #         finder = collection_taxonomy_data.find(info)
 # # # # #         if not finder:
 # # # # #             PrintWarning(5).stdout(f"Error searching {name}: Organism Not Found")
 # # # # #             return None, None
@@ -1534,7 +1569,7 @@ class Alignment:
 # # # # #         if not finder_data:
 # # # # #             PrintWarning(5).stdout(f"Error searching {id}: CDS Not Found")
 # # # # #             return None
-# # # # #         collection_data = db["protein_data"]
+# # # # #         collection_taxonomy_data = db["protein_data"]
 # # # # #         collection_convert = db["protein_hex"]
 # # # # #         protein_id = None
 # # # # #         for f in finder_data["Features"]:
@@ -1545,7 +1580,7 @@ class Alignment:
 # # # # #             PrintWarning(5).stdout(f"Error searching {id}: Protein Not Found")
 # # # # #             return None
 # # # # #         info = {"Id":protein_id}
-# # # # #         finder_data = collection_data.find_one(info)
+# # # # #         finder_data = collection_taxonomy_data.find_one(info)
 # # # # #         if not finder_data:
 # # # # #             PrintWarning(5).stdout(f"Error searching {protein_id}: Protein Not Found In Database...","\n","\t\tSearching on NCBI...")
 # # # # #             p1,p2 = self.ncbiSearch(protein_id,"protein")
@@ -1575,7 +1610,6 @@ class Alignment:
 # # # # #         if not finder_data:
 # # # # #             PrintWarning(5).stdout(f"Error searching {id}: Source Not Found")
 # # # # #             return None
-# # # # #         collection_data = db["taxonomy_data"]
 # # # # #         collection_convert = db["taxonomy_hex"]
 # # # # #         taxon_meta = None
 # # # # #         for f in finder_data["Features"]:
@@ -1587,12 +1621,12 @@ class Alignment:
 # # # # #             return None
 # # # # #         taxon_id = taxon_meta.split(":")[1]
 # # # # #         info = {"TaxId":taxon_id}
-# # # # #         finder_data = collection_data.find_one(info)
+# # # # #         finder_data = collection_taxonomy_data.find_one(info)
 # # # # #         if not finder_data:
 # # # # #             PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
 # # # # #             dataFind = self.ncbiSearchTaxon(taxon_id,"taxonomy")
 # # # # #             for data in dataFind:
-# # # # #                 collection_data.insert_one(data)
+# # # # #                 collection_taxonomy_data.insert_one(data)
 # # # # #             return dataFind
 # # # # #         return finder_data
     
@@ -1614,7 +1648,7 @@ class Alignment:
 # # # # #                 dataFind = self.ncbiSearchGenome(gene_id,"genome")
 # # # # #                 print(dataFind)
 # # # # #                 # info = {"TaxId":gene_id}
-# # # # #                 # finder_data = collection_data.find_one(info)
+# # # # #                 # finder_data = collection_taxonomy_data.find_one(info)
 # # # # #         return finder_data
 
 
@@ -1751,70 +1785,6 @@ class Alignment:
 
 
 
-    
-
-# NOT-DEPRECATED: SpecieProductMaker.py
-
-filter = {"Features.product": {"$exists": True}}
-projection= {"_id":0, "Features.organism": 1, "Features.product": 1}
-dataResult = collection_data.find(filter, projection)
-list_res = list(dataResult)
-flat_data= []
-
-for diz in list_res:
-    organism=diz["Features"][0]["organism"]
-    indexProduct=1
-    while (diz["Features"][indexProduct]=={}):
-        indexProduct+=1
-    product=diz["Features"][indexProduct]["product"]
-    tupla=(organism, product)
-    flat_data.append(tupla)
-    continue
-
-with open('SpecieProduct.csv', 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile)
-
-    for row in flat_data:
-        writer.writerow(row)
-
-filter = {"GBSeq_feature-table.GBFeature_key":"CDS","GBSeq_feature-table.GBFeature_quals.GBQualifier_name":"product"}
-proj = {"GBSeq_feature-table":1,"GBSeq_organism":1}
-
-dataResult = collection_data2.find(filter, proj)
-def jsonList():
-    tot_data = {}
-    for dataN in dataResult:
-        print(dataN["GBSeq_organism"])
-        if dataN["GBSeq_organism"] not in tot_data:
-            tot_data[dataN["GBSeq_organism"]] = []
-        for data in dataN["GBSeq_feature-table"]:
-            if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
-                for prod in data["GBFeature_quals"]:
-                    if prod["GBQualifier_name"] == "product" and (data["GBFeature_key"],prod["GBQualifier_value"]) not in tot_data[dataN["GBSeq_organism"]]:
-                        tot_data[dataN["GBSeq_organism"]].append((data["GBFeature_key"],prod["GBQualifier_value"]))
-        print(len(tot_data[dataN["GBSeq_organism"]]))
-
-    with open('Species.json', "w") as jswr:
-        json.dump(tot_data,jswr,indent=4)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1826,16 +1796,18 @@ def jsonList():
 
 def main(args:dict) -> None:
 
-    # genus = collection_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
+    # genus = collection_taxonomy_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
     # """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
-    #datas = new_collection.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
+    #datas = collection_taxonomy_tree.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
 
     # taxon = ncbiSearchTaxon("chlorella[next level]")
     # with open("taxonMeta.json","w") as jsw:
     #     json.dump(taxon,jsw,indent=4)
     #print(taxon)
-    name = input('Please insert something to search of')
-    nb = input('Please insert email')
+    name = input('Please insert something to search: ')
+    
+    if (True):   #qui andrà il check per i metodi che fanno ricerche online
+        Entrez.email = check_email()
     #unwrappingSpecies()
     #taxTreeMaker()                 #previously named algo()
     #searchForRank()                #previously named aglo()
@@ -1854,11 +1826,14 @@ def main(args:dict) -> None:
 
 
 
-
-
-# # # # # #######################
-# # # # # ######---MAIN---#######
-# # # # # #######################
+# Driver Code
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+    prog='Biologia Database Parsing',
+    description='What the program does',
+    epilog='Text at the bottom of help')
+    args = vars(parser.parse_args())
+    main(args)
 
 
 # # # # # def main(args:dict) -> None:
