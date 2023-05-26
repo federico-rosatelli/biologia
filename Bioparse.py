@@ -858,7 +858,40 @@ class Database:
 # Utility Methods
 ########################################################################################
 
+def JsonCreate():
+    '''[Legacy] Function that generate a .json file for readable purposes
+    mantaining structure'''
+    fileJ = "data/sourceJson/microAlgaeSource.json"
+    with open(fileJ) as jsr:
+        data:list[str] = json.load(jsr)
+    dataFinal = {}
+    for d in data:
+        if "sp." in d:
+            splt = d.split("sp.")
+            if not splt[0] in dataFinal:
+                dataFinal[splt[0]] = []
+            dataFinal[splt[0]].append(splt[1])
+        else:
+            dataFinal[d] = []
+    with open("uniqueGeneMicroAlgae.json","w") as jsw:
+        json.dump(dataFinal,jsw,indent=4)
+    collection_data = db["protein_data"]
+    filter = {}
+    dataResult = collection_data.find(filter,{"Id":1})
+    collection_data = db["genetic_data"]
+    list_res = []
+    for protein in dataResult:
+        filter = {"Features":{"$elemMatch":{"Type":"CDS","protein_id":protein["Id"]}}}
+        result = collection_data.find_one(filter)
+        if result:
+            list_res.append(protein["Id"])
+    print(list_res)
+    return
+
+
+
 def check_email() -> str:
+    '''Function that helps to check if inserted input is matching email standard'''
     nb = input('Please insert email: ')
     while(re.fullmatch(regex, nb) == None):
         nb = input('Invalid Email, please retry: ')
@@ -981,7 +1014,6 @@ def SpecieProductMaker():
     proj = {"GBSeq_feature-table":1,"GBSeq_organism":1}
     dataResult = collection_nucleotide_data.find(filter, proj)
 
-
     def jsonList():
         '''Inner function (not used) that create a json file from the precedent processed data'''
         tot_data = {}
@@ -996,8 +1028,10 @@ def SpecieProductMaker():
                             tot_data[dataN["GBSeq_organism"]].append((data["GBFeature_key"],prod["GBQualifier_value"]))
             print(len(tot_data[dataN["GBSeq_organism"]]))
         with open('Species.json', "w") as jswr:
-            json.dump(tot_data,jswr,indent=4)
+            json.dump(tot_data, jswr, indent=4)
         return
+    
+    jsonList()
     
     return
 
@@ -1038,6 +1072,7 @@ def finderTaxon(name):
             finderTaxon(tax["ScientificName"])
     except Exception as e:
         return
+    return
 
 
 def genomeRetrieve():
@@ -1134,6 +1169,7 @@ def genomeRetrieve():
                 out.close()
         # for file in dataLink:
         #     print(f'{file}')
+    return
 
 
 def nucleoImport():
@@ -1176,16 +1212,49 @@ def nucleoImport():
                 nucleo_collection.insert_one(record)
 
 
-def efetchTaxon(id):
+def efetchQuery(id, db ="taxonomy"):
     '''Simple function that use BioPython library to retrieve, for a given id, its data
     from Taxonomy section on NCBI'''
-    handle = Entrez.efetch(db="taxonomy", id=id, rettype='gb',retmode="xml")
+    handle = Entrez.efetch(db, id=id, rettype='gb',retmode="xml")
     read = Entrez.read(handle)
     return read
 
 
+def efetchGenome(taxId):
+    '''Function that search for genomic sequence for a data specie (by taxId).
+    Scan the page at the appropriate link on NCBI and if some compatible data
+    are found return the list of their direct link; otherwise return an empty
+    list'''
+    res = requests.get(f"https://ncbi.nlm.nih.gov/genome/?term={taxId}").text
+    tot = []
+    try:
+        findIndex1 = res.index("_genomic.gff.gz")
+        lastHttp1 = res[:findIndex1]
+        firstHttpIndex1 = lastHttp1.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot.append(lastHttp1[firstHttpIndex1:]+"_genomic.gff.gz")
+    except Exception as e:
+        print(f"GFF {e}")
+
+    try:
+        findIndex2 = res.index("_genomic.gbff.gz")
+        lastHttp2 = res[:findIndex2]
+        firstHttpIndex2 = lastHttp2.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot.append(lastHttp2[firstHttpIndex2:]+"_genomic.gbff.gz")
+    except Exception as e:
+        print(f"GBFF {e}")
+    try:
+        findIndex3 = res.index("_genomic.fna.gz")
+        lastHttp3 = res[:findIndex3]
+        firstHttpIndex3 = lastHttp3.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot.append(lastHttp3[firstHttpIndex3:]+"_genomic.fna.gz")
+    except Exception as e:
+        print(f"FNA {e}")
+    return tot
+
+
 def testNucleo():
-    '''TESTING'''
+    '''Function intended for internal testing only. Shows a representation of json structure
+    retrieved from NCBI at Nucleotide section making local query on DB'''
     nucleo_collection = db["nucleotide_organism"]
     query = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key":"CDS","GBFeature_quals":{"$elemMatch":{"GBQualifier_name":"protein_id"}}}}}
     filter = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key": "CDS"}}}
@@ -1212,50 +1281,14 @@ def testNucleo():
                 if qual["GBQualifier_name"] == "protein_id":
                     proteins.append(qual["GBQualifier_value"] in proteins)
         count += 1
-
-    def efetchProtein(ids):
-        '''TESTING'''
-        handle = Entrez.efetch(db="protein", id=ids, rettype='gb',retmode="xml")
-        read = Entrez.read(handle)
-        return read
-
-    results = efetchProtein(proteins)
+    results = efetchQuery(proteins, "protein")
     nucleo_collection.insert_many(results)
     return
 
 
-def efetchGenome(taxId):
-    '''TESTING'''
-    res = requests.get(f"https://ncbi.nlm.nih.gov/genome/?term={taxId}").text
-    tot = []
-    try:
-        findIndex1 = res.index("_genomic.gff.gz")
-        lastHttp1 = res[:findIndex1]
-        firstHttpIndex1 = lastHttp1.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
-        tot.append(lastHttp1[firstHttpIndex1:]+"_genomic.gff.gz")
-    except Exception as e:
-        print(f"GFF {e}")
-
-    try:
-        findIndex2 = res.index("_genomic.gbff.gz")
-        lastHttp2 = res[:findIndex2]
-        firstHttpIndex2 = lastHttp2.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
-        tot.append(lastHttp2[firstHttpIndex2:]+"_genomic.gbff.gz")
-    except Exception as e:
-        print(f"GBFF {e}")
-    try:
-        findIndex3 = res.index("_genomic.fna.gz")
-        lastHttp3 = res[:findIndex3]
-        firstHttpIndex3 = lastHttp3.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
-        tot.append(lastHttp3[firstHttpIndex3:]+"_genomic.fna.gz")
-    except Exception as e:
-        print(f"FNA {e}")
-
-    return tot
-
-
 def genomeFind(name:str):
-    '''TESTING'''
+    '''Function that merge data found on NCBI between Genome and Nucleotide section and
+    print its structore in json format'''
     handle = Entrez.esearch(db='genome', term=name, rettype='gb', retmode='text', retmax=10000)
     record = Entrez.read(handle, validate=False)
     handle.close()
@@ -1362,7 +1395,7 @@ def genusList():
     datas = [["Scientific Name","Taxon Id","Division"]]
     for gene in genus:
         print(gene["ScientificName"])
-        taxons = efetchTaxon(gene["TaxId"])
+        taxons = efetchQuery(gene["TaxId"])
         for taxon in taxons:
             if taxon["Division"] != "Bacteria":
                 datas.append([taxon["ScientificName"],taxon["TaxId"],taxon["Division"]])
@@ -1373,7 +1406,8 @@ def genusList():
 
 
 def ncbiProtein(name:str) ->list:
-    '''TESTING'''
+    '''Function that retrieve data, for a given protein, on Protein section of NCBI (if present)
+    and check for its IDs new datas.'''
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
     # read = Entrez.read(handle)
     handle = Entrez.esearch(db='protein', term=name, rettype='gb', retmode='text', retmax=10000)
@@ -1389,7 +1423,8 @@ def ncbiProtein(name:str) ->list:
 
 
 def proteinFind():
-    '''TESTING'''
+    '''Function that search from local taxonomy_data collection all Protein IDs,
+    cut its sequence to lightens local DB and retrieve new data from NCBI.'''
     taxon_collection = collection_taxonomy_data
     findTax = taxon_collection.find({},{"TaxId":1,"_id":0})
     for data in findTax:
@@ -1405,7 +1440,9 @@ def proteinFind():
 
 
 def findTaxon(key):
-    '''TEST'''
+    '''Function tat for a Taxon ID given in input check
+    if there is an occurrence in taxonomy_data collection
+    and print its Lineage values'''
     rgx = re.compile(f'{key}', re.IGNORECASE)
     info = {"Lineage":rgx}
     dataFind = collection_taxonomy_data.find(info)
@@ -1504,7 +1541,9 @@ def taxTreeMaker():
 
 
 def parseToBasic() -> list:
-    '''TESTING'''
+    '''Function that creates a new, light collection for performance purposes (table_basic collection) containing
+    ScientificName (Specie), TaxID (ID Specie), Nucleotide (nucleotides occurrences for
+    that specie) and Proteins (proteins occurrences for that specie)'''
     taxon_collection = db["taxonomy_data"]
     nucleo_collection = db["nucleotide_data"]
     tableBasic_collection = db["table_basic"]
@@ -1536,8 +1575,9 @@ def parseToBasic() -> list:
     return
 
 
-def fattoBene():
-    '''TESTING'''
+def fattoBene():            # TO DO: RENAME!
+    '''Function that creates a new, light collection for performance purposes (nucleotide_basic collection) containing
+    ScientificName (Specie) and its sequence code (GBSeq_locus, as served from NCBI)'''
     tt = db["nucleotide_basic"]
     tt1 = db["nucleotide_basic1"]
     tot = tt.find({},{"_id":0})
@@ -1551,8 +1591,9 @@ def fattoBene():
             tt1.insert_one(var)
 
 
-def newCollectionBene():
-    '''TESTING'''
+def newCollectionBene():    # TO DO: RENAME!
+    '''Function that creates a new, light collection for performance purposes (table_complete1 collection) containing
+    ScientificName (Specie). It is a new and more refined version of fattoBene()'''
     new_collection = db["table_complete1"]
     old_collection = collection_taxonomy_tree
     nucleotide_collection = db["nucleotide_data"]
@@ -1628,101 +1669,9 @@ def updateByGenomes(datasTaxon=''):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#DEPRECATED: genbank.py
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# DEPRECATED: jsonCreate.py
-
-
-# # # # # fileJ = "data/sourceJson/microAlgaeSource.json"
-
-# # # # # with open(fileJ) as jsr:
-# # # # #     data:list[str] = json.load(jsr)
-
-
-# # # # # dataFinal = {}
-
-# # # # # for d in data:
-# # # # #     if "sp." in d:
-# # # # #         splt = d.split("sp.")
-# # # # #         if not splt[0] in dataFinal:
-# # # # #             dataFinal[splt[0]] = []
-# # # # #         dataFinal[splt[0]].append(splt[1])
-# # # # #     else:
-# # # # #         dataFinal[d] = []
-
-
-# # # # # with open("uniqueGeneMicroAlgae.json","w") as jsw:
-# # # # #     json.dump(dataFinal,jsw,indent=4)
-
-
-# # # # collection_data = db["protein_data"]
-# # # # filter = {}
-# # # # dataResult = collection_data.find(filter,{"Id":1})
-# # # # collection_data = db["genetic_data"]
-# # # # list_res = []
-
-
-# # # # for protein in dataResult:
-# # # #     filter = {"Features":{"$elemMatch":{"Type":"CDS","protein_id":protein["Id"]}}}
-# # # #     result = collection_data.find_one(filter)
-# # # #     if result:
-# # # #         list_res.append(protein["Id"])
-
-# # # # print(list_res)
-
-
-
-
+########################################################################################
+# Examples and SCRATCH AREA
+########################################################################################
 
 
 
@@ -1740,8 +1689,8 @@ def updateByGenomes(datasTaxon=''):
 
 
 
-
 ########################################################################################
+# MAIN
 ########################################################################################
 
 def main(args:dict) -> None:
