@@ -34,7 +34,7 @@ client = MongoClient('localhost', 27017)
 db = client["Biologia"]
 collection_data = db["taxonomy_data"]
 new_collection = db["taxonomy_tree"]
-ignore_names = ["environmental samples"]
+ignore_names = ["environmental samples"]                    # taxonomy ID to be avoided in collection_data
 Entrez.api_key = "cc030996838fc52dd1a2653fad76bf5fe408"
 Entrez.email = ""
 pattern = r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?"            # pattern passed for checking email format purpose
@@ -46,7 +46,7 @@ pattern = r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?"            # pattern passed for
 ########################################################################################
 
 def test_email(your_pattern):
-  '''Function to check for valid email address'''
+  '''Function that check if the input text is a valid email address'''
   pattern = re.compile(your_pattern)
   emails = ["john@example.com", 
             "python-list@python.org", 
@@ -61,7 +61,7 @@ def test_email(your_pattern):
 
 
 def read_kbd_input(inputQueue):
-    '''Function to detect input text'''
+    '''Function that detect input text'''
     print('Ready for keyboard input: ')
     while (True):
         input_str = input()
@@ -139,11 +139,11 @@ class  PrintWarning:
 
 
 #################################################################################
-# Output files methods (mainly .cs)
+# Output files methods (mainly .csv)
 #################################################################################
 
 def productsTable():
-    '''Function to produce SpecieProduct.csv in lists/ folder'''
+    '''Function that produce SpecieProduct.csv in lists/ folder'''
     products = open("SpecieProduct.csv").readlines()
     complete_collection = db["table_complete"]
     basic_collection = db["table_basic"]
@@ -164,11 +164,11 @@ def productsTable():
 
 
 #################################################################################
-# Query methods
+# Online Query methods (NCBI), require login method to be saved before
 #################################################################################
 
-def ncbiSearchTaxon(name:str) ->list:
-    '''TESTING'''
+def ncbiSearchTaxon(name:str) -> list:
+    '''Function that submit queries with given TaxonomyIDs to NCBI platform, section Taxonomy'''
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
     # read = Entrez.read(handle)
     handle = Entrez.esearch(db='taxonomy', term=name, rettype='gb', retmode='text', retmax=10000)
@@ -183,9 +183,36 @@ def ncbiSearchTaxon(name:str) ->list:
     return read
 
 
-def aglo(name,rank):
-    '''TESTING'''
+def finderTaxon(name):
+    '''Function that, given a Taxonomy ID, add the relative specie to collection_data branch in Biologia DB,
+    if it is not already present in list'''
+    if name in ignore_names:
+        return
+    try:
+        taxon = ncbiSearchTaxon(f"{name}[next level]")
+        for tax in taxon:
+            if (not collection_data.find_one({"TaxId":tax["TaxId"]}) and tax["Rank"] == "species"):
+                    print(tax["ScientificName"])
+                    collection_data.insert_one(tax)
+            finderTaxon(tax["ScientificName"])
+    except Exception as e:
+        return
+    
+
+
+#################################################################################
+# Offline Query methods (MongoDB)
+#################################################################################
+
+def searchForRank(name = '', rank = ''):
+    '''Function that search for input with a mongo-query in local DB'''
     filter = {}
+    if (name != '' and rank != ''):
+        filter = {name, rank}
+    elif (name != ''):
+        filter = {name}
+    elif (rank != ''):
+        filter = {rank}
     dataResult = collection_data.find(filter)
     return
 
@@ -202,21 +229,6 @@ def finderTaxonFromFile(fn):
         if name != "" and name not in names:
             finderTaxon(name)
         names.append(name)
-
-
-def finderTaxon(name):
-    '''TESTING'''
-    if name in ignore_names:
-        return
-    try:
-        taxon = ncbiSearchTaxon(f"{name}[next level]")
-        for tax in taxon:
-            if (not collection_data.find_one({"TaxId":tax["TaxId"]}) and tax["Rank"] == "species"):
-                    print(tax["ScientificName"])
-                    collection_data.insert_one(tax)
-            finderTaxon(tax["ScientificName"])
-    except Exception as e:
-        return
 
 
 def unwrappingSpecies():
@@ -1961,7 +1973,7 @@ def main(args:dict) -> None:
     nb = input('Please insert email')
     #unwrappingSpecies()
     #algo()
-    #aglo()
+    #searchForRank()                #previously named aglo()
     #testNucleo()
     #GFF()
     #nucleoResult()
