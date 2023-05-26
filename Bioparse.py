@@ -98,7 +98,6 @@ class bcolors:
     OK_BOX = OKBLUE + '[*] '
 
 
-
 ########################################################################################
 
 class  PrintWarning:
@@ -152,6 +151,110 @@ class  PrintWarning:
 
 ########################################################################################
 
+class Alignment:
+    '''Class for SMITH-WATERMAN algorithm implementation'''
+
+
+    def __init__(self, *seqs:str, gap:int=1, show_table:bool=False) -> None:
+        '''Constructor'''
+        if len(seqs)<2:
+            print(bcolors.FAIL+f"MinMaxError: input len for sequences must be >= 2, got {len(seqs)}"+bcolors.ENDC)
+            return
+        self.seqs = [Seq(i) for i in seqs]
+        self.seq1 = seqs[0]
+        self.seq2 = seqs[1]
+        self.gap = gap
+        self.show_table = show_table
+    
+
+    def __str__(self) -> str:
+        '''Internal purposes'''
+        return '\n'.join(self.seqs)
+
+
+    def __len__(self) -> int:
+        '''Internal purposes'''
+        x = 1
+        for i in self.seqs:
+            x *= len(i)
+        return x
+    
+
+    def __call__(self, seq:str) -> list:
+        '''Internal purposes'''
+        self.seqs.append(seq)
+        return self.seqs
+
+
+    def createScoreMatrix(self, lnSeq1:int, lnSeq2:int) -> tuple:
+        '''Function that return a Matrix with score per gene'''
+        score_matrix = [[0 for _ in range(lnSeq2 + 1)] for _ in range(lnSeq1 + 1)]
+        max_score = 0
+        max_index = (0,0)
+        for i in range(1, lnSeq1 + 1):
+            for j in range(1, lnSeq2 + 1):
+                score = 1 if self.seq1[i-1] == self.seq2[j-1] else -1
+
+                score_matrix[i][j] = max(
+                    0,
+                    score_matrix[i-1][j-1] + score,
+                    score_matrix[i-1][j] - self.gap,
+                    score_matrix[i][j-1] - self.gap
+                )
+
+                if score_matrix[i][j] > max_score:
+                    max_score = score_matrix[i][j]
+                    max_index = (i, j)
+        return score_matrix,max_index
+
+
+    def localAlignment(self, save_table:bool=False) -> tuple:
+        '''Function that use createScoreMatrix() to operate on genes and make appropriate localAlignment according to Smith-Waterman'''
+        if len(self.seqs)>2:
+            print(bcolors.WARN_BOX+f"Warning! Only 2 arguments were expected, but got {len(self.seqs)}.\n\t-The algorithm will use only the first 2 sequences..."+bcolors.ENDC)
+        aligned_seq1 = ""
+        aligned_seq2 = ""
+        score_matrix, max_index_score_matrix = self.createScoreMatrix(len(self.seq1),len(self.seq2))
+        i, j = max_index_score_matrix
+        traceback = []
+        print(f"Table length. First sequence:{len(self.seq1)}, Second sequence:{len(self.seq2)}")
+        print(f"Max term: {score_matrix[i][j]}; in index: {max_index_score_matrix}")
+        f1 = 0
+        while score_matrix[i][j] != 0:
+            traceback.append((i,j))
+            if score_matrix[i-1][j-1] >= score_matrix[i-1][j] and score_matrix[i-1][j-1] >= score_matrix[i][j-1]:
+                aligned_seq1 = self.seq1[i-1] + aligned_seq1
+                aligned_seq2 = self.seq2[j-1] + aligned_seq2
+                i, j = i-1, j-1
+                f1 += 1
+            elif score_matrix[i-1][j] >= score_matrix[i-1][j-1] and score_matrix[i-1][j] >= score_matrix[i][j-1]:
+                aligned_seq1 = self.seq1[i-1] + aligned_seq1
+                aligned_seq2 = '-' + aligned_seq2
+                i -= 1
+            else:
+                aligned_seq1 = '-' + aligned_seq1
+                aligned_seq2 = self.seq2[j-1] + aligned_seq2
+                j -= 1
+        
+        if self.show_table:
+            printTable(score_matrix,(self.seq1,self.seq2),trace=traceback)
+            if save_table:
+                saveTable(score_matrix,trace=traceback)
+        print(f"{(f1/len(aligned_seq1))*100}% of alignment")
+        return aligned_seq1, aligned_seq2
+    
+
+    def globalAlignment(self):
+        '''TEST check'''
+        return 0
+
+
+# a = Alignment("AGTCCCTGATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTCCCTGATTT",
+# "TTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGT",show_table=True)
+# a.localAlignment(save_table=True)
+
+
+########################################################################################
 
 def csvWrite(dataResult):
     '''Custom function that, using csv library, return a file with field of interests
@@ -182,6 +285,7 @@ def csvWrite(dataResult):
 
 
 def printTable(table, gene, trace=[]):
+    '''Function implemented in Smith-Waterman that help to display Score Matrix '''
     #print([i for i in range(len(table[0]))])
     indx = "  "
     for i in range(trace[len(trace)-1][1],trace[len(trace)-1][1]+10):
@@ -205,6 +309,8 @@ def printTable(table, gene, trace=[]):
 
 
 def saveTable(table, trace=[]):
+    '''Aid function that is used in Smith-Waterman and serve the purpose to save in .png format
+    the result of printTable()'''
     if len(table)<40 or len(table[0])<40:
         return
     tableCopy = []
@@ -220,7 +326,6 @@ def saveTable(table, trace=[]):
                 color[i][j] = "#56b5fd"
     # for i in range(10,20):
     #     color[trace[len(trace)-i-1][0]][trace[len(trace)-i-1][1]] = "#56b5fd"
-    
     fig,ax = plt.subplots()
     fig.patch.set_visible(False)
     ax.axis('off')
@@ -236,12 +341,12 @@ def saveTable(table, trace=[]):
 # NOT-DEPRECATED: SpecieProductMaker.py
 
 def SpecieProductMaker():
+    '''TEST'''
     filter = {"Features.product": {"$exists": True}}
     projection= {"_id":0, "Features.organism": 1, "Features.product": 1}
     dataResult = collection_taxonomy_data.find(filter, projection)
     list_res = list(dataResult)
     flat_data= []
-
     for diz in list_res:
         organism=diz["Features"][0]["organism"]
         indexProduct=1
@@ -251,19 +356,16 @@ def SpecieProductMaker():
         tupla=(organism, product)
         flat_data.append(tupla)
         continue
-
     with open('SpecieProduct.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-
         for row in flat_data:
             writer.writerow(row)
-
     filter = {"GBSeq_feature-table.GBFeature_key":"CDS","GBSeq_feature-table.GBFeature_quals.GBQualifier_name":"product"}
     proj = {"GBSeq_feature-table":1,"GBSeq_organism":1}
-
     dataResult = collection_nucleotide_data.find(filter, proj)
 
     def jsonList():
+        '''TEST'''
         tot_data = {}
         for dataN in dataResult:
             print(dataN["GBSeq_organism"])
@@ -275,9 +377,10 @@ def SpecieProductMaker():
                         if prod["GBQualifier_name"] == "product" and (data["GBFeature_key"],prod["GBQualifier_value"]) not in tot_data[dataN["GBSeq_organism"]]:
                             tot_data[dataN["GBSeq_organism"]].append((data["GBFeature_key"],prod["GBQualifier_value"]))
             print(len(tot_data[dataN["GBSeq_organism"]]))
-
         with open('Species.json', "w") as jswr:
             json.dump(tot_data,jswr,indent=4)
+        return
+    
     return
 
 
@@ -352,7 +455,6 @@ def genomeRetrieve():
         print("Directory '% s' created" % path)
     except OSError as e:
         print(e)
-
     path2 = os.path.join(parent, temp)
     try:
         os.mkdir(path2)
@@ -684,7 +786,6 @@ def ncbiSearchNucleo123(name:str) ->bool:
     record = Entrez.read(handle, validate=False)
     handle.close()
     print(f"Len of IDLIST:{len(record['IdList'])} di {name}")
-
     if len(record['IdList']) == 0:
         return True
     # if len(record["IdList"]) == 0:
@@ -729,6 +830,7 @@ def proteinFind():
 
 
 def findTaxon(key):
+    '''TEST'''
     rgx = re.compile(f'{key}', re.IGNORECASE)
     info = {"Lineage":rgx}
     dataFind = collection_taxonomy_data.find(info)
@@ -853,7 +955,6 @@ def parseToBasic() -> list:
         }
         tableBasic_collection.insert_one(inserter)
         control += 1   
-    
     # per ogni ScientificName in Nucleotide:
         # popola "nucleotide_basic" con
             # GBSeq_locus
@@ -957,138 +1058,6 @@ def updateByGenomes(datasTaxon=''):
 
 
 
-# NOT-DEPRECATED: smith_waterman.py
-
-
-class Alignment:
-
-    def __init__(self, *seqs:str, gap:int=1, show_table:bool=False) -> None:
-        if len(seqs)<2:
-            print(bcolors.FAIL+f"MinMaxError: input len for sequences must be >= 2, got {len(seqs)}"+bcolors.ENDC)
-            return
-        self.seqs = [Seq(i) for i in seqs]
-        self.seq1 = seqs[0]
-        self.seq2 = seqs[1]
-        self.gap = gap
-        self.show_table = show_table
-    
-
-    def __str__(self) -> str:
-        return '\n'.join(self.seqs)
-
-
-    def __len__(self) -> int:
-        x = 1
-        for i in self.seqs:
-            x *= len(i)
-        return x
-    
-
-    def __call__(self, seq:str) -> list:
-        self.seqs.append(seq)
-        return self.seqs
-
-
-    def createScoreMatrix(self, lnSeq1:int, lnSeq2:int) -> tuple:
-        score_matrix = [[0 for _ in range(lnSeq2 + 1)] for _ in range(lnSeq1 + 1)]
-
-        max_score = 0
-        max_index = (0,0)
-        for i in range(1, lnSeq1 + 1):
-            for j in range(1, lnSeq2 + 1):
-                score = 1 if self.seq1[i-1] == self.seq2[j-1] else -1
-
-                score_matrix[i][j] = max(
-                    0,
-                    score_matrix[i-1][j-1] + score,
-                    score_matrix[i-1][j] - self.gap,
-                    score_matrix[i][j-1] - self.gap
-                )
-
-                if score_matrix[i][j] > max_score:
-                    max_score = score_matrix[i][j]
-                    max_index = (i, j)
-        return score_matrix,max_index
-
-
-    def localAlignment(self, save_table:bool=False) -> tuple:
-        if len(self.seqs)>2:
-            print(bcolors.WARN_BOX+f"Warning! Only 2 arguments were expected, but got {len(self.seqs)}.\n\t-The algorithm will use only the first 2 sequences..."+bcolors.ENDC)
-        aligned_seq1 = ""
-        aligned_seq2 = ""
-
-        score_matrix, max_index_score_matrix = self.createScoreMatrix(len(self.seq1),len(self.seq2))
-
-        i, j = max_index_score_matrix
-        traceback = []
-        print(f"Table length. First sequence:{len(self.seq1)}, Second sequence:{len(self.seq2)}")
-        print(f"Max term: {score_matrix[i][j]}; in index: {max_index_score_matrix}")
-        f1 = 0
-        while score_matrix[i][j] != 0:
-            traceback.append((i,j))
-            if score_matrix[i-1][j-1] >= score_matrix[i-1][j] and score_matrix[i-1][j-1] >= score_matrix[i][j-1]:
-                aligned_seq1 = self.seq1[i-1] + aligned_seq1
-                aligned_seq2 = self.seq2[j-1] + aligned_seq2
-                i, j = i-1, j-1
-                f1 += 1
-            elif score_matrix[i-1][j] >= score_matrix[i-1][j-1] and score_matrix[i-1][j] >= score_matrix[i][j-1]:
-                aligned_seq1 = self.seq1[i-1] + aligned_seq1
-                aligned_seq2 = '-' + aligned_seq2
-                i -= 1
-            else:
-                aligned_seq1 = '-' + aligned_seq1
-                aligned_seq2 = self.seq2[j-1] + aligned_seq2
-                j -= 1
-        
-        if self.show_table:
-            printTable(score_matrix,(self.seq1,self.seq2),trace=traceback)
-            if save_table:
-                saveTable(score_matrix,trace=traceback)
-        print(f"{(f1/len(aligned_seq1))*100}% of alignment")
-        return aligned_seq1, aligned_seq2
-    
-
-    def globalAlignment(self):
-        return 0
-
-
-# a = Alignment("AGTCCCTGATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTCCCTGATTT",
-# "TTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGT",show_table=True)
-# a.localAlignment(save_table=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # # # # # Questa classe comprende al suo interno i metodi di interrogazione del database
-# # # # # # attraverso l'interfaccia accessibile via web all'indirizzo localhost:3000.
-# # # # # # Per permetterne il funzionamento, é necessario prima attivare sia il
-# # # # # # servizio di mongodb che istanziare il server.js come illustrato in genbank.py. 
-
-
-
-
-
-# # # # # findTaxon("Eukaryota")
 
 
 
@@ -1755,16 +1724,10 @@ class Alignment:
 # # # # #     json.dump(dataFinal,jsw,indent=4)
 
 
-
-# # # # CLUSTER = "localhost:27017"
-# # # # client = MongoClient('localhost', 27017)
-# # # # db = client["Biologia"]
 # # # # collection_data = db["protein_data"]
-
 # # # # filter = {}
 # # # # dataResult = collection_data.find(filter,{"Id":1})
 # # # # collection_data = db["genetic_data"]
-
 # # # # list_res = []
 
 
@@ -1783,19 +1746,6 @@ class Alignment:
 
 
 
-
-
-
-
-
-
-
-########################################################################################
-########################################################################################
-########################################################################################
-
-def main(args:dict) -> None:
-
     # genus = collection_taxonomy_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
     # """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
     #datas = collection_taxonomy_tree.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
@@ -1804,6 +1754,18 @@ def main(args:dict) -> None:
     # with open("taxonMeta.json","w") as jsw:
     #     json.dump(taxon,jsw,indent=4)
     #print(taxon)
+
+
+
+
+
+
+########################################################################################
+########################################################################################
+
+def main(args:dict) -> None:
+
+
     name = input('Please insert something to search: ')
     
     if (True):   #qui andrà il check per i metodi che fanno ricerche online
@@ -1822,6 +1784,7 @@ def main(args:dict) -> None:
     #productsTable()
     #csvWrite(dataResult)
     #updateByGenomes()
+    #findTaxon("Eukaryota")
     return
 
 
@@ -1829,9 +1792,9 @@ def main(args:dict) -> None:
 # Driver Code
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-    prog='Biologia Database Parsing',
-    description='What the program does',
-    epilog='Text at the bottom of help')
+        prog='Biologia Database Parsing',
+        description='What the program does',
+        epilog='Text at the bottom of help')
     args = vars(parser.parse_args())
     main(args)
 
