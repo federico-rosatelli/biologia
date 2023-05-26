@@ -684,7 +684,8 @@ def ncbiSearchNucleo1(name:str) ->list:
 
 
 def nucleoImport():
-    '''TESTING'''
+    '''Sub-function that add new entries in nucleotide_data collection searching for them
+    on NCBI platform'''
     daora = False
     nucleo_collection = db["nucleotide_data"]
     all_data = collection_taxonomy_data.find({},{"TaxId":1,"_id":0})
@@ -706,7 +707,8 @@ def nucleoImport():
 
 
 def nucleoResult():
-    '''TESTING'''
+    '''Function that lightens the records of nucleotide_data collection taking only
+    datas of interest.'''
     nucleoImport()
     # "txid257627"
     # "txid257627"
@@ -764,7 +766,9 @@ def unwrappingSpecies():
 
 
 def genusList():
-    '''TESTING'''
+    '''Function that generate a .csv file that list all Ranks present in
+    taxonomy_tree collection, taking off some of them by avoiding to
+    insert non-microalgae'''
     genus = collection_taxonomy_tree.find({"Rank":"genus"})
     datas = [["Scientific Name","Taxon Id","Division"]]
     for gene in genus:
