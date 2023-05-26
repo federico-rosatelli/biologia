@@ -13,6 +13,11 @@ const router = createRouter({
 		{path: '/taxon', component: SearchTable},
 		{path: '/organism/:taxid/nucleotides', component: OrganismView},
 		{path: '/organism/:taxid/proteins', component: OrganismView},
+		{path: '/team', 
+		beforeEnter(to, from, next) {
+			window.location.replace("https://www.youtube.com/watch?v=rcVb6l4TpHw")
+		}
+	}
 
 	]
 })
