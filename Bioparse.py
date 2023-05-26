@@ -357,6 +357,511 @@ class Parsing(object):
 
 ########################################################################################
 
+
+class Database:
+    '''In this class are managed the different types of DB on which the data
+     they can be saved. The task of this class is initialization
+     and data manipulation, along with the ability to input
+     credentials to communicate with the servers of the major web platforms.'''
+
+
+    def __init__(self, verbose=False, type:str="", email:str=None) -> None:
+        '''Constructor'''
+        self.file = Global.SQL["Store"]
+        ip = Global.CLUSTER.split(":")[0]
+        port = int(Global.CLUSTER.split(":")[1])
+        self.client = MongoClient(f'{ip}', port)
+        self.connection = None
+        self.mongo_collections = (type+"_data",type+"_hex")
+        self.printWarning = PrintWarning(10)
+        self.dataSource = {}
+        self.totLength = 0
+        self.diffAlg = {}
+        self.verbose = verbose
+        self.parse = Parsing()
+        self.email = email
+        print(email)
+        if email:
+            Entrez.email = email
+    
+    
+    def listSource(self)->list:
+        '''Returns a list of sources from which data is fetched.'''
+        return [key for key in self.dataSource]
+    
+
+    def addEmail(self, email) -> None:
+        '''Update the email field for identification.'''
+        self.email = email
+        Entrez.email = email
+
+
+    def save_on_mongo(self, tuple_of_array:tuple) -> None:
+        '''This method generates the database in MongoDB (see Requirements at the top of the file or the README.md).
+         The data is saved in a local db called Biology, where all the operations will then be performed.'''
+        PrintWarning(8).stdout("\nStart saving on database")
+        db = self.client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
+        print(self.mongo_collections)
+        collection_taxonomy_data = db[self.mongo_collections[0]]
+        collection_convert = db[self.mongo_collections[1]]
+        count = 0
+        last = -1
+        for i in range(len(tuple_of_array[0])):
+            count+=1
+            if int((count/len(tuple_of_array[0]))*100) != last:
+                print("[%-50s] %d%%" % ('='*((last+1)//2),last+1),end="\r")
+                last +=1
+            filter = {"Name":tuple_of_array[0][i]["Name"]}
+            check_name = collection_taxonomy_data.find_one(filter)
+            if not check_name:
+                collection_taxonomy_data.insert_one(tuple_of_array[0][i])
+            if tuple_of_array[1][i] != {}:
+                filter = {"Seq_Hex":tuple_of_array[1][i]["Seq_Hex"]}
+                check_hex = collection_convert.find_one(filter)
+                if not check_hex:
+                    collection_convert.insert_one(tuple_of_array[1][i])
+        self.printWarning.stdout("Saved correctly on mongo")
+    
+
+    def save_one_in_mongo(self,struct:dict,collection:str)->None:
+        '''Like the save_on_mongo() method, but with per-record sensitivity.
+         In this way, we can manually add the data of interest.'''
+        db = self.client["Biologia"]
+        collection_taxonomy_data = collection + "_data"
+        collection_hex_name = collection + "_hex"
+        collection_taxonomy_data = db[collection_taxonomy_data]
+        collection_hex = db[collection_hex_name]
+        data = struct["data"]
+        hex = struct["hex"]
+        collection_taxonomy_data.insert_one(data)
+        collection_hex.insert_one(hex)
+        self.printWarning.stdout("Saved correctly on mongo")
+
+        
+    def save_on_sql(self,tuple_of_array:tuple, file=None):
+        '''This method generates the database in SQL (see Requirements at the beginning of the file or the README.md).
+         Although functional, at the moment this branch of the project is in STANDBY'''
+        if file != None:
+            self.file = file
+        try:
+            self.connection = sqlite3.connect(self.file)
+            cursor = self.connection.cursor()
+            if not self.file_exists():
+                scr = open("init.sql").read()
+                cursor.executescript(scr)
+            for i in range(len(tuple_of_array[0])):
+                data_tuple = (tuple_of_array[0][i]["Name"],tuple_of_array[0][i]["Id"],tuple_of_array[0][i]["Seq_Hex"],tuple_of_array[0][i]["Description"],i)
+                find = f"SELECT Seq_Hex FROM Biologia WHERE Seq_Hex='{tuple_of_array[0][i]['Seq_Hex']}'"
+                res = cursor.execute(find)
+                if not res:
+                    table ="""INSERT INTO Biologia VALUES(?,?,?,?,?)"""
+                    cursor.execute(table,data_tuple)
+        except Exception as e:
+            self.connection.close()
+            return PrintWarning(4).stdout(f"Error Database Biologia.db: {e}")
+        self.connection.commit()
+        if not self.connection:
+            self.connection.close()
+            return PrintWarning(5).stdout(f"Error Writing Database Biologia.db")
+        self.connection.close()
+        return None
+
+
+    def get_data_from_mongo(self, info:dict, saveOnJson:bool=False, algae:bool=False, micro_algae:bool=False) -> dict:
+        '''"Getter" type method, allows consultation of the DB based on MongoDB'''
+        if self.client == None:
+            ip = CLUSTER.split(":")[0]
+            port = int(CLUSTER.split(":")[1])
+            self.client = MongoClient(f'{ip}', port)
+        db = self.client["Biologia"]
+        collection_taxonomy_data = db[self.mongo_collections[0]]
+        collection_convert = db[self.mongo_collections[1]]
+        finder = collection_taxonomy_data.find(info)
+        dataSource = {}
+        for x in finder:
+            #print(x["Features"])
+            source = None
+            for f in x["Features"]:
+                if f["Type"] == "source":
+                    source = f["organism"]
+                    if source not in dataSource:
+                        dataSource[source] = []
+            dataSource[source].append(x["Id"])
+        self.totLength = len(dataSource)
+        self.dataSource = dataSource
+        if saveOnJson:
+            self.save_on_json()
+        if algae:
+            totAlgae,same = self.isAlgae(dataSource)
+            self.diffAlg["Algae"] = same
+            algaeSource = {}
+            for algae in totAlgae:
+                algaeSource[algae] = dataSource[algae]
+            self.dataSource = algaeSource
+            PrintWarning(2).stdout(f"Total algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
+            if saveOnJson:
+                self.save_on_json(fileName="algaeSource.json")
+        if micro_algae:
+            # ? self.datasource vs. datasource
+            totAlgae,same = self.isMicroAlgae(dataSource)
+            self.diffAlg["MicroAlgae"] = same
+            algaeSource = {}
+            for algae in totAlgae:
+                algaeSource[algae] = dataSource[algae]
+            self.dataSource = algaeSource
+            PrintWarning(2).stdout(f"Total micro algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
+            if saveOnJson:
+                self.save_on_json(fileName="microAlgaeSource.json")
+        #
+        # self.printDifferenceAlgae()
+        # dataDiff = self.checkDifferenceAlgae()
+        #return self.dataSource
+        self.confronto()
+        return self.dataSource
+    
+
+    def alignmentSeq(self, f1_key:str, f2_key:str) -> str:
+        '''Use Smith-Waterman Alignment to make comparison between sequences'''
+        db = self.client["Biologia"]
+        collection_taxonomy_data = db["genetic_data"]
+        collection_convert = db["hex_to_seq"]
+        info = {"Features":{"$elemMatch":{"Type":"source","organism":f1_key}}}
+        # FIND PROTEIN
+        finder = collection_taxonomy_data.find_one(info)
+        if not finder:
+            PrintWarning(5).stdout(f"Error searching {f1_key}: Organism Not Found")
+            return None, None
+        if not 'Seq_Hex' in finder:
+            PrintWarning(5).stdout(f"Error searching {f1_key}: Hex Sequence Not Found")
+            return None, None
+        hex1 = finder['Seq_Hex']
+        info2 = {"Features":{"$elemMatch":{"Type":"source","organism":f2_key}}}
+        finder2 = collection_taxonomy_data.find_one(info2)
+        if not finder2:
+            PrintWarning(5).stdout(f"Error searching {f2_key}: Organism Not Found")
+            return None, None
+        if not 'Seq_Hex' in finder2:
+            PrintWarning(5).stdout(f"Error searching {f2_key}: Hex Sequence Not Found")
+            return None, None
+        hex2 = finder2['Seq_Hex']
+        info_hex = {"Seq_Hex":hex1}
+        finder_hex = collection_convert.find_one(info_hex)
+        if not finder_hex:
+            PrintWarning(5).stdout(f"Error searching {f1_key}: Hex Sequence Not Found in the Database")
+            return None, None
+        seq1 = finder_hex['Seq_Raw']
+        info_hex = {"Seq_Hex":hex2}
+        finder_hex = collection_convert.find_one(info_hex)
+        if not finder_hex:
+            PrintWarning(5).stdout(f"Error searching {f2_key}: Hex Sequence Not Found in the Database")
+            return None, None
+        seq2 = finder_hex['Seq_Raw']
+        smwt = Alignment(seq1,seq2,show_table=self.verbose)
+        s1,s2 = smwt.localAlignment()
+        return s1,s2
+    
+
+    def saveFileSeq(self, name:str, seq1:str, seq2:str) -> None:
+        '''Test'''
+        seq1_fasta = ""
+        for i in range(len(seq1)):
+            if i%100 == 0 and i != 0:
+                seq1_fasta += "\n"
+            elif i%10 == 0 and i != 0:
+                seq1_fasta += " "
+            seq1_fasta += seq1[i]
+        seq2_fasta = ""
+        for i in range(len(seq2)):
+            if i%100 == 0 and i != 0:
+                seq2_fasta += "\n"
+            elif i%10 == 0 and i != 0:
+                seq2_fasta += " "
+            seq2_fasta += seq2[i]
+        with open(name,"w") as wr:
+            wr.write(seq1_fasta+"\n\n//\n\n"+seq2_fasta)
+    
+
+    def alignment(self,fileIn,fileOut) -> None:
+        '''Test'''
+        rd = open(fileIn).readlines()
+        for i in range(len(rd)):
+            for j in range(i+1,len(rd)):
+                PrintWarning(3).stdout(f"Align {rd[i].strip()} with {rd[j].strip()}")
+                seq1,seq2 = self.alignmentSeq(rd[i].strip(),rd[j].strip())
+                if seq1 and seq2:   
+                    PrintWarning(3).stdout(f"Sequence length: {len(seq1)}\n")
+                    self.saveFileSeq(f"{Global.ALIGNMENT['Path']}{fileOut.split('.')[0]}_{rd[i].strip()}_{rd[j].strip()}.txt",seq1,seq2)
+
+
+    def printDifferenceAlgae(self) -> list:
+        '''Print the algae not contained in microalgae'''
+        diff = [self.diffAlg[key] for key in self.diffAlg]
+        print(len(diff[0])-len(diff[1]))
+
+
+    def checkDifferenceAlgae(self) -> list:
+        '''Check the algae not contained in microalgae'''
+        diff = [self.diffAlg[key] for key in self.diffAlg]
+        tot = {}
+        for i in range(len(diff)):
+            for k in range(len(diff[i])):
+                if diff[i][k] not in tot:
+                    tot[diff[i][k]] = 1
+                else:
+                    tot[diff[i][k]] += 1  
+        algTot = []
+        for i in tot:
+            if tot[i] == 1:
+                algTot.append(i)
+        return algTot
+
+    
+    def save_on_json(self, fileName:str="dataSource.json") -> None:
+        '''Save the data to a file in .json format'''
+        with open(f"{Global.JSON['Path']}{fileName}","w") as js:
+            json.dump(self.dataSource,js,indent=4)
+    
+
+    def isAlgae(self,dataSource,rewrite:bool=False) -> tuple:
+        ''' This method compares with the data present in the db
+        local and among the csv records in database/Csv, fetched
+        from the European Database for accessibility reasons.
+        Datasource is inserted in the path data/sourcejson/struct.txt ed
+        is provided as an example.
+        If it finds a match, it returns the Algae lists
+        found and unique species (without any codes) '''
+        if not os.path.isfile(Global.WEBSOURCE["Algae"]["File"]) or rewrite:
+            r = requests.get(Global.WEBSOURCE["Algae"]["Web"])
+            with open(Global.WEBSOURCE["Algae"]["File"], "w") as wr:
+                dataContent = r.text
+                dataContent = dataContent.split("\n")
+                writer = csv.writer(wr)
+                for i in range(len(dataContent)):
+                    dataContent[i] = dataContent[i].split("\t")
+                    writer.writerow(dataContent[i])
+        file = open(Global.WEBSOURCE["Algae"]["File"],"r")
+        dataAlgae = csv.reader(file)
+        dataAlgae = list(dataAlgae)
+        totAlgae = []
+        unico = []
+        for key in dataSource:
+            keySplit = key.split(" ")
+            if keySplit[0] == "cf.":
+                val_key = key.split(" ")[1]
+            else:
+                val_key = key.split(" ")[0]
+
+            for algae in dataAlgae:
+                if len(algae) > 1 and val_key.lower() in algae[2].lower():
+                    totAlgae.append(key)
+                    if val_key.lower() not in unico:
+                        unico.append(val_key.lower())
+        return totAlgae,unico
+
+
+    def isMicroAlgae(self,dataSource) -> tuple:
+        ''' This method compares with the data present in the db
+        local and among the csv records in database/Csv, fetched
+        from the European Database for accessibility reasons.
+        Datasource is inserted in the path data/sourcejson/struct.txt ed
+        is provided as an example.
+        If it finds a match, it returns the MicroAlgae lists
+        found and unique species (without any codes) '''
+        rl = open(Global.WEBSOURCE["MicroAlgae"]["File"]).readlines()
+        dataAlgae = []
+        for i in range(len(rl)):
+            data = rl[i].split(";")
+            dataAlgae.append(data[1:])
+        totAlgae = []
+        unico = []
+        for key in dataSource:
+            keySplit = key.split(" ")
+            if keySplit[0] == "cf.":
+                val_key = key.split(" ")[1]
+            else:
+                val_key = key.split(" ")[0]
+            for algae in dataAlgae:
+                if len(algae) > 1 and val_key.lower() in algae[2].lower():
+                    totAlgae.append(key)
+                    if val_key.lower() not in unico:
+                        unico.append(val_key.lower())
+        return totAlgae,unico
+    
+
+    def toFasta(self,name):
+        '''Test'''
+        print(name)
+        db = self.client["Biologia"]
+        collection_taxonomy_data = db["genetic_data"]
+        collection_convert = db["hex_to_seq"]
+        info = {"Features":{"$elemMatch":{"Type":"source","organism":name}}}
+        # FIND PROTEIN
+        finder = collection_taxonomy_data.find(info)
+        if not finder:
+            PrintWarning(5).stdout(f"Error searching {name}: Organism Not Found")
+            return None, None
+        cds = []
+
+
+    def file_exists(self)-> bool:
+        '''Test'''
+        return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
+
+    
+    def proteinFind(self, id) -> dict:
+        '''Matching con db esistente di Nucleotide'''
+        db = self.client["Biologia"]
+        collection_data_nucleotide = db["nucleotide_data"]
+        info = {"Id":id,"Features":{"$elemMatch":{"Type":"CDS"}}}
+        finder_data = collection_data_nucleotide.find_one(info)
+        if not finder_data:
+            PrintWarning(5).stdout(f"Error searching {id}: CDS Not Found")
+            return None
+        collection_taxonomy_data = db["protein_data"]
+        collection_convert = db["protein_hex"]
+        protein_id = None
+        for f in finder_data["Features"]:
+            if f["Type"] == "CDS":
+                if "protein_id" in f:
+                    protein_id = f["protein_id"]
+        if not protein_id:
+            PrintWarning(5).stdout(f"Error searching {id}: Protein Not Found")
+            return None
+        info = {"Id":protein_id}
+        finder_data = collection_taxonomy_data.find_one(info)
+        if not finder_data:
+            PrintWarning(5).stdout(f"Error searching {protein_id}: Protein Not Found In Database...","\n","\t\tSearching on NCBI...")
+            p1,p2 = self.ncbiSearch(protein_id,"protein")
+            dataFind = {
+                'data':p1,
+                'hex':p2
+            }
+            self.save_one_in_mongo(dataFind,"protein")
+            return dataFind
+        info = {"Seq_Hex":finder_data["Seq_Hex"]}
+        finder_hex = collection_convert.find_one(info)
+        if not finder_hex:
+            PrintWarning(5).stdout(f"Error searching {finder_data['Seq_Hex']}: Hex Not Found")
+            return None
+        dataFind = {
+            'data':finder_data,
+            'hex':finder_hex
+        }
+        return dataFind
+    
+
+    def taxonFind(self,id) -> dict:
+        db = self.client["Biologia"]
+        collection_data_nucleotide = db["nucleotide_data"]
+        info = {"Id":id,"Features":{"$elemMatch":{"Type":"source"}}}
+        finder_data = collection_data_nucleotide.find_one(info)
+        if not finder_data:
+            PrintWarning(5).stdout(f"Error searching {id}: Source Not Found")
+            return None
+        collection_convert = db["taxonomy_hex"]
+        taxon_meta = None
+        for f in finder_data["Features"]:
+            if f["Type"] == "source":
+                if "db_xref" in f:
+                    taxon_meta = f["db_xref"]
+        if not taxon_meta:
+            PrintWarning(5).stdout(f"Error searching {id}: db_xref Not Found")
+            return None
+        taxon_id = taxon_meta.split(":")[1]
+        info = {"TaxId":taxon_id}
+        finder_data = collection_taxonomy_data.find_one(info)
+        if not finder_data:
+            PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
+            dataFind = self.ncbiSearch(taxon_id,"taxonomy")
+            for data in dataFind:
+                collection_taxonomy_data.insert_one(data)
+            return dataFind
+        return finder_data
+    
+
+    def genomeFind(self,id) -> dict:
+        db = self.client["Biologia"]
+        collection_data_nucleotide = db["nucleotide_data"]
+        info = {"Features":{"$elemMatch":{"Type":"CDS","db_xref":{"$exists":True}}}}
+        finder_data = collection_data_nucleotide.find(info)
+        genes = []
+        for finder in finder_data:
+            gene_id = None
+            for f in finder["Features"]:
+                if f["Type"] == "gene":
+                    if "gene" in f:
+                        gene_id = f["gene"]
+            if gene_id != None:
+                print(gene_id)
+                dataFind = self.ncbiSearchGenome(gene_id,"genome")
+                print(dataFind)
+                # info = {"TaxId":gene_id}
+                # finder_data = collection_taxonomy_data.find_one(info)
+        return finder_data
+
+
+    def ritornodicose(self) -> None:
+        finder = {"Id":"","Features":{"$elemMatch":{"Type":"CDS"}}}
+        db = self.client["Biologia"]
+        collection_data_nucleotide = db["nucleotide_data"]
+        data = collection_data_nucleotide.count_documents(finder)
+        print(data)
+
+
+    def confronto(self): #CAMBIA NOME
+        for key in self.dataSource:
+            for id in self.dataSource[key]:
+                data = self.proteinFind(id)
+                if not data:
+                    PrintWarning(5).stdout(f"ID:{id}")
+                    #return None
+                else:
+                    PrintWarning(3).stdout(f"Protein ID:{id}")
+                
+                data = self.taxonFind(id)
+                if not data:
+                    PrintWarning(5).stdout(f"ID:{id}")
+                    #return None
+                else:
+                    PrintWarning(3).stdout(f"Taxon ID:{id}")     
+        #data = self.genomeFind(4)
+                # if not data:
+                #     PrintWarning(5).stdout(f"ID:{id}")
+                #     #return None
+                # else:
+                #     PrintWarning(3).stdout(f"Genome ID:{id}")
+
+    def ncbiSearch(self,id:str,database:str) -> tuple:
+        # NB: in futuro la composizione del link potrebbe cambiare nella sua struttura, in base alla gestione interna di NCBI.
+        # TO-DO: se questo metodo non ritorna i dati correttamente andrà aggiornata la procedura di reperimento dei dati.
+        handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
+        record = SeqIO.read(handle, "genbank")
+        p1,p2,errors = self.parse.parseGene(record)
+        return p1,p2
+
+
+    def ncbiSearchTaxon(self,id:str,database:str) ->tuple:
+        try:
+            handle = Entrez.efetch(db=database, id=id, retmode="xml")
+            read = Entrez.read(handle)
+        except Exception as e:
+            print(e)
+            os.sleep(20)
+        return read
+    
+
+    def ncbiSearchGenome(self,id:str,database:str) ->tuple:
+        handle = Entrez.efetch(db=database, id=id, retmode="xml")
+        read = Entrez.read(handle)
+        #print(read)
+        # handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
+        # record = SeqIO.read(handle, "genbank")
+        return read
+
+
+########################################################################################
+
+
 def csvWrite(dataResult):
     '''Custom function that, using csv library, return a file with field of interests
     from a given list of data, parsed as NCBI Json structure'''
@@ -490,37 +995,20 @@ def SpecieProductMaker():
 # Online Query methods (NCBI), require login method to be saved before
 #################################################################################
 
-def ncbiSearchNucleo(name:str) ->list:
+def ncbiSearch(name:str, db="nucleotide") ->list:
     '''Function that submit queries with given a ScientificName to NCBI platform, section Nucleotide.
-    Return data read'''
+    Return data read. Default DB selected is nucleotide, can be changed referring to NCBI.'''
     # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
     # read = Entrez.read(handle)
-    handle = Entrez.esearch(db='nucleotide', term=name, rettype='gb', retmode='text', retmax=10000)
+    handle = Entrez.esearch(db, term=name, rettype='gb', retmode='text', retmax=10000)
     record = Entrez.read(handle, validate=False)
     handle.close()
     print(f"Len of IDLIST:{len(record['IdList'])}")
     if len(record["IdList"]) == 0:
         raise Exception("List Empty")
-    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
+    handle = Entrez.efetch(db, id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
     read = Entrez.read(handle)
     print(f"Len of EFETCH:{len(read)}")
-    return read
-
-
-def ncbiSearchTaxon(name:str) -> list:
-    '''Function that submit queries with given TaxonomyIDs to NCBI platform, section Taxonomy.
-    Return data read'''
-    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
-    # read = Entrez.read(handle)
-    handle = Entrez.esearch(db='taxonomy', term=name, rettype='gb', retmode='text', retmax=10000)
-    record = Entrez.read(handle, validate=False)
-    handle.close()
-    # print(record)
-    if len(record["IdList"]) == 0:
-        raise Exception("List Empty")
-    #print(record["IdList"])
-    handle = Entrez.efetch(db="taxonomy", id=record["IdList"], retmode="xml")
-    read = Entrez.read(handle)
     return read
 
 
@@ -530,7 +1018,7 @@ def finderTaxon(name):
     if name in ignore_names:
         return
     try:
-        taxon = ncbiSearchTaxon(f"{name}[next level]")
+        taxon = ncbiSearch(f"{name}[next level]", "taxonomy")
         for tax in taxon:
             if (not collection_taxonomy_data.find_one({"TaxId":tax["TaxId"]}) and tax["Rank"] == "species"):
                     print(tax["ScientificName"])
@@ -640,7 +1128,7 @@ def nucleoImport():
     '''TESTING'''
     taxon_collection = db["taxonomy_data"]
     nucleo_collection = db["nucleotide_organism"]
-    records = ncbiSearchNucleo("Scenedesmus bijugus")
+    records = ncbiSearch("Scenedesmus bijugus")
     print(records[0])
     csvOrganism = open('data/databaseCsv/microAlgaeDatabase.csv').readlines()
     listCompl = [csvOrganism[data].split(";")[3].strip() for data in range(0,200)]
@@ -663,7 +1151,7 @@ def nucleoImport():
 
         listCompl.append(organism)
         try:
-            records = ncbiSearchNucleo(organism)
+            records = ncbiSearch(organism)
         except Exception as e:
             print(e)
             continue
@@ -782,7 +1270,7 @@ def nucleoImport():
         if daora:
             print(f"txid{data['TaxId']}")
             try:
-                insertDatas = ncbiSearchNucleo(f"txid{data['TaxId']}[Organism:exp]")
+                insertDatas = ncbiSearch(f"txid{data['TaxId']}[Organism:exp]")
                 for ins in insertDatas:
                     ins.pop("GBSeq_sequence",None)
                     nucleo_collection.insert_one(ins)
@@ -798,7 +1286,7 @@ def nucleoResult():
     # "txid257627"
     # "txid257627"
     nucleo_collection = db["nucleotide_data"]
-    tot = ncbiSearchNucleo("txid257627[Organism:exp]")
+    tot = ncbiSearch("txid257627[Organism:exp]")
     i = 0
     for t in tot:
         print(i)
@@ -1157,502 +1645,6 @@ def updateByGenomes(datasTaxon=''):
 
 
 
-# # # # # class Database:
-# # # # #     '''In questa classe vengono gestiti i diversi tipi di DB su cui i dati
-# # # # #     possono essere salvati. Compito di questa classe é l'inizializzazione
-# # # # #     e la manipolazione dei dati, insieme alla possibilità di inserimento
-# # # # #     delle credenziali per dialogare con i server delle maggiori piattaforme web.'''
-
-
-# # # # #     def __init__(self, verbose=False, type:str="", email:str=None) -> None:
-# # # # #         '''Costruttore'''
-# # # # #         self.file = Global.SQL["Store"]
-# # # # #         ip = Global.CLUSTER.split(":")[0]
-# # # # #         port = int(Global.CLUSTER.split(":")[1])
-# # # # #         self.client = MongoClient(f'{ip}', port)
-# # # # #         self.connection = None
-# # # # #         self.mongo_collections = (type+"_data",type+"_hex")
-# # # # #         self.printWarning = PrintWarning(10)
-# # # # #         self.dataSource = {}
-# # # # #         self.totLength = 0
-# # # # #         self.diffAlg = {}
-# # # # #         self.verbose = verbose
-# # # # #         self.parse = Parsing()
-# # # # #         self.email = email
-# # # # #         print(email)
-# # # # #         if email:
-# # # # #             Entrez.email = email
-    
-    
-# # # # #     def listSource(self)->list:
-# # # # #         '''Restituisce una lista delle fonti da cui vengono prelevati i dati.'''
-# # # # #         return [key for key in self.dataSource]
-    
-
-# # # # #     def addEmail(self, email) -> None:
-# # # # #         '''Aggiorna il campo email per identificazione.'''
-# # # # #         self.email = email
-# # # # #         Entrez.email = email
-
-
-# # # # #     def save_on_mongo(self, tuple_of_array:tuple) -> None:
-# # # # #         '''Questo metodo genera il database in MongoDB (v. Requisiti all'inizio del file o il README.md).
-# # # # #         I dati vengono salvati in un db locale di nome Biologia, dove poi verranno eseguite tutte le operazioni.'''
-# # # # #         PrintWarning(8).stdout("\nStart saving on database")
-# # # # #         db = self.client["Biologia"]  # attenzione a quando si richiama il DB da riga di comando: case sensitive
-# # # # #         print(self.mongo_collections)
-# # # # #         collection_taxonomy_data = db[self.mongo_collections[0]]
-# # # # #         collection_convert = db[self.mongo_collections[1]]
-# # # # #         count = 0
-# # # # #         last = -1
-# # # # #         for i in range(len(tuple_of_array[0])):
-# # # # #             count+=1
-# # # # #             if int((count/len(tuple_of_array[0]))*100) != last:
-# # # # #                 print("[%-50s] %d%%" % ('='*((last+1)//2),last+1),end="\r")
-# # # # #                 last +=1
-# # # # #             filter = {"Name":tuple_of_array[0][i]["Name"]}
-# # # # #             check_name = collection_taxonomy_data.find_one(filter)
-# # # # #             if not check_name:
-# # # # #                 collection_taxonomy_data.insert_one(tuple_of_array[0][i])
-# # # # #             if tuple_of_array[1][i] != {}:
-# # # # #                 filter = {"Seq_Hex":tuple_of_array[1][i]["Seq_Hex"]}
-# # # # #                 check_hex = collection_convert.find_one(filter)
-# # # # #                 if not check_hex:
-# # # # #                     collection_convert.insert_one(tuple_of_array[1][i])
-# # # # #         self.printWarning.stdout("Saved correctly on mongo")
-    
-
-# # # # #     def save_one_in_mongo(self,struct:dict,collection:str)->None:
-# # # # #         '''Come il metodo save_on_mongo(), ma con sensibilità per singolo record.
-# # # # #         In questo modo, possiamo aggiungere manualmente i dati di interesse.'''
-# # # # #         db = self.client["Biologia"]
-# # # # #         collection_taxonomy_data = collection + "_data"
-# # # # #         collection_hex_name = collection + "_hex"
-# # # # #         collection_taxonomy_data = db[collection_taxonomy_data]
-# # # # #         collection_hex = db[collection_hex_name]
-# # # # #         data = struct["data"]
-# # # # #         hex = struct["hex"]
-# # # # #         collection_taxonomy_data.insert_one(data)
-# # # # #         collection_hex.insert_one(hex)
-# # # # #         self.printWarning.stdout("Saved correctly on mongo")
-
-        
-# # # # #     def save_on_sql(self,tuple_of_array:tuple, file=None):
-# # # # #         '''Questo metodo genera il database in SQL (v. Requisiti all'inizio del file o il README.md).
-# # # # #         Sebbene funzionante, al momento questo ramo del progetto è in STANDBY'''
-# # # # #         if file != None:
-# # # # #             self.file = file
-# # # # #         try:
-# # # # #             self.connection = sqlite3.connect(self.file)
-# # # # #             cursor = self.connection.cursor()
-# # # # #             if not self.file_exists():
-# # # # #                 scr = open("init.sql").read()
-# # # # #                 cursor.executescript(scr)
-# # # # #             for i in range(len(tuple_of_array[0])):
-# # # # #                 data_tuple = (tuple_of_array[0][i]["Name"],tuple_of_array[0][i]["Id"],tuple_of_array[0][i]["Seq_Hex"],tuple_of_array[0][i]["Description"],i)
-# # # # #                 find = f"SELECT Seq_Hex FROM Biologia WHERE Seq_Hex='{tuple_of_array[0][i]['Seq_Hex']}'"
-# # # # #                 res = cursor.execute(find)
-# # # # #                 if not res:
-# # # # #                     table ="""INSERT INTO Biologia VALUES(?,?,?,?,?)"""
-# # # # #                     cursor.execute(table,data_tuple)
-# # # # #         except Exception as e:
-# # # # #             self.connection.close()
-# # # # #             return PrintWarning(4).stdout(f"Error Database Biologia.db: {e}")
-# # # # #         self.connection.commit()
-# # # # #         if not self.connection:
-# # # # #             self.connection.close()
-# # # # #             return PrintWarning(5).stdout(f"Error Writing Database Biologia.db")
-# # # # #         self.connection.close()
-# # # # #         return None
-
-
-# # # # #     def get_data_from_mongo(self, info:dict, saveOnJson:bool=False, algae:bool=False, micro_algae:bool=False) -> dict:
-# # # # #         '''Metodo di tipo "Getter", permette la consultazione del DB basato su MongoDB'''
-# # # # #         if self.client == None:
-# # # # #             ip = CLUSTER.split(":")[0]
-# # # # #             port = int(CLUSTER.split(":")[1])
-# # # # #             self.client = MongoClient(f'{ip}', port)
-# # # # #         db = self.client["Biologia"]
-# # # # #         collection_taxonomy_data = db[self.mongo_collections[0]]
-# # # # #         collection_convert = db[self.mongo_collections[1]]
-# # # # #         finder = collection_taxonomy_data.find(info)
-# # # # #         dataSource = {}
-# # # # #         for x in finder:
-# # # # #             #print(x["Features"])
-# # # # #             source = None
-# # # # #             for f in x["Features"]:
-# # # # #                 if f["Type"] == "source":
-# # # # #                     source = f["organism"]
-# # # # #                     if source not in dataSource:
-# # # # #                         dataSource[source] = []
-# # # # #             dataSource[source].append(x["Id"])
-# # # # #         self.totLength = len(dataSource)
-# # # # #         self.dataSource = dataSource
-# # # # #         if saveOnJson:
-# # # # #             self.save_on_json()
-# # # # #         if algae:
-# # # # #             totAlgae,same = self.isAlgae(dataSource)
-# # # # #             self.diffAlg["Algae"] = same
-# # # # #             algaeSource = {}
-# # # # #             for algae in totAlgae:
-# # # # #                 algaeSource[algae] = dataSource[algae]
-# # # # #             self.dataSource = algaeSource
-# # # # #             PrintWarning(2).stdout(f"Total algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
-# # # # #             if saveOnJson:
-# # # # #                 self.save_on_json(fileName="algaeSource.json")
-# # # # #         if micro_algae:
-# # # # #             # ? self.datasource vs. datasource
-# # # # #             totAlgae,same = self.isMicroAlgae(dataSource)
-# # # # #             self.diffAlg["MicroAlgae"] = same
-# # # # #             algaeSource = {}
-# # # # #             for algae in totAlgae:
-# # # # #                 algaeSource[algae] = dataSource[algae]
-# # # # #             self.dataSource = algaeSource
-# # # # #             PrintWarning(2).stdout(f"Total micro algae {len(self.dataSource)} out of {self.totLength} with {len(same)} different gene")
-# # # # #             if saveOnJson:
-# # # # #                 self.save_on_json(fileName="microAlgaeSource.json")
-# # # # #         #
-# # # # #         # self.printDifferenceAlgae()
-# # # # #         # dataDiff = self.checkDifferenceAlgae()
-# # # # #         #return self.dataSource
-# # # # #         self.confronto()
-# # # # #         return self.dataSource
-    
-
-# # # # #     def alignmentSeq(self, f1_key:str, f2_key:str) -> str:
-# # # # #         db = self.client["Biologia"]
-# # # # #         collection_taxonomy_data = db["genetic_data"]
-# # # # #         collection_convert = db["hex_to_seq"]
-# # # # #         info = {"Features":{"$elemMatch":{"Type":"source","organism":f1_key}}}
-# # # # #         # FIND PROTEIN
-# # # # #         finder = collection_taxonomy_data.find_one(info)
-# # # # #         if not finder:
-# # # # #             PrintWarning(5).stdout(f"Error searching {f1_key}: Organism Not Found")
-# # # # #             return None, None
-# # # # #         if not 'Seq_Hex' in finder:
-# # # # #             PrintWarning(5).stdout(f"Error searching {f1_key}: Hex Sequence Not Found")
-# # # # #             return None, None
-# # # # #         hex1 = finder['Seq_Hex']
-# # # # #         info2 = {"Features":{"$elemMatch":{"Type":"source","organism":f2_key}}}
-# # # # #         finder2 = collection_taxonomy_data.find_one(info2)
-# # # # #         if not finder2:
-# # # # #             PrintWarning(5).stdout(f"Error searching {f2_key}: Organism Not Found")
-# # # # #             return None, None
-# # # # #         if not 'Seq_Hex' in finder2:
-# # # # #             PrintWarning(5).stdout(f"Error searching {f2_key}: Hex Sequence Not Found")
-# # # # #             return None, None
-# # # # #         hex2 = finder2['Seq_Hex']
-# # # # #         info_hex = {"Seq_Hex":hex1}
-# # # # #         finder_hex = collection_convert.find_one(info_hex)
-# # # # #         if not finder_hex:
-# # # # #             PrintWarning(5).stdout(f"Error searching {f1_key}: Hex Sequence Not Found in the Database")
-# # # # #             return None, None
-# # # # #         seq1 = finder_hex['Seq_Raw']
-# # # # #         info_hex = {"Seq_Hex":hex2}
-# # # # #         finder_hex = collection_convert.find_one(info_hex)
-# # # # #         if not finder_hex:
-# # # # #             PrintWarning(5).stdout(f"Error searching {f2_key}: Hex Sequence Not Found in the Database")
-# # # # #             return None, None
-# # # # #         seq2 = finder_hex['Seq_Raw']
-# # # # #         smwt = smith_waterman.Alignment(seq1,seq2,show_table=self.verbose)
-# # # # #         s1,s2 = smwt.localAlignment()
-# # # # #         return s1,s2
-    
-
-# # # # #     def saveFileSeq(self, name:str, seq1:str, seq2:str) -> None:
-# # # # #         seq1_fasta = ""
-# # # # #         for i in range(len(seq1)):
-# # # # #             if i%100 == 0 and i != 0:
-# # # # #                 seq1_fasta += "\n"
-# # # # #             elif i%10 == 0 and i != 0:
-# # # # #                 seq1_fasta += " "
-# # # # #             seq1_fasta += seq1[i]
-# # # # #         seq2_fasta = ""
-# # # # #         for i in range(len(seq2)):
-# # # # #             if i%100 == 0 and i != 0:
-# # # # #                 seq2_fasta += "\n"
-# # # # #             elif i%10 == 0 and i != 0:
-# # # # #                 seq2_fasta += " "
-# # # # #             seq2_fasta += seq2[i]
-# # # # #         with open(name,"w") as wr:
-# # # # #             wr.write(seq1_fasta+"\n\n//\n\n"+seq2_fasta)
-    
-
-# # # # #     def alignment(self,fileIn,fileOut) -> None:
-# # # # #         rd = open(fileIn).readlines()
-# # # # #         for i in range(len(rd)):
-# # # # #             for j in range(i+1,len(rd)):
-# # # # #                 PrintWarning(3).stdout(f"Align {rd[i].strip()} with {rd[j].strip()}")
-# # # # #                 seq1,seq2 = self.alignmentSeq(rd[i].strip(),rd[j].strip())
-# # # # #                 if seq1 and seq2:   
-# # # # #                     PrintWarning(3).stdout(f"Sequence length: {len(seq1)}\n")
-# # # # #                     self.saveFileSeq(f"{Global.ALIGNMENT['Path']}{fileOut.split('.')[0]}_{rd[i].strip()}_{rd[j].strip()}.txt",seq1,seq2)
-
-
-# # # # #     def printDifferenceAlgae(self) -> list:
-# # # # #         '''Stampa le algae non contenute in microalgae'''
-# # # # #         diff = [self.diffAlg[key] for key in self.diffAlg]
-# # # # #         print(len(diff[0])-len(diff[1]))
-
-
-# # # # #     def checkDifferenceAlgae(self) -> list:
-# # # # #         '''Effettua il check delle algae non contenute in microalgae'''
-# # # # #         diff = [self.diffAlg[key] for key in self.diffAlg]
-# # # # #         tot = {}
-# # # # #         for i in range(len(diff)):
-# # # # #             for k in range(len(diff[i])):
-# # # # #                 if diff[i][k] not in tot:
-# # # # #                     tot[diff[i][k]] = 1
-# # # # #                 else:
-# # # # #                     tot[diff[i][k]] += 1  
-# # # # #         algTot = []
-# # # # #         for i in tot:
-# # # # #             if tot[i] == 1:
-# # # # #                 algTot.append(i)
-# # # # #         return algTot
-
-    
-# # # # #     def save_on_json(self, fileName:str="dataSource.json") -> None:
-# # # # #         '''Salva i dati su un file in formato .json'''
-# # # # #         with open(f"{Global.JSON['Path']}{fileName}","w") as js:
-# # # # #             json.dump(self.dataSource,js,indent=4)
-    
-
-# # # # #     def isAlgae(self,dataSource,rewrite:bool=False) -> tuple:
-# # # # #         ''' Questo metodo fa il confronto con i dati presenti nel db
-# # # # #         locale e tra i record dei csv in database/Csv, prelevati
-# # # # #         dal Database europeo per motivi di accessibilità.
-# # # # #         Datasource è inserito nel path data/sourcejson/struct.txt ed
-# # # # #         è fornito come esempio.
-# # # # #         Se trova una corrispondenza, ritorna le liste delle Algae
-# # # # #         trovate e delle specie uniche (senza eventuali codici) '''
-# # # # #         if not os.path.isfile(Global.WEBSOURCE["Algae"]["File"]) or rewrite:
-# # # # #             r = requests.get(Global.WEBSOURCE["Algae"]["Web"])
-# # # # #             with open(Global.WEBSOURCE["Algae"]["File"], "w") as wr:
-# # # # #                 dataContent = r.text
-# # # # #                 dataContent = dataContent.split("\n")
-# # # # #                 writer = csv.writer(wr)
-# # # # #                 for i in range(len(dataContent)):
-# # # # #                     dataContent[i] = dataContent[i].split("\t")
-# # # # #                     writer.writerow(dataContent[i])
-# # # # #         file = open(Global.WEBSOURCE["Algae"]["File"],"r")
-# # # # #         dataAlgae = csv.reader(file)
-# # # # #         dataAlgae = list(dataAlgae)
-# # # # #         totAlgae = []
-# # # # #         unico = []
-# # # # #         for key in dataSource:
-# # # # #             keySplit = key.split(" ")
-# # # # #             if keySplit[0] == "cf.":
-# # # # #                 val_key = key.split(" ")[1]
-# # # # #             else:
-# # # # #                 val_key = key.split(" ")[0]
-
-# # # # #             for algae in dataAlgae:
-# # # # #                 if len(algae) > 1 and val_key.lower() in algae[2].lower():
-# # # # #                     totAlgae.append(key)
-# # # # #                     if val_key.lower() not in unico:
-# # # # #                         unico.append(val_key.lower())
-# # # # #         return totAlgae,unico
-
-
-# # # # #     def isMicroAlgae(self,dataSource) -> tuple:
-# # # # #         ''' Questo metodo fa il confronto con i dati presenti nel db
-# # # # #         locale e tra i record dei csv in database/Csv, prelevati
-# # # # #         dal Database europeo per motivi di accessibilità.
-# # # # #         Datasource è inserito nel path data/sourcejson/struct.txt ed
-# # # # #         è fornito come esempio.
-# # # # #         Se trova una corrispondenza, ritorna le liste delle MicroAlgae
-# # # # #         trovate e delle specie uniche (senza eventuali codici) '''
-# # # # #         rl = open(Global.WEBSOURCE["MicroAlgae"]["File"]).readlines()
-# # # # #         dataAlgae = []
-# # # # #         for i in range(len(rl)):
-# # # # #             data = rl[i].split(";")
-# # # # #             dataAlgae.append(data[1:])
-# # # # #         totAlgae = []
-# # # # #         unico = []
-# # # # #         for key in dataSource:
-# # # # #             keySplit = key.split(" ")
-# # # # #             if keySplit[0] == "cf.":
-# # # # #                 val_key = key.split(" ")[1]
-# # # # #             else:
-# # # # #                 val_key = key.split(" ")[0]
-# # # # #             for algae in dataAlgae:
-# # # # #                 if len(algae) > 1 and val_key.lower() in algae[2].lower():
-# # # # #                     totAlgae.append(key)
-# # # # #                     if val_key.lower() not in unico:
-# # # # #                         unico.append(val_key.lower())
-# # # # #         return totAlgae,unico
-    
-
-# # # # #     def toFasta(self,name):
-# # # # #         print(name)
-# # # # #         db = self.client["Biologia"]
-# # # # #         collection_taxonomy_data = db["genetic_data"]
-# # # # #         collection_convert = db["hex_to_seq"]
-# # # # #         info = {"Features":{"$elemMatch":{"Type":"source","organism":name}}}
-# # # # #         # FIND PROTEIN
-# # # # #         finder = collection_taxonomy_data.find(info)
-# # # # #         if not finder:
-# # # # #             PrintWarning(5).stdout(f"Error searching {name}: Organism Not Found")
-# # # # #             return None, None
-# # # # #         cds = []
-
-
-# # # # #     def file_exists(self)-> bool:
-# # # # #         return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
-
-    
-# # # # #     def proteinFind(self, id) -> dict:
-# # # # #         '''Matching con db esistente di Nucleotide'''
-# # # # #         db = self.client["Biologia"]
-# # # # #         collection_data_nucleotide = db["nucleotide_data"]
-# # # # #         info = {"Id":id,"Features":{"$elemMatch":{"Type":"CDS"}}}
-# # # # #         finder_data = collection_data_nucleotide.find_one(info)
-# # # # #         if not finder_data:
-# # # # #             PrintWarning(5).stdout(f"Error searching {id}: CDS Not Found")
-# # # # #             return None
-# # # # #         collection_taxonomy_data = db["protein_data"]
-# # # # #         collection_convert = db["protein_hex"]
-# # # # #         protein_id = None
-# # # # #         for f in finder_data["Features"]:
-# # # # #             if f["Type"] == "CDS":
-# # # # #                 if "protein_id" in f:
-# # # # #                     protein_id = f["protein_id"]
-# # # # #         if not protein_id:
-# # # # #             PrintWarning(5).stdout(f"Error searching {id}: Protein Not Found")
-# # # # #             return None
-# # # # #         info = {"Id":protein_id}
-# # # # #         finder_data = collection_taxonomy_data.find_one(info)
-# # # # #         if not finder_data:
-# # # # #             PrintWarning(5).stdout(f"Error searching {protein_id}: Protein Not Found In Database...","\n","\t\tSearching on NCBI...")
-# # # # #             p1,p2 = self.ncbiSearch(protein_id,"protein")
-# # # # #             dataFind = {
-# # # # #                 'data':p1,
-# # # # #                 'hex':p2
-# # # # #             }
-# # # # #             self.save_one_in_mongo(dataFind,"protein")
-# # # # #             return dataFind
-# # # # #         info = {"Seq_Hex":finder_data["Seq_Hex"]}
-# # # # #         finder_hex = collection_convert.find_one(info)
-# # # # #         if not finder_hex:
-# # # # #             PrintWarning(5).stdout(f"Error searching {finder_data['Seq_Hex']}: Hex Not Found")
-# # # # #             return None
-# # # # #         dataFind = {
-# # # # #             'data':finder_data,
-# # # # #             'hex':finder_hex
-# # # # #         }
-# # # # #         return dataFind
-    
-
-# # # # #     def taxonFind(self,id) -> dict:
-# # # # #         db = self.client["Biologia"]
-# # # # #         collection_data_nucleotide = db["nucleotide_data"]
-# # # # #         info = {"Id":id,"Features":{"$elemMatch":{"Type":"source"}}}
-# # # # #         finder_data = collection_data_nucleotide.find_one(info)
-# # # # #         if not finder_data:
-# # # # #             PrintWarning(5).stdout(f"Error searching {id}: Source Not Found")
-# # # # #             return None
-# # # # #         collection_convert = db["taxonomy_hex"]
-# # # # #         taxon_meta = None
-# # # # #         for f in finder_data["Features"]:
-# # # # #             if f["Type"] == "source":
-# # # # #                 if "db_xref" in f:
-# # # # #                     taxon_meta = f["db_xref"]
-# # # # #         if not taxon_meta:
-# # # # #             PrintWarning(5).stdout(f"Error searching {id}: db_xref Not Found")
-# # # # #             return None
-# # # # #         taxon_id = taxon_meta.split(":")[1]
-# # # # #         info = {"TaxId":taxon_id}
-# # # # #         finder_data = collection_taxonomy_data.find_one(info)
-# # # # #         if not finder_data:
-# # # # #             PrintWarning(5).stdout(f"Error searching {taxon_id}: Taxonomy Not Found In Database...","\n","\t\tSearching on NCBI...")
-# # # # #             dataFind = self.ncbiSearchTaxon(taxon_id,"taxonomy")
-# # # # #             for data in dataFind:
-# # # # #                 collection_taxonomy_data.insert_one(data)
-# # # # #             return dataFind
-# # # # #         return finder_data
-    
-
-# # # # #     def genomeFind(self,id) -> dict:
-# # # # #         db = self.client["Biologia"]
-# # # # #         collection_data_nucleotide = db["nucleotide_data"]
-# # # # #         info = {"Features":{"$elemMatch":{"Type":"CDS","db_xref":{"$exists":True}}}}
-# # # # #         finder_data = collection_data_nucleotide.find(info)
-# # # # #         genes = []
-# # # # #         for finder in finder_data:
-# # # # #             gene_id = None
-# # # # #             for f in finder["Features"]:
-# # # # #                 if f["Type"] == "gene":
-# # # # #                     if "gene" in f:
-# # # # #                         gene_id = f["gene"]
-# # # # #             if gene_id != None:
-# # # # #                 print(gene_id)
-# # # # #                 dataFind = self.ncbiSearchGenome(gene_id,"genome")
-# # # # #                 print(dataFind)
-# # # # #                 # info = {"TaxId":gene_id}
-# # # # #                 # finder_data = collection_taxonomy_data.find_one(info)
-# # # # #         return finder_data
-
-
-# # # # #     def ncbiSearch(self,id:str,database:str) -> tuple:
-# # # # #         # NB: in futuro la composizione del link potrebbe cambiare nella sua struttura, in base alla gestione interna di NCBI.
-# # # # #         # TO-DO: se questo metodo non ritorna i dati correttamente andrà aggiornata la procedura di reperimento dei dati.
-# # # # #         handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
-# # # # #         record = SeqIO.read(handle, "genbank")
-# # # # #         p1,p2,errors = self.parse.parseGene(record)
-# # # # #         return p1,p2
-
-
-# # # # #     def ncbiSearchTaxon(self,id:str,database:str) ->tuple:
-# # # # #         try:
-# # # # #             handle = Entrez.efetch(db=database, id=id, retmode="xml")
-# # # # #             read = Entrez.read(handle)
-# # # # #         except Exception as e:
-# # # # #             print(e)
-# # # # #             os.sleep(20)
-# # # # #         return read
-    
-
-# # # # #     def ncbiSearchGenome(self,id:str,database:str) ->tuple:
-# # # # #         handle = Entrez.efetch(db=database, id=id, retmode="xml")
-# # # # #         read = Entrez.read(handle)
-# # # # #         #print(read)
-# # # # #         # handle = Entrez.efetch(db=database, id=id,rettype="gb", retmode="text")
-# # # # #         # record = SeqIO.read(handle, "genbank")
-# # # # #         return read
-
-
-# # # # #     def ritornodicose(self) -> None:
-# # # # #         finder = {"Id":"","Features":{"$elemMatch":{"Type":"CDS"}}}
-# # # # #         db = self.client["Biologia"]
-# # # # #         collection_data_nucleotide = db["nucleotide_data"]
-# # # # #         data = collection_data_nucleotide.count_documents(finder)
-# # # # #         print(data)
-
-
-# # # # #     def confronto(self): #CAMBIA NOME
-# # # # #         for key in self.dataSource:
-# # # # #             for id in self.dataSource[key]:
-# # # # #                 data = self.proteinFind(id)
-# # # # #                 if not data:
-# # # # #                     PrintWarning(5).stdout(f"ID:{id}")
-# # # # #                     #return None
-# # # # #                 else:
-# # # # #                     PrintWarning(3).stdout(f"Protein ID:{id}")
-                
-# # # # #                 data = self.taxonFind(id)
-# # # # #                 if not data:
-# # # # #                     PrintWarning(5).stdout(f"ID:{id}")
-# # # # #                     #return None
-# # # # #                 else:
-# # # # #                     PrintWarning(3).stdout(f"Taxon ID:{id}")     
-# # # # #         #data = self.genomeFind(4)
-# # # # #                 # if not data:
-# # # # #                 #     PrintWarning(5).stdout(f"ID:{id}")
-# # # # #                 #     #return None
-# # # # #                 # else:
-# # # # #                 #     PrintWarning(3).stdout(f"Genome ID:{id}")
-
 
     
 
@@ -1723,7 +1715,7 @@ def updateByGenomes(datasTaxon=''):
     # """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
     #datas = collection_taxonomy_tree.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
 
-    # taxon = ncbiSearchTaxon("chlorella[next level]")
+    # taxon = ncbiSearch("chlorella[next level]", "taxonomy")
     # with open("taxonMeta.json","w") as jsw:
     #     json.dump(taxon,jsw,indent=4)
     #print(taxon)
