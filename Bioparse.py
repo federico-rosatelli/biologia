@@ -30,6 +30,7 @@ import sys
 # Init and Declaration of Global variables
 ########################################################################################
 
+Global = ""
 client = MongoClient('localhost', 27017)
 db = client["Biologia"]
 collection_taxonomy_data = db["taxonomy_data"]
@@ -252,6 +253,106 @@ class Alignment:
 # a = Alignment("AGTCCCTGATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTATTTAGTCCCTGATTTAGTCCCTGATTT",
 # "TTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGTTTTAGTCCCTGATTTAGT",show_table=True)
 # a.localAlignment(save_table=True)
+
+
+########################################################################################
+
+class Parsing(object):
+    '''Class that takes in input a .gbk file for parsing purposes.
+    It has to be considered Legacy and needs to be modified before use'''
+
+
+    def __init__(self, file_name:str=None) -> None:
+        '''Constructor'''
+        if not file_name:
+            self.record = []
+        else:
+            self.record = SeqIO.parse(file_name, "genbank")
+
+
+    def parsing_gene(self, verbose:bool=False) -> list:
+        '''Method that returns two lists:
+         - In "gene_array" there are the analyzed data: for each file.gbk given in input there are X genes,
+           and for each gene we will have a dictionary of fields of interest, such as the Name, the ID, and so on;
+         - In "hex_array" there are the processed data referred to the Sequence. In fact, let's save both the sequence
+           of nitrogenous bases "as is", both the version encoded with SHA256'''
+        gene_array = []
+        hex_array = []
+        count = 0
+        last = -1
+        errors = 0
+        PrintWarning(8).stdout("\nSTART PARSING")               # messaggio informativo su console
+        print("~"*56+"\n")
+        t_last = perf_counter()
+        
+        for gene in self.record:
+            count += 1
+            if int((count/86100)*100) != last and verbose:              # Gestito in base al verbose, attenzione alla lunghezza del file (...)
+                t_now = perf_counter()
+                print("[%-50s] %d%% %d" % ('='*((last+1)//2),last+1,(t_now-t_last)*(86100//count)),end="\r") #??????
+                last +=1
+            #print(count)
+            json_gene, json_convert, errors = self.parseGene(gene)
+            hex_array.append(json_convert)
+            gene_array.append(json_gene)
+        PrintWarning(3).stdout("\nParsing completed\n") 
+        PrintWarning(5).stdout("Process completed with", errors, 'errors\n')
+        return gene_array, hex_array
+
+
+    def parseGene(self, gene) -> tuple[dict, dict, int]:
+        '''Method that returns a tuple structured as follows:
+         - dict json_gene which contains Name and ID of the analyzed gene;
+         - dict json_convert which contains both the "raw" and the translated SHA256 sequence;
+         - int error which reports how many errors occurred during the search, i.e. how many times the data was missing
+         This tuple is used inside the parsing_gene() method to populate the two arrays gee_array and hex_array'''
+        json_gene = {}
+        json_convert = {}
+        json_gene["Name"] = gene.name
+        json_gene["Id"] = gene.id
+        check = False
+        errors = 0
+        try:
+            if gene.seq != "":
+                #print(count)
+                check = True
+                sh = self.sha_index(str(gene.seq))
+                json_gene["Seq_Hex"] = sh["hex"]        #str(gene.seq)-> SHA256 funzione
+                json_convert["Seq_Hex"] = sh["hex"]     #str(gene.seq)-> SHA256 funzione
+                json_convert["Seq_Raw"] = sh["seq"]     #str(gene.seq)-> SHA256 funzione
+        except Exception as e:
+            if check:
+                print(e,"Enters here:",gene.id)
+            errors += 1
+            pass
+        json_gene["Description"] = gene.description
+        json_gene["Features"] = []
+        for feature in gene.features:
+            feature_type = {"Type":feature.type}
+            #json_gene["Features"][feature.type] = {}
+            for qual in feature.qualifiers:
+                feature_type[qual] = feature.qualifiers.get(qual)[0]
+            feature_type["Location"] = (int(feature.location.start),int(feature.location.end))
+            json_gene["Features"].append(feature_type)
+        return json_gene, json_convert, errors
+    
+
+    def sha_index(self, seq:str) -> dict:
+        '''Method which, given a sequence as input, returns the sequence and its hash code in a dictionary.
+         ACGTU are the possible units of any sequence'''
+        return {
+            'hex':hashlib.sha256(seq.encode('utf-8')).hexdigest(),
+            'seq':seq
+        }
+    
+
+    def save_data(self, json_array:tuple) -> None:
+        '''Function that creates a JSON file with parsed data'''
+        with open(f"{Global.JSON['Path']}datastruct.json","w") as js:
+            json.dump({
+                        "struct":json_array[0],
+                        "hex":json_array[1]
+                        },js,indent=4)
 
 
 ########################################################################################
@@ -1053,105 +1154,7 @@ def updateByGenomes(datasTaxon=''):
 #DEPRECATED: genbank.py
 
 
-# # # # # class Parsing(object):
-# # # # #     '''Classe che si occupa di trattare i dati forniti da GenBank.
-# # # # #     Il file su cui si opera si da essere per scontato in formato .gbk'''
 
-
-# # # # #     def __init__(self, file_name:str=None) -> None:
-# # # # #         '''Costruttore'''
-# # # # #         if not file_name:
-# # # # #             self.record = []
-# # # # #         else:
-# # # # #             self.record = SeqIO.parse(file_name, "genbank")
-
-
-# # # # #     def parsing_gene(self, verbose:bool=False) -> list:
-# # # # #         '''Metodo che ritorna due liste:
-# # # # #         - In "gene_array" vi sono i dati analizzati: per ogni file.gbk dato in input ci sono X geni,
-# # # # #           e per ogni gene avremo un dizionario dei campi di interesse, come il Name, l'ID, e così via;
-# # # # #         - In "hex_array" vi sono i dati trattati riferiti alla Sequenza. Salviamo infatti sia la sequenza
-# # # # #           di basi azotate "as is", sia la versione codificata con SHA256.'''
-# # # # #         gene_array = []
-# # # # #         hex_array = []
-# # # # #         count = 0
-# # # # #         last = -1
-# # # # #         errors = 0
-# # # # #         PrintWarning(8).stdout("\nSTART PARSING")               # messaggio informativo su console
-# # # # #         print("~"*56+"\n")
-# # # # #         t_last = perf_counter()
-        
-# # # # #         for gene in self.record:
-# # # # #             count += 1
-# # # # #             if int((count/86100)*100) != last and verbose:              # Gestito in base al verbose, attenzione alla lunghezza del file (...)
-# # # # #                 t_now = perf_counter()
-# # # # #                 print("[%-50s] %d%% %d" % ('='*((last+1)//2),last+1,(t_now-t_last)*(86100//count)),end="\r") #??????
-# # # # #                 last +=1
-# # # # #             #print(count)
-# # # # #             json_gene, json_convert, errors = self.parseGene(gene)
-# # # # #             hex_array.append(json_convert)
-# # # # #             gene_array.append(json_gene)
-# # # # #         PrintWarning(3).stdout("\nParsing completed\n") 
-# # # # #         PrintWarning(5).stdout("Process completed with", errors, 'errors\n')
-# # # # #         return gene_array, hex_array
-
-
-# # # # #     def parseGene(self, gene) -> tuple[dict, dict, int]:
-# # # # #         '''Metodo che ritorna una tupla strutturata nel modo seguente:
-# # # # #         - dict json_gene        che contiene Nome e ID del gene analizzato;
-# # # # #         - dict json_convert     che contiene sia la sequenza "raw" che tradotta in SHA256;
-# # # # #         - int  error            che segnala quanti errori si sono verificati durante la ricerca, ovvero quante volte il dato è risultato mancante       
-# # # # #         Questa tupla viene utilizzata all'interno del metodo parsing_gene() per popolare i due array gee_array e hex_array.'''
-# # # # #         json_gene = {}
-# # # # #         json_convert = {}
-# # # # #         json_gene["Name"] = gene.name
-# # # # #         json_gene["Id"] = gene.id
-# # # # #         check = False
-# # # # #         errors = 0
-# # # # #         try:
-# # # # #             if gene.seq != "":
-# # # # #                 #print(count)
-# # # # #                 check = True
-# # # # #                 sh = self.sha_index(str(gene.seq))
-# # # # #                 json_gene["Seq_Hex"] = sh["hex"]        #str(gene.seq)-> SHA256 funzione
-# # # # #                 json_convert["Seq_Hex"] = sh["hex"]     #str(gene.seq)-> SHA256 funzione
-# # # # #                 json_convert["Seq_Raw"] = sh["seq"]     #str(gene.seq)-> SHA256 funzione
-# # # # #         except Exception as e:
-# # # # #             if check:
-# # # # #                 print(e,"Entra qua nella sequenza:",gene.id)
-# # # # #             errors += 1
-# # # # #             pass
-# # # # #         json_gene["Description"] = gene.description
-# # # # #         json_gene["Features"] = []
-# # # # #         for feature in gene.features:
-# # # # #             feature_type = {"Type":feature.type}
-# # # # #             #json_gene["Features"][feature.type] = {}
-# # # # #             for qual in feature.qualifiers:
-# # # # #                 feature_type[qual] = feature.qualifiers.get(qual)[0]
-# # # # #             feature_type["Location"] = (int(feature.location.start),int(feature.location.end))
-# # # # #             json_gene["Features"].append(feature_type)
-# # # # #         return json_gene, json_convert, errors
-    
-
-# # # # #     def sha_index(self, seq:str) -> dict:
-# # # # #         '''Metodo che, dato in input una squenza, ritorna in un dizionario la sequenza e il suo codice hash.
-# # # # #         ACGTU sono le possibili unità di una qualsiasi sequenza. '''
-# # # # #         return {
-# # # # #             'hex':hashlib.sha256(seq.encode('utf-8')).hexdigest(),
-# # # # #             'seq':seq
-# # # # #         }
-    
-
-# # # # #     def save_data(self, json_array:tuple) -> None:
-# # # # #         '''Crea un file json contentene i dati parsati.'''
-# # # # #         with open(f"{Global.JSON['Path']}datastruct.json","w") as js:
-# # # # #             json.dump({
-# # # # #                         "struct":json_array[0],
-# # # # #                         "hex":json_array[1]
-# # # # #                         },js,indent=4)
-
-
-# # # # # #######################
 
 
 # # # # # class Database:
@@ -1734,8 +1737,15 @@ def updateByGenomes(datasTaxon=''):
 ########################################################################################
 
 def main(args:dict) -> None:
-
-
+    print("Welcome! This program is intended to be used for parsing data from NCBI or a file.\n"
+          "After parsing process is completed, you can check and query results in the DB selected as argument.")
+    count = 0
+    if len(sys.argv) == 1:
+        count += 1
+        print("Please add an argument at least.\n")
+        if (count >= 3):
+            print("Need a help? Digit -h or --help after calling genbank.py.\n")
+    
     name = input('Please insert something to search: ')
     
     if (True):   #qui andrà il check per i metodi che fanno ricerche online
@@ -1771,9 +1781,6 @@ if __name__ == "__main__":
 
 # # # # # def main(args:dict) -> None:
 # # # # #     v = False
-# # # # #     print("Welcome! This script is intended to be used for parsing data from a .gbk file.\nAfter parsing process is completed, you can check and query results in the DB selected as argument.")
-# # # # #     if len(sys.argv) == 1:
-# # # # #         print("Please add an argument at least\nDigit -h or --help after calling genbank.py to show possible input and try again\nRETURN:")
 # # # # #     if args["verbose"]:
 # # # # #         v = True
 # # # # #     type = "nucleotide"
@@ -1814,7 +1821,7 @@ if __name__ == "__main__":
 # # # # #         if args["fasta"]:
 # # # # #             #print(args["fasta"])
 # # # # #             d.toFasta(args["fasta"])
-# # # # #     #d.isMicorAlgae()
+# # # # #     #d.isMicroAlgae()
 # # # # #     return
 
 
