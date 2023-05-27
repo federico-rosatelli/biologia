@@ -7,7 +7,7 @@ from Bio import SeqIO, Entrez
 from time import ctime, perf_counter
 from Bio.Seq import Seq
 from matplotlib import pyplot as plt
-from validate_email import validate_email
+#from validate_email import validate_email
 import urllib.request as download
 import pandas as pd
 import csv
@@ -30,7 +30,6 @@ import sys
 # Init and Declaration of Global variables
 ########################################################################################
 
-Global = ""                                                 # Deprecated?
 client = MongoClient('localhost', 27017)
 db = client["Biologia"]
 collection_taxonomy_data = db["taxonomy_data"]
@@ -42,29 +41,29 @@ ignore_names = ["environmental samples"]                    # taxonomy ID to be 
 Entrez.api_key = "cc030996838fc52dd1a2653fad76bf5fe408"
 Entrez.email = ""
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
-
+Global = {}                                                 # Deprecated, it must contain some data to be parsed in relative functions
 CLUSTER = "localhost:27017"
 WEBSOURCE = {
-    "Algae":{
-        "Web":"https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt",
-        "File":"data/databaseCsv/algaeDatabase.csv"
-    },
-    "MicroAlgae":{
-        "Web":"",
-        "File":"data/databaseCsv/microAlgaeDatabase.csv"
-    }
+        "Algae":{
+            "Web":"https://shigen.nig.ac.jp/algae/download/downloadFile/Strain_e.txt",
+            "File":"data/databaseCsv/algaeDatabase.csv"
+        },
+        "MicroAlgae":{
+            "Web":"",
+            "File":"data/databaseCsv/microAlgaeDatabase.csv"
+        }
 }
 SQL = {
     "Init":"data/DBs/init.sql",
-    "Store":"Biologia.db"
-}
+        "Store":"Biologia.db"
+    }
 JSON = {
-    "Path":"data/src/",
-    "Type":"JSONFile"
-}
+        "Path":"data/src/",
+        "Type":"JSONFile"
+    }
 ALIGNMENT = {
-    "Path":"data/src/alignments/",
-    "Type":"TXTFile"
+        "Path":"data/src/alignments/",
+        "Type":"TXTFile"
 }
 
 
@@ -1490,6 +1489,40 @@ def searchForRank(name = '', rank = ''):
     dataResult = collection_taxonomy_data.find(filter)
     return
 
+
+def delOrganisms():
+    client = MongoClient('localhost', 27017)
+    db = client["Biologia"]
+    collection_taxonomy_data = db["taxonomy_data"]
+    collection_taxonomy_tree = db["taxonomy_tree"]
+    collection_table_basic = db["table_basic"]
+    collection_table_complete = db["table_complete"]
+
+
+    list_all = ["Closterium", "Cruciplacolithus","Gomphonema"]
+
+    for value in list_all:
+        variable = collection_taxonomy_tree.find_one({"ScientificName" : value})
+        try:
+            for sub in variable["SubClasses"]:
+                print(f"Delete {sub['ScientificName']}")
+                d = collection_taxonomy_data.find_one_and_delete({"TaxId":sub["TaxId"]})
+                print(f"Delete {d}")
+                collection_table_basic.find_one_and_delete({"TaxId":sub["TaxId"]})
+                collection_table_complete.find_one_and_delete({"TaxId":sub["TaxId"]})
+        except Exception as e:
+            print(f"{e}")
+    # db.taxonomy_data.deleteMany({ScientificName:{$regex:"Closterium"}})
+    # db.table_basic.deleteMany({ScientificName:{$regex:"Closterium"}})
+    # db.table_complete.deleteMany({ScientificName:{$regex:"Closterium"}})
+    # db.taxonomy_data.deleteMany({ScientificName:{$regex:"Cruciplacolithus"}})
+    # db.table_basic.deleteMany({ScientificName:{$regex:"Cruciplacolithus"}})
+    # db.table_complete.deleteMany({ScientificName:{$regex:"Cruciplacolithus"}})
+    # db.taxonomy_data.deleteMany({ScientificName:{$regex:"Gomphonema"}})
+    # db.table_basic.deleteMany({ScientificName:{$regex:"Gomphonema"}})
+    # db.table_complete.deleteMany({ScientificName:{$regex:"Gomphonema"}})
+    # db.taxonomy_tree.drop()
+    # taxTreeMaker()
 
 def taxTreeMaker():
     '''Function that retrieves datas from collection_taxonomy_data of MongoDB and
