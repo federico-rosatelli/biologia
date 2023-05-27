@@ -1,0 +1,33 @@
+version: "3"
+services:
+
+  # backend 
+  bio-backend:
+    container_name: bio-backend
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+    - "3000:3000"
+    links:
+    - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+    - "27018:27017"
+  
+  # frontend
+  bio-frontend:
+    container_name: bio-frontend
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+    - "80:80"
+
+# services:
+#   webapp:
+#     build: https://github.com/mycompany/example.git#branch_or_tag:subdirectory
