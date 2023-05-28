@@ -888,9 +888,9 @@ def JsonCreate():
     return
 
 
-
 def check_email() -> str:
     '''Function that helps to check if inserted input is matching email standard'''
+    print("This method connects to NCBI for retrieving data.\n")
     nb = input('Please insert email: ')
     while(re.fullmatch(regex, nb) == None):
         nb = input('Invalid Email, please retry: ')
@@ -903,34 +903,6 @@ def check_email() -> str:
 def file_exists(self)-> bool:
     '''check file existence in path'''
     return os.path.isfile(self.file) and not os.stat(self.file).st_size == 0
-
-
-def csvWrite(dataResult):
-    '''Custom function that, using csv library, return a file with field of interests
-    from a given list of data, parsed as NCBI Json structure'''
-    tot_data = []
-    num = []
-    for dataN in dataResult:
-        print(dataN["GBSeq_organism"])
-        for data in dataN["GBSeq_feature-table"]:
-            if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
-                for prod in data["GBFeature_quals"]:
-                    if prod["GBQualifier_name"] == "product":
-                        number = 1
-                        if [prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()] in tot_data:
-                            iii = tot_data.index([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
-                            num[iii] = num[iii]+1
-                        else:
-                            tot_data.append([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
-                            num.append(number)
-        print(len(tot_data))
-    tot_tot = []
-    for i in range(len(tot_data)):
-        tot_tot.append(tot_data[i]+[num[i]])
-    with open('SpecieProduct.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile,delimiter="|")
-        writer.writerows(tot_tot)
-    return
 
 
 def printTable(table, gene, trace=[]):
@@ -1074,12 +1046,409 @@ def finderTaxon(name):
     return
 
 
-def genomeRetrieve():
+def nucleoImport():
+    '''Function that make comparison between datas present in microAlgaeDatabase.csv
+    and those present in taxonomy_data collection and then try to find that record
+    on Nucleotide section of NCBI. At the end, if the record is not present in
+    nucleotide_data collection locally, the data is inserted in DB'''
+    taxon_collection = db["taxonomy_data"]
+    nucleo_collection = db["nucleotide_organism"]
+    records = ncbiSearch("Scenedesmus bijugus")
+    print(records[0])
+    csvOrganism = open('data/databaseCsv/microAlgaeDatabase.csv').readlines()
+    listCompl = [csvOrganism[data].split(";")[3].strip() for data in range(0,200)]
+    for i in range(200,len(csvOrganism)):
+        organism = csvOrganism[i]
+        organism = organism.split(";")
+        organism = organism[3]
+        organism.strip()
+        dataRank = taxon_collection.find_one({"ScientificName":organism})
+        if not dataRank or dataRank["Rank"] != "species" or dataRank["Division"] == "Bacteria":
+            continue
+        if organism.split(" ")[1] == "sp." and len(organism.split(" ")) == 2:
+            continue
+        if organism in listCompl:
+            continue
+        print(organism)
+        if "_" in organism:
+            organism = organism.split("_")[0]
+        print(organism,f"{i} su {len(csvOrganism)}")
+
+        listCompl.append(organism)
+        try:
+            records = ncbiSearch(organism)
+        except Exception as e:
+            print(e)
+            continue
+        for record in records:
+            record.pop("GBSeq_sequence",None)
+            if not nucleo_collection.find_one({"GBSeq_locus":record["GBSeq_locus"]}):
+                nucleo_collection.insert_one(record)
+
+
+def efetchQuery(id, db ="taxonomy"):
+    '''Simple function that use BioPython library to retrieve, for a given id, its data
+    from Taxonomy section on NCBI'''
+    handle = Entrez.efetch(db, id=id, rettype='gb',retmode="xml")
+    read = Entrez.read(handle)
+    return read
+
+
+def efetchGenome(taxId):
+    '''Function that search for genomic sequence for a data specie (by taxId).
+    Scan the page at the appropriate link on NCBI and if some compatible data
+    are found return the list of their direct link; otherwise return an empty
+    list'''
+    res = requests.get(f"https://ncbi.nlm.nih.gov/genome/?term={taxId}").text
+    tot = []
+    try:
+        findIndex1 = res.index("_genomic.gff.gz")
+        lastHttp1 = res[:findIndex1]
+        firstHttpIndex1 = lastHttp1.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot.append(lastHttp1[firstHttpIndex1:]+"_genomic.gff.gz")
+    except Exception as e:
+        print(f"GFF {e}")
+
+    try:
+        findIndex2 = res.index("_genomic.gbff.gz")
+        lastHttp2 = res[:findIndex2]
+        firstHttpIndex2 = lastHttp2.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot.append(lastHttp2[firstHttpIndex2:]+"_genomic.gbff.gz")
+    except Exception as e:
+        print(f"GBFF {e}")
+    try:
+        findIndex3 = res.index("_genomic.fna.gz")
+        lastHttp3 = res[:findIndex3]
+        firstHttpIndex3 = lastHttp3.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
+        tot.append(lastHttp3[firstHttpIndex3:]+"_genomic.fna.gz")
+    except Exception as e:
+        print(f"FNA {e}")
+    return tot
+
+
+def nucleoImport():
+    '''Sub-function that add new entries in nucleotide_data collection searching for them
+    on NCBI platform'''
+    daora = False
+    nucleo_collection = db["nucleotide_data"]
+    all_data = collection_taxonomy_data.find({},{"TaxId":1,"_id":0})
+    for data in all_data:
+        if f"txid{data['TaxId']}" == "txid1411642":
+            daora = True
+        else:
+            print("No",f"txid{data['TaxId']}")
+        if daora:
+            print(f"txid{data['TaxId']}")
+            try:
+                insertDatas = ncbiSearch(f"txid{data['TaxId']}[Organism:exp]")
+                for ins in insertDatas:
+                    ins.pop("GBSeq_sequence",None)
+                    nucleo_collection.insert_one(ins)
+                #nucleo_collection.insert_many(insertDatas)
+            except Exception as e:
+                print(e)
+
+
+def finderTaxonFromFile(fn):
+    '''Function that, given a file path in input, scan for species and datas.
+    File has to be formatted like those present in path ./data./databaseCsv'''
+    names = []
+    rd = open(fn).readlines()
+    for i in range(len(rd)):
+        data = rd[i].split(";")
+        name = data[3].split(" ")[0]
+        if "_" in name:
+            name = name.split("_")[0]
+        if name != "" and name not in names:
+            finderTaxon(name)
+        names.append(name)
+
+
+def genusList():
+    '''Function that generate a .csv file that list all Ranks present in
+    taxonomy_tree collection, taking off some of them by avoiding to
+    insert non-microalgae'''
+    genus = collection_taxonomy_tree.find({"Rank":"genus"})
+    datas = [["Scientific Name","Taxon Id","Division"]]
+    for gene in genus:
+        print(gene["ScientificName"])
+        taxons = efetchQuery(gene["TaxId"])
+        for taxon in taxons:
+            if taxon["Division"] != "Bacteria":
+                datas.append([taxon["ScientificName"],taxon["TaxId"],taxon["Division"]])
+    with open('GenusList.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(datas)
+
+
+
+def ncbiProtein(name:str) ->list:
+    '''Function that retrieve data, for a given protein, on Protein section of NCBI (if present)
+    and check for its IDs new datas.'''
+    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
+    # read = Entrez.read(handle)
+    handle = Entrez.esearch(db='protein', term=name, rettype='gb', retmode='text', retmax=10000)
+    record = Entrez.read(handle, validate=False)
+    handle.close()
+    print(f"Len of IDLIST:{len(record['IdList'])}")
+    if len(record["IdList"]) == 0:
+        raise Exception("List Empty")
+    handle = Entrez.efetch(db="protein", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
+    read = Entrez.read(handle)
+    print(f"Len of EFETCH:{len(read)}")
+    return read
+
+
+
+#################################################################################
+# Offline Query methods (MongoDB)
+#################################################################################
+
+def delOrganisms():
+    client = MongoClient('localhost', 27017)
+    db = client["Biologia"]
+    collection_taxonomy_data = db["taxonomy_data"]
+    collection_taxonomy_tree = db["taxonomy_tree"]
+    collection_table_basic = db["table_basic"]
+    collection_table_complete = db["table_complete"]
+
+
+    list_all = ["Closterium", "Cruciplacolithus","Gomphonema"]
+
+    for value in list_all:
+        variable = collection_taxonomy_tree.find_one({"ScientificName" : value})
+        try:
+            for sub in variable["SubClasses"]:
+                print(f"Delete {sub['ScientificName']}")
+                d = collection_taxonomy_data.find_one_and_delete({"TaxId":sub["TaxId"]})
+                print(f"Delete {d}")
+                collection_table_basic.find_one_and_delete({"TaxId":sub["TaxId"]})
+                collection_table_complete.find_one_and_delete({"TaxId":sub["TaxId"]})
+        except Exception as e:
+            print(f"{e}")
+    # db.taxonomy_data.deleteMany({ScientificName:{$regex:"Closterium"}})
+    # db.table_basic.deleteMany({ScientificName:{$regex:"Closterium"}})
+    # db.table_complete.deleteMany({ScientificName:{$regex:"Closterium"}})
+    # db.taxonomy_data.deleteMany({ScientificName:{$regex:"Cruciplacolithus"}})
+    # db.table_basic.deleteMany({ScientificName:{$regex:"Cruciplacolithus"}})
+    # db.table_complete.deleteMany({ScientificName:{$regex:"Cruciplacolithus"}})
+    # db.taxonomy_data.deleteMany({ScientificName:{$regex:"Gomphonema"}})
+    # db.table_basic.deleteMany({ScientificName:{$regex:"Gomphonema"}})
+    # db.table_complete.deleteMany({ScientificName:{$regex:"Gomphonema"}})
+    # db.taxonomy_tree.drop()
+    # taxTreeMaker()
+
+
+def checkInput(id):
+    '''Function for avoiding redundant code and checking input type'''
+    if id.isdigit():
+        id = int(id)
+    else:
+        id = 100
+    return id
+
+
+def number_to_string(argument):
+    '''Function intended to be used in main for user selection of method process'''
+    val = 0
+    dictfun = {
+        0: "unwrappingSpecies",
+        1: "taxTreeMaker",
+        2: "searchForRank",
+        3: "testNucleo",
+        4: "genomeRetrieve",
+        5: "nucleoResult",
+        6: "genomeFind",
+        7: "parseToBasic",
+        8: "fattoBene",
+        9: "proteinFind",
+        10: "newCollectionBene",
+        11: "productsTablen",
+        12: "csvWriten",
+        13: "updateByGenomes",
+        14: "findTaxon",
+        15: "proteinFind"
+        }
+    val = dictfun.get(argument, "Invalid number")
+    print(f"Executing... {val}")
+    match argument: 
+        case 0:
+            unwrappingSpecies()
+            print("Process completed.\n")
+            return
+        case 1:
+            taxTreeMaker()                #previously named algo()
+            return
+        case 2:
+            searchForRank()                #previously named aglo()
+            return
+        case 3:
+            testNucleo()
+            return
+        case 4:
+            genomeRetrieve()               #previously named GFF()
+            return
+        case 5:
+            nucleoResult()
+            return
+        case 6:
+            #name
+            genomeFind()
+            return
+        case 7:
+            parseToBasic()
+            return
+        case 8:
+            fattoBene() 
+            return
+        case 9:
+            proteinFind()
+            return
+        case 10:
+            newCollectionBene()
+            return
+        case 11:
+            productsTable()
+            return
+        case 12:
+            #dataResult
+            csvWrite()
+            return
+        case 13:
+            updateByGenomes()
+            return
+        case 14:
+            findTaxon("Eukaryota")
+            return
+
+
+
+########################################################################################
+# Methods intended to be ran in main by User
+########################################################################################
+
+def unwrappingSpecies():                    #case 0
+    '''Function that, using finderTaxonFromFile scan, nake a new OrganismList.csv file
+    that contain contents parsed and cleaned in a readable format for humans.'''
+    print("Offline method: executing on local DB...\n")
+    finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
+    taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
+    collection_taxonomy_data.delete_many({"Lineage":{"$regex":"environmental samples"}})
+    parsed_file = collection_taxonomy_data.find({},{"ScientificName":1,"_id":0})
+    listTuple = [[i["ScientificName"]] for i in parsed_file]
+    with open('./lists/OrganismList.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(listTuple)
+    return
+
+
+def taxTreeMaker():                         #case 1
+    '''Function that retrieves datas from collection_taxonomy_data of MongoDB and
+    create a new collection, taxonomy_tree, that contain the Lineage for
+    each specie'''
+    print("Offline method: executing on local DB...\n")
+    results = collection_taxonomy_data.find({})
+    iter = 0
+    for res in results:
+        print(iter)
+        iter += 1
+        # if collection_taxonomy_tree.find_one({"TaxId":res["ParentTaxId"]}):
+        #     dataPush = {
+        #             "TaxId":LineageEx["TaxId"],
+        #             "Rank":LineageEx["Rank"],
+        #             "ScientificName":LineageEx["ScientificName"],
+        #             "SubClasses":[]
+        #         }
+        #     collection_taxonomy_tree.insert_one(dataPush)
+        for i in range(1, len(res["LineageEx"])):
+            #for LineageEx in res["LineageEx"]:
+            LineageEx = res["LineageEx"][i]
+            if not collection_taxonomy_tree.find_one({"TaxId":LineageEx["TaxId"]}):
+                dataPush = {
+                    "TaxId":LineageEx["TaxId"],
+                    "Rank":LineageEx["Rank"],
+                    "ScientificName":LineageEx["ScientificName"],
+                    "SubClasses":[]
+                }
+                collection_taxonomy_tree.insert_one(dataPush)
+            if (i == 1):
+                continue
+            LineageExPrev = res["LineageEx"][i-1]
+
+            if collection_taxonomy_tree.find_one({"TaxId":LineageExPrev["TaxId"], "SubClasses":{"$elemMatch":{"TaxId":LineageEx["TaxId"]}}}):
+                continue
+            newDataPush = {
+                    "TaxId":LineageEx["TaxId"],
+                    "Rank":LineageEx["Rank"],
+                    "ScientificName":LineageEx["ScientificName"],
+                    }
+            collection_taxonomy_tree.update_one({"TaxId":LineageExPrev["TaxId"]},{"$push":{"SubClasses":newDataPush}})
+        if not collection_taxonomy_tree.find_one({"TaxId":res["ParentTaxId"], "SubClasses":{"$elemMatch":{"TaxId":res["TaxId"]}}}):
+            newDataPush = {
+                    "TaxId":res["TaxId"],
+                    "Rank":res["Rank"],
+                    "ScientificName":res["ScientificName"],
+                    }
+            collection_taxonomy_tree.update_one({"TaxId":res["ParentTaxId"]},{"$push":{"SubClasses":newDataPush}})
+    return
+
+
+def searchForRank(name = '', rank = ''):    #case 2
+    '''Function that search for input with a mongo-query in local DB'''
+    print("Offline method: executing on local DB...\n")
+    filter = {}
+    if (name != '' and rank != ''):
+        filter = {name, rank}
+    elif (name != ''):
+        filter = {name}
+    elif (rank != ''):
+        filter = {rank}
+    dataResult = collection_taxonomy_data.find(filter)
+    return
+
+
+def testNucleo():                           #case 3
+    '''Function intended for internal testing only. Shows a representation of json structure
+    retrieved from NCBI at Nucleotide section making local query on DB'''
+    Entrez.email = check_email()
+    nucleo_collection = db["nucleotide_organism"]
+    query = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key":"CDS","GBFeature_quals":{"$elemMatch":{"GBQualifier_name":"protein_id"}}}}}
+    filter = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key": "CDS"}}}
+    res = nucleo_collection.aggregate([
+        {"$match": {'GBSeq_feature-table.GBFeature_key': 'CDS','GBSeq_feature-table.GBFeature_quals.GBQualifier_name':"protein_id"}},
+        {"$project": {
+            "GBSeq_feature-table": {"$filter": {
+                "input": '$GBSeq_feature-table',
+                "as": 'cds',
+                "cond": {"$eq": ['$$cds.GBFeature_key', 'CDS']}
+            }},
+            "_id": 0,
+        }}
+    ])
+    nucleos = nucleo_collection.count_documents(query,filter)
+    print(nucleos)
+    proteins = []
+    count = 0
+    for nucleo in res:
+        print(count)
+        cdss = nucleo["GBSeq_feature-table"]
+        for cds in cdss:
+            for qual in cds["GBFeature_quals"]:
+                if qual["GBQualifier_name"] == "protein_id":
+                    proteins.append(qual["GBQualifier_value"] in proteins)
+        count += 1
+    results = efetchQuery(proteins, "protein")
+    nucleo_collection.insert_many(results)
+    return
+
+
+def genomeRetrieve():                       #case 4
     '''Function that search on NCBI, for all occurrencies in taxonomy_data, if
     there are links to GFF, GBFF and FNA files containing genomic sequences
     for eache specie; in that case, carry out the download in ./data/temp
     folder, unwrap the files and move the extracted content in ./data/genomes/<txid>
     where <txid> is the relative id found in taxonomy_data for that specie'''
+    print("Online method but does not require login credentials.\n")
     # creation directory for downloading process
     directory = "genomes/"
     temp = "temp/"
@@ -1171,165 +1540,10 @@ def genomeRetrieve():
     return
 
 
-def nucleoImport():
-    '''Function that make comparison between datas present in microAlgaeDatabase.csv
-    and those present in taxonomy_data collection and then try to find that record
-    on Nucleotide section of NCBI. At the end, if the record is not present in
-    nucleotide_data collection locally, the data is inserted in DB'''
-    taxon_collection = db["taxonomy_data"]
-    nucleo_collection = db["nucleotide_organism"]
-    records = ncbiSearch("Scenedesmus bijugus")
-    print(records[0])
-    csvOrganism = open('data/databaseCsv/microAlgaeDatabase.csv').readlines()
-    listCompl = [csvOrganism[data].split(";")[3].strip() for data in range(0,200)]
-    for i in range(200,len(csvOrganism)):
-        organism = csvOrganism[i]
-        organism = organism.split(";")
-        organism = organism[3]
-        organism.strip()
-        dataRank = taxon_collection.find_one({"ScientificName":organism})
-        if not dataRank or dataRank["Rank"] != "species" or dataRank["Division"] == "Bacteria":
-            continue
-        if organism.split(" ")[1] == "sp." and len(organism.split(" ")) == 2:
-            continue
-        if organism in listCompl:
-            continue
-        print(organism)
-        if "_" in organism:
-            organism = organism.split("_")[0]
-        print(organism,f"{i} su {len(csvOrganism)}")
-
-        listCompl.append(organism)
-        try:
-            records = ncbiSearch(organism)
-        except Exception as e:
-            print(e)
-            continue
-        for record in records:
-            record.pop("GBSeq_sequence",None)
-            if not nucleo_collection.find_one({"GBSeq_locus":record["GBSeq_locus"]}):
-                nucleo_collection.insert_one(record)
-
-
-def efetchQuery(id, db ="taxonomy"):
-    '''Simple function that use BioPython library to retrieve, for a given id, its data
-    from Taxonomy section on NCBI'''
-    handle = Entrez.efetch(db, id=id, rettype='gb',retmode="xml")
-    read = Entrez.read(handle)
-    return read
-
-
-def efetchGenome(taxId):
-    '''Function that search for genomic sequence for a data specie (by taxId).
-    Scan the page at the appropriate link on NCBI and if some compatible data
-    are found return the list of their direct link; otherwise return an empty
-    list'''
-    res = requests.get(f"https://ncbi.nlm.nih.gov/genome/?term={taxId}").text
-    tot = []
-    try:
-        findIndex1 = res.index("_genomic.gff.gz")
-        lastHttp1 = res[:findIndex1]
-        firstHttpIndex1 = lastHttp1.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
-        tot.append(lastHttp1[firstHttpIndex1:]+"_genomic.gff.gz")
-    except Exception as e:
-        print(f"GFF {e}")
-
-    try:
-        findIndex2 = res.index("_genomic.gbff.gz")
-        lastHttp2 = res[:findIndex2]
-        firstHttpIndex2 = lastHttp2.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
-        tot.append(lastHttp2[firstHttpIndex2:]+"_genomic.gbff.gz")
-    except Exception as e:
-        print(f"GBFF {e}")
-    try:
-        findIndex3 = res.index("_genomic.fna.gz")
-        lastHttp3 = res[:findIndex3]
-        firstHttpIndex3 = lastHttp3.rfind("https://ftp.ncbi.nlm.nih.gov/genomes")
-        tot.append(lastHttp3[firstHttpIndex3:]+"_genomic.fna.gz")
-    except Exception as e:
-        print(f"FNA {e}")
-    return tot
-
-
-def testNucleo():
-    '''Function intended for internal testing only. Shows a representation of json structure
-    retrieved from NCBI at Nucleotide section making local query on DB'''
-    nucleo_collection = db["nucleotide_organism"]
-    query = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key":"CDS","GBFeature_quals":{"$elemMatch":{"GBQualifier_name":"protein_id"}}}}}
-    filter = {"GBSeq_feature-table":{"$elemMatch":{"GBFeature_key": "CDS"}}}
-    res = nucleo_collection.aggregate([
-        {"$match": {'GBSeq_feature-table.GBFeature_key': 'CDS','GBSeq_feature-table.GBFeature_quals.GBQualifier_name':"protein_id"}},
-        {"$project": {
-            "GBSeq_feature-table": {"$filter": {
-                "input": '$GBSeq_feature-table',
-                "as": 'cds',
-                "cond": {"$eq": ['$$cds.GBFeature_key', 'CDS']}
-            }},
-            "_id": 0,
-        }}
-    ])
-    nucleos = nucleo_collection.count_documents(query,filter)
-    print(nucleos)
-    proteins = []
-    count = 0
-    for nucleo in res:
-        print(count)
-        cdss = nucleo["GBSeq_feature-table"]
-        for cds in cdss:
-            for qual in cds["GBFeature_quals"]:
-                if qual["GBQualifier_name"] == "protein_id":
-                    proteins.append(qual["GBQualifier_value"] in proteins)
-        count += 1
-    results = efetchQuery(proteins, "protein")
-    nucleo_collection.insert_many(results)
-    return
-
-
-def genomeFind(name:str):
-    '''Function that merge data found on NCBI between Genome and Nucleotide section and
-    print its structore in json format'''
-    handle = Entrez.esearch(db='genome', term=name, rettype='gb', retmode='text', retmax=10000)
-    record = Entrez.read(handle, validate=False)
-    handle.close()
-    # print(f"Len of IDLIST:{len(record['IdList'])}")
-    # if len(record["IdList"]) == 0:
-    #     raise Exception("List Empty")
-    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
-    read = Entrez.read(handle)
-    json_object = json.loads(f"{read}")
-
-    json_formatted_str = json.dumps(json_object, indent=2)
-    # print(f"Len of EFETCH:{len(read)}")
-    # return read
-    print(json_formatted_str)
-
-
-def nucleoImport():
-    '''Sub-function that add new entries in nucleotide_data collection searching for them
-    on NCBI platform'''
-    daora = False
-    nucleo_collection = db["nucleotide_data"]
-    all_data = collection_taxonomy_data.find({},{"TaxId":1,"_id":0})
-    for data in all_data:
-        if f"txid{data['TaxId']}" == "txid1411642":
-            daora = True
-        else:
-            print("No",f"txid{data['TaxId']}")
-        if daora:
-            print(f"txid{data['TaxId']}")
-            try:
-                insertDatas = ncbiSearch(f"txid{data['TaxId']}[Organism:exp]")
-                for ins in insertDatas:
-                    ins.pop("GBSeq_sequence",None)
-                    nucleo_collection.insert_one(ins)
-                #nucleo_collection.insert_many(insertDatas)
-            except Exception as e:
-                print(e)
-
-
-def nucleoResult():
+def nucleoResult():                         #case 5
     '''Function that lightens the records of nucleotide_data collection taking only
     datas of interest.'''
+    Entrez.email = check_email()
     nucleoImport()
     # "txid257627"
     # "txid257627"
@@ -1357,226 +1571,31 @@ def nucleoResult():
     return
 
 
-def finderTaxonFromFile(fn):
-    '''Function that, given a file path in input, scan for species and datas.
-    File has to be formatted like those present in path ./data./databaseCsv'''
-    names = []
-    rd = open(fn).readlines()
-    for i in range(len(rd)):
-        data = rd[i].split(";")
-        name = data[3].split(" ")[0]
-        if "_" in name:
-            name = name.split("_")[0]
-        if name != "" and name not in names:
-            finderTaxon(name)
-        names.append(name)
-
-
-def unwrappingSpecies():
-    '''Function that, using finderTaxonFromFile scan, nake a new OrganismList.csv file
-    that contain contents parsed and cleaned in a readable format for humans.'''
-    finderTaxonFromFile('data/databaseCsv/microAlgaeDatabase.csv')
-    taxons = finderTaxon('data/databaseCsv/microAlgaeDatabase.csv')
-    collection_taxonomy_data.delete_many({"Lineage":{"$regex":"environmental samples"}})
-    parsed_file = collection_taxonomy_data.find({},{"ScientificName":1,"_id":0})
-    listTuple = [[i["ScientificName"]] for i in parsed_file]
-    with open('./lists/OrganismList.csv', 'w') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerows(listTuple)
-    return
-
-
-def genusList():
-    '''Function that generate a .csv file that list all Ranks present in
-    taxonomy_tree collection, taking off some of them by avoiding to
-    insert non-microalgae'''
-    genus = collection_taxonomy_tree.find({"Rank":"genus"})
-    datas = [["Scientific Name","Taxon Id","Division"]]
-    for gene in genus:
-        print(gene["ScientificName"])
-        taxons = efetchQuery(gene["TaxId"])
-        for taxon in taxons:
-            if taxon["Division"] != "Bacteria":
-                datas.append([taxon["ScientificName"],taxon["TaxId"],taxon["Division"]])
-    with open('GenusList.csv', 'w') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerows(datas)
-
-
-
-def ncbiProtein(name:str) ->list:
-    '''Function that retrieve data, for a given protein, on Protein section of NCBI (if present)
-    and check for its IDs new datas.'''
-    # handle = Entrez.efetch(db="taxonomy", Lineage=name, retmode="xml")
-    # read = Entrez.read(handle)
-    handle = Entrez.esearch(db='protein', term=name, rettype='gb', retmode='text', retmax=10000)
+def genomeFind(name:str):                   #case 6
+    '''Function that merge data found on NCBI between Genome and Nucleotide section and
+    print its structore in json format'''
+    Entrez.email = check_email()
+    handle = Entrez.esearch(db='genome', term=name, rettype='gb', retmode='text', retmax=10000)
     record = Entrez.read(handle, validate=False)
     handle.close()
-    print(f"Len of IDLIST:{len(record['IdList'])}")
-    if len(record["IdList"]) == 0:
-        raise Exception("List Empty")
-    handle = Entrez.efetch(db="protein", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
+    # print(f"Len of IDLIST:{len(record['IdList'])}")
+    # if len(record["IdList"]) == 0:
+    #     raise Exception("List Empty")
+    handle = Entrez.efetch(db="nucleotide", id=record["IdList"], rettype='gb',retmode="xml",complexity=1)
     read = Entrez.read(handle)
-    print(f"Len of EFETCH:{len(read)}")
-    return read
-
-
-def proteinFind():
-    '''Function that search from local taxonomy_data collection all Protein IDs,
-    cut its sequence to lightens local DB and retrieve new data from NCBI.'''
-    taxon_collection = collection_taxonomy_data
-    findTax = taxon_collection.find({},{"TaxId":1,"_id":0})
-    for data in findTax:
-        tax = f"txid{data['TaxId']}"
-        print(tax)
-        try:
-            allData = ncbiProtein(tax)
-            for prot in allData:
-                prot.pop("GBSeq_sequence",None)
-                collection_protein_data.insert_one(prot)
-        except Exception as e:
-            print(e)
-
-
-def findTaxon(key):
-    '''Function tat for a Taxon ID given in input check
-    if there is an occurrence in taxonomy_data collection
-    and print its Lineage values'''
-    rgx = re.compile(f'{key}', re.IGNORECASE)
-    info = {"Lineage":rgx}
-    dataFind = collection_taxonomy_data.find(info)
-    for i in dataFind:
-        print(i)
-
-
-
-#################################################################################
-# Offline Query methods (MongoDB)
-#################################################################################
-
-
-def productsTable():
-    '''Function that take data from lists/SpecieProduct.csv and parse
-    new collections (table_complete and table_basic) with those datas
-    [Legacy procedure]'''
-    products = open("./lists/SpecieProduct.csv").readlines()
-    complete_collection = db["table_complete"]
-    basic_collection = db["table_basic"]
-    for i in range(len(products)):
-        splt = products[i].split("|")
-        product,name,qua = splt[0],splt[1].capitalize(),splt[2].strip()
-        print(i,name)
-        inserBasic = {
-            "ProductName":product
-        }
-        insertComplete = {
-            "ProductName":product,
-            "QtyProduct":qua
-        }
-        basic_collection.update_one({"ScientificName":name},{"$push":{"Products":inserBasic}})
-        complete_collection.update_one({"ScientificName":name},{"$push":{"Products":insertComplete}})
-
-
-def searchForRank(name = '', rank = ''):
-    '''Function that search for input with a mongo-query in local DB'''
-    filter = {}
-    if (name != '' and rank != ''):
-        filter = {name, rank}
-    elif (name != ''):
-        filter = {name}
-    elif (rank != ''):
-        filter = {rank}
-    dataResult = collection_taxonomy_data.find(filter)
+    json_object = json.loads(f"{read}")
+    json_formatted_str = json.dumps(json_object, indent=2)
+    # print(f"Len of EFETCH:{len(read)}")
+    # return read
+    print(json_formatted_str)
     return
 
 
-def delOrganisms():
-    client = MongoClient('localhost', 27017)
-    db = client["Biologia"]
-    collection_taxonomy_data = db["taxonomy_data"]
-    collection_taxonomy_tree = db["taxonomy_tree"]
-    collection_table_basic = db["table_basic"]
-    collection_table_complete = db["table_complete"]
-
-
-    list_all = ["Closterium", "Cruciplacolithus","Gomphonema"]
-
-    for value in list_all:
-        variable = collection_taxonomy_tree.find_one({"ScientificName" : value})
-        try:
-            for sub in variable["SubClasses"]:
-                print(f"Delete {sub['ScientificName']}")
-                d = collection_taxonomy_data.find_one_and_delete({"TaxId":sub["TaxId"]})
-                print(f"Delete {d}")
-                collection_table_basic.find_one_and_delete({"TaxId":sub["TaxId"]})
-                collection_table_complete.find_one_and_delete({"TaxId":sub["TaxId"]})
-        except Exception as e:
-            print(f"{e}")
-    # db.taxonomy_data.deleteMany({ScientificName:{$regex:"Closterium"}})
-    # db.table_basic.deleteMany({ScientificName:{$regex:"Closterium"}})
-    # db.table_complete.deleteMany({ScientificName:{$regex:"Closterium"}})
-    # db.taxonomy_data.deleteMany({ScientificName:{$regex:"Cruciplacolithus"}})
-    # db.table_basic.deleteMany({ScientificName:{$regex:"Cruciplacolithus"}})
-    # db.table_complete.deleteMany({ScientificName:{$regex:"Cruciplacolithus"}})
-    # db.taxonomy_data.deleteMany({ScientificName:{$regex:"Gomphonema"}})
-    # db.table_basic.deleteMany({ScientificName:{$regex:"Gomphonema"}})
-    # db.table_complete.deleteMany({ScientificName:{$regex:"Gomphonema"}})
-    # db.taxonomy_tree.drop()
-    # taxTreeMaker()
-
-def taxTreeMaker():
-    '''Function that retrieves datas from collection_taxonomy_data of MongoDB and
-    create a new collection, taxonomy_tree, that contain the Lineage for
-    each specie'''
-    results = collection_taxonomy_data.find({})
-    iter = 0
-    for res in results:
-        print(iter)
-        iter += 1
-        # if collection_taxonomy_tree.find_one({"TaxId":res["ParentTaxId"]}):
-        #     dataPush = {
-        #             "TaxId":LineageEx["TaxId"],
-        #             "Rank":LineageEx["Rank"],
-        #             "ScientificName":LineageEx["ScientificName"],
-        #             "SubClasses":[]
-        #         }
-        #     collection_taxonomy_tree.insert_one(dataPush)
-        for i in range(1, len(res["LineageEx"])):
-            #for LineageEx in res["LineageEx"]:
-            LineageEx = res["LineageEx"][i]
-            if not collection_taxonomy_tree.find_one({"TaxId":LineageEx["TaxId"]}):
-                dataPush = {
-                    "TaxId":LineageEx["TaxId"],
-                    "Rank":LineageEx["Rank"],
-                    "ScientificName":LineageEx["ScientificName"],
-                    "SubClasses":[]
-                }
-                collection_taxonomy_tree.insert_one(dataPush)
-            if (i == 1):
-                continue
-            LineageExPrev = res["LineageEx"][i-1]
-
-            if collection_taxonomy_tree.find_one({"TaxId":LineageExPrev["TaxId"], "SubClasses":{"$elemMatch":{"TaxId":LineageEx["TaxId"]}}}):
-                continue
-            newDataPush = {
-                    "TaxId":LineageEx["TaxId"],
-                    "Rank":LineageEx["Rank"],
-                    "ScientificName":LineageEx["ScientificName"],
-                    }
-            collection_taxonomy_tree.update_one({"TaxId":LineageExPrev["TaxId"]},{"$push":{"SubClasses":newDataPush}})
-        if not collection_taxonomy_tree.find_one({"TaxId":res["ParentTaxId"], "SubClasses":{"$elemMatch":{"TaxId":res["TaxId"]}}}):
-            newDataPush = {
-                    "TaxId":res["TaxId"],
-                    "Rank":res["Rank"],
-                    "ScientificName":res["ScientificName"],
-                    }
-            collection_taxonomy_tree.update_one({"TaxId":res["ParentTaxId"]},{"$push":{"SubClasses":newDataPush}})
-
-
-def parseToBasic() -> list:
+def parseToBasic() -> list:                 #case 7
     '''Function that creates a new, light collection for performance purposes (table_basic collection) containing
     ScientificName (Specie), TaxID (ID Specie), Nucleotide (nucleotides occurrences for
     that specie) and Proteins (proteins occurrences for that specie)'''
+    print("Offline method: executing on local DB...\n")
     taxon_collection = db["taxonomy_data"]
     nucleo_collection = db["nucleotide_data"]
     tableBasic_collection = db["table_basic"]
@@ -1608,9 +1627,10 @@ def parseToBasic() -> list:
     return
 
 
-def fattoBene():            # TO DO: RENAME!
+def fattoBene():                            #case 8
     '''Function that creates a new, light collection for performance purposes (nucleotide_basic collection) containing
     ScientificName (Specie) and its sequence code (GBSeq_locus, as served from NCBI)'''
+    print("Offline method: executing on local DB...\n")
     tt = db["nucleotide_basic"]
     tt1 = db["nucleotide_basic1"]
     tot = tt.find({},{"_id":0})
@@ -1622,11 +1642,31 @@ def fattoBene():            # TO DO: RENAME!
                 "GBSeq_locus":t[k]
             }
             tt1.insert_one(var)
+    return
+    
+
+def proteinFind():                          #case 9
+    '''Function that search from local taxonomy_data collection all Protein IDs,
+    cut its sequence to lightens local DB and retrieve new data from NCBI.'''
+    Entrez.email = check_email()
+    taxon_collection = collection_taxonomy_data
+    findTax = taxon_collection.find({},{"TaxId":1,"_id":0})
+    for data in findTax:
+        tax = f"txid{data['TaxId']}"
+        print(tax)
+        try:
+            allData = ncbiProtein(tax)
+            for prot in allData:
+                prot.pop("GBSeq_sequence",None)
+                collection_protein_data.insert_one(prot)
+        except Exception as e:
+            print(e)
 
 
-def newCollectionBene():    # TO DO: RENAME!
+def newCollectionBene():                    #case 10
     '''Function that creates a new, light collection for performance purposes (table_complete1 collection) containing
     ScientificName (Specie). It is a new and more refined version of fattoBene()'''
+    print("Offline method: executing on local DB...\n")
     new_collection = db["table_complete1"]
     old_collection = collection_taxonomy_tree
     nucleotide_collection = db["nucleotide_data"]
@@ -1661,12 +1701,67 @@ def newCollectionBene():    # TO DO: RENAME!
             #     new_collection.update_one({"TaxId":data["TaxId"]},{"$push":{"Nucleotides":n}})
             # for n in allDataP:
             #     new_collection.update_one({"TaxId":data["TaxId"]},{"$push":{"Proteins":n}})
+    return
 
 
-def updateByGenomes(datasTaxon=''):
+def productsTable():                        #case 11
+    '''Function that take data from lists/SpecieProduct.csv and parse
+    new collections (table_complete and table_basic) with those datas
+    [Legacy procedure]'''
+    print("Offline method: executing on local DB...\n")
+    products = open("./lists/SpecieProduct.csv").readlines()
+    complete_collection = db["table_complete"]
+    basic_collection = db["table_basic"]
+    for i in range(len(products)):
+        splt = products[i].split("|")
+        product,name,qua = splt[0],splt[1].capitalize(),splt[2].strip()
+        print(i,name)
+        inserBasic = {
+            "ProductName":product
+        }
+        insertComplete = {
+            "ProductName":product,
+            "QtyProduct":qua
+        }
+        basic_collection.update_one({"ScientificName":name},{"$push":{"Products":inserBasic}})
+        complete_collection.update_one({"ScientificName":name},{"$push":{"Products":insertComplete}})
+    return
+
+
+def csvWrite(dataResult):                   #case 12
+    '''Custom function that, using csv library, return a file with field of interests
+    from a given list of data, parsed as NCBI Json structure'''
+    print("Offline method: executing on local DB...\n")
+    tot_data = []
+    num = []
+    for dataN in dataResult:
+        print(dataN["GBSeq_organism"])
+        for data in dataN["GBSeq_feature-table"]:
+            if data["GBFeature_key"] == "CDS" or data["GBFeature_key"] == "rRNA":
+                for prod in data["GBFeature_quals"]:
+                    if prod["GBQualifier_name"] == "product":
+                        number = 1
+                        if [prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()] in tot_data:
+                            iii = tot_data.index([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
+                            num[iii] = num[iii]+1
+                        else:
+                            tot_data.append([prod["GBQualifier_value"].lower(), dataN["GBSeq_organism"].lower()])
+                            num.append(number)
+        print(len(tot_data))
+    tot_tot = []
+    for i in range(len(tot_data)):
+        tot_tot.append(tot_data[i]+[num[i]])
+    with open('SpecieProduct.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile,delimiter="|")
+        writer.writerows(tot_tot)
+    return
+
+
+def updateByGenomes(datasTaxon=''):         #case 13
     '''Function that take a list where FNA files were found on NCBI platform
     through genomeRetrieve() and insert those link on local DB. It can be
     speciefied a new list in input'''
+    print("Offline method: executing on local DB...\n")
     if datasTaxon == '':
         datasTaxon = [(2961,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2961",True,True,False),
             (145388,"https://www.ncbi.nlm.nih.gov/genome/?term=txid145388",True,True,True),
@@ -1700,24 +1795,17 @@ def updateByGenomes(datasTaxon=''):
     return
 
 
-
-
-########################################################################################
-# Examples and SCRATCH AREA
-########################################################################################
-
-
-
-
-    # genus = collection_taxonomy_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
-    # """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
-    #datas = collection_taxonomy_tree.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
-
-    # taxon = ncbiSearch("chlorella[next level]", "taxonomy")
-    # with open("taxonMeta.json","w") as jsw:
-    #     json.dump(taxon,jsw,indent=4)
-    #print(taxon)
-
+def findTaxon(key):                         #case 14
+    '''Function tat for a Taxon ID given in input check
+    if there is an occurrence in taxonomy_data collection
+    and print its Lineage values'''
+    print("Offline method: executing on local DB...\n")
+    rgx = re.compile(f'{key}', re.IGNORECASE)
+    info = {"Lineage":rgx}
+    dataFind = collection_taxonomy_data.find(info)
+    for i in dataFind:
+        print(i)
+    return
 
 
 
@@ -1727,34 +1815,39 @@ def updateByGenomes(datasTaxon=''):
 ########################################################################################
 
 def main(args:dict) -> None:
-    print("Welcome! This program is intended to be used for parsing data from NCBI or a file.\n"
-          "After parsing process is completed, you can check and query results in the DB selected as argument.")
+    print("\nWelcome! This program is intended to be used for parsing data from NCBI or a file.\n"
+          "After parsing process is completed, you can check and query results in the DB selected as argument.\n")
     count = 0
-    if len(sys.argv) == 1:
+    print("Every number maps an execution process:\n" 
+          "0: unwrappingSpecies()\n"
+          "1: taxTreeMaker()\n"
+          "2: searchForRank\n"
+          "3: testNucleo\n"
+          "4: genomeRetrieve\n"
+          "5: nucleoResult\n"
+          "6: genomeFind\n"
+          "7: parseToBasic\n"
+          "8: fattoBene\n"
+          "9: proteinFind\n"
+          "10: newCollectionBene\n"
+          "11: productsTable\n"
+          "12: csvWrite\n"
+          "13: updateByGenomes\n"
+          "14: findTaxon\n"
+          )
+    id = input('Please insert a number to begin: ')
+    id = checkInput(id)
+    while ( id < 0 or id > 14):
         count += 1
-        print("Please add an argument at least.\n")
+        print("\nError. Please try again.\n")
         if (count >= 3):
             print("Need a help? Digit -h or --help after calling genbank.py.\n")
-    
-    name = input('Please insert something to search: ')
-    
-    if (True):   #qui andrà il check per i metodi che fanno ricerche online
-        Entrez.email = check_email()
-    #unwrappingSpecies()
-    #taxTreeMaker()                 #previously named algo()
-    #searchForRank()                #previously named aglo()
-    #testNucleo()
-    #genomeRetrieve()               #previously named GFF()
-    #nucleoResult()
-    #genomeFind(name)
-    #parseToBasic()
-    #fattoBene() 
-    #proteinFind()
-    #newCollectionBene()
-    #productsTable()
-    #csvWrite(dataResult)
-    #updateByGenomes()
-    #findTaxon("Eukaryota")
+        if (count >= 5):
+            print("Too many attempts. Aborting...")
+            return -1
+        id = input()
+        id = checkInput(id)
+    number_to_string(id)
     return
 
 
@@ -1860,3 +1953,21 @@ if __name__ == "__main__":
 # # # # #                         help='ask for FASTA format')
 # # # # #     args = vars(parser.parse_args())
 # # # # #     main(args)
+
+
+########################################################################################
+# Examples and SCRATCH AREA
+########################################################################################
+
+
+
+
+    # genus = collection_taxonomy_data.find({"Rank":"genus","Division":{"$not":re.compile("Bacteria")}})
+    # """SELECT * FROM COLLECTION WHERE RANK=genus AND NOT =bacteria"""
+    #datas = collection_taxonomy_tree.find_one({"ScientificName":"unclassified Chlorella"},{'_id':0})
+
+    # taxon = ncbiSearch("chlorella[next level]", "taxonomy")
+    # with open("taxonMeta.json","w") as jsw:
+    #     json.dump(taxon,jsw,indent=4)
+    #print(taxon)
+
