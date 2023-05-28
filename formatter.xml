@@ -1,0 +1,3806 @@
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT accession="SRX5317299" alias="RACE_1">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX5317299</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>RNA-Seq of adaptor-ligated Amphidinium carterae RNA: random hexamer synthesis</TITLE>
+		<STUDY_REF accession="SRP183076">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP183076</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION>Approximately 1 g ng DNA-free total cellular RNA from Amphidinium carterae, quantified with a nanodrop photospectrometer, ligated to 1 g of a custom RNA adapter (GCUGAUGGCGAUGAGCACUGGGUUGCAA) using T4 RNA ligase. 1/3 of the eluted product was used as template for synthesis with a Maxima H Minus double stranded cDNA synthesis kit (Thermo), and random-hewamer primers.</DESIGN_DESCRIPTION>
+			<SAMPLE_DESCRIPTOR accession="SRS4313709">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS4313709</PRIMARY_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_NAME>RACE_1</LIBRARY_NAME>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>other</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina MiSeq</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+	</EXPERIMENT>
+	<SUBMISSION lab_name="Biochemistry" center_name="University of Cambridge" accession="SRA842274" alias="SUB5109492">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA842274</PRIMARY_ID>
+			<SUBMITTER_ID namespace="University of Cambridge">SUB5109492</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="institute">
+		<Name>University of Cambridge</Name>
+		<Address postal_code="CB21QW">
+			<Department>Biochemistry</Department>
+			<Institution>University of Cambridge</Institution>
+			<Street>Tennis Court Road</Street>
+			<City>Cambridge</City>
+			<Country>United Kingdom (Great Britain)</Country>
+		</Address>
+		<Contact email="dorrell@biologie.ens.fr">
+			<Address postal_code="CB21QW">
+				<Department>Biochemistry</Department>
+				<Institution>University of Cambridge</Institution>
+				<Street>Tennis Court Road</Street>
+				<City>Cambridge</City>
+				<Country>United Kingdom (Great Britain)</Country>
+			</Address>
+			<Name>
+				<First>Richard</First>
+				<Last>Dorrell</Last>
+				<Middle>G</Middle>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="BioProject" alias="PRJNA518128" accession="SRP183076">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP183076</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject" label="primary">PRJNA518128</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>Adapter-ligated sequencing libraries of total cellular Amphidinium carterae RNA</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Other"/>
+			<STUDY_ABSTRACT>MiSeq sequencing libraries of total cellular RNA harvested from Amphidinium carterae CCMP1314, ligated to a custom GCUGAUGGCGAUGAGCACUGGGUUGCAA RNA adapter, and converted into double-stranded cDNA using a Maxima H Minus double stranded cDNA synthesis kit.The aim of this project was to identify the positions and orientations of A. carterae mRNA termini, specifically those of the chloroplast. These positions can be identified by the presence of adapter ligation sites, and the orientation of the adapter (or its complement) relative to the coding sequences of colocalised genes.</STUDY_ABSTRACT>
+		</DESCRIPTOR>
+	</STUDY>
+	<SAMPLE alias="RACE_1" accession="SRS4313709">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS4313709</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN10853949</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="pda|kozhamyk" label="Sample name">RACE_1</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<DESCRIPTION>Amplified with random hexamer cDNA primer</DESCRIPTION>
+		<SAMPLE_LINKS>
+			<SAMPLE_LINK>
+				<XREF_LINK>
+					<DB>bioproject</DB>
+					<ID>518128</ID>
+					<LABEL>PRJNA518128</LABEL>
+				</XREF_LINK>
+			</SAMPLE_LINK>
+		</SAMPLE_LINKS>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain</TAG>
+				<VALUE>CCMP1314</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>host</TAG>
+				<VALUE>not applicable</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>isolation_source</TAG>
+				<VALUE>"Falmouth Great Pond"</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>collection_date</TAG>
+				<VALUE>1954-01-09</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>geo_loc_name</TAG>
+				<VALUE>Atlantic Ocean: USA, Massachusetts, Falmouth, Falmouth Great Pond</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>sample_type</TAG>
+				<VALUE>Cell culture; amplified with random hexamer cDNA primer; replicate 1</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>BioSampleModel</TAG>
+				<VALUE>Microbe, viral or environmental</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS4313709" sample_name="RACE_1" sample_title="Amplified with random hexamer cDNA primer" spots="17384572" bases="4322396870" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS4313709</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN10853949</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="4322396870" spots="17384572" bytes="2514542702">
+		<RUN accession="SRR8513682" alias="DLS-AmphidiniumRACE_S3_L001_R1_001.fastq" total_spots="17384572" total_bases="4322396870" size="2514542702" load_done="true" published="2020-02-01 00:01:26" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR8513682</PRIMARY_ID>
+				<SUBMITTER_ID namespace="SUB5109492" label="0">DLS-AmphidiniumRACE_S3_L001_R1_001.fastq</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF accession="SRX5317299">
+				<IDENTIFIERS>
+					<SUBMITTER_ID namespace="SUB5109492">RACE_1</SUBMITTER_ID>
+				</IDENTIFIERS>
+			</EXPERIMENT_REF>
+			<Pool>
+				<Member member_name="" accession="SRS4313709" sample_name="RACE_1" sample_title="Amplified with random hexamer cDNA primer" spots="17384572" bases="4322396870" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS4313709</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN10853949</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="DLS-AmphidiniumRACE_S3_L001_R1_001.fastq" size="5311969404" date="2020-02-05 15:36:05" md5="5214f0bdf63cea9b27e862a17261de62" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-3/SRR8513682/DLS-AmphidiniumRACE_S3_L001_R1_001.fastq" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="DLS-AmphidiniumRACE_S3_L001_R2_001.fastq" size="5332631476" date="2020-02-05 12:42:13" md5="498bfcbef36cb11e2f5ef0ec86a11191" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-3/SRR8513682/DLS-AmphidiniumRACE_S3_L001_R2_001.fastq" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR8513682" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR8513682/SRR8513682" size="2514544527" date="2019-01-31 15:46:45" md5="ee75e2eb697b4aaa5659c18dae98af83" version="1" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR8513682/SRR8513682" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR8513682.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos3/sra-pub-zq-22/SRR008/513/SRR8513682.sralite.1" size="1157908895" date="2020-06-19 20:15:25" md5="e587bd838e20ad0c98e9efd447a06a59" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos3/sra-pub-zq-22/SRR008/513/SRR8513682.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-9/SRR8513682/SRR8513682.zq.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="17384572">
+				<Read index="0" count="17384572" average="124.02" stdev="63.97"/>
+				<Read index="1" count="17384572" average="124.61" stdev="64.50"/>
+			</Statistics>
+			<Databases>
+				<Database>
+					<Table name="SEQUENCE">
+						<Statistics source="meta">
+							<Rows count="17384572"/>
+							<Elements count="4322396870"/>
+						</Statistics>
+					</Table>
+				</Database>
+			</Databases>
+			<Bases cs_native="false" count="4322396870">
+				<Base value="A" count="1057612814"/>
+				<Base value="C" count="1106987856"/>
+				<Base value="G" count="1104372924"/>
+				<Base value="T" count="1051347611"/>
+				<Base value="N" count="2075665"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT accession="SRX5317298" alias="U_1">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX5317298</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>RNA-Seq of adaptor-ligated Amphidinium carterae RNA: oligo-d(A) (anti-poly(U) synthesis</TITLE>
+		<STUDY_REF accession="SRP183076">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP183076</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION>Approximately 1 g ng DNA-free total cellular RNA from Amphidinium carterae, quantified with a nanodrop photospectrometer, ligated to 1 g of a custom RNA adapter (GCUGAUGGCGAUGAGCACUGGGUUGCAA) using T4 RNA ligase. 1/3 of the eluted product was used as template for synthesis with a Maxima H Minus double stranded cDNA synthesis kit (Thermo), and a custom anti-poly(U) cDNA primer (GGGACTAGTCTCGAGAAAAAAAAAAAAAAAAAA).</DESIGN_DESCRIPTION>
+			<SAMPLE_DESCRIPTOR accession="SRS4313708">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS4313708</PRIMARY_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_NAME>U_1</LIBRARY_NAME>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>other</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina MiSeq</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+	</EXPERIMENT>
+	<SUBMISSION lab_name="Biochemistry" center_name="University of Cambridge" accession="SRA842274" alias="SUB5109492">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA842274</PRIMARY_ID>
+			<SUBMITTER_ID namespace="University of Cambridge">SUB5109492</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="institute">
+		<Name>University of Cambridge</Name>
+		<Address postal_code="CB21QW">
+			<Department>Biochemistry</Department>
+			<Institution>University of Cambridge</Institution>
+			<Street>Tennis Court Road</Street>
+			<City>Cambridge</City>
+			<Country>United Kingdom (Great Britain)</Country>
+		</Address>
+		<Contact email="dorrell@biologie.ens.fr">
+			<Address postal_code="CB21QW">
+				<Department>Biochemistry</Department>
+				<Institution>University of Cambridge</Institution>
+				<Street>Tennis Court Road</Street>
+				<City>Cambridge</City>
+				<Country>United Kingdom (Great Britain)</Country>
+			</Address>
+			<Name>
+				<First>Richard</First>
+				<Last>Dorrell</Last>
+				<Middle>G</Middle>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="BioProject" alias="PRJNA518128" accession="SRP183076">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP183076</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject" label="primary">PRJNA518128</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>Adapter-ligated sequencing libraries of total cellular Amphidinium carterae RNA</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Other"/>
+			<STUDY_ABSTRACT>MiSeq sequencing libraries of total cellular RNA harvested from Amphidinium carterae CCMP1314, ligated to a custom GCUGAUGGCGAUGAGCACUGGGUUGCAA RNA adapter, and converted into double-stranded cDNA using a Maxima H Minus double stranded cDNA synthesis kit.The aim of this project was to identify the positions and orientations of A. carterae mRNA termini, specifically those of the chloroplast. These positions can be identified by the presence of adapter ligation sites, and the orientation of the adapter (or its complement) relative to the coding sequences of colocalised genes.</STUDY_ABSTRACT>
+		</DESCRIPTOR>
+	</STUDY>
+	<SAMPLE alias="U_1" accession="SRS4313708">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS4313708</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN10853951</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="pda|kozhamyk" label="Sample name">U_1</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<DESCRIPTION>Amplified with oligo-d(A) (anti-poly(U) cDNA primer</DESCRIPTION>
+		<SAMPLE_LINKS>
+			<SAMPLE_LINK>
+				<XREF_LINK>
+					<DB>bioproject</DB>
+					<ID>518128</ID>
+					<LABEL>PRJNA518128</LABEL>
+				</XREF_LINK>
+			</SAMPLE_LINK>
+		</SAMPLE_LINKS>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain</TAG>
+				<VALUE>CCMP1314</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>host</TAG>
+				<VALUE>not applicable</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>isolation_source</TAG>
+				<VALUE>"Falmouth Great Pond"</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>collection_date</TAG>
+				<VALUE>1954-01-09</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>geo_loc_name</TAG>
+				<VALUE>Atlantic Ocean: USA, Massachusetts, Falmouth, Falmouth Great Pond</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>sample_type</TAG>
+				<VALUE>Cell culture; amplified with oligo-d(A) (anti-poly(U) cDNA primer; replicate 1</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>BioSampleModel</TAG>
+				<VALUE>Microbe, viral or environmental</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS4313708" sample_name="U_1" sample_title="Amplified with oligo-d(A) (anti-poly(U) cDNA primer" spots="641885" bases="75978525" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS4313708</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN10853951</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="75978525" spots="641885" bytes="47115501">
+		<RUN accession="SRR8513683" alias="DLS-AmphidiniumU_S2_L001_R1_001.fastq" total_spots="641885" total_bases="75978525" size="47115501" load_done="true" published="2020-02-01 00:01:26" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR8513683</PRIMARY_ID>
+				<SUBMITTER_ID namespace="SUB5109492" label="1">DLS-AmphidiniumU_S2_L001_R1_001.fastq</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF accession="SRX5317298">
+				<IDENTIFIERS>
+					<SUBMITTER_ID namespace="SUB5109492">U_1</SUBMITTER_ID>
+				</IDENTIFIERS>
+			</EXPERIMENT_REF>
+			<Pool>
+				<Member member_name="" accession="SRS4313708" sample_name="U_1" sample_title="Amplified with oligo-d(A) (anti-poly(U) cDNA primer" spots="641885" bases="75978525" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS4313708</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN10853951</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="DLS-AmphidiniumU_S2_L001_R1_001.fastq" size="112450449" date="2020-02-05 15:37:56" md5="3c6e6499fc21cae98862b4d1649f3950" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-3/SRR8513683/DLS-AmphidiniumU_S2_L001_R1_001.fastq" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR8513683" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR8513683/SRR8513683" size="47117322" date="2019-01-31 15:39:32" md5="2ff81469f30ad6891cdf5c324302f87b" version="1" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR8513683/SRR8513683" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR8513683.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos3/sra-pub-zq-22/SRR008/513/SRR8513683.sralite.1" size="21477669" date="2020-06-20 19:56:07" md5="28695aa888ff9acde8b495554acbb346" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos3/sra-pub-zq-22/SRR008/513/SRR8513683.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-9/SRR8513683/SRR8513683.zq.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="DLS-AmphidiniumU_S2_L001_R2_001.fastq" size="113336363" date="2020-02-05 16:15:46" md5="b2e757a79b17e1301dfb54dc3534d2cf" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-3/SRR8513683/DLS-AmphidiniumU_S2_L001_R2_001.fastq" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="641885">
+				<Read index="0" count="641885" average="58.84" stdev="30.25"/>
+				<Read index="1" count="641885" average="59.53" stdev="32.52"/>
+			</Statistics>
+			<Databases>
+				<Database>
+					<Table name="SEQUENCE">
+						<Statistics source="meta">
+							<Rows count="641885"/>
+							<Elements count="75978525"/>
+						</Statistics>
+					</Table>
+				</Database>
+			</Databases>
+			<Bases cs_native="false" count="75978525">
+				<Base value="A" count="15767095"/>
+				<Base value="C" count="21437690"/>
+				<Base value="G" count="21318078"/>
+				<Base value="T" count="15413799"/>
+				<Base value="N" count="2041863"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT alias="GSM2473972" accession="SRX2530602">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX2530602</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>GSM2473972: Nitrogen-Starvation 3; Amphidinium carterae; RNA-Seq</TITLE>
+		<STUDY_REF accession="SRP098662" refname="GSE94355">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION/>
+			<SAMPLE_DESCRIPTOR accession="SRS1951488">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS1951488</PRIMARY_ID>
+					<EXTERNAL_ID namespace="GEO">GSM2473972</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>cDNA</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+				<LIBRARY_CONSTRUCTION_PROTOCOL>Cells were lysed using half a spatula of glass beads (about 200 mg; Sigma-Aldrich, Milan, Italy) for each 2 mL tube, incubating and mixing tubes for 10 min at 60°C and maximum speed in the Thermo Shaker BS100 (Biosan). RNA was then extracted using using the Direct-zolTM RNA MiniPrep (Zymo Research), following the manufacturer’s instructions. RNA quantity and purity were assessed by Nano-Drop (ND-1000 UV-Vis spectrophotometer; NanoDrop Technologies) monitoring the absorbance at 260 nm and the 260/280 nm and 260/230 nm ratios (Both ratios were about 2.0). RNA quality was evaluated by gel electrophoresis that showed intact RNA, with sharp ribosomal bands. Total RNA quality was evaluated by measuring the RNA Integrity Number (RIN) with Agilent 2100 Bioanalyzer (Agilent Technologies, Inc.); high quality (RIN &gt;8) RNA was used for the RNAseq. RNA-Seq libraries were constructed from 2.5 µg of total RNAusing the Illumina TruSeq® Stranded mRNA kit (Illumina Inc., San Diego, CA, USA) according to manufacturer instructions. The libraries were size selected using the Pippin Prep automated gel electrophoresis system (Sage Science, Beverly, MA, USA) for 350 to 550 bp. Paired-end sequencing (100 bp × 2) was performed with the HiSeq 1000 Illumina platformusing the TruSeq SBS v3-HS kit (200 cycles) and TruSeq PE Cluster v3-cBot-HS kit (Illumina).</LIBRARY_CONSTRUCTION_PROTOCOL>
+			</LIBRARY_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 1000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<EXPERIMENT_LINKS>
+			<EXPERIMENT_LINK>
+				<XREF_LINK>
+					<DB>gds</DB>
+					<ID>302473972</ID>
+				</XREF_LINK>
+			</EXPERIMENT_LINK>
+		</EXPERIMENT_LINKS>
+		<EXPERIMENT_ATTRIBUTES>
+			<EXPERIMENT_ATTRIBUTE>
+				<TAG>GEO Accession</TAG>
+				<VALUE>GSM2473972</VALUE>
+			</EXPERIMENT_ATTRIBUTE>
+		</EXPERIMENT_ATTRIBUTES>
+	</EXPERIMENT>
+	<SUBMISSION alias="GEO: GSE94355" broker_name="GEO" center_name="GEO" submission_comment="submission brokered by GEO" lab_name="" accession="SRA534450">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA534450</PRIMARY_ID>
+			<SUBMITTER_ID namespace="GEO">GEO: GSE94355</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="center">
+		<Name abbr="GEO">NCBI</Name>
+		<Contact email="geo-group@ncbi.nlm.nih.gov">
+			<Name>
+				<First>Geo</First>
+				<Last>Curators</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="GEO" alias="GSE94355" accession="SRP098662">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject" label="primary">PRJNA369431</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSE94355</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>De novo transcriptome of the cosmopolitan dinoflagellate Amphidinium carterae to identify genes with biotechnological interests</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Transcriptome Analysis"/>
+			<STUDY_ABSTRACT>Dinoflagellates are phytoplanktonic organisms found in both freshwater and marine habitats. They are often studied because related to harmful algal blooms responsible for impacts on ecosystem functioning, economic damages for aquaculture and fishery industries and/or deleterious impacts for human health. In addition they are also known to produce bioactive compounds, such as for the treatment of cancer or beneficial effects for the treatment of Alzheimer's disease. The dinoflagellate Amphidinium sp. is a cosmopolitan dinoflagellate species known to produce both cytotoxic and beneficial compounds. However, several studies reported that environmental changes (e.g. nutrient starvation, UV radiation and ocean acidification) may alter this production. The aim of this study was to sequence the full transcriptome of the dinoflagellate Amphidinium carterae in both nitrogen- starved and -repleted culturing conditions (1) to evaluated its response to nitrogen starvation, (2) to look for possible polyketide synthases (PKSs), involved in the synthesis of various compounds, in this studied clone, (3) if present, to evaluate if nutrient starvation can influence PKS activity, (4) to test strain cytotoxicity on human cells and (5) to look for other possible enzymes/proteins of biotechnological interest. Overall design: The dinoflagellate A. carterae was cultured in two conditions, i.e. Nitrogen-starved or -repleted (control) conditions. Cells were harvested at the end of the stationary phase and used for RNA extraction. Triplicate samples of both conditions were sequenced and differential expression analysis was performed. In addition, enzymes with biotechnological interest were identified.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>GSE94355</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+		<STUDY_LINKS>
+			<STUDY_LINK>
+				<XREF_LINK>
+					<DB>pubmed</DB>
+					<ID>28916825</ID>
+				</XREF_LINK>
+			</STUDY_LINK>
+		</STUDY_LINKS>
+	</STUDY>
+	<SAMPLE alias="GSM2473972" accession="SRS1951488">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS1951488</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN06285951</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSM2473972</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<TITLE>Nitrogen-Starvation 3</TITLE>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_LINKS>
+			<SAMPLE_LINK>
+				<XREF_LINK>
+					<DB>bioproject</DB>
+					<ID>369431</ID>
+					<LABEL>PRJNA369431</LABEL>
+				</XREF_LINK>
+			</SAMPLE_LINK>
+		</SAMPLE_LINKS>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>source_name</TAG>
+				<VALUE>Microalgal cells</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain code</TAG>
+				<VALUE>FE102</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>growth phase</TAG>
+				<VALUE>Late stationary phase</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>culturing condition</TAG>
+				<VALUE>Starved medium</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS1951488" sample_name="GSM2473972" sample_title="Nitrogen-Starvation 3" spots="22022361" bases="4426494561" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS1951488</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN06285951</EXTERNAL_ID>
+				<EXTERNAL_ID namespace="GEO">GSM2473972</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="4426494561" spots="22022361" bytes="2978758780">
+		<RUN alias="GSM2473972_r1" accession="SRR5220737" total_spots="22022361" total_bases="4426494561" size="2978758780" load_done="true" published="2017-12-06 18:01:06" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR5220737</PRIMARY_ID>
+				<SUBMITTER_ID namespace="GEO">GSM2473972_r1</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF accession="SRX2530602" refname="GSM2473972"/>
+			<Pool>
+				<Member member_name="" accession="SRS1951488" sample_name="GSM2473972" sample_title="Nitrogen-Starvation 3" spots="22022361" bases="4426494561" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS1951488</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN06285951</EXTERNAL_ID>
+						<EXTERNAL_ID namespace="GEO">GSM2473972</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="C5L_CGATGTA_L008_R1.fastq.gz" size="2184166386" date="2020-03-31 09:47:19" md5="0217249d64494099252d15bc13a5fb31" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-7/SRR5220737/C5L_CGATGTA_L008_R1.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="C5L_CGATGTA_L008_R2.fastq.gz" size="2181903156" date="2020-03-31 13:47:30" md5="923960695aba5a7ad5bdbc7a12183f04" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-6/SRR5220737/C5L_CGATGTA_L008_R2.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220737" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220737/SRR5220737" size="2978760524" date="2017-01-31 17:54:18" md5="a2bac6dee76694af231325807f0ff92c" version="1" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220737/SRR5220737" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220737.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-14/SRR005/220/SRR5220737.sralite.1" size="1156125535" date="2021-06-16 09:15:22" md5="8bd72bd4902d521bde8e7ce954948096" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-14/SRR005/220/SRR5220737.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-4/SRR5220737/SRR5220737.noqual.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="22022361">
+				<Read index="0" count="22022361" average="101" stdev="0"/>
+				<Read index="1" count="22022361" average="100" stdev="0"/>
+			</Statistics>
+			<Bases cs_native="false" count="4426494561">
+				<Base value="A" count="995657266"/>
+				<Base value="C" count="1212202747"/>
+				<Base value="G" count="1200203021"/>
+				<Base value="T" count="1018242443"/>
+				<Base value="N" count="189084"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT alias="GSM2473971" accession="SRX2530601">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX2530601</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>GSM2473971: Nitrogen-Starvation 2; Amphidinium carterae; RNA-Seq</TITLE>
+		<STUDY_REF accession="SRP098662" refname="GSE94355">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION/>
+			<SAMPLE_DESCRIPTOR accession="SRS1951486">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS1951486</PRIMARY_ID>
+					<EXTERNAL_ID namespace="GEO">GSM2473971</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>cDNA</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+				<LIBRARY_CONSTRUCTION_PROTOCOL>Cells were lysed using half a spatula of glass beads (about 200 mg; Sigma-Aldrich, Milan, Italy) for each 2 mL tube, incubating and mixing tubes for 10 min at 60°C and maximum speed in the Thermo Shaker BS100 (Biosan). RNA was then extracted using using the Direct-zolTM RNA MiniPrep (Zymo Research), following the manufacturer’s instructions. RNA quantity and purity were assessed by Nano-Drop (ND-1000 UV-Vis spectrophotometer; NanoDrop Technologies) monitoring the absorbance at 260 nm and the 260/280 nm and 260/230 nm ratios (Both ratios were about 2.0). RNA quality was evaluated by gel electrophoresis that showed intact RNA, with sharp ribosomal bands. Total RNA quality was evaluated by measuring the RNA Integrity Number (RIN) with Agilent 2100 Bioanalyzer (Agilent Technologies, Inc.); high quality (RIN &gt;8) RNA was used for the RNAseq. RNA-Seq libraries were constructed from 2.5 µg of total RNAusing the Illumina TruSeq® Stranded mRNA kit (Illumina Inc., San Diego, CA, USA) according to manufacturer instructions. The libraries were size selected using the Pippin Prep automated gel electrophoresis system (Sage Science, Beverly, MA, USA) for 350 to 550 bp. Paired-end sequencing (100 bp × 2) was performed with the HiSeq 1000 Illumina platformusing the TruSeq SBS v3-HS kit (200 cycles) and TruSeq PE Cluster v3-cBot-HS kit (Illumina).</LIBRARY_CONSTRUCTION_PROTOCOL>
+			</LIBRARY_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 1000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<EXPERIMENT_LINKS>
+			<EXPERIMENT_LINK>
+				<XREF_LINK>
+					<DB>gds</DB>
+					<ID>302473971</ID>
+				</XREF_LINK>
+			</EXPERIMENT_LINK>
+		</EXPERIMENT_LINKS>
+		<EXPERIMENT_ATTRIBUTES>
+			<EXPERIMENT_ATTRIBUTE>
+				<TAG>GEO Accession</TAG>
+				<VALUE>GSM2473971</VALUE>
+			</EXPERIMENT_ATTRIBUTE>
+		</EXPERIMENT_ATTRIBUTES>
+	</EXPERIMENT>
+	<SUBMISSION alias="GEO: GSE94355" broker_name="GEO" center_name="GEO" submission_comment="submission brokered by GEO" lab_name="" accession="SRA534450">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA534450</PRIMARY_ID>
+			<SUBMITTER_ID namespace="GEO">GEO: GSE94355</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="center">
+		<Name abbr="GEO">NCBI</Name>
+		<Contact email="geo-group@ncbi.nlm.nih.gov">
+			<Name>
+				<First>Geo</First>
+				<Last>Curators</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="GEO" alias="GSE94355" accession="SRP098662">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject" label="primary">PRJNA369431</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSE94355</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>De novo transcriptome of the cosmopolitan dinoflagellate Amphidinium carterae to identify genes with biotechnological interests</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Transcriptome Analysis"/>
+			<STUDY_ABSTRACT>Dinoflagellates are phytoplanktonic organisms found in both freshwater and marine habitats. They are often studied because related to harmful algal blooms responsible for impacts on ecosystem functioning, economic damages for aquaculture and fishery industries and/or deleterious impacts for human health. In addition they are also known to produce bioactive compounds, such as for the treatment of cancer or beneficial effects for the treatment of Alzheimer's disease. The dinoflagellate Amphidinium sp. is a cosmopolitan dinoflagellate species known to produce both cytotoxic and beneficial compounds. However, several studies reported that environmental changes (e.g. nutrient starvation, UV radiation and ocean acidification) may alter this production. The aim of this study was to sequence the full transcriptome of the dinoflagellate Amphidinium carterae in both nitrogen- starved and -repleted culturing conditions (1) to evaluated its response to nitrogen starvation, (2) to look for possible polyketide synthases (PKSs), involved in the synthesis of various compounds, in this studied clone, (3) if present, to evaluate if nutrient starvation can influence PKS activity, (4) to test strain cytotoxicity on human cells and (5) to look for other possible enzymes/proteins of biotechnological interest. Overall design: The dinoflagellate A. carterae was cultured in two conditions, i.e. Nitrogen-starved or -repleted (control) conditions. Cells were harvested at the end of the stationary phase and used for RNA extraction. Triplicate samples of both conditions were sequenced and differential expression analysis was performed. In addition, enzymes with biotechnological interest were identified.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>GSE94355</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+		<STUDY_LINKS>
+			<STUDY_LINK>
+				<XREF_LINK>
+					<DB>pubmed</DB>
+					<ID>28916825</ID>
+				</XREF_LINK>
+			</STUDY_LINK>
+		</STUDY_LINKS>
+	</STUDY>
+	<SAMPLE alias="GSM2473971" accession="SRS1951486">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS1951486</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN06285952</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSM2473971</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<TITLE>Nitrogen-Starvation 2</TITLE>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_LINKS>
+			<SAMPLE_LINK>
+				<XREF_LINK>
+					<DB>bioproject</DB>
+					<ID>369431</ID>
+					<LABEL>PRJNA369431</LABEL>
+				</XREF_LINK>
+			</SAMPLE_LINK>
+		</SAMPLE_LINKS>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>source_name</TAG>
+				<VALUE>Microalgal cells</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain code</TAG>
+				<VALUE>FE102</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>growth phase</TAG>
+				<VALUE>Late stationary phase</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>culturing condition</TAG>
+				<VALUE>Starved medium</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS1951486" sample_name="GSM2473971" sample_title="Nitrogen-Starvation 2" spots="51300294" bases="10311359094" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS1951486</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN06285952</EXTERNAL_ID>
+				<EXTERNAL_ID namespace="GEO">GSM2473971</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="10311359094" spots="51300294" bytes="6956902494">
+		<RUN alias="GSM2473971_r1" accession="SRR5220736" total_spots="51300294" total_bases="10311359094" size="6956902494" load_done="true" published="2017-12-06 18:01:06" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR5220736</PRIMARY_ID>
+				<SUBMITTER_ID namespace="GEO">GSM2473971_r1</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF accession="SRX2530601" refname="GSM2473971"/>
+			<Pool>
+				<Member member_name="" accession="SRS1951486" sample_name="GSM2473971" sample_title="Nitrogen-Starvation 2" spots="51300294" bases="10311359094" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS1951486</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN06285952</EXTERNAL_ID>
+						<EXTERNAL_ID namespace="GEO">GSM2473971</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="SRR5220736" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220736/SRR5220736" size="6956904244" date="2017-01-31 18:03:10" md5="920ae1b0db2bcdb26702aa647f9f96d0" version="1" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220736/SRR5220736" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220736.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220736/SRR5220736.sralite.1" size="2680867434" date="2020-06-21 23:25:10" md5="2be8d9aa928c3c6764cfb1e38f16eceb" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220736/SRR5220736.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-1/SRR5220736/SRR5220736.zq.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="B6L_B4Lbis_sulla_provetta_TTAGGCA_L008_R2.fastq.gz" size="5082767763" date="2020-03-31 12:57:22" md5="5e105e7d8e3cba8b973f2a884896228d" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-4/SRR5220736/B6L_B4Lbis_sulla_provetta_TTAGGCA_L008_R2.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="B6L_B4Lbis_sulla_provetta_TTAGGCA_L008_R1.fastq.gz" size="5098970636" date="2020-03-31 12:57:28" md5="52cbc1e3dd3a61965f8fa97a2c57b5d5" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-4/SRR5220736/B6L_B4Lbis_sulla_provetta_TTAGGCA_L008_R1.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="51300294">
+				<Read index="0" count="51300294" average="101" stdev="0"/>
+				<Read index="1" count="51300294" average="100" stdev="0"/>
+			</Statistics>
+			<Bases cs_native="false" count="10311359094">
+				<Base value="A" count="2323693883"/>
+				<Base value="C" count="2823413656"/>
+				<Base value="G" count="2795699086"/>
+				<Base value="T" count="2368105083"/>
+				<Base value="N" count="447386"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT alias="GSM2473970" accession="SRX2530600">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX2530600</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>GSM2473970: Nitrogen-Starvation 1; Amphidinium carterae; RNA-Seq</TITLE>
+		<STUDY_REF accession="SRP098662" refname="GSE94355">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION/>
+			<SAMPLE_DESCRIPTOR accession="SRS1951487">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS1951487</PRIMARY_ID>
+					<EXTERNAL_ID namespace="GEO">GSM2473970</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>cDNA</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+				<LIBRARY_CONSTRUCTION_PROTOCOL>Cells were lysed using half a spatula of glass beads (about 200 mg; Sigma-Aldrich, Milan, Italy) for each 2 mL tube, incubating and mixing tubes for 10 min at 60°C and maximum speed in the Thermo Shaker BS100 (Biosan). RNA was then extracted using using the Direct-zolTM RNA MiniPrep (Zymo Research), following the manufacturer’s instructions. RNA quantity and purity were assessed by Nano-Drop (ND-1000 UV-Vis spectrophotometer; NanoDrop Technologies) monitoring the absorbance at 260 nm and the 260/280 nm and 260/230 nm ratios (Both ratios were about 2.0). RNA quality was evaluated by gel electrophoresis that showed intact RNA, with sharp ribosomal bands. Total RNA quality was evaluated by measuring the RNA Integrity Number (RIN) with Agilent 2100 Bioanalyzer (Agilent Technologies, Inc.); high quality (RIN &gt;8) RNA was used for the RNAseq. RNA-Seq libraries were constructed from 2.5 µg of total RNAusing the Illumina TruSeq® Stranded mRNA kit (Illumina Inc., San Diego, CA, USA) according to manufacturer instructions. The libraries were size selected using the Pippin Prep automated gel electrophoresis system (Sage Science, Beverly, MA, USA) for 350 to 550 bp. Paired-end sequencing (100 bp × 2) was performed with the HiSeq 1000 Illumina platformusing the TruSeq SBS v3-HS kit (200 cycles) and TruSeq PE Cluster v3-cBot-HS kit (Illumina).</LIBRARY_CONSTRUCTION_PROTOCOL>
+			</LIBRARY_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 1000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<EXPERIMENT_LINKS>
+			<EXPERIMENT_LINK>
+				<XREF_LINK>
+					<DB>gds</DB>
+					<ID>302473970</ID>
+				</XREF_LINK>
+			</EXPERIMENT_LINK>
+		</EXPERIMENT_LINKS>
+		<EXPERIMENT_ATTRIBUTES>
+			<EXPERIMENT_ATTRIBUTE>
+				<TAG>GEO Accession</TAG>
+				<VALUE>GSM2473970</VALUE>
+			</EXPERIMENT_ATTRIBUTE>
+		</EXPERIMENT_ATTRIBUTES>
+	</EXPERIMENT>
+	<SUBMISSION alias="GEO: GSE94355" broker_name="GEO" center_name="GEO" submission_comment="submission brokered by GEO" lab_name="" accession="SRA534450">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA534450</PRIMARY_ID>
+			<SUBMITTER_ID namespace="GEO">GEO: GSE94355</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="center">
+		<Name abbr="GEO">NCBI</Name>
+		<Contact email="geo-group@ncbi.nlm.nih.gov">
+			<Name>
+				<First>Geo</First>
+				<Last>Curators</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="GEO" alias="GSE94355" accession="SRP098662">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject" label="primary">PRJNA369431</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSE94355</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>De novo transcriptome of the cosmopolitan dinoflagellate Amphidinium carterae to identify genes with biotechnological interests</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Transcriptome Analysis"/>
+			<STUDY_ABSTRACT>Dinoflagellates are phytoplanktonic organisms found in both freshwater and marine habitats. They are often studied because related to harmful algal blooms responsible for impacts on ecosystem functioning, economic damages for aquaculture and fishery industries and/or deleterious impacts for human health. In addition they are also known to produce bioactive compounds, such as for the treatment of cancer or beneficial effects for the treatment of Alzheimer's disease. The dinoflagellate Amphidinium sp. is a cosmopolitan dinoflagellate species known to produce both cytotoxic and beneficial compounds. However, several studies reported that environmental changes (e.g. nutrient starvation, UV radiation and ocean acidification) may alter this production. The aim of this study was to sequence the full transcriptome of the dinoflagellate Amphidinium carterae in both nitrogen- starved and -repleted culturing conditions (1) to evaluated its response to nitrogen starvation, (2) to look for possible polyketide synthases (PKSs), involved in the synthesis of various compounds, in this studied clone, (3) if present, to evaluate if nutrient starvation can influence PKS activity, (4) to test strain cytotoxicity on human cells and (5) to look for other possible enzymes/proteins of biotechnological interest. Overall design: The dinoflagellate A. carterae was cultured in two conditions, i.e. Nitrogen-starved or -repleted (control) conditions. Cells were harvested at the end of the stationary phase and used for RNA extraction. Triplicate samples of both conditions were sequenced and differential expression analysis was performed. In addition, enzymes with biotechnological interest were identified.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>GSE94355</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+		<STUDY_LINKS>
+			<STUDY_LINK>
+				<XREF_LINK>
+					<DB>pubmed</DB>
+					<ID>28916825</ID>
+				</XREF_LINK>
+			</STUDY_LINK>
+		</STUDY_LINKS>
+	</STUDY>
+	<SAMPLE alias="GSM2473970" accession="SRS1951487">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS1951487</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN06285953</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSM2473970</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<TITLE>Nitrogen-Starvation 1</TITLE>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_LINKS>
+			<SAMPLE_LINK>
+				<XREF_LINK>
+					<DB>bioproject</DB>
+					<ID>369431</ID>
+					<LABEL>PRJNA369431</LABEL>
+				</XREF_LINK>
+			</SAMPLE_LINK>
+		</SAMPLE_LINKS>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>source_name</TAG>
+				<VALUE>Microalgal cells</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain code</TAG>
+				<VALUE>FE102</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>growth phase</TAG>
+				<VALUE>Late stationary phase</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>culturing condition</TAG>
+				<VALUE>Starved medium</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS1951487" sample_name="GSM2473970" sample_title="Nitrogen-Starvation 1" spots="39645781" bases="7968801981" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS1951487</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN06285953</EXTERNAL_ID>
+				<EXTERNAL_ID namespace="GEO">GSM2473970</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="7968801981" spots="39645781" bytes="5318845291">
+		<RUN alias="GSM2473970_r1" accession="SRR5220735" total_spots="39645781" total_bases="7968801981" size="5318845291" load_done="true" published="2017-12-06 18:01:06" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR5220735</PRIMARY_ID>
+				<SUBMITTER_ID namespace="GEO">GSM2473970_r1</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF accession="SRX2530600" refname="GSM2473970"/>
+			<Pool>
+				<Member member_name="" accession="SRS1951487" sample_name="GSM2473970" sample_title="Nitrogen-Starvation 1" spots="39645781" bases="7968801981" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS1951487</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN06285953</EXTERNAL_ID>
+						<EXTERNAL_ID namespace="GEO">GSM2473970</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="A2L_GATCAGA_L008_R1.fastq.gz" size="3919679581" date="2020-03-31 13:47:30" md5="aca63f67a28c97d5c1ff90772b5cdabd" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-4/SRR5220735/A2L_GATCAGA_L008_R1.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="A2L_GATCAGA_L008_R2.fastq.gz" size="3884891756" date="2020-03-31 13:05:54" md5="4cb3fbe572b2a5d706dd2fef7daccd85" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-7/SRR5220735/A2L_GATCAGA_L008_R2.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220735" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220735/SRR5220735" size="5318847043" date="2017-01-31 17:59:45" md5="55f43dae9a48559a6007263e3d21c9de" version="1" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220735/SRR5220735" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220735.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220735/SRR5220735.sralite.1" size="2074810865" date="2020-06-20 21:34:59" md5="70e390f23b94e05f02912a2fa74d3f15" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220735/SRR5220735.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-1/SRR5220735/SRR5220735.zq.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="39645781">
+				<Read index="0" count="39645781" average="101" stdev="0"/>
+				<Read index="1" count="39645781" average="100" stdev="0"/>
+			</Statistics>
+			<Bases cs_native="false" count="7968801981">
+				<Base value="A" count="1792822639"/>
+				<Base value="C" count="2179082506"/>
+				<Base value="G" count="2169581514"/>
+				<Base value="T" count="1826962985"/>
+				<Base value="N" count="352337"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT alias="GSM2473969" accession="SRX2530599">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX2530599</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>GSM2473969: Control condition 3; Amphidinium carterae; RNA-Seq</TITLE>
+		<STUDY_REF accession="SRP098662" refname="GSE94355">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION/>
+			<SAMPLE_DESCRIPTOR accession="SRS1951485">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS1951485</PRIMARY_ID>
+					<EXTERNAL_ID namespace="GEO">GSM2473969</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>cDNA</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+				<LIBRARY_CONSTRUCTION_PROTOCOL>Cells were lysed using half a spatula of glass beads (about 200 mg; Sigma-Aldrich, Milan, Italy) for each 2 mL tube, incubating and mixing tubes for 10 min at 60°C and maximum speed in the Thermo Shaker BS100 (Biosan). RNA was then extracted using using the Direct-zolTM RNA MiniPrep (Zymo Research), following the manufacturer’s instructions. RNA quantity and purity were assessed by Nano-Drop (ND-1000 UV-Vis spectrophotometer; NanoDrop Technologies) monitoring the absorbance at 260 nm and the 260/280 nm and 260/230 nm ratios (Both ratios were about 2.0). RNA quality was evaluated by gel electrophoresis that showed intact RNA, with sharp ribosomal bands. Total RNA quality was evaluated by measuring the RNA Integrity Number (RIN) with Agilent 2100 Bioanalyzer (Agilent Technologies, Inc.); high quality (RIN &gt;8) RNA was used for the RNAseq. RNA-Seq libraries were constructed from 2.5 µg of total RNAusing the Illumina TruSeq® Stranded mRNA kit (Illumina Inc., San Diego, CA, USA) according to manufacturer instructions. The libraries were size selected using the Pippin Prep automated gel electrophoresis system (Sage Science, Beverly, MA, USA) for 350 to 550 bp. Paired-end sequencing (100 bp × 2) was performed with the HiSeq 1000 Illumina platformusing the TruSeq SBS v3-HS kit (200 cycles) and TruSeq PE Cluster v3-cBot-HS kit (Illumina).</LIBRARY_CONSTRUCTION_PROTOCOL>
+			</LIBRARY_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 1000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<EXPERIMENT_LINKS>
+			<EXPERIMENT_LINK>
+				<XREF_LINK>
+					<DB>gds</DB>
+					<ID>302473969</ID>
+				</XREF_LINK>
+			</EXPERIMENT_LINK>
+		</EXPERIMENT_LINKS>
+		<EXPERIMENT_ATTRIBUTES>
+			<EXPERIMENT_ATTRIBUTE>
+				<TAG>GEO Accession</TAG>
+				<VALUE>GSM2473969</VALUE>
+			</EXPERIMENT_ATTRIBUTE>
+		</EXPERIMENT_ATTRIBUTES>
+	</EXPERIMENT>
+	<SUBMISSION alias="GEO: GSE94355" broker_name="GEO" center_name="GEO" submission_comment="submission brokered by GEO" lab_name="" accession="SRA534450">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA534450</PRIMARY_ID>
+			<SUBMITTER_ID namespace="GEO">GEO: GSE94355</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="center">
+		<Name abbr="GEO">NCBI</Name>
+		<Contact email="geo-group@ncbi.nlm.nih.gov">
+			<Name>
+				<First>Geo</First>
+				<Last>Curators</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="GEO" alias="GSE94355" accession="SRP098662">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject" label="primary">PRJNA369431</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSE94355</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>De novo transcriptome of the cosmopolitan dinoflagellate Amphidinium carterae to identify genes with biotechnological interests</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Transcriptome Analysis"/>
+			<STUDY_ABSTRACT>Dinoflagellates are phytoplanktonic organisms found in both freshwater and marine habitats. They are often studied because related to harmful algal blooms responsible for impacts on ecosystem functioning, economic damages for aquaculture and fishery industries and/or deleterious impacts for human health. In addition they are also known to produce bioactive compounds, such as for the treatment of cancer or beneficial effects for the treatment of Alzheimer's disease. The dinoflagellate Amphidinium sp. is a cosmopolitan dinoflagellate species known to produce both cytotoxic and beneficial compounds. However, several studies reported that environmental changes (e.g. nutrient starvation, UV radiation and ocean acidification) may alter this production. The aim of this study was to sequence the full transcriptome of the dinoflagellate Amphidinium carterae in both nitrogen- starved and -repleted culturing conditions (1) to evaluated its response to nitrogen starvation, (2) to look for possible polyketide synthases (PKSs), involved in the synthesis of various compounds, in this studied clone, (3) if present, to evaluate if nutrient starvation can influence PKS activity, (4) to test strain cytotoxicity on human cells and (5) to look for other possible enzymes/proteins of biotechnological interest. Overall design: The dinoflagellate A. carterae was cultured in two conditions, i.e. Nitrogen-starved or -repleted (control) conditions. Cells were harvested at the end of the stationary phase and used for RNA extraction. Triplicate samples of both conditions were sequenced and differential expression analysis was performed. In addition, enzymes with biotechnological interest were identified.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>GSE94355</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+		<STUDY_LINKS>
+			<STUDY_LINK>
+				<XREF_LINK>
+					<DB>pubmed</DB>
+					<ID>28916825</ID>
+				</XREF_LINK>
+			</STUDY_LINK>
+		</STUDY_LINKS>
+	</STUDY>
+	<SAMPLE alias="GSM2473969" accession="SRS1951485">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS1951485</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN06285954</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSM2473969</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<TITLE>Control condition 3</TITLE>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_LINKS>
+			<SAMPLE_LINK>
+				<XREF_LINK>
+					<DB>bioproject</DB>
+					<ID>369431</ID>
+					<LABEL>PRJNA369431</LABEL>
+				</XREF_LINK>
+			</SAMPLE_LINK>
+		</SAMPLE_LINKS>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>source_name</TAG>
+				<VALUE>Microalgal cells</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain code</TAG>
+				<VALUE>FE102</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>growth phase</TAG>
+				<VALUE>Late stationary phase</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>culturing condition</TAG>
+				<VALUE>Complete medium</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS1951485" sample_name="GSM2473969" sample_title="Control condition 3" spots="34867047" bases="7008276447" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS1951485</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN06285954</EXTERNAL_ID>
+				<EXTERNAL_ID namespace="GEO">GSM2473969</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="7008276447" spots="34867047" bytes="4684460479">
+		<RUN alias="GSM2473969_r1" accession="SRR5220734" total_spots="34867047" total_bases="7008276447" size="4684460479" load_done="true" published="2017-12-06 18:01:06" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR5220734</PRIMARY_ID>
+				<SUBMITTER_ID namespace="GEO">GSM2473969_r1</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF accession="SRX2530599" refname="GSM2473969"/>
+			<Pool>
+				<Member member_name="" accession="SRS1951485" sample_name="GSM2473969" sample_title="Control condition 3" spots="34867047" bases="7008276447" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS1951485</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN06285954</EXTERNAL_ID>
+						<EXTERNAL_ID namespace="GEO">GSM2473969</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="C7_TAGCTTA_L008_R1.fastq.gz" size="3440356125" date="2020-03-31 09:47:19" md5="daaa2a0fb87b34042ed8687f874cf367" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-4/SRR5220734/C7_TAGCTTA_L008_R1.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="C7_TAGCTTA_L008_R2.fastq.gz" size="3428696706" date="2020-03-31 13:47:30" md5="e58676ce09810db04b62188432151f11" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-6/SRR5220734/C7_TAGCTTA_L008_R2.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220734" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220734/SRR5220734" size="4684462231" date="2017-01-31 17:58:25" md5="062129c4d0a4fe0f86f0c2c22c136aa7" version="1" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220734/SRR5220734" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220734.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220734/SRR5220734.sralite.1" size="1826045229" date="2021-06-15 05:21:15" md5="a2db83d90d657259c1fbd15634c75e87" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220734/SRR5220734.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-1/SRR5220734/SRR5220734.noqual.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="34867047">
+				<Read index="0" count="34867047" average="101" stdev="0"/>
+				<Read index="1" count="34867047" average="100" stdev="0"/>
+			</Statistics>
+			<Bases cs_native="false" count="7008276447">
+				<Base value="A" count="1578506350"/>
+				<Base value="C" count="1917215152"/>
+				<Base value="G" count="1900535203"/>
+				<Base value="T" count="1611718076"/>
+				<Base value="N" count="301666"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT alias="GSM2473968" accession="SRX2530598">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX2530598</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>GSM2473968: Control condition 2; Amphidinium carterae; RNA-Seq</TITLE>
+		<STUDY_REF accession="SRP098662" refname="GSE94355">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION/>
+			<SAMPLE_DESCRIPTOR accession="SRS1951483">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS1951483</PRIMARY_ID>
+					<EXTERNAL_ID namespace="GEO">GSM2473968</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>cDNA</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+				<LIBRARY_CONSTRUCTION_PROTOCOL>Cells were lysed using half a spatula of glass beads (about 200 mg; Sigma-Aldrich, Milan, Italy) for each 2 mL tube, incubating and mixing tubes for 10 min at 60°C and maximum speed in the Thermo Shaker BS100 (Biosan). RNA was then extracted using using the Direct-zolTM RNA MiniPrep (Zymo Research), following the manufacturer’s instructions. RNA quantity and purity were assessed by Nano-Drop (ND-1000 UV-Vis spectrophotometer; NanoDrop Technologies) monitoring the absorbance at 260 nm and the 260/280 nm and 260/230 nm ratios (Both ratios were about 2.0). RNA quality was evaluated by gel electrophoresis that showed intact RNA, with sharp ribosomal bands. Total RNA quality was evaluated by measuring the RNA Integrity Number (RIN) with Agilent 2100 Bioanalyzer (Agilent Technologies, Inc.); high quality (RIN &gt;8) RNA was used for the RNAseq. RNA-Seq libraries were constructed from 2.5 µg of total RNAusing the Illumina TruSeq® Stranded mRNA kit (Illumina Inc., San Diego, CA, USA) according to manufacturer instructions. The libraries were size selected using the Pippin Prep automated gel electrophoresis system (Sage Science, Beverly, MA, USA) for 350 to 550 bp. Paired-end sequencing (100 bp × 2) was performed with the HiSeq 1000 Illumina platformusing the TruSeq SBS v3-HS kit (200 cycles) and TruSeq PE Cluster v3-cBot-HS kit (Illumina).</LIBRARY_CONSTRUCTION_PROTOCOL>
+			</LIBRARY_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 1000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<EXPERIMENT_LINKS>
+			<EXPERIMENT_LINK>
+				<XREF_LINK>
+					<DB>gds</DB>
+					<ID>302473968</ID>
+				</XREF_LINK>
+			</EXPERIMENT_LINK>
+		</EXPERIMENT_LINKS>
+		<EXPERIMENT_ATTRIBUTES>
+			<EXPERIMENT_ATTRIBUTE>
+				<TAG>GEO Accession</TAG>
+				<VALUE>GSM2473968</VALUE>
+			</EXPERIMENT_ATTRIBUTE>
+		</EXPERIMENT_ATTRIBUTES>
+	</EXPERIMENT>
+	<SUBMISSION alias="GEO: GSE94355" broker_name="GEO" center_name="GEO" submission_comment="submission brokered by GEO" lab_name="" accession="SRA534450">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA534450</PRIMARY_ID>
+			<SUBMITTER_ID namespace="GEO">GEO: GSE94355</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="center">
+		<Name abbr="GEO">NCBI</Name>
+		<Contact email="geo-group@ncbi.nlm.nih.gov">
+			<Name>
+				<First>Geo</First>
+				<Last>Curators</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="GEO" alias="GSE94355" accession="SRP098662">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject" label="primary">PRJNA369431</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSE94355</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>De novo transcriptome of the cosmopolitan dinoflagellate Amphidinium carterae to identify genes with biotechnological interests</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Transcriptome Analysis"/>
+			<STUDY_ABSTRACT>Dinoflagellates are phytoplanktonic organisms found in both freshwater and marine habitats. They are often studied because related to harmful algal blooms responsible for impacts on ecosystem functioning, economic damages for aquaculture and fishery industries and/or deleterious impacts for human health. In addition they are also known to produce bioactive compounds, such as for the treatment of cancer or beneficial effects for the treatment of Alzheimer's disease. The dinoflagellate Amphidinium sp. is a cosmopolitan dinoflagellate species known to produce both cytotoxic and beneficial compounds. However, several studies reported that environmental changes (e.g. nutrient starvation, UV radiation and ocean acidification) may alter this production. The aim of this study was to sequence the full transcriptome of the dinoflagellate Amphidinium carterae in both nitrogen- starved and -repleted culturing conditions (1) to evaluated its response to nitrogen starvation, (2) to look for possible polyketide synthases (PKSs), involved in the synthesis of various compounds, in this studied clone, (3) if present, to evaluate if nutrient starvation can influence PKS activity, (4) to test strain cytotoxicity on human cells and (5) to look for other possible enzymes/proteins of biotechnological interest. Overall design: The dinoflagellate A. carterae was cultured in two conditions, i.e. Nitrogen-starved or -repleted (control) conditions. Cells were harvested at the end of the stationary phase and used for RNA extraction. Triplicate samples of both conditions were sequenced and differential expression analysis was performed. In addition, enzymes with biotechnological interest were identified.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>GSE94355</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+		<STUDY_LINKS>
+			<STUDY_LINK>
+				<XREF_LINK>
+					<DB>pubmed</DB>
+					<ID>28916825</ID>
+				</XREF_LINK>
+			</STUDY_LINK>
+		</STUDY_LINKS>
+	</STUDY>
+	<SAMPLE alias="GSM2473968" accession="SRS1951483">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS1951483</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN06285955</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSM2473968</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<TITLE>Control condition 2</TITLE>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_LINKS>
+			<SAMPLE_LINK>
+				<XREF_LINK>
+					<DB>bioproject</DB>
+					<ID>369431</ID>
+					<LABEL>PRJNA369431</LABEL>
+				</XREF_LINK>
+			</SAMPLE_LINK>
+		</SAMPLE_LINKS>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>source_name</TAG>
+				<VALUE>Microalgal cells</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain code</TAG>
+				<VALUE>FE102</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>growth phase</TAG>
+				<VALUE>Late stationary phase</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>culturing condition</TAG>
+				<VALUE>Complete medium</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS1951483" sample_name="GSM2473968" sample_title="Control condition 2" spots="41325662" bases="8306458062" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS1951483</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN06285955</EXTERNAL_ID>
+				<EXTERNAL_ID namespace="GEO">GSM2473968</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="8306458062" spots="41325662" bytes="5549349181">
+		<RUN alias="GSM2473968_r1" accession="SRR5220733" total_spots="41325662" total_bases="8306458062" size="5549349181" load_done="true" published="2017-12-06 18:01:06" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR5220733</PRIMARY_ID>
+				<SUBMITTER_ID namespace="GEO">GSM2473968_r1</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF accession="SRX2530598" refname="GSM2473968"/>
+			<Pool>
+				<Member member_name="" accession="SRS1951483" sample_name="GSM2473968" sample_title="Control condition 2" spots="41325662" bases="8306458062" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS1951483</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN06285955</EXTERNAL_ID>
+						<EXTERNAL_ID namespace="GEO">GSM2473968</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="B6_B4bis_sulla_provetta_ACTGATA_L008_R1.fastq.gz" size="4078172195" date="2020-03-31 13:47:30" md5="6fe94c4d7bc4cd98884987d5237c5952" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-8/SRR5220733/B6_B4bis_sulla_provetta_ACTGATA_L008_R1.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220733" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220733/SRR5220733" size="5549350927" date="2017-01-31 17:59:36" md5="091470a7f690b4559dd17a1a618c5366" version="1" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220733/SRR5220733" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220733.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220733/SRR5220733.sralite.1" size="2162233869" date="2020-06-20 22:01:42" md5="d164ef8c5f175762de5063b89cd5254b" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220733/SRR5220733.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-1/SRR5220733/SRR5220733.zq.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="B6_B4bis_sulla_provetta_ACTGATA_L008_R2.fastq.gz" size="4059265711" date="2020-03-31 11:50:52" md5="3d91d811d52ff1836c98f682095609b1" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-7/SRR5220733/B6_B4bis_sulla_provetta_ACTGATA_L008_R2.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="41325662">
+				<Read index="0" count="41325662" average="101" stdev="0"/>
+				<Read index="1" count="41325662" average="100" stdev="0"/>
+			</Statistics>
+			<Bases cs_native="false" count="8306458062">
+				<Base value="A" count="1867479617"/>
+				<Base value="C" count="2277014434"/>
+				<Base value="G" count="2252697429"/>
+				<Base value="T" count="1908905909"/>
+				<Base value="N" count="360673"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT alias="GSM2473967" accession="SRX2530597">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX2530597</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>GSM2473967: Control condition 1; Amphidinium carterae; RNA-Seq</TITLE>
+		<STUDY_REF accession="SRP098662" refname="GSE94355">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION/>
+			<SAMPLE_DESCRIPTOR accession="SRS1951484">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS1951484</PRIMARY_ID>
+					<EXTERNAL_ID namespace="GEO">GSM2473967</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>cDNA</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+				<LIBRARY_CONSTRUCTION_PROTOCOL>Cells were lysed using half a spatula of glass beads (about 200 mg; Sigma-Aldrich, Milan, Italy) for each 2 mL tube, incubating and mixing tubes for 10 min at 60°C and maximum speed in the Thermo Shaker BS100 (Biosan). RNA was then extracted using using the Direct-zolTM RNA MiniPrep (Zymo Research), following the manufacturer’s instructions. RNA quantity and purity were assessed by Nano-Drop (ND-1000 UV-Vis spectrophotometer; NanoDrop Technologies) monitoring the absorbance at 260 nm and the 260/280 nm and 260/230 nm ratios (Both ratios were about 2.0). RNA quality was evaluated by gel electrophoresis that showed intact RNA, with sharp ribosomal bands. Total RNA quality was evaluated by measuring the RNA Integrity Number (RIN) with Agilent 2100 Bioanalyzer (Agilent Technologies, Inc.); high quality (RIN &gt;8) RNA was used for the RNAseq. RNA-Seq libraries were constructed from 2.5 µg of total RNAusing the Illumina TruSeq® Stranded mRNA kit (Illumina Inc., San Diego, CA, USA) according to manufacturer instructions. The libraries were size selected using the Pippin Prep automated gel electrophoresis system (Sage Science, Beverly, MA, USA) for 350 to 550 bp. Paired-end sequencing (100 bp × 2) was performed with the HiSeq 1000 Illumina platformusing the TruSeq SBS v3-HS kit (200 cycles) and TruSeq PE Cluster v3-cBot-HS kit (Illumina).</LIBRARY_CONSTRUCTION_PROTOCOL>
+			</LIBRARY_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 1000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<EXPERIMENT_LINKS>
+			<EXPERIMENT_LINK>
+				<XREF_LINK>
+					<DB>gds</DB>
+					<ID>302473967</ID>
+				</XREF_LINK>
+			</EXPERIMENT_LINK>
+		</EXPERIMENT_LINKS>
+		<EXPERIMENT_ATTRIBUTES>
+			<EXPERIMENT_ATTRIBUTE>
+				<TAG>GEO Accession</TAG>
+				<VALUE>GSM2473967</VALUE>
+			</EXPERIMENT_ATTRIBUTE>
+		</EXPERIMENT_ATTRIBUTES>
+	</EXPERIMENT>
+	<SUBMISSION alias="GEO: GSE94355" broker_name="GEO" center_name="GEO" submission_comment="submission brokered by GEO" lab_name="" accession="SRA534450">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA534450</PRIMARY_ID>
+			<SUBMITTER_ID namespace="GEO">GEO: GSE94355</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="center">
+		<Name abbr="GEO">NCBI</Name>
+		<Contact email="geo-group@ncbi.nlm.nih.gov">
+			<Name>
+				<First>Geo</First>
+				<Last>Curators</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="GEO" alias="GSE94355" accession="SRP098662">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP098662</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject" label="primary">PRJNA369431</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSE94355</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>De novo transcriptome of the cosmopolitan dinoflagellate Amphidinium carterae to identify genes with biotechnological interests</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Transcriptome Analysis"/>
+			<STUDY_ABSTRACT>Dinoflagellates are phytoplanktonic organisms found in both freshwater and marine habitats. They are often studied because related to harmful algal blooms responsible for impacts on ecosystem functioning, economic damages for aquaculture and fishery industries and/or deleterious impacts for human health. In addition they are also known to produce bioactive compounds, such as for the treatment of cancer or beneficial effects for the treatment of Alzheimer's disease. The dinoflagellate Amphidinium sp. is a cosmopolitan dinoflagellate species known to produce both cytotoxic and beneficial compounds. However, several studies reported that environmental changes (e.g. nutrient starvation, UV radiation and ocean acidification) may alter this production. The aim of this study was to sequence the full transcriptome of the dinoflagellate Amphidinium carterae in both nitrogen- starved and -repleted culturing conditions (1) to evaluated its response to nitrogen starvation, (2) to look for possible polyketide synthases (PKSs), involved in the synthesis of various compounds, in this studied clone, (3) if present, to evaluate if nutrient starvation can influence PKS activity, (4) to test strain cytotoxicity on human cells and (5) to look for other possible enzymes/proteins of biotechnological interest. Overall design: The dinoflagellate A. carterae was cultured in two conditions, i.e. Nitrogen-starved or -repleted (control) conditions. Cells were harvested at the end of the stationary phase and used for RNA extraction. Triplicate samples of both conditions were sequenced and differential expression analysis was performed. In addition, enzymes with biotechnological interest were identified.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>GSE94355</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+		<STUDY_LINKS>
+			<STUDY_LINK>
+				<XREF_LINK>
+					<DB>pubmed</DB>
+					<ID>28916825</ID>
+				</XREF_LINK>
+			</STUDY_LINK>
+		</STUDY_LINKS>
+	</STUDY>
+	<SAMPLE alias="GSM2473967" accession="SRS1951484">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS1951484</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN06285956</EXTERNAL_ID>
+			<EXTERNAL_ID namespace="GEO">GSM2473967</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<TITLE>Control condition 1</TITLE>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_LINKS>
+			<SAMPLE_LINK>
+				<XREF_LINK>
+					<DB>bioproject</DB>
+					<ID>369431</ID>
+					<LABEL>PRJNA369431</LABEL>
+				</XREF_LINK>
+			</SAMPLE_LINK>
+		</SAMPLE_LINKS>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>source_name</TAG>
+				<VALUE>Microalgal cells</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain code</TAG>
+				<VALUE>FE102</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>growth phase</TAG>
+				<VALUE>Late stationary phase</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>culturing condition</TAG>
+				<VALUE>Complete medium</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS1951484" sample_name="GSM2473967" sample_title="Control condition 1" spots="43313622" bases="8706038022" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS1951484</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN06285956</EXTERNAL_ID>
+				<EXTERNAL_ID namespace="GEO">GSM2473967</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="8706038022" spots="43313622" bytes="5790482910">
+		<RUN alias="GSM2473967_r1" accession="SRR5220732" total_spots="43313622" total_bases="8706038022" size="5790482910" load_done="true" published="2017-12-06 18:01:06" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR5220732</PRIMARY_ID>
+				<SUBMITTER_ID namespace="GEO">GSM2473967_r1</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF accession="SRX2530597" refname="GSM2473967"/>
+			<Pool>
+				<Member member_name="" accession="SRS1951484" sample_name="GSM2473967" sample_title="Control condition 1" spots="43313622" bases="8706038022" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS1951484</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN06285956</EXTERNAL_ID>
+						<EXTERNAL_ID namespace="GEO">GSM2473967</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="A2_ATTCCTT_L008_R2.fastq.gz" size="4233605808" date="2020-03-31 11:50:52" md5="ecadbebd9302eee3c35dbd87ef4a7339" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-8/SRR5220732/A2_ATTCCTT_L008_R2.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220732" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220732/SRR5220732" size="5790484659" date="2017-01-31 17:57:38" md5="a88542fe2367c465031af700bbb5372a" version="1" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5220732/SRR5220732" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR5220732.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220732/SRR5220732.sralite.1" size="2265619496" date="2021-06-15 09:08:37" md5="56a71cb00070a8d0faff6464a9635687" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR005/220/SRR5220732/SRR5220732.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-1/SRR5220732/SRR5220732.noqual.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="A2_ATTCCTT_L008_R1.fastq.gz" size="4271505349" date="2020-03-31 14:49:53" md5="bacd607f303fe25bf07daa1eaaf463fc" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-8/SRR5220732/A2_ATTCCTT_L008_R1.fastq.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="43313622">
+				<Read index="0" count="43313622" average="101" stdev="0"/>
+				<Read index="1" count="43313622" average="100" stdev="0"/>
+			</Statistics>
+			<Bases cs_native="false" count="8706038022">
+				<Base value="A" count="1960704727"/>
+				<Base value="C" count="2381236714"/>
+				<Base value="G" count="2366310044"/>
+				<Base value="T" count="1997404623"/>
+				<Base value="N" count="381914"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT accession="SRX722011" center_name="University of Maryland, College Park" alias="Amphidinium carterae mRNA">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX722011</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>Amphidinium carterae mRNA</TITLE>
+		<STUDY_REF accession="SRP046737">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP046737</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioProject">PRJNA257290</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION>PolyA-selected mRNA extracted from monoculture during log-phase growth [CCMP1314]</DESIGN_DESCRIPTION>
+			<SAMPLE_DESCRIPTOR accession="SRS716224">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS716224</PRIMARY_ID>
+					<EXTERNAL_ID namespace="BioSample">SAMN03075512</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_NAME>Amphidinium carterae mRNA</LIBRARY_NAME>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>other</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>
+			<SPOT_DESCRIPTOR>
+				<SPOT_DECODE_SPEC>
+					<SPOT_LENGTH>202</SPOT_LENGTH>
+					<READ_SPEC>
+						<READ_INDEX>0</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Forward</READ_TYPE>
+						<BASE_COORD>1</BASE_COORD>
+					</READ_SPEC>
+					<READ_SPEC>
+						<READ_INDEX>1</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Reverse</READ_TYPE>
+						<BASE_COORD>102</BASE_COORD>
+					</READ_SPEC>
+				</SPOT_DECODE_SPEC>
+			</SPOT_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 2000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<EXPERIMENT_ATTRIBUTES>
+			<EXPERIMENT_ATTRIBUTE>
+				<TAG>insert_size</TAG>
+				<VALUE>296</VALUE>
+			</EXPERIMENT_ATTRIBUTE>
+		</EXPERIMENT_ATTRIBUTES>
+	</EXPERIMENT>
+	<SUBMISSION
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" alias="Dinoflagellate Tree of Life" submission_comment="created to combine previously submitted data" lab_name="Delwiche Lab" center_name="University of Maryland, College Park" accession="SRA191197">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA191197</PRIMARY_ID>
+			<SUBMITTER_ID namespace="University of Maryland, College Park">Dinoflagellate Tree of Life</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="center">
+		<Name>University of Maryland, College Park</Name>
+		<Contact email="jamesthierer@gmail.com" phone="4103028101">
+			<Name>
+				<First>James</First>
+				<Last>Thierer</Last>
+				<Middle>Henry</Middle>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="BioProject" alias="PRJNA257290" accession="SRP046737">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP046737</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject" label="primary">PRJNA257290</EXTERNAL_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>Dinoflagellate Tree of Life</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Other"/>
+			<STUDY_ABSTRACT>Whole transcriptomes from AToL: An Integrated Approach to the Phylogeny of Dinoflagellates</STUDY_ABSTRACT>
+		</DESCRIPTOR>
+	</STUDY>
+	<SAMPLE alias="Amphidinium carterae" accession="SRS716224">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS716224</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN03075512</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="pda|delwiche.lab@gmail.com" label="Sample name">Amphidinium carterae</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<TITLE>Amphidinium carterae</TITLE>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<DESCRIPTION>Transcriptomic analysis of Amphidinium carterae</DESCRIPTION>
+		<SAMPLE_LINKS>
+			<SAMPLE_LINK>
+				<XREF_LINK>
+					<DB>bioproject</DB>
+					<ID>257290</ID>
+					<LABEL>PRJNA257290</LABEL>
+				</XREF_LINK>
+			</SAMPLE_LINK>
+		</SAMPLE_LINKS>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cultivar</TAG>
+				<VALUE>Amphidinium carterae</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>biomaterial_provider</TAG>
+				<VALUE>N/A</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>tissue</TAG>
+				<VALUE>Whole cell Amphidinium carterae</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>geo_loc_name</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>age</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>BioSampleModel</TAG>
+				<VALUE>Plant</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS716224" sample_name="Amphidinium carterae" sample_title="Amphidinium carterae" spots="30126498" bases="6085552596" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS716224</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN03075512</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="6085552596" spots="30126498" bytes="4276608936">
+		<RUN accession="SRR1610335" center_name="University of Maryland, College Park" alias="Amphidinium carterae mRNA_files" total_spots="30126498" total_bases="6085552596" size="4276608936" load_done="true" published="2015-10-16 00:00:00" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR1610335</PRIMARY_ID>
+				<SUBMITTER_ID namespace="University of Maryland, College Park">Amphidinium carterae mRNA_files</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF accession="SRX722011">
+				<IDENTIFIERS>
+					<SUBMITTER_ID namespace="University of Maryland, College Park">Amphidinium carterae mRNA</SUBMITTER_ID>
+				</IDENTIFIERS>
+			</EXPERIMENT_REF>
+			<Pool>
+				<Member member_name="" accession="SRS716224" sample_name="Amphidinium carterae" sample_title="Amphidinium carterae" spots="30126498" bases="6085552596" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS716224</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN03075512</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="Amphidinium_carterae_mRNA_1.fastq" size="8798697478" date="2020-05-15 02:57:31" md5="28e1fef6f65ed5c9fa66a06bec82324c" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-14/SRR1610335/Amphidinium_carterae_mRNA_1.fastq" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="Amphidinium_carterae_mRNA_2.fastq" size="8798697478" date="2020-05-15 03:42:10" md5="b06b83ec2d9dd15902ec013bd729145a" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-12/SRR1610335/Amphidinium_carterae_mRNA_2.fastq" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1610335" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1610335/SRR1610335" size="4276610169" date="2015-12-15 11:24:03" md5="3bb571bcea9fbf94756e4fbf211a3d2d" version="2" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1610335/SRR1610335" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1610335.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/610/SRR1610335/SRR1610335.sralite.1" size="1523959853" date="2020-06-21 14:37:33" md5="405e60f48eb5b8a450bb9d6e98100e8b" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/610/SRR1610335/SRR1610335.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-4/SRR1610335/SRR1610335.zq.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="30126498">
+				<Read index="0" count="30126498" average="101" stdev="0"/>
+				<Read index="1" count="30126498" average="101" stdev="0"/>
+			</Statistics>
+			<Databases>
+				<Database>
+					<Table name="SEQUENCE">
+						<Statistics source="meta">
+							<Rows count="30126498"/>
+							<Elements count="6085552596"/>
+						</Statistics>
+					</Table>
+				</Database>
+			</Databases>
+			<Bases cs_native="false" count="6085552596">
+				<Base value="A" count="1381151535"/>
+				<Base value="C" count="1660675689"/>
+				<Base value="G" count="1637977731"/>
+				<Base value="T" count="1405051492"/>
+				<Base value="N" count="696149"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT center_name="NCGR" alias="experiment_lib_lane_id_5022645" accession="SRX551165">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX551165</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>Whole transcriptome sequencing of Amphidinium carterae CCMP1314 - MMETSP0259</TITLE>
+		<STUDY_REF accession="SRP042159">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP042159</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioProject">PRJNA248394</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION>lims run 120713_SN1076_0924_BD0N15ACXX; lane 8; pooled lib MMETSP_pool_59 (Illumina_Index10; TAGCTT ; 12.5% of pool); library_type: RNA; protocol: mRNA_Seq_PE_SPRI; adapter length: 119</DESIGN_DESCRIPTION>
+			<SAMPLE_DESCRIPTOR accession="SRS618874">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS618874</PRIMARY_ID>
+					<EXTERNAL_ID namespace="BioSample">SAMN02740443</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>RANDOM PCR</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>
+			<SPOT_DESCRIPTOR>
+				<SPOT_DECODE_SPEC>
+					<SPOT_LENGTH>100</SPOT_LENGTH>
+					<READ_SPEC>
+						<READ_INDEX>0</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Forward</READ_TYPE>
+						<BASE_COORD>1</BASE_COORD>
+					</READ_SPEC>
+					<READ_SPEC>
+						<READ_INDEX>1</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Reverse</READ_TYPE>
+						<BASE_COORD>51</BASE_COORD>
+					</READ_SPEC>
+				</SPOT_DECODE_SPEC>
+			</SPOT_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 2000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<PROCESSING>
+			<PIPELINE>
+				<PIPE_SECTION section_name="ncgr pipeline">
+					<STEP_INDEX>0</STEP_INDEX>
+					<PREV_STEP_INDEX>N/A</PREV_STEP_INDEX>
+					<PROGRAM>Illumina Pipeline</PROGRAM>
+					<VERSION>Illumina RTA 1.13.48, CASAVA-1.7.0</VERSION>
+				</PIPE_SECTION>
+			</PIPELINE>
+		</PROCESSING>
+	</EXPERIMENT>
+	<SUBMISSION center_name="NCGR" alias="NCGR_marinellite_2014-05-22" lab_name="" accession="SRA166822">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA166822</PRIMARY_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite_2014-05-22</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="institute">
+		<Name>National Center for Genome Resources</Name>
+		<Address postal_code="87505-6303">
+			<Department>NM-INBRE</Department>
+			<Institution>National Center for Genome Resources</Institution>
+			<Street>2935 Rodeo Park Dr E</Street>
+			<City>Santa Fe</City>
+			<Sub>NM</Sub>
+			<Country>USA</Country>
+		</Address>
+		<Contact email="asundara@ncgr.org" sec_email="asundara@ncgr.org">
+			<Address postal_code="87505-6303">
+				<Department>NM-INBRE</Department>
+				<Institution>National Center for Genome Resources</Institution>
+				<Street>2935 Rodeo Park Dr E</Street>
+				<City>Santa Fe</City>
+				<Sub>NM</Sub>
+				<Country>USA</Country>
+			</Address>
+			<Name>
+				<First>Anitha</First>
+				<Last>Sundararajan</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="NCGR" alias="NCGR_marinellite" accession="SRP042159">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject">PRJNA248394</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>Marine Microbial Eukaryote Transcriptome Sequencing Project</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Other"/>
+			<STUDY_ABSTRACT>The Marine Microbial Eukaryote Transcriptome Sequencing Project was a collaboration between the National Center for Genome Resources, the Gordon and Betty Moore Foundation's Marine Microbiology Initiative, and the international marine microbial eukaryote research community to sequence the transcriptomes of approximately 700 samples from hundreds of diverse organisms.   Marine microbial eukaryotes are found in all major eukaryotic branches of the evolutionary tree. They perform a diverse range of functions in marine ecosystems, including photosynthesis, predation, and parasitism. Despite the great abundance of microeukaryotes in the ocean, their importance as absorbers of carbon dioxide and their critical contribution to marine food webs (among many ecological roles), the gene content of these microorganisms is only beginning to be explored because their genomes can be structurally complex and can be many gigabases in size. This program was intended to increase the research community's baseline of scientific knowledge by creating catalogs of genes that suggest how these organisms thrive in diverse marine habitats and how they influence marine ecosystems, biogeochemical cycles, and the composition of the atmosphere.  Transcriptome datasets are complex and should be approached with awareness, especially in light of the very deep Illumina sequencing used to generate these data. While many researchers attempted to provide axenic and uni-algal total RNA extracts for sequencing, it did not always turn out to be that way. The deep Illumina sequencing may have occasionally picked up very low levels of non-target RNA, and low levels of bacteria may have been present but not known to the laboratory that provided the sample.  For additional project information, details about the varied samples, and data, including transcriptome assemblies and annotations, please see: http://marinemicroeukaryotes.org/ and http://camera.calit2.net/mmetsp/.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>Marine Microbial Eukaryote Transcriptome Sequencing Project</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+	</STUDY>
+	<SAMPLE alias="MMETSP0259" accession="SRS618874">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS618874</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN02740443</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="pda|callum_bell" label="Sample name">MMETSP0259</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_first_name</TAG>
+				<VALUE>Boris/Geoff</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>clonal</TAG>
+				<VALUE>unknown</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_5'</TAG>
+				<VALUE>none</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_modif_growth</TAG>
+				<VALUE>none</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ammonium</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_prey_organism</TAG>
+				<VALUE>none</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_urea</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>estimated_size</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain</TAG>
+				<VALUE>CCMP1314</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_total_fe</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_date</TAG>
+				<VALUE>1-Aug-2011</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ploidy</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_3'</TAG>
+				<VALUE>none</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>lat_lon</TAG>
+				<VALUE>41.56 N 70.583 E</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_silicate</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_light</TAG>
+				<VALUE>705 (umol photons/m^2/s)</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>collection_date</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_salinity</TAG>
+				<VALUE>32 psu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>feature</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>camera_sample_acc</TAG>
+				<VALUE>CAM_SMPL_002485</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_growth_medium</TAG>
+				<VALUE>L1</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_phosphate</TAG>
+				<VALUE>60 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_day_portion_of_day</TAG>
+				<VALUE>12 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_night_portion_of_day</TAG>
+				<VALUE>12 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>project_name</TAG>
+				<VALUE>Marine microbial eukaryote transcriptome sequencing project</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>geo_loc_name</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_temperature</TAG>
+				<VALUE>22 C</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>material</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ref_biomaterial</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>num_replicons</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>biomaterial_provider</TAG>
+				<VALUE>Boris Wawrik/Geoff Sinclair</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>axenic</TAG>
+				<VALUE>no</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_trace_elements_total</TAG>
+				<VALUE>1170 nmol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>isol_growth_condt</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>environment_biome</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>propagation</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>depth</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_nitrate</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>habitat_description</TAG>
+				<VALUE>coastal</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_last_name</TAG>
+				<VALUE>Wawrik/Sinclair</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ph</TAG>
+				<VALUE>8.2</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>BioSampleModel</TAG>
+				<VALUE>MIGS.eu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS618874" sample_name="MMETSP0259" spots="28648014" bases="2864801400" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS618874</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN02740443</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="2864801400" spots="28648014" bytes="1819578701">
+		<RUN center_name="NCGR" alias="run_lib_lane_id_5022645" run_date="2012-07-22T10:00:00Z" accession="SRR1296758" total_spots="28648014" total_bases="2864801400" size="1819578701" load_done="true" published="2015-07-22 17:06:46" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR1296758</PRIMARY_ID>
+				<SUBMITTER_ID namespace="NCGR">run_lib_lane_id_5022645</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF refname="experiment_lib_lane_id_5022645" refcenter="NCGR" accession="SRX551165">
+				<IDENTIFIERS>
+					<SUBMITTER_ID namespace="NCGR">experiment_lib_lane_id_5022645</SUBMITTER_ID>
+				</IDENTIFIERS>
+			</EXPERIMENT_REF>
+			<Pool>
+				<Member member_name="" accession="SRS618874" sample_name="MMETSP0259" spots="28648014" bases="2864801400" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS618874</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN02740443</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-22_lib_lane_id_5022645_s_8_1_sequence_TAGCTT_0MM.txt.gz" size="1385173369" date="2020-05-18 05:20:59" md5="ac789f09c1d9e0d28b1c748e68ccd955" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-12/SRR1296758/NCGR_marinellite_2014-05-22_lib_lane_id_5022645_s_8_1_sequence_TAGCTT_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-22_lib_lane_id_5022645_s_8_1_sequence_TAGCTT_1MM.txt.gz" size="16325672" date="2020-05-18 14:20:03" md5="19e3dae990a364f282ea8075395ef7b3" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-6/SRR1296758/NCGR_marinellite_2014-05-22_lib_lane_id_5022645_s_8_1_sequence_TAGCTT_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-22_lib_lane_id_5022645_s_8_2_sequence_TAGCTT_0MM.txt.gz" size="1404948390" date="2020-05-18 14:22:12" md5="b5b577cb6f93c0fd367251671130df29" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-14/SRR1296758/NCGR_marinellite_2014-05-22_lib_lane_id_5022645_s_8_2_sequence_TAGCTT_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-22_lib_lane_id_5022645_s_8_2_sequence_TAGCTT_1MM.txt.gz" size="16302566" date="2020-05-18 04:56:55" md5="67e44e566d3c4c0edfa1d9c4f76a282a" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-12/SRR1296758/NCGR_marinellite_2014-05-22_lib_lane_id_5022645_s_8_2_sequence_TAGCTT_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1296758" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-run-32/SRR001/1296/SRR1296758/SRR1296758.2" size="1819581049" date="2015-07-27 02:20:27" md5="361dac302205dc2c6d11e1815ae2e145" version="2" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="gs://sra-pub-crun-7/SRR1296758/SRR1296758.2" free_egress="-" access_type="Use Cloud Data Delivery" org="GCP"/>
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1296758/SRR1296758" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-run-32/SRR001/1296/SRR1296758/SRR1296758.2" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="gs" location="gs.US"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="28648014">
+				<Read index="0" count="28648014" average="50" stdev="0"/>
+				<Read index="1" count="28648014" average="50" stdev="0"/>
+			</Statistics>
+			<Bases cs_native="false" count="2864801400">
+				<Base value="A" count="646565587"/>
+				<Base value="C" count="789053379"/>
+				<Base value="G" count="767723954"/>
+				<Base value="T" count="657336800"/>
+				<Base value="N" count="4121680"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT center_name="NCGR" alias="experiment_lib_lane_id_5022644" accession="SRX551164">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX551164</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>Whole transcriptome sequencing of Amphidinium carterae CCMP1314 - MMETSP0258</TITLE>
+		<STUDY_REF accession="SRP042159">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP042159</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioProject">PRJNA248394</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION>lims run 120713_SN1076_0924_BD0N15ACXX; lane 8; pooled lib MMETSP_pool_59 (Illumina_Index9; GATCAG ; 12.5% of pool); library_type: RNA; protocol: mRNA_Seq_PE_SPRI; adapter length: 119</DESIGN_DESCRIPTION>
+			<SAMPLE_DESCRIPTOR accession="SRS618873">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS618873</PRIMARY_ID>
+					<EXTERNAL_ID namespace="BioSample">SAMN02740442</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>RANDOM PCR</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>
+			<SPOT_DESCRIPTOR>
+				<SPOT_DECODE_SPEC>
+					<SPOT_LENGTH>100</SPOT_LENGTH>
+					<READ_SPEC>
+						<READ_INDEX>0</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Forward</READ_TYPE>
+						<BASE_COORD>1</BASE_COORD>
+					</READ_SPEC>
+					<READ_SPEC>
+						<READ_INDEX>1</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Reverse</READ_TYPE>
+						<BASE_COORD>51</BASE_COORD>
+					</READ_SPEC>
+				</SPOT_DECODE_SPEC>
+			</SPOT_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 2000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<PROCESSING>
+			<PIPELINE>
+				<PIPE_SECTION section_name="ncgr pipeline">
+					<STEP_INDEX>0</STEP_INDEX>
+					<PREV_STEP_INDEX>N/A</PREV_STEP_INDEX>
+					<PROGRAM>Illumina Pipeline</PROGRAM>
+					<VERSION>Illumina RTA 1.13.48, CASAVA-1.7.0</VERSION>
+				</PIPE_SECTION>
+			</PIPELINE>
+		</PROCESSING>
+	</EXPERIMENT>
+	<SUBMISSION center_name="NCGR" alias="NCGR_marinellite_2014-05-22" lab_name="" accession="SRA166822">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA166822</PRIMARY_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite_2014-05-22</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="institute">
+		<Name>National Center for Genome Resources</Name>
+		<Address postal_code="87505-6303">
+			<Department>NM-INBRE</Department>
+			<Institution>National Center for Genome Resources</Institution>
+			<Street>2935 Rodeo Park Dr E</Street>
+			<City>Santa Fe</City>
+			<Sub>NM</Sub>
+			<Country>USA</Country>
+		</Address>
+		<Contact email="asundara@ncgr.org" sec_email="asundara@ncgr.org">
+			<Address postal_code="87505-6303">
+				<Department>NM-INBRE</Department>
+				<Institution>National Center for Genome Resources</Institution>
+				<Street>2935 Rodeo Park Dr E</Street>
+				<City>Santa Fe</City>
+				<Sub>NM</Sub>
+				<Country>USA</Country>
+			</Address>
+			<Name>
+				<First>Anitha</First>
+				<Last>Sundararajan</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="NCGR" alias="NCGR_marinellite" accession="SRP042159">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject">PRJNA248394</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>Marine Microbial Eukaryote Transcriptome Sequencing Project</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Other"/>
+			<STUDY_ABSTRACT>The Marine Microbial Eukaryote Transcriptome Sequencing Project was a collaboration between the National Center for Genome Resources, the Gordon and Betty Moore Foundation's Marine Microbiology Initiative, and the international marine microbial eukaryote research community to sequence the transcriptomes of approximately 700 samples from hundreds of diverse organisms.   Marine microbial eukaryotes are found in all major eukaryotic branches of the evolutionary tree. They perform a diverse range of functions in marine ecosystems, including photosynthesis, predation, and parasitism. Despite the great abundance of microeukaryotes in the ocean, their importance as absorbers of carbon dioxide and their critical contribution to marine food webs (among many ecological roles), the gene content of these microorganisms is only beginning to be explored because their genomes can be structurally complex and can be many gigabases in size. This program was intended to increase the research community's baseline of scientific knowledge by creating catalogs of genes that suggest how these organisms thrive in diverse marine habitats and how they influence marine ecosystems, biogeochemical cycles, and the composition of the atmosphere.  Transcriptome datasets are complex and should be approached with awareness, especially in light of the very deep Illumina sequencing used to generate these data. While many researchers attempted to provide axenic and uni-algal total RNA extracts for sequencing, it did not always turn out to be that way. The deep Illumina sequencing may have occasionally picked up very low levels of non-target RNA, and low levels of bacteria may have been present but not known to the laboratory that provided the sample.  For additional project information, details about the varied samples, and data, including transcriptome assemblies and annotations, please see: http://marinemicroeukaryotes.org/ and http://camera.calit2.net/mmetsp/.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>Marine Microbial Eukaryote Transcriptome Sequencing Project</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+	</STUDY>
+	<SAMPLE alias="MMETSP0258" accession="SRS618873">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS618873</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN02740442</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="pda|callum_bell" label="Sample name">MMETSP0258</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_first_name</TAG>
+				<VALUE>Boris/Geoff</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>clonal</TAG>
+				<VALUE>unknown</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_5'</TAG>
+				<VALUE>none</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_modif_growth</TAG>
+				<VALUE>none</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ammonium</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_prey_organism</TAG>
+				<VALUE>none</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_urea</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>estimated_size</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain</TAG>
+				<VALUE>CCMP1314</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_total_fe</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_date</TAG>
+				<VALUE>1-Aug-2011</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ploidy</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_3'</TAG>
+				<VALUE>none</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>lat_lon</TAG>
+				<VALUE>41.56 N 70.583 E</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_silicate</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_light</TAG>
+				<VALUE>326 (umol photons/m^2/s)</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>collection_date</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_salinity</TAG>
+				<VALUE>32 psu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>feature</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>camera_sample_acc</TAG>
+				<VALUE>CAM_SMPL_002498</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_growth_medium</TAG>
+				<VALUE>L1</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_phosphate</TAG>
+				<VALUE>60 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_day_portion_of_day</TAG>
+				<VALUE>12 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_night_portion_of_day</TAG>
+				<VALUE>12 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>project_name</TAG>
+				<VALUE>Marine microbial eukaryote transcriptome sequencing project</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>geo_loc_name</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_temperature</TAG>
+				<VALUE>22 C</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>material</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ref_biomaterial</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>num_replicons</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>biomaterial_provider</TAG>
+				<VALUE>Boris Wawrik/Geoff Sinclair</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>axenic</TAG>
+				<VALUE>no</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_trace_elements_total</TAG>
+				<VALUE>1170 nmol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>isol_growth_condt</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>environment_biome</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>propagation</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>depth</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_nitrate</TAG>
+				<VALUE>60 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>habitat_description</TAG>
+				<VALUE>coastal</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_last_name</TAG>
+				<VALUE>Wawrik/Sinclair</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ph</TAG>
+				<VALUE>8.2</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>BioSampleModel</TAG>
+				<VALUE>MIGS.eu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS618873" sample_name="MMETSP0258" spots="26123949" bases="2612394900" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS618873</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN02740442</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="2612394900" spots="26123949" bytes="1663596981">
+		<RUN center_name="NCGR" alias="run_lib_lane_id_5022644" run_date="2012-07-22T10:00:00Z" accession="SRR1296757" total_spots="26123949" total_bases="2612394900" size="1663596981" load_done="true" published="2015-07-22 17:06:50" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR1296757</PRIMARY_ID>
+				<SUBMITTER_ID namespace="NCGR">run_lib_lane_id_5022644</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF refname="experiment_lib_lane_id_5022644" refcenter="NCGR" accession="SRX551164">
+				<IDENTIFIERS>
+					<SUBMITTER_ID namespace="NCGR">experiment_lib_lane_id_5022644</SUBMITTER_ID>
+				</IDENTIFIERS>
+			</EXPERIMENT_REF>
+			<Pool>
+				<Member member_name="" accession="SRS618873" sample_name="MMETSP0258" spots="26123949" bases="2612394900" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS618873</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN02740442</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-22_lib_lane_id_5022644_s_8_1_sequence_GATCAG_0MM.txt.gz" size="1268155417" date="2020-05-19 01:16:38" md5="19f5f8ecffeafab9631f658a5107997d" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-10/SRR1296757/NCGR_marinellite_2014-05-22_lib_lane_id_5022644_s_8_1_sequence_GATCAG_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1296757" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-run-32/SRR001/1296/SRR1296757/SRR1296757.2" size="1663599332" date="2015-07-27 02:27:54" md5="079b7e17e97e68c848f055108a49adbe" version="2" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="gs://sra-pub-crun-5/SRR1296757/SRR1296757.2" free_egress="-" access_type="Use Cloud Data Delivery" org="GCP"/>
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1296757/SRR1296757" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-run-32/SRR001/1296/SRR1296757/SRR1296757.2" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-22_lib_lane_id_5022644_s_8_2_sequence_GATCAG_1MM.txt.gz" size="10995424" date="2020-05-18 14:17:06" md5="a33fd2105945be6b3c72c7d989a5a169" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-13/SRR1296757/NCGR_marinellite_2014-05-22_lib_lane_id_5022644_s_8_2_sequence_GATCAG_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-22_lib_lane_id_5022644_s_8_2_sequence_GATCAG_0MM.txt.gz" size="1290619186" date="2020-05-18 14:16:54" md5="6274a872f8cdd80420f84958050589ad" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-11/SRR1296757/NCGR_marinellite_2014-05-22_lib_lane_id_5022644_s_8_2_sequence_GATCAG_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-22_lib_lane_id_5022644_s_8_1_sequence_GATCAG_1MM.txt.gz" size="11073896" date="2020-05-18 14:18:04" md5="8e095d8938892a4da288f54d7336e98b" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-13/SRR1296757/NCGR_marinellite_2014-05-22_lib_lane_id_5022644_s_8_1_sequence_GATCAG_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="gs" location="gs.US"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="26123949">
+				<Read index="0" count="26123949" average="50" stdev="0"/>
+				<Read index="1" count="26123949" average="50" stdev="0"/>
+			</Statistics>
+			<Bases cs_native="false" count="2612394900">
+				<Base value="A" count="587441335"/>
+				<Base value="C" count="720157843"/>
+				<Base value="G" count="701224628"/>
+				<Base value="T" count="599772720"/>
+				<Base value="N" count="3798374"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT center_name="NCGR" alias="experiment_lib_lane_id_5024134" accession="SRX549008">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX549008</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>Whole transcriptome sequencing of Amphidinium carterae CCMP1314 - MMETSP0399</TITLE>
+		<STUDY_REF accession="SRP042159" refname="NCGR_marinellite" refcenter="NCGR">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION>lims run 121219_SN1076_0952_AC1GD1ACXX; lane 4; pooled lib MMETSP_Pool_76 (Illumina_Index6; GCCAAT ; 22.2% of pool); library_type: transcriptomic cDNA; protocol: cDNA_PE_Library; starting material is cDNA.  Perform 2nd strand to fragment, then follow mRNA-seq protocol from end-repair step.; adapter length: 125</DESIGN_DESCRIPTION>
+			<SAMPLE_DESCRIPTOR accession="SRS616848">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS616848</PRIMARY_ID>
+					<EXTERNAL_ID namespace="BioSample">SAMN02740469</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>RANDOM PCR</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>
+			<SPOT_DESCRIPTOR>
+				<SPOT_DECODE_SPEC>
+					<SPOT_LENGTH>100</SPOT_LENGTH>
+					<READ_SPEC>
+						<READ_INDEX>0</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Forward</READ_TYPE>
+						<BASE_COORD>1</BASE_COORD>
+					</READ_SPEC>
+					<READ_SPEC>
+						<READ_INDEX>1</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Reverse</READ_TYPE>
+						<BASE_COORD>51</BASE_COORD>
+					</READ_SPEC>
+				</SPOT_DECODE_SPEC>
+			</SPOT_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 2000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<PROCESSING>
+			<PIPELINE>
+				<PIPE_SECTION section_name="ncgr pipeline">
+					<STEP_INDEX>0</STEP_INDEX>
+					<PREV_STEP_INDEX>N/A</PREV_STEP_INDEX>
+					<PROGRAM>Illumina Pipeline</PROGRAM>
+					<VERSION>Illumina RTA 1.13.48, CASAVA-1.7.0</VERSION>
+				</PIPE_SECTION>
+			</PIPELINE>
+		</PROCESSING>
+	</EXPERIMENT>
+	<SUBMISSION center_name="NCGR" alias="NCGR_marinellite_2014-05-15" lab_name="" accession="SRA166613">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA166613</PRIMARY_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite_2014-05-15</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="institute">
+		<Name>National Center for Genome Resources</Name>
+		<Address postal_code="87505-6303">
+			<Department>NM-INBRE</Department>
+			<Institution>National Center for Genome Resources</Institution>
+			<Street>2935 Rodeo Park Dr E</Street>
+			<City>Santa Fe</City>
+			<Sub>NM</Sub>
+			<Country>USA</Country>
+		</Address>
+		<Contact email="asundara@ncgr.org" sec_email="asundara@ncgr.org">
+			<Address postal_code="87505-6303">
+				<Department>NM-INBRE</Department>
+				<Institution>National Center for Genome Resources</Institution>
+				<Street>2935 Rodeo Park Dr E</Street>
+				<City>Santa Fe</City>
+				<Sub>NM</Sub>
+				<Country>USA</Country>
+			</Address>
+			<Name>
+				<First>Anitha</First>
+				<Last>Sundararajan</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="NCGR" alias="NCGR_marinellite" accession="SRP042159">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject">PRJNA248394</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>Marine Microbial Eukaryote Transcriptome Sequencing Project</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Other"/>
+			<STUDY_ABSTRACT>The Marine Microbial Eukaryote Transcriptome Sequencing Project was a collaboration between the National Center for Genome Resources, the Gordon and Betty Moore Foundation's Marine Microbiology Initiative, and the international marine microbial eukaryote research community to sequence the transcriptomes of approximately 700 samples from hundreds of diverse organisms.   Marine microbial eukaryotes are found in all major eukaryotic branches of the evolutionary tree. They perform a diverse range of functions in marine ecosystems, including photosynthesis, predation, and parasitism. Despite the great abundance of microeukaryotes in the ocean, their importance as absorbers of carbon dioxide and their critical contribution to marine food webs (among many ecological roles), the gene content of these microorganisms is only beginning to be explored because their genomes can be structurally complex and can be many gigabases in size. This program was intended to increase the research community's baseline of scientific knowledge by creating catalogs of genes that suggest how these organisms thrive in diverse marine habitats and how they influence marine ecosystems, biogeochemical cycles, and the composition of the atmosphere.  Transcriptome datasets are complex and should be approached with awareness, especially in light of the very deep Illumina sequencing used to generate these data. While many researchers attempted to provide axenic and uni-algal total RNA extracts for sequencing, it did not always turn out to be that way. The deep Illumina sequencing may have occasionally picked up very low levels of non-target RNA, and low levels of bacteria may have been present but not known to the laboratory that provided the sample.  For additional project information, details about the varied samples, and data, including transcriptome assemblies and annotations, please see: http://marinemicroeukaryotes.org/ and http://camera.calit2.net/mmetsp/.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>Marine Microbial Eukaryote Transcriptome Sequencing Project</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+	</STUDY>
+	<SAMPLE alias="MMETSP0399" accession="SRS616848">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS616848</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN02740469</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="pda|callum_bell" label="Sample name">MMETSP0399</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_first_name</TAG>
+				<VALUE>Senjie</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>clonal</TAG>
+				<VALUE>yes</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_5'</TAG>
+				<VALUE>CGTATCGCCTCCCTCGCGCCATCAG</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ammonium</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_urea</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>estimated_size</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain</TAG>
+				<VALUE>CCMP1314</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_total_fe</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_date</TAG>
+				<VALUE>15-May-2011</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ploidy</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_3'</TAG>
+				<VALUE>CTATGCGCCTTGCCAGCCCGCTCAGTAATACGACTCACTATAGGGAG</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>lat_lon</TAG>
+				<VALUE>41.56 N 70.583 E</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_silicate</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_light</TAG>
+				<VALUE>322 (umol photons/m^2/s)</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>collection_date</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_salinity</TAG>
+				<VALUE>28 psu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>feature</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>camera_sample_acc</TAG>
+				<VALUE>CAM_SMPL_002538</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_growth_medium</TAG>
+				<VALUE>f/2 amended seawater</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_phosphate</TAG>
+				<VALUE>36.2 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_day_portion_of_day</TAG>
+				<VALUE>14 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_night_portion_of_day</TAG>
+				<VALUE>10 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>project_name</TAG>
+				<VALUE>Marine microbial eukaryote transcriptome sequencing project</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>geo_loc_name</TAG>
+				<VALUE>Atlantic Ocean</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_temperature</TAG>
+				<VALUE>20 C</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>material</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ref_biomaterial</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>num_replicons</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>biomaterial_provider</TAG>
+				<VALUE>Senjie Lin</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>axenic</TAG>
+				<VALUE>no</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_trace_elements_total</TAG>
+				<VALUE>11.7 nmol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>isol_growth_condt</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>environment_biome</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>propagation</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>depth</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_nitrate</TAG>
+				<VALUE>882 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_last_name</TAG>
+				<VALUE>Lin</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ph</TAG>
+				<VALUE>8.1</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>BioSampleModel</TAG>
+				<VALUE>MIGS.eu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS616848" sample_name="MMETSP0399" spots="11094315" bases="1109431500" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS616848</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN02740469</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="1109431500" spots="11094315" bytes="699711292">
+		<RUN center_name="NCGR" alias="run_lib_lane_id_5024134" run_date="2012-12-28T10:00:00Z" accession="SRR1294394" total_spots="11094315" total_bases="1109431500" size="699711292" load_done="true" published="2015-07-22 17:13:16" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR1294394</PRIMARY_ID>
+				<SUBMITTER_ID namespace="NCGR">run_lib_lane_id_5024134</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF refname="experiment_lib_lane_id_5024134" refcenter="NCGR" accession="SRX549008">
+				<IDENTIFIERS>
+					<SUBMITTER_ID namespace="NCGR">experiment_lib_lane_id_5024134</SUBMITTER_ID>
+				</IDENTIFIERS>
+			</EXPERIMENT_REF>
+			<Pool>
+				<Member member_name="" accession="SRS616848" sample_name="MMETSP0399" spots="11094315" bases="1109431500" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS616848</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN02740469</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5024134_s_4_1_sequence_GCCAAT_0MM.txt.gz" size="415605704" date="2020-05-18 08:28:44" md5="f624b6d9d85e03f4712840f92fe45cd8" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-11/SRR1294394/NCGR_marinellite_2014-05-15_lib_lane_id_5024134_s_4_1_sequence_GCCAAT_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5024134_s_4_1_sequence_GCCAAT_1MM.txt.gz" size="9591874" date="2020-05-18 07:31:17" md5="4f74241d7d63176e86ade4f1f15c46db" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-11/SRR1294394/NCGR_marinellite_2014-05-15_lib_lane_id_5024134_s_4_1_sequence_GCCAAT_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5024134_s_4_2_sequence_GCCAAT_0MM.txt.gz" size="432936807" date="2020-05-18 07:27:28" md5="30726d27b9897f3cbcc3c9f329e39577" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-8/SRR1294394/NCGR_marinellite_2014-05-15_lib_lane_id_5024134_s_4_2_sequence_GCCAAT_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5024134_s_4_2_sequence_GCCAAT_1MM.txt.gz" size="9744144" date="2020-05-18 16:14:49" md5="692b088847329ba94a90c85ebfcbe413" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-14/SRR1294394/NCGR_marinellite_2014-05-15_lib_lane_id_5024134_s_4_2_sequence_GCCAAT_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1294394" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1294394/SRR1294394" size="699712822" date="2015-12-30 02:48:18" md5="8b3b6d986f2979021b23307591fe696f" version="2" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1294394/SRR1294394" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1294394.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/294/SRR1294394/SRR1294394.sralite.1" size="278786478" date="2020-06-22 10:09:21" md5="a1b8e4bed28658333885c00e9edaccd0" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/294/SRR1294394/SRR1294394.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-1/SRR1294394/SRR1294394.zq.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="11094315">
+				<Read index="0" count="11094315" average="50" stdev="0"/>
+				<Read index="1" count="11094315" average="50" stdev="0"/>
+			</Statistics>
+			<Databases>
+				<Database>
+					<Table name="SEQUENCE">
+						<Statistics source="meta">
+							<Rows count="11094315"/>
+							<Elements count="1109431500"/>
+						</Statistics>
+					</Table>
+				</Database>
+			</Databases>
+			<Bases cs_native="false" count="1109431500">
+				<Base value="A" count="227046261"/>
+				<Base value="C" count="361915468"/>
+				<Base value="G" count="260174820"/>
+				<Base value="T" count="260156158"/>
+				<Base value="N" count="138793"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT center_name="NCGR" alias="experiment_lib_lane_id_5022172" accession="SRX549007">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX549007</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>Whole transcriptome sequencing of Amphidinium carterae CCMP1314 - MMETSP0399</TITLE>
+		<STUDY_REF accession="SRP042159" refname="NCGR_marinellite" refcenter="NCGR">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION>lims run 120607_SN1076_0914_AC0FEGACXX; lane 6; pooled lib MMETSP_pool_45 (Illumina_Index6; GCCAAT ; 8.0% of pool); library_type: transcriptomic cDNA; protocol: cDNA_PE_Library; starting material is cDNA.  Perform 2nd strand to fragment, then follow mRNA-seq protocol from end-repair step.; adapter length: 125</DESIGN_DESCRIPTION>
+			<SAMPLE_DESCRIPTOR accession="SRS616848">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS616848</PRIMARY_ID>
+					<EXTERNAL_ID namespace="BioSample">SAMN02740469</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>RANDOM PCR</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>
+			<SPOT_DESCRIPTOR>
+				<SPOT_DECODE_SPEC>
+					<SPOT_LENGTH>100</SPOT_LENGTH>
+					<READ_SPEC>
+						<READ_INDEX>0</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Forward</READ_TYPE>
+						<BASE_COORD>1</BASE_COORD>
+					</READ_SPEC>
+					<READ_SPEC>
+						<READ_INDEX>1</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Reverse</READ_TYPE>
+						<BASE_COORD>51</BASE_COORD>
+					</READ_SPEC>
+				</SPOT_DECODE_SPEC>
+			</SPOT_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 2000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<PROCESSING>
+			<PIPELINE>
+				<PIPE_SECTION section_name="ncgr pipeline">
+					<STEP_INDEX>0</STEP_INDEX>
+					<PREV_STEP_INDEX>N/A</PREV_STEP_INDEX>
+					<PROGRAM>Illumina Pipeline</PROGRAM>
+					<VERSION>Illumina RTA 1.13.48, CASAVA-1.7.0</VERSION>
+				</PIPE_SECTION>
+			</PIPELINE>
+		</PROCESSING>
+	</EXPERIMENT>
+	<SUBMISSION center_name="NCGR" alias="NCGR_marinellite_2014-05-15" lab_name="" accession="SRA166613">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA166613</PRIMARY_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite_2014-05-15</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="institute">
+		<Name>National Center for Genome Resources</Name>
+		<Address postal_code="87505-6303">
+			<Department>NM-INBRE</Department>
+			<Institution>National Center for Genome Resources</Institution>
+			<Street>2935 Rodeo Park Dr E</Street>
+			<City>Santa Fe</City>
+			<Sub>NM</Sub>
+			<Country>USA</Country>
+		</Address>
+		<Contact email="asundara@ncgr.org" sec_email="asundara@ncgr.org">
+			<Address postal_code="87505-6303">
+				<Department>NM-INBRE</Department>
+				<Institution>National Center for Genome Resources</Institution>
+				<Street>2935 Rodeo Park Dr E</Street>
+				<City>Santa Fe</City>
+				<Sub>NM</Sub>
+				<Country>USA</Country>
+			</Address>
+			<Name>
+				<First>Anitha</First>
+				<Last>Sundararajan</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="NCGR" alias="NCGR_marinellite" accession="SRP042159">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject">PRJNA248394</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>Marine Microbial Eukaryote Transcriptome Sequencing Project</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Other"/>
+			<STUDY_ABSTRACT>The Marine Microbial Eukaryote Transcriptome Sequencing Project was a collaboration between the National Center for Genome Resources, the Gordon and Betty Moore Foundation's Marine Microbiology Initiative, and the international marine microbial eukaryote research community to sequence the transcriptomes of approximately 700 samples from hundreds of diverse organisms.   Marine microbial eukaryotes are found in all major eukaryotic branches of the evolutionary tree. They perform a diverse range of functions in marine ecosystems, including photosynthesis, predation, and parasitism. Despite the great abundance of microeukaryotes in the ocean, their importance as absorbers of carbon dioxide and their critical contribution to marine food webs (among many ecological roles), the gene content of these microorganisms is only beginning to be explored because their genomes can be structurally complex and can be many gigabases in size. This program was intended to increase the research community's baseline of scientific knowledge by creating catalogs of genes that suggest how these organisms thrive in diverse marine habitats and how they influence marine ecosystems, biogeochemical cycles, and the composition of the atmosphere.  Transcriptome datasets are complex and should be approached with awareness, especially in light of the very deep Illumina sequencing used to generate these data. While many researchers attempted to provide axenic and uni-algal total RNA extracts for sequencing, it did not always turn out to be that way. The deep Illumina sequencing may have occasionally picked up very low levels of non-target RNA, and low levels of bacteria may have been present but not known to the laboratory that provided the sample.  For additional project information, details about the varied samples, and data, including transcriptome assemblies and annotations, please see: http://marinemicroeukaryotes.org/ and http://camera.calit2.net/mmetsp/.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>Marine Microbial Eukaryote Transcriptome Sequencing Project</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+	</STUDY>
+	<SAMPLE alias="MMETSP0399" accession="SRS616848">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS616848</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN02740469</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="pda|callum_bell" label="Sample name">MMETSP0399</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_first_name</TAG>
+				<VALUE>Senjie</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>clonal</TAG>
+				<VALUE>yes</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_5'</TAG>
+				<VALUE>CGTATCGCCTCCCTCGCGCCATCAG</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ammonium</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_urea</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>estimated_size</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain</TAG>
+				<VALUE>CCMP1314</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_total_fe</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_date</TAG>
+				<VALUE>15-May-2011</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ploidy</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_3'</TAG>
+				<VALUE>CTATGCGCCTTGCCAGCCCGCTCAGTAATACGACTCACTATAGGGAG</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>lat_lon</TAG>
+				<VALUE>41.56 N 70.583 E</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_silicate</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_light</TAG>
+				<VALUE>322 (umol photons/m^2/s)</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>collection_date</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_salinity</TAG>
+				<VALUE>28 psu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>feature</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>camera_sample_acc</TAG>
+				<VALUE>CAM_SMPL_002538</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_growth_medium</TAG>
+				<VALUE>f/2 amended seawater</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_phosphate</TAG>
+				<VALUE>36.2 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_day_portion_of_day</TAG>
+				<VALUE>14 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_night_portion_of_day</TAG>
+				<VALUE>10 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>project_name</TAG>
+				<VALUE>Marine microbial eukaryote transcriptome sequencing project</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>geo_loc_name</TAG>
+				<VALUE>Atlantic Ocean</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_temperature</TAG>
+				<VALUE>20 C</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>material</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ref_biomaterial</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>num_replicons</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>biomaterial_provider</TAG>
+				<VALUE>Senjie Lin</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>axenic</TAG>
+				<VALUE>no</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_trace_elements_total</TAG>
+				<VALUE>11.7 nmol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>isol_growth_condt</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>environment_biome</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>propagation</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>depth</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_nitrate</TAG>
+				<VALUE>882 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_last_name</TAG>
+				<VALUE>Lin</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ph</TAG>
+				<VALUE>8.1</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>BioSampleModel</TAG>
+				<VALUE>MIGS.eu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS616848" sample_name="MMETSP0399" spots="12163683" bases="1216368300" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS616848</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN02740469</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="1216368300" spots="12163683" bytes="717702105">
+		<RUN center_name="NCGR" alias="run_lib_lane_id_5022172" run_date="2012-06-16T10:00:00Z" accession="SRR1294393" total_spots="12163683" total_bases="1216368300" size="717702105" load_done="true" published="2015-07-22 17:13:16" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR1294393</PRIMARY_ID>
+				<SUBMITTER_ID namespace="NCGR">run_lib_lane_id_5022172</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF refname="experiment_lib_lane_id_5022172" refcenter="NCGR" accession="SRX549007">
+				<IDENTIFIERS>
+					<SUBMITTER_ID namespace="NCGR">experiment_lib_lane_id_5022172</SUBMITTER_ID>
+				</IDENTIFIERS>
+			</EXPERIMENT_REF>
+			<Pool>
+				<Member member_name="" accession="SRS616848" sample_name="MMETSP0399" spots="12163683" bases="1216368300" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS616848</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN02740469</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5022172_s_6_1_sequence_GCCAAT_0MM.txt.gz" size="417396474" date="2020-05-19 04:21:09" md5="b1b4e8633ebfee49c0715c7e8b00c9ea" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-14/SRR1294393/NCGR_marinellite_2014-05-15_lib_lane_id_5022172_s_6_1_sequence_GCCAAT_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5022172_s_6_1_sequence_GCCAAT_1MM.txt.gz" size="14029772" date="2020-05-18 16:21:16" md5="02a7f164cc4e1b23020324ae922fd6bc" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-11/SRR1294393/NCGR_marinellite_2014-05-15_lib_lane_id_5022172_s_6_1_sequence_GCCAAT_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5022172_s_6_2_sequence_GCCAAT_0MM.txt.gz" size="412169207" date="2020-05-19 14:05:39" md5="dcc5f7cc7767f70b245c4e5459cf2c85" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-10/SRR1294393/NCGR_marinellite_2014-05-15_lib_lane_id_5022172_s_6_2_sequence_GCCAAT_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5022172_s_6_2_sequence_GCCAAT_1MM.txt.gz" size="14991831" date="2020-05-18 07:30:36" md5="dc52221281e9b1090b920ea24d88df28" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-13/SRR1294393/NCGR_marinellite_2014-05-15_lib_lane_id_5022172_s_6_2_sequence_GCCAAT_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1294393" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1294393/SRR1294393" size="717703635" date="2015-12-09 02:23:59" md5="1d89c8b09c368fcf941cf7ed66beac7c" version="2" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1294393/SRR1294393" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1294393.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/294/SRR1294393/SRR1294393.sralite.1" size="302778044" date="2020-06-12 22:29:10" md5="7dbec0a7ed02ea28b6b7403bdfefbdf1" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/294/SRR1294393/SRR1294393.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-1/SRR1294393/SRR1294393.zq.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="12163683">
+				<Read index="0" count="12163683" average="50" stdev="0"/>
+				<Read index="1" count="12163683" average="50" stdev="0"/>
+			</Statistics>
+			<Databases>
+				<Database>
+					<Table name="SEQUENCE">
+						<Statistics source="meta">
+							<Rows count="12163683"/>
+							<Elements count="1216368300"/>
+						</Statistics>
+					</Table>
+				</Database>
+			</Databases>
+			<Bases cs_native="false" count="1216368300">
+				<Base value="A" count="242440452"/>
+				<Base value="C" count="407494362"/>
+				<Base value="G" count="280504793"/>
+				<Base value="T" count="285873559"/>
+				<Base value="N" count="55134"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT center_name="NCGR" alias="experiment_lib_lane_id_5024126" accession="SRX549006">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX549006</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>Whole transcriptome sequencing of Amphidinium carterae CCMP1314 - MMETSP0398</TITLE>
+		<STUDY_REF accession="SRP042159" refname="NCGR_marinellite" refcenter="NCGR">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION>lims run 121219_SN1076_0952_AC1GD1ACXX; lane 3; pooled lib MMETSP_pool_75 (Illumina_Index5; ACAGTG ; 22.3% of pool); library_type: transcriptomic cDNA; protocol: cDNA_PE_Library; starting material is cDNA.  Perform 2nd strand to fragment, then follow mRNA-seq protocol from end-repair step.; adapter length: 125</DESIGN_DESCRIPTION>
+			<SAMPLE_DESCRIPTOR accession="SRS616847">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS616847</PRIMARY_ID>
+					<EXTERNAL_ID namespace="BioSample">SAMN02740468</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>RANDOM PCR</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>
+			<SPOT_DESCRIPTOR>
+				<SPOT_DECODE_SPEC>
+					<SPOT_LENGTH>100</SPOT_LENGTH>
+					<READ_SPEC>
+						<READ_INDEX>0</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Forward</READ_TYPE>
+						<BASE_COORD>1</BASE_COORD>
+					</READ_SPEC>
+					<READ_SPEC>
+						<READ_INDEX>1</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Reverse</READ_TYPE>
+						<BASE_COORD>51</BASE_COORD>
+					</READ_SPEC>
+				</SPOT_DECODE_SPEC>
+			</SPOT_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 2000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<PROCESSING>
+			<PIPELINE>
+				<PIPE_SECTION section_name="ncgr pipeline">
+					<STEP_INDEX>0</STEP_INDEX>
+					<PREV_STEP_INDEX>N/A</PREV_STEP_INDEX>
+					<PROGRAM>Illumina Pipeline</PROGRAM>
+					<VERSION>Illumina RTA 1.13.48, CASAVA-1.7.0</VERSION>
+				</PIPE_SECTION>
+			</PIPELINE>
+		</PROCESSING>
+	</EXPERIMENT>
+	<SUBMISSION center_name="NCGR" alias="NCGR_marinellite_2014-05-15" lab_name="" accession="SRA166613">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA166613</PRIMARY_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite_2014-05-15</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="institute">
+		<Name>National Center for Genome Resources</Name>
+		<Address postal_code="87505-6303">
+			<Department>NM-INBRE</Department>
+			<Institution>National Center for Genome Resources</Institution>
+			<Street>2935 Rodeo Park Dr E</Street>
+			<City>Santa Fe</City>
+			<Sub>NM</Sub>
+			<Country>USA</Country>
+		</Address>
+		<Contact email="asundara@ncgr.org" sec_email="asundara@ncgr.org">
+			<Address postal_code="87505-6303">
+				<Department>NM-INBRE</Department>
+				<Institution>National Center for Genome Resources</Institution>
+				<Street>2935 Rodeo Park Dr E</Street>
+				<City>Santa Fe</City>
+				<Sub>NM</Sub>
+				<Country>USA</Country>
+			</Address>
+			<Name>
+				<First>Anitha</First>
+				<Last>Sundararajan</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="NCGR" alias="NCGR_marinellite" accession="SRP042159">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject">PRJNA248394</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>Marine Microbial Eukaryote Transcriptome Sequencing Project</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Other"/>
+			<STUDY_ABSTRACT>The Marine Microbial Eukaryote Transcriptome Sequencing Project was a collaboration between the National Center for Genome Resources, the Gordon and Betty Moore Foundation's Marine Microbiology Initiative, and the international marine microbial eukaryote research community to sequence the transcriptomes of approximately 700 samples from hundreds of diverse organisms.   Marine microbial eukaryotes are found in all major eukaryotic branches of the evolutionary tree. They perform a diverse range of functions in marine ecosystems, including photosynthesis, predation, and parasitism. Despite the great abundance of microeukaryotes in the ocean, their importance as absorbers of carbon dioxide and their critical contribution to marine food webs (among many ecological roles), the gene content of these microorganisms is only beginning to be explored because their genomes can be structurally complex and can be many gigabases in size. This program was intended to increase the research community's baseline of scientific knowledge by creating catalogs of genes that suggest how these organisms thrive in diverse marine habitats and how they influence marine ecosystems, biogeochemical cycles, and the composition of the atmosphere.  Transcriptome datasets are complex and should be approached with awareness, especially in light of the very deep Illumina sequencing used to generate these data. While many researchers attempted to provide axenic and uni-algal total RNA extracts for sequencing, it did not always turn out to be that way. The deep Illumina sequencing may have occasionally picked up very low levels of non-target RNA, and low levels of bacteria may have been present but not known to the laboratory that provided the sample.  For additional project information, details about the varied samples, and data, including transcriptome assemblies and annotations, please see: http://marinemicroeukaryotes.org/ and http://camera.calit2.net/mmetsp/.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>Marine Microbial Eukaryote Transcriptome Sequencing Project</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+	</STUDY>
+	<SAMPLE alias="MMETSP0398" accession="SRS616847">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS616847</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN02740468</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="pda|callum_bell" label="Sample name">MMETSP0398</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_first_name</TAG>
+				<VALUE>Senjie</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>clonal</TAG>
+				<VALUE>yes</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_5'</TAG>
+				<VALUE>CGTATCGCCTCCCTCGCGCCATCAG</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ammonium</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_urea</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>estimated_size</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain</TAG>
+				<VALUE>CCMP1314</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_total_fe</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_date</TAG>
+				<VALUE>15-May-2011</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ploidy</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_3'</TAG>
+				<VALUE>CTATGCGCCTTGCCAGCCCGCTCAGTAATACGACTCACTATAGGGAG</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>lat_lon</TAG>
+				<VALUE>41.56 N 70.583 E</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_silicate</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_light</TAG>
+				<VALUE>694 (umol photons/m^2/s)</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>collection_date</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_salinity</TAG>
+				<VALUE>28 psu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>feature</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>camera_sample_acc</TAG>
+				<VALUE>CAM_SMPL_002537</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_growth_medium</TAG>
+				<VALUE>f/2 amended seawater</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_phosphate</TAG>
+				<VALUE>36.2 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_day_portion_of_day</TAG>
+				<VALUE>14 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_night_portion_of_day</TAG>
+				<VALUE>10 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>project_name</TAG>
+				<VALUE>Marine microbial eukaryote transcriptome sequencing project</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>geo_loc_name</TAG>
+				<VALUE>Atlantic Ocean</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_temperature</TAG>
+				<VALUE>20 C</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>material</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ref_biomaterial</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>num_replicons</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>biomaterial_provider</TAG>
+				<VALUE>Senjie Lin</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>axenic</TAG>
+				<VALUE>no</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_trace_elements_total</TAG>
+				<VALUE>11.7 nmol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>isol_growth_condt</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>environment_biome</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>propagation</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>depth</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_nitrate</TAG>
+				<VALUE>882 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_last_name</TAG>
+				<VALUE>Lin</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ph</TAG>
+				<VALUE>8.1</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>BioSampleModel</TAG>
+				<VALUE>MIGS.eu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS616847" sample_name="MMETSP0398" spots="5881078" bases="588107800" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS616847</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN02740468</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="588107800" spots="5881078" bytes="389615215">
+		<RUN center_name="NCGR" alias="run_lib_lane_id_5024126" run_date="2012-12-28T10:00:00Z" accession="SRR1294392" total_spots="5881078" total_bases="588107800" size="389615215" load_done="true" published="2015-07-22 17:13:16" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR1294392</PRIMARY_ID>
+				<SUBMITTER_ID namespace="NCGR">run_lib_lane_id_5024126</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF refname="experiment_lib_lane_id_5024126" refcenter="NCGR" accession="SRX549006">
+				<IDENTIFIERS>
+					<SUBMITTER_ID namespace="NCGR">experiment_lib_lane_id_5024126</SUBMITTER_ID>
+				</IDENTIFIERS>
+			</EXPERIMENT_REF>
+			<Pool>
+				<Member member_name="" accession="SRS616847" sample_name="MMETSP0398" spots="5881078" bases="588107800" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS616847</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN02740468</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5024126_s_3_1_sequence_ACAGTG_0MM.txt.gz" size="238825164" date="2020-05-19 04:26:40" md5="d8a95db6a040496c98f12ae4cdd41013" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-9/SRR1294392/NCGR_marinellite_2014-05-15_lib_lane_id_5024126_s_3_1_sequence_ACAGTG_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5024126_s_3_1_sequence_ACAGTG_1MM.txt.gz" size="8929244" date="2020-05-18 03:54:08" md5="036dad67e4dcd0fc54891581047d5668" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-14/SRR1294392/NCGR_marinellite_2014-05-15_lib_lane_id_5024126_s_3_1_sequence_ACAGTG_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5024126_s_3_2_sequence_ACAGTG_0MM.txt.gz" size="248002129" date="2020-05-19 14:09:40" md5="0c1430c65c6450e21a7b6c1ff7a999b1" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-13/SRR1294392/NCGR_marinellite_2014-05-15_lib_lane_id_5024126_s_3_2_sequence_ACAGTG_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5024126_s_3_2_sequence_ACAGTG_1MM.txt.gz" size="8898819" date="2020-05-18 07:56:47" md5="eae891541d919d27d8c6bc99aa0e5878" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-11/SRR1294392/NCGR_marinellite_2014-05-15_lib_lane_id_5024126_s_3_2_sequence_ACAGTG_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1294392" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1294392/SRR1294392" size="389616748" date="2015-12-30 02:20:22" md5="1658318500dd308977c1d85e7f574db1" version="2" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1294392/SRR1294392" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1294392.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/294/SRR1294392/SRR1294392.sralite.1" size="147892969" date="2021-06-15 22:32:24" md5="7a0bdfd94f7427d761f843d8dcd5bd71" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/294/SRR1294392/SRR1294392.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-1/SRR1294392/SRR1294392.noqual.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="5881078">
+				<Read index="0" count="5881078" average="50" stdev="0"/>
+				<Read index="1" count="5881078" average="50" stdev="0"/>
+			</Statistics>
+			<Databases>
+				<Database>
+					<Table name="SEQUENCE">
+						<Statistics source="meta">
+							<Rows count="5881078"/>
+							<Elements count="588107800"/>
+						</Statistics>
+					</Table>
+				</Database>
+			</Databases>
+			<Bases cs_native="false" count="588107800">
+				<Base value="A" count="122366564"/>
+				<Base value="C" count="189375655"/>
+				<Base value="G" count="139450757"/>
+				<Base value="T" count="136846951"/>
+				<Base value="N" count="67873"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>
+<EXPERIMENT_PACKAGE>
+	<EXPERIMENT center_name="NCGR" alias="experiment_lib_lane_id_5022171" accession="SRX549005">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRX549005</PRIMARY_ID>
+		</IDENTIFIERS>
+		<TITLE>Whole transcriptome sequencing of Amphidinium carterae CCMP1314 - MMETSP0398</TITLE>
+		<STUDY_REF accession="SRP042159" refname="NCGR_marinellite" refcenter="NCGR">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			</IDENTIFIERS>
+		</STUDY_REF>
+		<DESIGN>
+			<DESIGN_DESCRIPTION>lims run 120607_SN1076_0914_AC0FEGACXX; lane 6; pooled lib MMETSP_pool_45 (Illumina_Index5; ACAGTG ; 7.0% of pool); library_type: transcriptomic cDNA; protocol: cDNA_PE_Library; starting material is cDNA.  Perform 2nd strand to fragment, then follow mRNA-seq protocol from end-repair step.; adapter length: 125</DESIGN_DESCRIPTION>
+			<SAMPLE_DESCRIPTOR accession="SRS616847">
+				<IDENTIFIERS>
+					<PRIMARY_ID>SRS616847</PRIMARY_ID>
+					<EXTERNAL_ID namespace="BioSample">SAMN02740468</EXTERNAL_ID>
+				</IDENTIFIERS>
+			</SAMPLE_DESCRIPTOR>
+			<LIBRARY_DESCRIPTOR>
+				<LIBRARY_STRATEGY>RNA-Seq</LIBRARY_STRATEGY>
+				<LIBRARY_SOURCE>TRANSCRIPTOMIC</LIBRARY_SOURCE>
+				<LIBRARY_SELECTION>RANDOM PCR</LIBRARY_SELECTION>
+				<LIBRARY_LAYOUT>
+					<PAIRED/>
+				</LIBRARY_LAYOUT>
+			</LIBRARY_DESCRIPTOR>
+			<SPOT_DESCRIPTOR>
+				<SPOT_DECODE_SPEC>
+					<SPOT_LENGTH>100</SPOT_LENGTH>
+					<READ_SPEC>
+						<READ_INDEX>0</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Forward</READ_TYPE>
+						<BASE_COORD>1</BASE_COORD>
+					</READ_SPEC>
+					<READ_SPEC>
+						<READ_INDEX>1</READ_INDEX>
+						<READ_CLASS>Application Read</READ_CLASS>
+						<READ_TYPE>Reverse</READ_TYPE>
+						<BASE_COORD>51</BASE_COORD>
+					</READ_SPEC>
+				</SPOT_DECODE_SPEC>
+			</SPOT_DESCRIPTOR>
+		</DESIGN>
+		<PLATFORM>
+			<ILLUMINA>
+				<INSTRUMENT_MODEL>Illumina HiSeq 2000</INSTRUMENT_MODEL>
+			</ILLUMINA>
+		</PLATFORM>
+		<PROCESSING>
+			<PIPELINE>
+				<PIPE_SECTION section_name="ncgr pipeline">
+					<STEP_INDEX>0</STEP_INDEX>
+					<PREV_STEP_INDEX>N/A</PREV_STEP_INDEX>
+					<PROGRAM>Illumina Pipeline</PROGRAM>
+					<VERSION>Illumina RTA 1.13.48, CASAVA-1.7.0</VERSION>
+				</PIPE_SECTION>
+			</PIPELINE>
+		</PROCESSING>
+	</EXPERIMENT>
+	<SUBMISSION center_name="NCGR" alias="NCGR_marinellite_2014-05-15" lab_name="" accession="SRA166613">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRA166613</PRIMARY_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite_2014-05-15</SUBMITTER_ID>
+		</IDENTIFIERS>
+	</SUBMISSION>
+	<Organization type="institute">
+		<Name>National Center for Genome Resources</Name>
+		<Address postal_code="87505-6303">
+			<Department>NM-INBRE</Department>
+			<Institution>National Center for Genome Resources</Institution>
+			<Street>2935 Rodeo Park Dr E</Street>
+			<City>Santa Fe</City>
+			<Sub>NM</Sub>
+			<Country>USA</Country>
+		</Address>
+		<Contact email="asundara@ncgr.org" sec_email="asundara@ncgr.org">
+			<Address postal_code="87505-6303">
+				<Department>NM-INBRE</Department>
+				<Institution>National Center for Genome Resources</Institution>
+				<Street>2935 Rodeo Park Dr E</Street>
+				<City>Santa Fe</City>
+				<Sub>NM</Sub>
+				<Country>USA</Country>
+			</Address>
+			<Name>
+				<First>Anitha</First>
+				<Last>Sundararajan</Last>
+			</Name>
+		</Contact>
+	</Organization>
+	<STUDY center_name="NCGR" alias="NCGR_marinellite" accession="SRP042159">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRP042159</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioProject">PRJNA248394</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="NCGR">NCGR_marinellite</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<DESCRIPTOR>
+			<STUDY_TITLE>Marine Microbial Eukaryote Transcriptome Sequencing Project</STUDY_TITLE>
+			<STUDY_TYPE existing_study_type="Other"/>
+			<STUDY_ABSTRACT>The Marine Microbial Eukaryote Transcriptome Sequencing Project was a collaboration between the National Center for Genome Resources, the Gordon and Betty Moore Foundation's Marine Microbiology Initiative, and the international marine microbial eukaryote research community to sequence the transcriptomes of approximately 700 samples from hundreds of diverse organisms.   Marine microbial eukaryotes are found in all major eukaryotic branches of the evolutionary tree. They perform a diverse range of functions in marine ecosystems, including photosynthesis, predation, and parasitism. Despite the great abundance of microeukaryotes in the ocean, their importance as absorbers of carbon dioxide and their critical contribution to marine food webs (among many ecological roles), the gene content of these microorganisms is only beginning to be explored because their genomes can be structurally complex and can be many gigabases in size. This program was intended to increase the research community's baseline of scientific knowledge by creating catalogs of genes that suggest how these organisms thrive in diverse marine habitats and how they influence marine ecosystems, biogeochemical cycles, and the composition of the atmosphere.  Transcriptome datasets are complex and should be approached with awareness, especially in light of the very deep Illumina sequencing used to generate these data. While many researchers attempted to provide axenic and uni-algal total RNA extracts for sequencing, it did not always turn out to be that way. The deep Illumina sequencing may have occasionally picked up very low levels of non-target RNA, and low levels of bacteria may have been present but not known to the laboratory that provided the sample.  For additional project information, details about the varied samples, and data, including transcriptome assemblies and annotations, please see: http://marinemicroeukaryotes.org/ and http://camera.calit2.net/mmetsp/.</STUDY_ABSTRACT>
+			<CENTER_PROJECT_NAME>Marine Microbial Eukaryote Transcriptome Sequencing Project</CENTER_PROJECT_NAME>
+		</DESCRIPTOR>
+	</STUDY>
+	<SAMPLE alias="MMETSP0398" accession="SRS616847">
+		<IDENTIFIERS>
+			<PRIMARY_ID>SRS616847</PRIMARY_ID>
+			<EXTERNAL_ID namespace="BioSample">SAMN02740468</EXTERNAL_ID>
+			<SUBMITTER_ID namespace="pda|callum_bell" label="Sample name">MMETSP0398</SUBMITTER_ID>
+		</IDENTIFIERS>
+		<SAMPLE_NAME>
+			<TAXON_ID>2961</TAXON_ID>
+			<SCIENTIFIC_NAME>Amphidinium carterae</SCIENTIFIC_NAME>
+		</SAMPLE_NAME>
+		<SAMPLE_ATTRIBUTES>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_first_name</TAG>
+				<VALUE>Senjie</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>clonal</TAG>
+				<VALUE>yes</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_5'</TAG>
+				<VALUE>CGTATCGCCTCCCTCGCGCCATCAG</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ammonium</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_urea</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>estimated_size</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>strain</TAG>
+				<VALUE>CCMP1314</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_total_fe</TAG>
+				<VALUE/>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_date</TAG>
+				<VALUE>15-May-2011</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ploidy</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>cDNA_adapter_3'</TAG>
+				<VALUE>CTATGCGCCTTGCCAGCCCGCTCAGTAATACGACTCACTATAGGGAG</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>lat_lon</TAG>
+				<VALUE>41.56 N 70.583 E</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_silicate</TAG>
+				<VALUE>0 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_light</TAG>
+				<VALUE>694 (umol photons/m^2/s)</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>collection_date</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_salinity</TAG>
+				<VALUE>28 psu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>feature</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>camera_sample_acc</TAG>
+				<VALUE>CAM_SMPL_002537</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_growth_medium</TAG>
+				<VALUE>f/2 amended seawater</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_phosphate</TAG>
+				<VALUE>36.2 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_day_portion_of_day</TAG>
+				<VALUE>14 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_night_portion_of_day</TAG>
+				<VALUE>10 hr</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>project_name</TAG>
+				<VALUE>Marine microbial eukaryote transcriptome sequencing project</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>geo_loc_name</TAG>
+				<VALUE>Atlantic Ocean</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_temperature</TAG>
+				<VALUE>20 C</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>material</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>ref_biomaterial</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>num_replicons</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>biomaterial_provider</TAG>
+				<VALUE>Senjie Lin</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>axenic</TAG>
+				<VALUE>no</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_trace_elements_total</TAG>
+				<VALUE>11.7 nmol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>isol_growth_condt</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>environment_biome</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>propagation</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>depth</TAG>
+				<VALUE>missing</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_nitrate</TAG>
+				<VALUE>882 umol/L</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>pi_last_name</TAG>
+				<VALUE>Lin</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>exp_ph</TAG>
+				<VALUE>8.1</VALUE>
+			</SAMPLE_ATTRIBUTE>
+			<SAMPLE_ATTRIBUTE>
+				<TAG>BioSampleModel</TAG>
+				<VALUE>MIGS.eu</VALUE>
+			</SAMPLE_ATTRIBUTE>
+		</SAMPLE_ATTRIBUTES>
+	</SAMPLE>
+	<Pool>
+		<Member member_name="" accession="SRS616847" sample_name="MMETSP0398" spots="6960303" bases="696030300" tax_id="2961" organism="Amphidinium carterae">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRS616847</PRIMARY_ID>
+				<EXTERNAL_ID namespace="BioSample">SAMN02740468</EXTERNAL_ID>
+			</IDENTIFIERS>
+		</Member>
+	</Pool>
+	<RUN_SET runs="1" bases="696030300" spots="6960303" bytes="394583697">
+		<RUN center_name="NCGR" alias="run_lib_lane_id_5022171" run_date="2012-06-16T10:00:00Z" accession="SRR1294391" total_spots="6960303" total_bases="696030300" size="394583697" load_done="true" published="2015-07-22 17:13:14" is_public="true" cluster_name="public" has_taxanalysis="1" static_data_available="1">
+			<IDENTIFIERS>
+				<PRIMARY_ID>SRR1294391</PRIMARY_ID>
+				<SUBMITTER_ID namespace="NCGR">run_lib_lane_id_5022171</SUBMITTER_ID>
+			</IDENTIFIERS>
+			<EXPERIMENT_REF refname="experiment_lib_lane_id_5022171" refcenter="NCGR" accession="SRX549005">
+				<IDENTIFIERS>
+					<SUBMITTER_ID namespace="NCGR">experiment_lib_lane_id_5022171</SUBMITTER_ID>
+				</IDENTIFIERS>
+			</EXPERIMENT_REF>
+			<Pool>
+				<Member member_name="" accession="SRS616847" sample_name="MMETSP0398" spots="6960303" bases="696030300" tax_id="2961" organism="Amphidinium carterae">
+					<IDENTIFIERS>
+						<PRIMARY_ID>SRS616847</PRIMARY_ID>
+						<EXTERNAL_ID namespace="BioSample">SAMN02740468</EXTERNAL_ID>
+					</IDENTIFIERS>
+				</Member>
+			</Pool>
+			<SRAFiles>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5022171_s_6_1_sequence_ACAGTG_0MM.txt.gz" size="215868039" date="2020-05-19 14:08:15" md5="b3759df2884aa582cdf1f43710aac0f7" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-9/SRR1294391/NCGR_marinellite_2014-05-15_lib_lane_id_5022171_s_6_1_sequence_ACAGTG_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5022171_s_6_1_sequence_ACAGTG_1MM.txt.gz" size="16949298" date="2020-05-18 07:56:47" md5="0d7b43f0a4ebde9432a1a6d8d17ad05b" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-10/SRR1294391/NCGR_marinellite_2014-05-15_lib_lane_id_5022171_s_6_1_sequence_ACAGTG_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5022171_s_6_2_sequence_ACAGTG_0MM.txt.gz" size="212677824" date="2020-05-18 03:46:15" md5="05c76307b775340a16e0921d241a42c3" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-12/SRR1294391/NCGR_marinellite_2014-05-15_lib_lane_id_5022171_s_6_2_sequence_ACAGTG_0MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="NCGR_marinellite_2014-05-15_lib_lane_id_5022171_s_6_2_sequence_ACAGTG_1MM.txt.gz" size="17986669" date="2020-05-19 14:02:11" md5="d100cda2da6434c74a81cd05e4ae2b67" version="1" semantic_name="fastq" supertype="Original" sratoolkit="0">
+					<Alternatives url="s3://sra-pub-src-10/SRR1294391/NCGR_marinellite_2014-05-15_lib_lane_id_5022171_s_6_2_sequence_ACAGTG_1MM.txt.gz" free_egress="-" access_type="Use Cloud Data Delivery" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1294391" url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1294391/SRR1294391" size="394585225" date="2015-12-09 02:22:38" md5="4db6d297a7600e4197432c3fa0e7fa01" version="2" semantic_name="SRA Normalized" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR1294391/SRR1294391" free_egress="worldwide" access_type="anonymous" org="AWS"/>
+				</SRAFile>
+				<SRAFile cluster="public" filename="SRR1294391.sralite" url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/294/SRR1294391/SRR1294391.sralite.1" size="173882904" date="2020-06-22 10:07:20" md5="0d4aca4b17134e77768a1610d863749c" version="1" semantic_name="SRA Lite" supertype="Primary ETL" sratoolkit="1">
+					<Alternatives url="https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos5/sra-pub-zq-11/SRR001/294/SRR1294391/SRR1294391.sralite.1" free_egress="worldwide" access_type="anonymous" org="NCBI"/>
+					<Alternatives url="gs://sra-pub-zq-1/SRR1294391/SRR1294391.zq.1" free_egress="gs.US" access_type="gcp identity" org="GCP"/>
+				</SRAFile>
+			</SRAFiles>
+			<CloudFiles>
+				<CloudFile filetype="fastq" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run" provider="s3" location="s3.us-east-1"/>
+				<CloudFile filetype="run.zq" provider="gs" location="gs.US"/>
+			</CloudFiles>
+			<Statistics nreads="2" nspots="6960303">
+				<Read index="0" count="6960303" average="50" stdev="0"/>
+				<Read index="1" count="6960303" average="50" stdev="0"/>
+			</Statistics>
+			<Databases>
+				<Database>
+					<Table name="SEQUENCE">
+						<Statistics source="meta">
+							<Rows count="6960303"/>
+							<Elements count="696030300"/>
+						</Statistics>
+					</Table>
+				</Database>
+			</Databases>
+			<Bases cs_native="false" count="696030300">
+				<Base value="A" count="137054070"/>
+				<Base value="C" count="236290862"/>
+				<Base value="G" count="160474716"/>
+				<Base value="T" count="162178593"/>
+				<Base value="N" count="32059"/>
+			</Bases>
+		</RUN>
+	</RUN_SET>
+</EXPERIMENT_PACKAGE>undefined</EXPERIMENT_PACKAGE_SET>
