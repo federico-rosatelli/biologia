@@ -73,6 +73,12 @@ L'insieme di questi 4 moduli hanno dato vita al progetto qui in opera:
 - Parser:   Bioparse.py
 - Backend:  GoServer
 - Frontend: VueJS
+- data:		Files
+
+
+
+# Schema del progetto
+![Algae Project Struct](algaeStruct.png "Struct of the Project")
 
 
 
@@ -186,11 +192,6 @@ o simili per individuare eventuali relazioni funzionali, strutturali o filogenet
 Le tecniche di allineamento prevedono il confronto globale e locale.
 Un'applicazione algoritmica di allineamento locale è data da Smith Waterman.
 Un'applicazione algoritmica di allineamento globale é data da Needleman-Wunsch.
-
-
-
-# Schema del progetto
-![Algae Project Struct](algaeStruct.png "Struct of the Project")
 
 
 
