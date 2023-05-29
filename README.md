@@ -212,124 +212,185 @@ Un'applicazione algoritmica di allineamento globale é data da Needleman-Wunsch.
 
 
 # Schema delle collections:
-Le seguenti strutture sono reperibili e visibili per inter effettuando una <db=Name>.<collectionName>.find() da terminale con MongoDB. Le seguenti strutture sono state ottenute eseguendo il comando:
-db.<collectionName.findOne({GBSeq_organism:"Chlorella vulgaris"}) per esempio.
+Le seguenti strutture sono reperibili e visibili per inter effettuando una <db=Name>.<collectionName>.find({}) ( o findOne({}) ) da terminale con MongoDB. Le seguenti strutture sono state ottenute con i comandi elencati per ogni collection:
 
 
 `nucleotide_data`
+Frammento ottenuto per Chlorella Vulgaris con il comando:
+db.nucleotide_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
 ```json
-{
-  _id: ObjectId("645fc9f1bacdba52eb60256f"),
-  GBSeq_locus: 'OQ888174',
-  GBSeq_length: '759',
-  GBSeq_strandedness: 'double',
-  GBSeq_moltype: 'DNA',
-  GBSeq_topology: 'linear',
-  GBSeq_division: 'PLN',
-  'GBSeq_update-date': '03-MAY-2023',
-  'GBSeq_create-date': '03-MAY-2023',
-  GBSeq_definition: 'Chlorella vulgaris culture UTEX:396 small subunit ribosomal RNA gene, partial sequence; internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence; and large subunit ribosomal RNA gene, partial sequence',
-  'GBSeq_primary-accession': 'OQ888174',
-  'GBSeq_accession-version': 'OQ888174.1',
-  'GBSeq_other-seqids': [ 'gb|OQ888174.1|', 'gi|2497659680' ],
-  GBSeq_source: 'Chlorella vulgaris',
-  GBSeq_organism: 'Chlorella vulgaris',
-  GBSeq_taxonomy: 'Eukaryota; Viridiplantae; Chlorophyta; core chlorophytes; Trebouxiophyceae; Chlorellales; Chlorellaceae; Chlorella clade; Chlorella',
-  GBSeq_references: [
-    {
-      GBReference_reference: '1',
-      GBReference_position: '1..759',
-      GBReference_authors: [ 'Gao,J.', 'Maza,I.H.', 'Khoshbakht,Y.', 'Nobles,D.R.' ],
-      GBReference_title: 'Direct Submission',
-      GBReference_journal: 'Submitted (27-APR-2023) UTEX Culture Collection of Algae, The University of Texas at Austin, 7601 Galliano Cir, Address 2 Optional, Austin, TX 78749, USA'
-    }
-  ],
-  GBSeq_comment: '##Assembly-Data-START## ; Sequencing Technology :: Sanger dideoxy sequencing ; ##Assembly-Data-END##',
-  'GBSeq_feature-table': [
-    {
-      GBFeature_key: 'source',
-      GBFeature_location: '1..759',
-      GBFeature_intervals: [
-        {
-          GBInterval_from: '1',
-          GBInterval_to: '759',
-          GBInterval_accession: 'OQ888174.1'
-        }
-      ],
-      GBFeature_quals: [
-        {
-          GBQualifier_name: 'organism',
-          GBQualifier_value: 'Chlorella vulgaris'
-        },
-        {
-          GBQualifier_name: 'mol_type',
-          GBQualifier_value: 'genomic DNA'
-        },
-        {
-          GBQualifier_name: 'culture_collection',
-          GBQualifier_value: 'UTEX:396'
-        },
-        {
-          GBQualifier_name: 'db_xref',
-          GBQualifier_value: 'taxon:3077'
-        },
-        {
-          GBQualifier_name: 'collection_date',
-          GBQualifier_value: '1953'
-        }
-      ]
-    },
-    {
-      GBFeature_key: 'misc_RNA',
-      GBFeature_location: '<1..>759',
-      GBFeature_intervals: [
-        {
-          GBInterval_from: '1',
-          GBInterval_to: '759',
-          GBInterval_accession: 'OQ888174.1'
-        }
-      ],
-      GBFeature_partial5: '',
-      GBFeature_partial3: '',
-      GBFeature_quals: [
-        {
-          GBQualifier_name: 'note',
-          GBQualifier_value: 'contains small subunit ribosomal RNA, internal transcribed spacer 1, 5.8S ribosomal RNA, internal transcribed spacer 2, and large subunit ribosomal RNA'
-        }
-      ]
-    }
-  ]
+type Nucleotide struct {
+	GBSeqAccessionVersion string `bson:"GBSeq_accession-version"`
+	GBSeqComment          string `bson:"GBSeq_comment"`
+	GBSeqCreateDate       string `bson:"GBSeq_create-date"`
+	GBSeqDefinition       string `bson:"GBSeq_definition"`
+	GBSeqDivision         string `bson:"GBSeq_division"`
+	GBSeqFeatureTable     []struct {
+		GBFeatureIntervals []struct {
+			GBIntervalAccession string `bson:"GBInterval_accession"`
+			GBIntervalFrom      string `bson:"GBInterval_from"`
+			GBIntervalTo        string `bson:"GBInterval_to"`
+		} `bson:"GBFeature_intervals"`
+		GBFeatureKey      string `bson:"GBFeature_key"`
+		GBFeatureLocation string `bson:"GBFeature_location"`
+		GBFeatureQuals    []struct {
+			GBQualifierName  string `bson:"GBQualifier_name"`
+			GBQualifierValue string `bson:"GBQualifier_value"`
+		} `bson:"GBFeature_quals"`
+		GBFeaturePartial3 string `bson:"GBFeature_partial3,omitempty"`
+		GBFeaturePartial5 string `bson:"GBFeature_partial5,omitempty"`
+	} `bson:"GBSeq_feature-table"`
+	GBSeqLength           string   `bson:"GBSeq_length"`
+	GBSeqLocus            string   `bson:"GBSeq_locus"`
+	GBSeqMoltype          string   `bson:"GBSeq_moltype"`
+	GBSeqOrganism         string   `bson:"GBSeq_organism"`
+	GBSeqOtherSeqids      []string `bson:"GBSeq_other-seqids"`
+	GBSeqPrimaryAccession string   `bson:"GBSeq_primary-accession"`
+	GBSeqReferences       []struct {
+		GBReferenceAuthors   []string `bson:"GBReference_authors"`
+		GBReferenceJournal   string   `bson:"GBReference_journal"`
+		GBReferencePosition  string   `bson:"GBReference_position"`
+		GBReferenceReference string   `bson:"GBReference_reference"`
+		GBReferenceTitle     string   `bson:"GBReference_title"`
+	} `bson:"GBSeq_references"`
+	GBSeqSource       string `bson:"GBSeq_source"`
+	GBSeqStrandedness string `bson:"GBSeq_strandedness"`
+	GBSeqTaxonomy     string `bson:"GBSeq_taxonomy"`
+	GBSeqTopology     string `bson:"GBSeq_topology"`
+	GBSeqUpdateDate   string `bson:"GBSeq_update-date"`
 }
 ```
 
-`taxonomy_data`
+
+`organism_data`
+Frammento ottenuto per Chlorella Vulgaris con il comando:
+db.nucleotide_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
 ```json
+type OrganismTable struct {
+	ScientificName string
+	TaxId          string
+	QtyNucleotides int
+	QtyProteins    int
+	QtyProducts    int
+	Genomes        []struct {
+		Link string
+		GBFF bool
+		FNA  bool
+		GFF  bool
+	}
+	Annotations  []string
+	Trascriptome []string
+	SraWgs       int
+	SraTran      int
+}
 ```
+
+
+`taxonomy_data`
+Frammento ottenuto per Chlorella Vulgaris con il comando:
+db.taxonomy_data.findOne({ScientificName:"Chlorella vulgaris"})
+```json
+type Taxonomy struct {
+	TaxID          string `bson:"TaxId"`
+	ScientificName string `bson:"ScientificName"`
+	ParentTaxID    string `bson:"ParentTaxId"`
+	Rank           string `bson:"Rank"`
+	Division       string `bson:"Division"`
+	GeneticCode    struct {
+		GCID   string `bson:"GCId"`
+		GCName string `bson:"GCName"`
+	} `bson:"GeneticCode"`
+	MitoGeneticCode struct {
+		MGCID   string `bson:"MGCId"`
+		MGCName string `bson:"MGCName"`
+	} `bson:"MitoGeneticCode"`
+	Lineage   string `bson:"Lineage"`
+	LineageEx []struct {
+		TaxID          string `bson:"TaxId"`
+		ScientificName string `bson:"ScientificName"`
+		Rank           string `bson:"Rank"`
+	} `bson:"LineageEx"`
+	CreateDate string `bson:"CreateDate"`
+	UpdateDate string `bson:"UpdateDate"`
+	PubDate    string `bson:"PubDate"`
+}
+```
+
 
 `protein_data`
+Frammento ottenuto per Chlorella Vulgaris con il comando:
+db.protein_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
+```json
+
+```
+
+
+`nucleotide_basic`
+Frammento ottenuto per Chlorella Vulgaris con il comando:
+db.protein_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
 ```json
 ```
 
-`nucleotide_basic`
-```json
-```
 
 `table_basic`
 ```json
+type TableBasic struct {
+	ScientificName string `bson:"ScientificName"`
+	TaxId          string `bson:"TaxId"`
+	Nucleotides    []struct {
+		GBSeq_locus string `bson:"GBSeq_locus"`
+	} `bson:"Nucleotides"`
+	Proteins []struct {
+		GBSeq_locus string `bson:"GBSeq_locus"`
+	} `bson:"Proteins"`
+	Products []struct {
+		ProductName string `bson:"ProductName"`
+		QtyProduct  string `bson:"QtyProduct"`
+	} `bson:"Products"`
+	Country []struct {
+		CountryName string `bson:"CountryName"`
+	} `bson:"Country"`
+}
 ```
+
 
 `table_complete`
 ```json
+type TableComplete struct {
+	ScientificName string       `bson:"ScientificName"`
+	TaxId          string       `bson:"TaxId"`
+	Nucleotides    []Nucleotide `bson:"Nucleotides"`
+	Proteins       []Protein    `bson:"Proteins"`
+	Products       []struct {
+		ProductName string `bson:"ProductName"`
+		QtyProduct  string `bson:"QtyProduct"`
+	} `bson:"Products"`
+	Country []struct {
+		CountryName string `bson:"CountryName"`
+	} `bson:"Country"`
+}
 ```
+
 
 `taxonomy_tree`
 ```json
+type TaxonomyTree struct {
+	TaxId          string         `bson:"TaxId"`
+	Rank           string         `bson:"Rank"`
+	ScientificName string         `bson:"ScientificName"`
+	SubClasses     []TaxonomyTree `bson:"SubClasses"`
+}
 ```
+
 
 `markdown`
 ```json
+type Markdown struct {
+	Title    string `bson:"Title"`
+	Versione string `bson:"Versione"`
+	Text     string `bson:"Text"`
+}
 ```
-
 
 
 
