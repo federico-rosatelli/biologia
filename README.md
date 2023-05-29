@@ -182,14 +182,14 @@ qualitativo codificato in ASCII. Un esempio a seguire:
 
 
 
-# Sequenziamento genetico
+# Genomic & Transcriptomic Sequencing
 E' il processo di determinazione dell'ordine dei nucleotidi (Adenina, Citosina, Guanina e Timina) che 
 costituiscono il frammento di DNA in analisi. Le tecniche principali di Squenziamento sono
 Sanger e NGS (Illumina ne é un esempio).
 
 
 
-# Allineamento genetico
+# Sequence Alignment
 E' il processo di confronto di due o più sequenze di DNA o proteine per identificare regioni identiche
 o simili per individuare eventuali relazioni funzionali, strutturali o filogenetiche.
 Le tecniche di allineamento prevedono il confronto globale e locale.
