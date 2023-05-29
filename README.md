@@ -211,10 +211,9 @@ Basic collections (per effettuare query ricorrenti ad alte performance):
 Le seguenti strutture sono reperibili e visibili per inter effettuando una <db=Name>.<collectionName>.find({}) ( o findOne({}) ) da terminale con MongoDB. Le seguenti strutture sono state ottenute con i comandi elencati per ogni collection. Gli esempi sono riferiti alla specie (ScientificName o GBSeq_organism) Chlorella vulgaris, che figura come ID tassonomico su NCBI (txid) come txid3077.
 
 
-`nucleotide_data`
+# `nucleotide_data`
 
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-
 ``db.nucleotide_data.findOne({GBSeq_organism:"Chlorella vulgaris"})``
 ```json
 type Nucleotide struct {
@@ -260,10 +259,9 @@ type Nucleotide struct {
 ```
 
 
-`taxonomy_data`
+# `taxonomy_data`
 
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-
 ``db.taxonomy_data.findOne({ScientificName:"Chlorella vulgaris"})``
 ```json
 type Taxonomy struct {
@@ -293,10 +291,9 @@ type Taxonomy struct {
 ```
 
 
-`protein_data`
+# `protein_data`
 
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-
 ``db.protein_data.findOne({GBSeq_organism:"Chlorella vulgaris"})``
 NB: Struttura identica a nucleotide_data
 ```json
@@ -343,10 +340,9 @@ type Protein struct {
 ```
 
 
-`table_basic`
+# `table_basic`
 
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-
 ``db.table_basic.findOne({ScientificName:"Chlorella vulgaris"})``
 ```json
 type TableBasic struct {
@@ -369,10 +365,9 @@ type TableBasic struct {
 ```
 
 
-`table_complete`
+# `table_complete`
 
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-
 ``db.table_complete.findOne({ScientificName:"Chlorella vulgaris"})``
 ```json
 type TableComplete struct {
@@ -391,10 +386,9 @@ type TableComplete struct {
 ```
 
 
-`taxonomy_tree`
+# `taxonomy_tree`
 
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-
 ``db.taxonomy_tree.findOne({TaxId:"3077"})``
 ```json
 type TaxonomyTree struct {
@@ -409,8 +403,7 @@ type TaxonomyTree struct {
 EXTRA:
 
 
-`markdown`
-
+# `markdown`
 View generica per parsing della Homepage [WIP]
 ```json
 type Markdown struct {
@@ -421,8 +414,7 @@ type Markdown struct {
 ```
 
 
-`table_basic`
-
+# `table_basic`
 Struttura di appoggio per visualizzare i dati di table_basic e table_compete
 ```json
 type OrganismTable struct {
