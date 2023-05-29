@@ -136,23 +136,6 @@ download da parte delle piattaforme dei Riferimenti Ufficiali. Tali metodi sono 
 
     ``http://localhost:5173``
 
- 
- 
- 
-# Le collections trattate:
-Data e Complete collections (contenenti la maggior parte dei dati):
-
-- nucleotide_data       contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla voce Nucleotide;
-- taxonomy_data         contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Taxonomy;
-- protein_data          contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Protein;
-
-Basic collections (per effettuare query ricorrenti ad alte performance):
-
-- nucleotide_basic      contiene i dati, allegeriti soltanto a nome e NCBI_ID, per questioni di performance quando si effettuano query di conteggio;
-- table_basic           contiene la struttura di una tabella vuota, utile per display su Frontend;
-- table_complete        contiene la struttura di una tabella popolata, utile per display su Frontend;
-- taxonomy_tree         contiene i link di Lineage per singola specie, generata su base di taxonomy_data con taxTreeMaker su BioParse.py;
-- markdown              contiene questo Readme.md parsato in collection. Pensato per display sul Frontend.
 
 
 # Dati esterni al DB:
@@ -211,12 +194,25 @@ Un'applicazione algoritmica di allineamento globale é data da Needleman-Wunsch.
 
 
 
-# Schema delle collections:
-Le seguenti strutture sono reperibili e visibili per inter effettuando una <db=Name>.<collectionName>.find({}) ( o findOne({}) ) da terminale con MongoDB. Le seguenti strutture sono state ottenute con i comandi elencati per ogni collection:
+# Le collections trattate: schema e specifiche
+Data e Complete collections (contenenti la maggior parte dei dati):
+
+- nucleotide_data       contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla voce Nucleotide;
+- taxonomy_data         contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Taxonomy;
+- protein_data          contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Protein;
+
+Basic collections (per effettuare query ricorrenti ad alte performance):
+  
+- table_basic           contiene i dati, allegeriti soltanto a nome e NCBI_ID, per questioni di performance quando si effettuano query di conteggio;
+- table_complete        contiene i dati per questioni di performance quando si effettuano query di conteggio;
+- taxonomy_tree         contiene i link di Lineage per singola specie, generata su base di taxonomy_data con taxTreeMaker su BioParse.py;
+- markdown              contiene questo Readme.md parsato in collection. Pensato per display sul Frontend.
+
+Le seguenti strutture sono reperibili e visibili per inter effettuando una <db=Name>.<collectionName>.find({}) ( o findOne({}) ) da terminale con MongoDB. Le seguenti strutture sono state ottenute con i comandi elencati per ogni collection. Gli esempi sono riferiti alla specie (ScientificName o GBSeq_organism) Chlorella vulgaris, che figura come ID tassonomico su NCBI (txid) come txid3077.
 
 
 `nucleotide_data`
-Frammento ottenuto per Chlorella Vulgaris con il comando:
+View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
 db.nucleotide_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
 ```json
 type Nucleotide struct {
@@ -262,32 +258,8 @@ type Nucleotide struct {
 ```
 
 
-`organism_data`
-Frammento ottenuto per Chlorella Vulgaris con il comando:
-db.nucleotide_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
-```json
-type OrganismTable struct {
-	ScientificName string
-	TaxId          string
-	QtyNucleotides int
-	QtyProteins    int
-	QtyProducts    int
-	Genomes        []struct {
-		Link string
-		GBFF bool
-		FNA  bool
-		GFF  bool
-	}
-	Annotations  []string
-	Trascriptome []string
-	SraWgs       int
-	SraTran      int
-}
-```
-
-
 `taxonomy_data`
-Frammento ottenuto per Chlorella Vulgaris con il comando:
+View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
 db.taxonomy_data.findOne({ScientificName:"Chlorella vulgaris"})
 ```json
 type Taxonomy struct {
@@ -318,21 +290,56 @@ type Taxonomy struct {
 
 
 `protein_data`
-Frammento ottenuto per Chlorella Vulgaris con il comando:
+View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
 db.protein_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
+NB: Struttura identica a nucleotide_data
 ```json
-
-```
-
-
-`nucleotide_basic`
-Frammento ottenuto per Chlorella Vulgaris con il comando:
-db.protein_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
-```json
+type Protein struct {
+	GBSeqAccessionVersion string `bson:"GBSeq_accession-version"`
+	GBSeqComment          string `bson:"GBSeq_comment"`
+	GBSeqCreateDate       string `bson:"GBSeq_create-date"`
+	GBSeqDefinition       string `bson:"GBSeq_definition"`
+	GBSeqDivision         string `bson:"GBSeq_division"`
+	GBSeqFeatureTable     []struct {
+		GBFeatureIntervals []struct {
+			GBIntervalAccession string `bson:"GBInterval_accession"`
+			GBIntervalFrom      string `bson:"GBInterval_from"`
+			GBIntervalTo        string `bson:"GBInterval_to"`
+		} `bson:"GBFeature_intervals"`
+		GBFeatureKey      string `bson:"GBFeature_key"`
+		GBFeatureLocation string `bson:"GBFeature_location"`
+		GBFeatureQuals    []struct {
+			GBQualifierName  string `bson:"GBQualifier_name"`
+			GBQualifierValue string `bson:"GBQualifier_value"`
+		} `bson:"GBFeature_quals"`
+		GBFeaturePartial3 string `bson:"GBFeature_partial3,omitempty"`
+		GBFeaturePartial5 string `bson:"GBFeature_partial5,omitempty"`
+	} `bson:"GBSeq_feature-table"`
+	GBSeqLength           string   `bson:"GBSeq_length"`
+	GBSeqLocus            string   `bson:"GBSeq_locus"`
+	GBSeqMoltype          string   `bson:"GBSeq_moltype"`
+	GBSeqOrganism         string   `bson:"GBSeq_organism"`
+	GBSeqOtherSeqids      []string `bson:"GBSeq_other-seqids"`
+	GBSeqPrimaryAccession string   `bson:"GBSeq_primary-accession"`
+	GBSeqReferences       []struct {
+		GBReferenceAuthors   []string `bson:"GBReference_authors"`
+		GBReferenceJournal   string   `bson:"GBReference_journal"`
+		GBReferencePosition  string   `bson:"GBReference_position"`
+		GBReferenceReference string   `bson:"GBReference_reference"`
+		GBReferenceTitle     string   `bson:"GBReference_title"`
+	} `bson:"GBSeq_references"`
+	GBSeqSource       string `bson:"GBSeq_source"`
+	GBSeqStrandedness string `bson:"GBSeq_strandedness"`
+	GBSeqTaxonomy     string `bson:"GBSeq_taxonomy"`
+	GBSeqTopology     string `bson:"GBSeq_topology"`
+	GBSeqUpdateDate   string `bson:"GBSeq_update-date"`
+}
 ```
 
 
 `table_basic`
+View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
+db.table_basic.findOne({ScientificName:"Chlorella vulgaris"})
 ```json
 type TableBasic struct {
 	ScientificName string `bson:"ScientificName"`
@@ -355,6 +362,8 @@ type TableBasic struct {
 
 
 `table_complete`
+View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
+db.table_complete.findOne({ScientificName:"Chlorella vulgaris"})
 ```json
 type TableComplete struct {
 	ScientificName string       `bson:"ScientificName"`
@@ -373,6 +382,8 @@ type TableComplete struct {
 
 
 `taxonomy_tree`
+View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
+db.taxonomy_tree.findOne({TaxId:"3077"})
 ```json
 type TaxonomyTree struct {
 	TaxId          string         `bson:"TaxId"`
@@ -383,7 +394,11 @@ type TaxonomyTree struct {
 ```
 
 
+EXTRA:
+
+
 `markdown`
+View generica per parsing della Homepage [WIP]
 ```json
 type Markdown struct {
 	Title    string `bson:"Title"`
@@ -393,7 +408,27 @@ type Markdown struct {
 ```
 
 
-
+`table_basic`
+Struttura di appoggio per visualizzare i dati di table_basic e table_compete
+```json
+type OrganismTable struct {
+	ScientificName string
+	TaxId          string
+	QtyNucleotides int
+	QtyProteins    int
+	QtyProducts    int
+	Genomes        []struct {
+		Link string
+		GBFF bool
+		FNA  bool
+		GFF  bool
+	}
+	Annotations  []string
+	Trascriptome []string
+	SraWgs       int
+	SraTran      int
+}
+```
 
 
 
