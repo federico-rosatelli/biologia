@@ -140,11 +140,19 @@ download da parte delle piattaforme dei Riferimenti Ufficiali. Tali metodi sono 
  
  
 # Le collections trattate:
-- nucleotide_data    contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla voce Nucleotide;
-- nucleotide_basic   contiene i dati, allegeriti soltanto a nome e NCBI_ID, per questioni di performance quando si effettuano query di conteggio;
-- taxonomy_data      contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Taxonomy;
-- taxonomy_tree      contiene i link di Lineage per singola specie.
+Data e Complete collections (contenenti la maggior parte dei dati):
 
+- nucleotide_data       contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla voce Nucleotide;
+- taxonomy_data         contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Taxonomy;
+- protein_data          contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Protein;
+
+Basic collections (per effettuare query ricorrenti ad alte performance):
+
+- nucleotide_basic      contiene i dati, allegeriti soltanto a nome e NCBI_ID, per questioni di performance quando si effettuano query di conteggio;
+- table_basic           contiene la struttura di una tabella vuota, utile per display su Frontend;
+- table_complete        contiene la struttura di una tabella popolata, utile per display su Frontend;
+- taxonomy_tree         contiene i link di Lineage per singola specie, generata su base di taxonomy_data con taxTreeMaker su BioParse.py;
+- markdown              contiene questo Readme.md parsato in collection. Pensato per display sul Frontend.
 
 
 # Dati esterni al DB:
