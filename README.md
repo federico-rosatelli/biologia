@@ -197,22 +197,24 @@ Un'applicazione algoritmica di allineamento globale é data da Needleman-Wunsch.
 # Le collections trattate: schema e specifiche
 Data e Complete collections (contenenti la maggior parte dei dati):
 
-- nucleotide_data       contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla voce Nucleotide;
-- taxonomy_data         contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Taxonomy;
-- protein_data          contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Protein;
+- `nucleotide_data`       contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla voce Nucleotide;
+- `taxonomy_data`         contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Taxonomy;
+- `protein_data`          contiene tutti i dati delle microalghe che sono riscontrabili su NCBI alla sezione Protein;
 
 Basic collections (per effettuare query ricorrenti ad alte performance):
   
-- table_basic           contiene i dati, allegeriti soltanto a nome e NCBI_ID, per questioni di performance quando si effettuano query di conteggio;
-- table_complete        contiene i dati per questioni di performance quando si effettuano query di conteggio;
-- taxonomy_tree         contiene i link di Lineage per singola specie, generata su base di taxonomy_data con taxTreeMaker su BioParse.py;
-- markdown              contiene questo Readme.md parsato in collection. Pensato per display sul Frontend.
+- `table_basic`           contiene i dati, allegeriti soltanto a nome e NCBI_ID, per questioni di performance quando si effettuano query di conteggio;
+- `table_complete`        contiene i dati per questioni di performance quando si effettuano query di conteggio;
+- `taxonomy_tree`         contiene i link di Lineage per singola specie, generata su base di taxonomy_data con taxTreeMaker su BioParse.py;
+- `markdown`              contiene questo Readme.md parsato in collection. Pensato per display sul Frontend.
 
 Le seguenti strutture sono reperibili e visibili per inter effettuando una <db=Name>.<collectionName>.find({}) ( o findOne({}) ) da terminale con MongoDB. Le seguenti strutture sono state ottenute con i comandi elencati per ogni collection. Gli esempi sono riferiti alla specie (ScientificName o GBSeq_organism) Chlorella vulgaris, che figura come ID tassonomico su NCBI (txid) come txid3077.
 
 
 `nucleotide_data`
+
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
+
 ``db.nucleotide_data.findOne({GBSeq_organism:"Chlorella vulgaris"})``
 ```json
 type Nucleotide struct {
@@ -259,7 +261,9 @@ type Nucleotide struct {
 
 
 `taxonomy_data`
+
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
+
 ``db.taxonomy_data.findOne({ScientificName:"Chlorella vulgaris"})``
 ```json
 type Taxonomy struct {
@@ -290,7 +294,9 @@ type Taxonomy struct {
 
 
 `protein_data`
+
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
+
 ``db.protein_data.findOne({GBSeq_organism:"Chlorella vulgaris"})``
 NB: Struttura identica a nucleotide_data
 ```json
@@ -338,7 +344,9 @@ type Protein struct {
 
 
 `table_basic`
+
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
+
 ``db.table_basic.findOne({ScientificName:"Chlorella vulgaris"})``
 ```json
 type TableBasic struct {
@@ -362,7 +370,9 @@ type TableBasic struct {
 
 
 `table_complete`
+
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
+
 ``db.table_complete.findOne({ScientificName:"Chlorella vulgaris"})``
 ```json
 type TableComplete struct {
@@ -382,7 +392,9 @@ type TableComplete struct {
 
 
 `taxonomy_tree`
+
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
+
 ``db.taxonomy_tree.findOne({TaxId:"3077"})``
 ```json
 type TaxonomyTree struct {
@@ -398,6 +410,7 @@ EXTRA:
 
 
 `markdown`
+
 View generica per parsing della Homepage [WIP]
 ```json
 type Markdown struct {
@@ -409,6 +422,7 @@ type Markdown struct {
 
 
 `table_basic`
+
 Struttura di appoggio per visualizzare i dati di table_basic e table_compete
 ```json
 type OrganismTable struct {
