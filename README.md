@@ -213,7 +213,7 @@ Le seguenti strutture sono reperibili e visibili per inter effettuando una <db=N
 
 `nucleotide_data`
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-db.nucleotide_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
+``db.nucleotide_data.findOne({GBSeq_organism:"Chlorella vulgaris"})``
 ```json
 type Nucleotide struct {
 	GBSeqAccessionVersion string `bson:"GBSeq_accession-version"`
@@ -260,7 +260,7 @@ type Nucleotide struct {
 
 `taxonomy_data`
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-db.taxonomy_data.findOne({ScientificName:"Chlorella vulgaris"})
+``db.taxonomy_data.findOne({ScientificName:"Chlorella vulgaris"})``
 ```json
 type Taxonomy struct {
 	TaxID          string `bson:"TaxId"`
@@ -291,7 +291,7 @@ type Taxonomy struct {
 
 `protein_data`
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-db.protein_data.findOne({GBSeq_organism:"Chlorella vulgaris"})
+``db.protein_data.findOne({GBSeq_organism:"Chlorella vulgaris"})``
 NB: Struttura identica a nucleotide_data
 ```json
 type Protein struct {
@@ -339,7 +339,7 @@ type Protein struct {
 
 `table_basic`
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-db.table_basic.findOne({ScientificName:"Chlorella vulgaris"})
+``db.table_basic.findOne({ScientificName:"Chlorella vulgaris"})``
 ```json
 type TableBasic struct {
 	ScientificName string `bson:"ScientificName"`
@@ -363,7 +363,7 @@ type TableBasic struct {
 
 `table_complete`
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-db.table_complete.findOne({ScientificName:"Chlorella vulgaris"})
+``db.table_complete.findOne({ScientificName:"Chlorella vulgaris"})``
 ```json
 type TableComplete struct {
 	ScientificName string       `bson:"ScientificName"`
@@ -383,7 +383,7 @@ type TableComplete struct {
 
 `taxonomy_tree`
 View sulla struttura ottenuta con comando del tipo (i.e. per Chlorella vulgaris):
-db.taxonomy_tree.findOne({TaxId:"3077"})
+``db.taxonomy_tree.findOne({TaxId:"3077"})``
 ```json
 type TaxonomyTree struct {
 	TaxId          string         `bson:"TaxId"`
