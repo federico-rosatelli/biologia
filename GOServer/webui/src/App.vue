@@ -49,6 +49,12 @@ export default{
                         Search
 					</RouterLink>
                 </li>
+
+                <li>
+                    <RouterLink to="/sra">
+                        SRA
+					</RouterLink>
+                </li>
             </ul>
         </nav>
     </header>
