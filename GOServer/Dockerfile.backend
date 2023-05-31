@@ -21,5 +21,8 @@ WORKDIR /app/
 ADD conf ./conf
 COPY --from=builder /app/webapi ./
 
+ADD MongoDumpAll /MongoDumpAll
+RUN mongorestore --db=Biologia /MongoDumpAll/Biologia
+
 ### Executable command
 CMD ["/app/webapi"]

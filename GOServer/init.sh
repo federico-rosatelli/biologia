@@ -2,7 +2,7 @@
 
 if [[ ! -d ./temp/ ]]
 then
-    echo "folder already exists"
-else
-    python3 ./download.py
+    pip3 install gdown
+    gdown 1NFQqeo4af6It3ieXOhe1EV5hxh7T3Alp
+    unzip MongoDumpAll.zip
 fi
