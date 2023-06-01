@@ -8,15 +8,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
+    command: >
+      sh "./mongorestore.sh"
     ports:
     - "3000:3000"
     links:
     - mongo
+  #mongo
   mongo:
     container_name: mongo
     image: mongo
     ports:
     - "27018:27017"
+    volumes:
+    - type: bind
+      source: ./mongorestore.sh
+      target: /docker-entrypoint-initdb.d/mongorestore.sh
   
   # frontend
   bio-frontend:
