@@ -55,6 +55,13 @@ export default{
                         SRA
 					</RouterLink>
                 </li>
+
+                <li>
+                    <RouterLink to="/analysis">
+                        Analysis
+					</RouterLink>
+                </li>
+
             </ul>
         </nav>
     </header>
