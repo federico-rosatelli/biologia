@@ -72,6 +72,7 @@ datasTaxon = [(2961,"https://www.ncbi.nlm.nih.gov/genome/?term=txid2961"),
 ########################################################################################
 # Methods
 ########################################################################################
+collection_SRA_data = db["sequences_data_nogen"]
 
 def SRAFind(name:str):                   #case 15
     '''Function that merge data found on NCBI between Genome and Nucleotide section and
@@ -88,12 +89,14 @@ def SRAFind(name:str):                   #case 15
     print(f"Stiamo facendo {name}")
     for child in root:
         dict_seq = funzioneRicorsiva(child)
-        seq_list.append(dict_seq)
-    #collection_SRA_data.insert_many(seq_list)
-    with open('provariscorsiva.json', "w") as jswr:
-        json.dump(seq_list, jswr, indent=4)        
-    print(len(seq_list))
-    return
+        if (len(dict_seq) != 0):
+            seq_list.append(dict_seq)
+    if (len(seq_list) != 0):
+        collection_SRA_data.insert_many(seq_list)
+    # with open('provariscorsiva.json', "w") as jswr:
+    #     json.dump(seq_list, jswr, indent=4)        
+    # print(len(seq_list))
+    # return
 
 
 def funzioneRicorsiva(bla) -> dict:
@@ -115,6 +118,7 @@ def funzioneRicorsiva(bla) -> dict:
 ########################################################################################
 # Execution code unit
 ########################################################################################
+
 
 # print("Bomba in buca!")
 # count = 0
@@ -154,25 +158,52 @@ def csvWriteProf():
     ]
 
     all_data = collection_SRA_data.aggregate(aggregate)
+    taxon_collection = db['taxonomy_data']
     datas = []
     for data in all_data:
+        temp = taxon_collection.find_one({'TaxId':data['TaxId']},{"ScientificName":1,"TaxId":1,"_id":0})
+        if temp == None:
+            continue
+        data['ScientificName'] = temp['ScientificName']
         links = []
         for key in data["LinkSRA"]:
-            if "url" in data["LinkSRA"][key]["Alternatives"]:
+            if "Alternatives" in data["LinkSRA"][key] and "url" in data["LinkSRA"][key]["Alternatives"]:
                 links.append(data["LinkSRA"][key]["Alternatives"]["url"])
         data["LinkSRA"] = ' '.join(links)
         datas.append(data)
-    with open('bioprojects.csv',"w") as csvW:
+
+    with open('bioprojectsnogenome.csv',"w") as csvW:
         writer = csv.writer(csvW,delimiter="\t")
         for row in datas:
             if "Abstract" in row:
-                rws = [row["TaxId"],row["BioProject"] or '', row["BioSample"] or '', row["ExperimentCode"] or '', row["SRR"] or '', row["LinkSRA"] or '', row["Abstract"] or '',]
+                rws = [row["TaxId"], row['ScientificName'] or '', row["BioProject"] or '', row["BioSample"] or '', row["ExperimentCode"] or '', row["SRR"] or '', row["LinkSRA"] or '', row["Abstract"] or '',]
             else:
-                rws = [row["TaxId"],row["BioProject"] or '', row["BioSample"] or '', row["ExperimentCode"] or '', row["SRR"] or '', row["LinkSRA"] or '', "" or '']
+                rws = [row["TaxId"], row['ScientificName'], row["BioProject"] or '', row["BioSample"] or '', row["ExperimentCode"] or '', row["SRR"] or '', row["LinkSRA"] or '', "" or '']
             writer.writerow(rws)
     # with open('provaaggr.json', "w") as jswr:
     #     json.dump(datas, jswr, indent=4)    
     
+def findTaxNoGenomes():
+    taxon_collection = db['taxonomy_data']
+    dataRank = taxon_collection.find({},{"ScientificName":1,"TaxId":1,"_id":0})
+    datas = []
+    for data in dataRank:
+        if not int(data['TaxId']) in [item[0] for item in datasTaxon]:
+            datas.append(data)
+    
+    with open('SpeciesWithoutGenomes.csv',"w") as csvW:
+        writer = csv.writer(csvW,delimiter="\t")
+        for row in datas:
+            writer.writerow(row.values())
+
+def bioProjectsNoGenome():
+    taxon_collection = db['taxonomy_data']
+    dataRank = taxon_collection.find({},{"ScientificName":1,"TaxId":1,"_id":0})
+    for data in dataRank:
+        if not int(data['TaxId']) in [item[0] for item in datasTaxon]:
+            SRAFind(f"txid{data['TaxId']}")
+
+# bioProjectsNoGenome()
 
 #csvWriteProf()
 #SRAFind("txid35677")
