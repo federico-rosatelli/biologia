@@ -33,8 +33,9 @@ export default {
         },
     },
     mounted() {
-        if (this.$route.params.taxid != null) {
-            this.search = this.$route.params.taxid;
+        let taxId = this.$route.params.taxid
+        if (taxId != null && taxId != "") {
+            this.search = taxId;
             this.type = 'id'
             this.searchTax()
         }
@@ -43,9 +44,12 @@ export default {
         this.$watch(
             () => this.$route.params,
             (toParams) => {
-                this.search = toParams.taxid;
-                this.type = 'id'
-                this.searchTax()
+                let taxId = toParams.taxid
+                if (taxId != null && taxId != "") {
+                    this.search = toParams.taxid;
+                    this.type = 'id'
+                    this.searchTax()
+                }
             })
     },
 }
