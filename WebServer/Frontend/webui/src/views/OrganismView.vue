@@ -3,10 +3,10 @@ import $ from 'jquery'
 export default {
 	data: function() {
 		return {
+            taxId: null,
+            typeof: null,
 			errormsg: null,
 			loading: false,
-            search: null,
-            type: null,
             response: [],
             nucleo:null,
             dataArray: [],
@@ -17,16 +17,34 @@ export default {
 	},
     
 	methods: {
+        async refresh() {
+            try{
+                let response = await this.$axios.get(`/organism/${this.taxId}/${this.typeof}`);
+                this.response=response.data
+            } catch(e){
+                this.errormsg = e.response.data
+            }
+            if (!this.errormsg){
+                try{
+                    let taxonomy = await this.$axios.get(`/taxonomy?search=${this.response.ScientificName}`);
+                    this.taxonomy=taxonomy.data
+                } catch(e){
+                    this.errormsg = e.response.data
+                }
+            }
+
+            this.dataArray = this.typeof == "proteins" ? this.response.Proteins : this.response.Nucleotides
+            let datalink = this.typeof == 'nucleotides' ? '/proteins': '/nucleotides'
+            this.otherRouterLink = '/organism/' + this.taxId + datalink
+        },
         async findLocus(locus){
             this.loading = true
             if (this.nucleo){
                 this.close(this.nucleo.GBSeqLocus)
             }
             try{
-                let taxId = this.$route.params.taxid;
-                let typof = this.$route.path.split("/").pop();
-                let nucleo = await this.$axios.get(`organism/${taxId}/${typof}/${locus}`);
-                this.nucleo= typof == "proteins" ? nucleo.data.Proteins[0] : nucleo.data.Nucleotides[0]
+                let nucleo = await this.$axios.get(`organism/${this.taxId}/${this.typeof}/${locus}`);
+                this.nucleo = this.typeof == "proteins" ? nucleo.data.Proteins[0] : nucleo.data.Nucleotides[0]
             } catch(e){
                 this.errormsg = e.response.data
             }
@@ -44,28 +62,19 @@ export default {
             setTimeout(() => popup.style.visibility = "hidden" , 1200);
         }
     },
-    async mounted(){
-        let taxId = this.$route.params.taxid;
-        let typof = this.$route.path.split("/").pop();
-        try{
-            let response = await this.$axios.get(`/organism/${taxId}/${typof}`);
-            this.response=response.data
-        } catch(e){
-            this.errormsg = e.response.data
-        }
-        if (!this.errormsg){
-            try{
-                let taxonomy = await this.$axios.get(`/taxonomy?search=${this.response.ScientificName}`);
-                this.taxonomy=taxonomy.data
-            } catch(e){
-                this.errormsg = e.response.data
-            }
-        }
-
-        this.dataArray = typof == "proteins" ? this.response.Proteins : this.response.Nucleotides
-        let datalink = this.$route.path.split('/').pop() == 'nucleotides' ? '/proteins': '/nucleotides'
-        this.otherRouterLink = '/organism/'+this.$route.params.taxid+datalink
-
+    mounted(){
+        this.taxId = this.$route.params.taxid;
+        this.typeof = this.$route.path.split("/").pop();
+        this.refresh()
+    },
+    created(){
+        this.$watch(
+            () => this.$route.params,
+            (toParams) => {
+                this.taxId = this.$route.params.taxid;
+                this.typeof = this.$route.path.split("/").pop();
+                this.refresh()
+            })
     },
 }
 
@@ -81,7 +90,7 @@ export default {
         of {{ this.response.ScientificName }}
     </div>
     <div class="otherLink">
-        Looking for {{this.$route.path.split('/').pop() == 'nucleotides' ? 'proteins': 'nucleotides'}} ? Go to <a v-if="otherRouterLink" :href="otherRouterLink">{{ this.response.ScientificName }} {{this.$route.path.split('/').pop() == 'nucleotides' ? '/proteins': '/nucleotides'}} </a>
+        Looking for {{this.$route.path.split('/').pop() == 'nucleotides' ? 'proteins': 'nucleotides'}} ? Go to <RouterLink v-if="otherRouterLink" :to="otherRouterLink">{{ this.response.ScientificName }} {{this.$route.path.split('/').pop() == 'nucleotides' ? '/proteins': '/nucleotides'}} </RouterLink>
     </div>
     <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
     <div v-if="this.dataArray">
@@ -134,7 +143,8 @@ export default {
                         <h3>
                             -----------------------------
                         </h3>
-                        <a :href="'/taxonomy/'+lin.TaxID">
+
+                        <RouterLink :to="'/taxonomy/'+lin.TaxID">
                             <h3>
                                 Taxonomy Id: {{ lin.TaxID }}
                             </h3>
@@ -144,7 +154,7 @@ export default {
                             <h3>
                                 Rank: {{ lin.Rank }}
                             </h3>
-                        </a>
+                        </RouterLink>
                         <h3>
                             -----------------------------
                         </h3>

@@ -1,7 +1,9 @@
-<script>
+<script setup>
 import { RouterLink, RouterView } from 'vue-router'
+</script>
+<script>
 export default{
-    data:()=>{
+    data: function () {
         return {
             token: null,
             some_data: null,
@@ -22,7 +24,6 @@ export default{
 
 }
 </script>
-
 <template>
     <header>
         <hgroup>
@@ -57,7 +58,7 @@ export default{
                 </li>
 
                 <li>
-                    <RouterLink to="/analysis" >
+                    <RouterLink to="/analysis">
                         Analysis
 					</RouterLink>
                 </li>

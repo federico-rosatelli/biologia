@@ -44,9 +44,9 @@ export default {
                     <span v-for="run in experiment.Runs" :key="run.RunId">
                         <span v-for="rundata in run.RunDataId" :key="rundata.RunDataIdValue">
                             concorrenza con {{ rundata.ConcorrenzaCon }}
-                            <a :href="'/sra/'+ rundata.RunDataIdValue"> <!-- non so quale sarà l'url preciso-->
+                            <RouterLink :to="'/sra/'+ rundata.RunDataIdValue"> <!-- non so quale sarà l'url preciso-->
                                 {{ rundata.RunDataIdValue }}
-                            </a>
+                            </RouterLink>
 
                         </span>
 

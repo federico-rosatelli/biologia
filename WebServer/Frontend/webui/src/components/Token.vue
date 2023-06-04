@@ -10,7 +10,7 @@ export default {
             <h1>Token success {{token_value}}</h1>
 		</div>
 	</div>
-	<div v-if="!token_value"><slot /></div>
+	<div v-if="!token_value"><slot/></div>
 </template>
 
 <style></style>
