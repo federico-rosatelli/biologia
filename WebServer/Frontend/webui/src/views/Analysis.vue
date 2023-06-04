@@ -57,7 +57,7 @@ export default {
                         <h2>Images:</h2>
                             <ul>
                                 <div class="image">
-                                    <img :src="'/public/images/analysis' + organism.TaxId">
+                                    <img :src="'/images/analysis' + organism.TaxId">
                                 </div>
                             </ul>
                 </li>

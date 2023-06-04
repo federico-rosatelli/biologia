@@ -17,10 +17,10 @@ section, article, header, footer, nav, aside, hgroup { display:block; }
 
 @font-face {
 	font-family: 'SansationRegular';
-	src: url('/public/css/Sansation_Regular.eot?'),
-		url('/public/css/Sansation_Regular.woff') format('woff'), 
-		url('/public/css/Sansation_Regular.ttf') format('truetype'), 
-		url('/public/css/Sansation_Regular.svg#webfontLr2B6u5e') format('svg');
+	src: url('/css/Sansation_Regular.eot?'),
+		url('/css/Sansation_Regular.woff') format('woff'), 
+		url('/css/Sansation_Regular.ttf') format('truetype'), 
+		url('/css/Sansation_Regular.svg#webfontLr2B6u5e') format('svg');
 		
 	font-weight: normal;
 	font-style: normal;
@@ -28,10 +28,10 @@ section, article, header, footer, nav, aside, hgroup { display:block; }
 
 @font-face {
 	font-family: 'SansationBold';
-	src: url('/public/css/Sansation_Bold.eot?'),
-		url('/public/css/Sansation_Bold.woff') format('woff'), 
-		url('/public/css/Sansation_Bold.ttf') format('truetype'), 
-		url('/public/css/Sansation_Bold.svg#webfont8dfDl0fr') format('svg');
+	src: url('/css/Sansation_Bold.eot?'),
+		url('/css/Sansation_Bold.woff') format('woff'), 
+		url('/css/Sansation_Bold.ttf') format('truetype'), 
+		url('/css/Sansation_Bold.svg#webfont8dfDl0fr') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -44,7 +44,7 @@ section, article, header, footer, nav, aside, hgroup { display:block; }
 
 body {  
 	font-family: 'SansationRegular', Arial, Helvetica, sans-serif; font-size:14px; color:#fff; line-height:150%; text-align:left;
-	background-image: url(/public/images/Danio.jpg);
+	background-image: url(/images/Danio.jpg);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;

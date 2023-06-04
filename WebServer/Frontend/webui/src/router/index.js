@@ -15,7 +15,7 @@ const router = createRouter({
 		{path: '/organism/:taxid/proteins', component: OrganismView},
 		{path: '/team', 
 		beforeEnter(to, from, next) {
-			window.location.replace("https://www.youtube.com/watch?v=rcVb6l4TpHw")
+			window.location.replace("https://www.youtube.com/watch?v=uDLVHywMGfE")
 		}
 	}
 
