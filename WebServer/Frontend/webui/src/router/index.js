@@ -5,7 +5,7 @@ import Taxonomy from '../views/TaxonomyView.vue'
 import OrganismView from '../views/OrganismView.vue'
 
 const router = createRouter({
-	history: createWebHistory(),
+	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
 		{path: '/', component: HomeView},
 		{path: '/taxonomy', component: Taxonomy},

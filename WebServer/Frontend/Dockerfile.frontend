@@ -6,7 +6,6 @@ COPY webui webui
 
 ### Build Vue.js into plain HTML/CSS/JS
 WORKDIR /app/webui
-RUN npm install
 RUN npm run build-prod
 
 

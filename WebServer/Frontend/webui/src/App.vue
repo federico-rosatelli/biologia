@@ -57,7 +57,7 @@ export default{
                 </li>
 
                 <li>
-                    <RouterLink to="/analysis">
+                    <RouterLink to="/analysis" >
                         Analysis
 					</RouterLink>
                 </li>

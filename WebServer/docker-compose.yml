@@ -1,36 +1,32 @@
-version: "3"
+version: "3.9"
 services:
-
   # backend 
   bio-backend:
     container_name: bio-backend
     restart: always
     build:
-      context: .
+      context: ./Backend
       dockerfile: Dockerfile.backend
-    command: >
-      sh "./mongorestore.sh"
     ports:
     - "3000:3000"
-    links:
-    - mongo
-  #mongo
+    depends_on: 
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/
+  # DB
   mongo:
     container_name: mongo
     image: mongo
     ports:
-    - "27018:27017"
+    - "27017:27017"
     volumes:
-    - type: bind
-      source: ./mongorestore.sh
-      target: /docker-entrypoint-initdb.d/mongorestore.sh
-  
+      - './mongodata:/data/db'
   # frontend
   bio-frontend:
     container_name: bio-frontend
     restart: always
     build:
-      context: .
+      context: ./Frontend
       dockerfile: Dockerfile.frontend
     ports:
     - "80:80"

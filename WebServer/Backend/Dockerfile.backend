@@ -21,7 +21,5 @@ WORKDIR /app/
 ADD conf ./conf
 COPY --from=builder /app/webapi ./
 
-ADD MongoDumpAll ./MongoDumpAll
-
 ### Executable command
 CMD ["/app/webapi"]

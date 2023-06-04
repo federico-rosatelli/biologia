@@ -40,7 +40,11 @@ func run() error {
 	var db database.AppDatabase
 
 	logger.Println("Initializing Database Support")
-	dbconn := options.Client().ApplyURI("mongodb://localhost:27017/")
+	mongo_url, found := os.LookupEnv("MONGO_URL")
+	if !(found) {
+		mongo_url = "mongodb://localhost:27017"
+	}
+	dbconn := options.Client().ApplyURI(mongo_url)
 	client, err := mongo.Connect(context.TODO(), dbconn)
 	if err != nil {
 		logger.WithError(err).Error("error connetting to mongo DB")
