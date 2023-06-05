@@ -70,9 +70,9 @@ export default {
 <br/>
   <LoadingSpinner :loading="this.loading"/>
   <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
-  <div v-if="response.length > 0">
+  <div v-if="genomes.length > 0">
     <div>
-      <h1>{{ response.length }} Results</h1>
+      <h1>{{ genomes.length }} Results</h1>
     </div>
     <table id="table">
       <thead>

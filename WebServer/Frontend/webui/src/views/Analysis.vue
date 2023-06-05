@@ -15,7 +15,7 @@ export default {
         async mounted(){
             try{
                 let response = await this.$axios.get(`/analysis`);
-                this.organismsWG = response.data
+                this.organisms = response.data
             } catch(e){
                 this.errormsg = e.response.data
             }
@@ -32,14 +32,14 @@ export default {
 
     <LoadingSpinner :loading="this.loading"/>
     <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
-    <div v-if="response.length > 0">
+    <div v-if="organisms.length > 0">
         <div>
-            <h1>{{ response.length }} Results</h1>
+            <h1>{{ organisms.length }} Results</h1>
         </div>
 
         <div>
             <ul>
-                <li v-for="organism in this.organism" :key="organism.TaxId">
+                <li v-for="organism in this.organisms" :key="organism.TaxId">
 
                     <strong>{{ organism.ScientificName }}</strong>
 
@@ -57,7 +57,7 @@ export default {
                         <h2>Images:</h2>
                             <ul>
                                 <div class="image">
-                                    <img :src="'/images/analysis' + organism.TaxId">
+                                    <img :src="'/images/analysis/' + organism.TaxId">
                                 </div>
                             </ul>
                 </li>
