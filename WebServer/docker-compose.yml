@@ -30,6 +30,8 @@ services:
       dockerfile: Dockerfile.frontend
     ports:
     - "80:80"
+    volumes:
+    - ./Frontend/default.conf:/etc/nginx/conf.d/default.conf
 
 # services:
 #   webapp:

@@ -1,13 +1,14 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Taxonomy from '../views/TaxonomyView.vue'
 import SearchTable from '../views/SearchTable.vue'
 import OrganismView from '../views/OrganismView.vue'
 import SRAView from '../views/Sra.vue'
 import AnalysisView from '../views/Analysis.vue'
+import NotFoundView from '../views/NotFoundView.vue'
 
 const router = createRouter({
-	history: createWebHashHistory(import.meta.env.BASE_URL),
+	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
 		{ path: '/', component: HomeView },
 		{ path: '/taxonomy', component: Taxonomy },
@@ -18,6 +19,7 @@ const router = createRouter({
 		{ path: '/sra', component: SRAView},
 		{ path: '/analysis', component: AnalysisView},
 		{ path: '/team', beforeEnter(to, from, next) {window.location.replace("https://www.youtube.com/watch?v=uDLVHywMGfE")}},
+		{ path: '/:pathMatch(.*)', component: NotFoundView },
 	]
 })
 
