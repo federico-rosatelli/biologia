@@ -130,23 +130,23 @@ def funzioneRicorsiva(bla) -> dict:
 
 #SRAFind("txid3077")
 
-with open('WebServer/visual.json') as jsrd:
-    sample = json.load(jsrd)
+# with open('WebServer/visual.json') as jsrd:
+#     sample = json.load(jsrd)
 
-tuttoquanto = []
-for s in sample:
-    tuttoquanto.append(s["TaxId"])
-quellichenonesistono = []
-for d in datasTaxon:
-    data = d[0]
-    if str(data) in tuttoquanto:
-        print(f"{data} esiste")
-    else:
-        quellichenonesistono.append(data)
+# tuttoquanto = []
+# for s in sample:
+#     tuttoquanto.append(s["TaxId"])
+# quellichenonesistono = []
+# for d in datasTaxon:
+#     data = d[0]
+#     if str(data) in tuttoquanto:
+#         print(f"{data} esiste")
+#     else:
+#         quellichenonesistono.append(data)
 
-for non in quellichenonesistono:
-    dato = db["sequences_data"].count_documents({"SAMPLE.SAMPLE_NAME.TAXON_ID.value":f"{non}"})
-    print(f"AO INVECE SU {non} troviamo {dato}")
+# for non in quellichenonesistono:
+#     dato = db["sequences_data"].count_documents({"SAMPLE.SAMPLE_NAME.TAXON_ID.value":f"{non}"})
+#     print(f"AO INVECE SU {non} troviamo {dato}")
 
 def proviamoAdAggregare(taxid):
     filter = {
@@ -172,7 +172,16 @@ def proviamoAdAggregare(taxid):
     data = list(all_data)
     print(len(data))
 
-proviamoAdAggregare("2730355")
+#proviamoAdAggregare("2730355")
+
+def eliminoDuplicatiPercheSI():
+    tutti_ris = db["nucleotide_data"].aggregate([
+        {"$group" : { "_id": "$GBSeq_locus", "count": { "$sum": 1 } } },
+        {"$match": {"_id" :{ "$ne" : None } , "count" : {"$gt": 1} } }, 
+        {"$project": {"GBSeq_locus" : "$_id", "_id" : 0} }
+    ])
+    print(len(list(tutti_ris)))
+
 def csvWriteProf():
     print("MEEE SOOO MBRIAAACATO")
     filter = {
