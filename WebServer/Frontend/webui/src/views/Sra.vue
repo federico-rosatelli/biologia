@@ -28,6 +28,9 @@ export default{
             document.getElementById("popup-"+genome.TaxId).style.display = "flex"
         },
         openModal(taxId){
+          if (this.project){
+            return
+          }
           document.getElementById("popup-"+taxId).style.display = "flex"
           this.project = taxId
         },

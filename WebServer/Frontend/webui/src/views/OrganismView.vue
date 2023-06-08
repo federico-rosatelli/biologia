@@ -175,7 +175,7 @@ export default {
                                 {{ prod.ProductName }}
                             </h2>
                         </div>
-                        <h3 style="margin-left: 5%;">
+                        <h3 style="margin-left: auto; padding-right: 5px;">
                             {{ prod.QtyProduct }}
                         </h3>
                     </div>

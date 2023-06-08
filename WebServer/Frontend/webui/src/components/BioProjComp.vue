@@ -13,15 +13,43 @@ export default {
     </tr>
     <ul>
         <tr v-for="proj in data">
-            BioProject: {{ proj.BioProjectId }}
+            <div class="origin">
+                BioProject:
+            </div>
+            <div class="clickable">
+                {{ proj.BioProjectId }}
+            </div>
             <td v-for="sample in proj.BioSamples">
-                BioSample: {{ sample.BioSampleId }}
-                <td v-for="exp in sample.Experiments">
-                    Experiment: {{ exp.ExperimentId }}
-                    <ul v-for="run in exp.Runs">
-                        Run: {{ run }}
-                    </ul>
-                </td>
+                <div class="origin">
+                    BioSample: 
+                </div>
+                <div class="clickable">
+                    {{ sample.BioSampleId }}
+                </div>
+                <ul>
+                    <tr>
+                        <td v-for="exp in sample.Experiments">
+                            <div class="origin">
+                                Experiment: 
+                            </div>
+                            <div class="clickable">
+                                {{ exp.ExperimentId }}
+                            </div>
+                            <ul v-for="run in exp.Runs">
+                                <tr>
+                                    <td>
+                                        <div class="origin">
+                                            Run:
+                                        </div>
+                                        <div class="clickable">
+                                            {{ run }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ul>
+                        </td>
+                    </tr>
+                </ul>
             </td>
         </tr>
     </ul>
@@ -31,3 +59,9 @@ export default {
         </div>
     </div>
 </template>
+
+<style>
+.origin{
+    color: rgb(172, 172, 172);
+}
+</style>
