@@ -9,6 +9,7 @@ export default{
             loading: false,
             genomes: null,
             project: null,
+            newGenome:null,
         };
     },
     methods: {
@@ -27,7 +28,8 @@ export default{
             this.genomeClick=genome
             document.getElementById("popup-"+genome.TaxId).style.display = "flex"
         },
-        openModal(taxId){
+        openModal(gen){
+          let taxId = gen[0].TaxId
           if (this.project){
             return
           }
@@ -47,9 +49,10 @@ export default{
               this.runcount += add
           }
 
-        }
+        },
     },
     async mounted(){
+        console.log("AOOOO");
             try{
                 let response = await this.$axios.get(`/analysis`);
                 let projects = response.data
@@ -60,7 +63,6 @@ export default{
                   }
                   gen[proj.TaxId].push(proj)
                 });
-                console.log(gen);
                 this.genomes = gen
             } catch(e){
               console.log(e);
@@ -68,8 +70,6 @@ export default{
             }
         },
 }
-
-
 </script>
 
 <template>
@@ -93,12 +93,12 @@ export default{
       <tr v-for="genome in this.genomes" :key="genome.TaxId">
 
         <td class="clickable">
-          <div @click="openModal(genome[0].TaxId)">
+          <div @click="openModal(genome)">
             {{ genome[0].ScientificName ? genome[0].ScientificName : genome[0].TaxId }}
           </div>
           <div class="popup" :id="'popup-'+genome[0].TaxId">
             <div v-if="this.project" class="popup-content">
-              <BioProjComp :data="genome"/>
+              <BioProjComp v-if="genome" :data="genome"/>
               <button type="button" class="popupclose" @click="close(genome[0].TaxId)">Close</button>
             </div>
           </div>
