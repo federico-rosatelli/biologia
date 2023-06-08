@@ -180,8 +180,18 @@ def eliminoDuplicatiPercheSI():
         {"$match": {"_id" :{ "$ne" : None } , "count" : {"$gt": 1} } }, 
         {"$project": {"GBSeq_locus" : "$_id", "_id" : 0} }
     ])
+    a = list(tutti_ris)
+    for loc in a:
+        id = loc["GBSeq_locus"]
+        print(id)
+        db["nucleotide_data"].delete_one({"GBSeq_locus":id})
+    tutti_ris = db["nucleotide_data"].aggregate([
+        {"$group" : { "_id": "$GBSeq_locus", "count": { "$sum": 1 } } },
+        {"$match": {"_id" :{ "$ne" : None } , "count" : {"$gt": 1} } }, 
+        {"$project": {"GBSeq_locus" : "$_id", "_id" : 0} }
+    ])
     print(len(list(tutti_ris)))
-
+eliminoDuplicatiPercheSI()
 def csvWriteProf():
     print("MEEE SOOO MBRIAAACATO")
     filter = {
