@@ -56,7 +56,16 @@ export default {
           fin.style.visibility = "hidden"
         },
     },
-    components: { LoadingSpinner }
+    components: { LoadingSpinner },
+    async mounted(){
+        
+        let product = this.$route.query.product;
+        if (!product){
+          return
+        }
+        this.product = product
+        this.nucleotideSearch()
+      },
 }
 
 
