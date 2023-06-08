@@ -2,58 +2,32 @@
 export default {
 	props: ['data'],
     methods:{
-
     }
 }
 </script>
 
 <template>
-    <div>BioProjects of {{ data.ScientificName }}</div>
-
-    <ul v-for="proj in data.BioProjects" :key=proj.BioProjectId>
-        {{ proj.BioProjectId }} project
-
-        <ul v-for="bioProject in data.BioProjects" :key="bioProject.BioProjectId">
-            <span v-for="bioSample in bioProject.BioSamples" :key="bioSample.BioSampleId">
-                {{ bioSample.BioSampleId }} sample
-            </span>
-        </ul>
-
-        <ul v-for="bioProject in data.BioProjects" :key="bioProject.BioProjectId">
-            <span v-for="bioSample in bioProject.BioSamples" :key="bioSample.BioSampleId">
-                <span v-for="experiment in bioSample.Experiments" :key="experiment.ExperimentId">
-                    {{ experiment.ExperimentId }} experiment
-                </span>
-            </span>
-        </ul>
-
-        <ul v-for="bioProject in data.BioProjects" :key="bioProject.BioProjectId">
-            <span v-for="bioSample in bioProject.BioSamples" :key="bioSample.BioSampleId">
-                <span v-for="experiment in bioSample.Experiments" :key="experiment.ExperimentId">
-                    <span v-for="run in experiment.Runs" :key="run.RunId">
-                        {{ run.RunId }} run
-
-                    </span>
-                </span>
-            </span>
-        </ul>
-
-        <ul v-for="bioProject in data.BioProjects" :key="bioProject.BioProjectId">
-            <span v-for="bioSample in bioProject.BioSamples" :key="bioSample.BioSampleId">
-                <span v-for="experiment in bioSample.Experiments" :key="experiment.ExperimentId">
-                    <span v-for="run in experiment.Runs" :key="run.RunId">
-                        <span v-for="rundata in run.RunDataId" :key="rundata.RunDataIdValue">
-                            concorrenza con {{ rundata.ConcorrenzaCon }}
-                            <RouterLink :to="'/sra/'+ rundata.RunDataIdValue"> <!-- non so quale sarà l'url preciso-->
-                                {{ rundata.RunDataIdValue }}
-                            </RouterLink>
-
-                        </span>
-
-                    </span>
-                </span>
-            </span>
-        </ul>
-
+    <!-- <div>BioProjects of {{ scientificName }}</div> -->
+    <tr>
+        BioProject
+    </tr>
+    <ul>
+        <tr v-for="proj in data">
+            BioProject: {{ proj.BioProjectId }}
+            <td v-for="sample in proj.BioSamples">
+                BioSample: {{ sample.BioSampleId }}
+                <td v-for="exp in sample.Experiments">
+                    Experiment: {{ exp.ExperimentId }}
+                    <ul v-for="run in exp.Runs">
+                        Run: {{ run }}
+                    </ul>
+                </td>
+            </td>
+        </tr>
     </ul>
+    <div v-if="data[0].ImagesPath && data[0].ImagesPath.length > 0" class="immagini">
+        <div v-for="img in data[0].ImagesPath">
+            <img :src="img" alt="Prova">
+        </div>
+    </div>
 </template>

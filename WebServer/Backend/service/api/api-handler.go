@@ -14,5 +14,6 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.GET("/organism/:id/nucleotides/:locus", rt.Get_Nucleotide_From_Locus)
 	rt.router.GET("/organism/:id/proteins", rt.Get_Proteins_Id)
 	rt.router.GET("/organism/:id/proteins/:locus", rt.Get_Protein_From_Locus)
+	rt.router.GET("/analysis", rt.Get_Analysis)
 	return rt.router
 }

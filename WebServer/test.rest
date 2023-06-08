@@ -7,3 +7,6 @@ GET http://localhost:3000/organism/2722869/nucleotides
 
 ### HOMEPAGE
 GET http://localhost:3000/taxonomy_tree?search=3071
+
+### Ana
+GET http://localhost:3000/analysis

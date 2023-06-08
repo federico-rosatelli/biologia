@@ -7,15 +7,16 @@ export default {
         return {
             errormsg: null,
             loading: false,
-            organisms: null,
+            bioProj: null,
+            bioProjId: this.$axios.params.bioprojid,
 
         };
     },
     methods: {
         async mounted(){
             try{
-                let response = await this.$axios.get(`/analysis`);
-                this.organisms = response.data
+                let response = await this.$axios.get(`/sra/` + this.bioProjId);
+                this.bioProj = response.data
             } catch(e){
                 this.errormsg = e.response.data
             }
@@ -29,46 +30,56 @@ export default {
 
 
 <template>
-
     <LoadingSpinner :loading="this.loading"/>
     <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
-    <div v-if="organisms.length > 0">
+    <div v-if="bioProj.length > 0">
         <div>
-            <h1>{{ organisms.length }} Results</h1>
+            <h1>{{ bioProj.TaxId }} Analysis</h1>
+        </div>
+
+        <div class="legend top-right">
+            <span class="pink">pink: case</span>
+            <span class="blue">blue: control</span>
         </div>
 
         <div>
             <ul>
-                <li v-for="organism in this.organisms" :key="organism.TaxId">
+                <div class="image">Heat Map:
+                    <img :src="'/sra/' + bioProj.TaxId + '/heatmap'">
+                </div>
 
-                    <strong>{{ organism.ScientificName }}</strong>
-
-                    <h2>CSV File:</h2>
-                        <ul>
-                            <li v-for="(values, fieldName) in organism.CsvFile" :key="fieldName">
-                                <strong>{{ fieldName }}:</strong>
-                                <ul>
-                                    <li v-for="value in values" :key="value">
-                                        {{ value }}
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <h2>Images:</h2>
-                            <ul>
-                                <div class="image">
-                                    <img :src="'/images/analysis/' + organism.TaxId">
-                                </div>
-                            </ul>
-                </li>
+                <div class="image">Volcano Plot:
+                    <img :src="'/sra/' + bioProj.TaxId + '/volcanoplot'">               
+                </div>
             </ul>
         </div>
     </div>
 
 </template>
 
+
 <style>
-strong {
-  font-weight: bold;
+.legend {
+position: fixed;
+top: 20px;
+right: 20px;
+background-color: #ffffff;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+
+.legend span {
+display: block;
+margin-bottom: 5px;
+}
+
+.pink {
+color: pink;
+}
+
+.blue {
+color: blue;
 }
 </style>
+

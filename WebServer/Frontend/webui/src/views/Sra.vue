@@ -2,34 +2,21 @@
 import LoadingSpinner from '../components/LoadingSpinner.vue';
 
 
-export default {
+export default{
     data: function () {
         return {
             errormsg: null,
             loading: false,
             genomes: null,
-            genomeClick: null,
-            projcount: 0,
-            sampcount: 0,
-            expcount: 0,
-            runcount: 0,
-            rundatacount:0,
-
+            project: null,
         };
     },
     methods: {
-        async mounted(){
-            try{
-                let response = await this.$axios.get(`/sra`);
-                this.genomes = response.data
-            } catch(e){
-                this.errormsg = e.response.data
-            }
-        },
 
-        close(TaxId){
-            document.getElementById("popup-"+TaxId).style.display = "none"
-            this.projects = null
+        close(taxId){
+            console.log(taxId);
+            this.project = null
+            document.getElementById("popup-"+taxId).style.display = "none"
 
         },
 
@@ -39,6 +26,10 @@ export default {
             }
             this.genomeClick=genome
             document.getElementById("popup-"+genome.TaxId).style.display = "flex"
+        },
+        openModal(taxId){
+          document.getElementById("popup-"+taxId).style.display = "flex"
+          this.project = taxId
         },
 
         plus(count, add) {
@@ -51,13 +42,28 @@ export default {
               this.expcount += add
             case('r'):
               this.runcount += add
-            case('rd'):
-              this.rundatacount += add
           }
 
         }
     },
-    components: { LoadingSpinner }
+    async mounted(){
+            try{
+                let response = await this.$axios.get(`/analysis`);
+                let projects = response.data
+                let gen = {}
+                projects.forEach(proj => {
+                  if(!gen[proj.TaxId]){
+                    gen[proj.TaxId] = []
+                  }
+                  gen[proj.TaxId].push(proj)
+                });
+                console.log(gen);
+                this.genomes = gen
+            } catch(e){
+              console.log(e);
+                this.errormsg = e.response
+            }
+        },
 }
 
 
@@ -70,28 +76,34 @@ export default {
 <br/>
   <LoadingSpinner :loading="this.loading"/>
   <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
-  <div v-if="genomes.length > 0">
+  <div v-if="this.genomes">
     <div>
-      <h1>{{ genomes.length }} Results</h1>
+      <h1>{{ Object.keys(this.genomes).length }} Results</h1>
     </div>
     <table id="table">
       <thead>
         <tr>
           <th>Scientific Name</th>
-          <th>BioProjects</th>
-          <th>BIoSamples</th>
-          <th>Experiments</th>
-          <th>Runs</th>
-          <th>Run Data Id</th>
+          <th>Number BioProjects</th>
         </tr>
       </thead>
       <tr v-for="genome in this.genomes" :key="genome.TaxId">
 
-        <td @click="ProjectsTree(genome)" class="clickable">
-          {{ genome.ScientificName }}
+        <td class="clickable">
+          <div @click="openModal(genome[0].TaxId)">
+            {{ genome[0].ScientificName ? genome[0].ScientificName : genome[0].TaxId }}
+          </div>
+          <div class="popup" :id="'popup-'+genome[0].TaxId">
+            <div v-if="this.project" class="popup-content">
+              <BioProjComp :data="genome"/>
+              <button type="button" class="popupclose" @click="close(genome[0].TaxId)">Close</button>
+            </div>
+          </div>
         </td>
-
-        <div>
+        <td>
+          {{ genome.length }}
+        </td>
+        <!-- <div>
             <div class="popup" :id='"popup-"+genome.TaxId'>
                 <div v-if="this.genomeClick" class="popup-content">
                     <BioProjComp :data="this.genomeClick"/>
@@ -101,43 +113,30 @@ export default {
         </div>
               
           <td>
-            {{ plus('p', genome.BioProjects.length) }}
+            {{ plus('p', genome.length) }}
             {{ projcount == 1 ? genome.BioProjects[0].BioProjectId : projcount }}
           </td>
 
-          <td v-for="bioProject in genome.BioProjects" :key="bioProject.BioProjectId">
+          <td v-for="bioProject in genome" :key="bioProject.BioProjectId">
             {{ plus('s', bioProject.BioSamples.length) }}
             {{ sampcount == 1 ? bioProject.BioSamples[0].BioSampleId : sampcount }}
           </td>
           
-          <td v-for="bioProject in genome.BioProjects" :key="bioProject.BioProjectId">
+          <td v-for="bioProject in genome" :key="bioProject.BioProjectId">
             <span v-for="bioSample in bioProject.BioSamples" :key="bioSample.BioSampleId">
               {{ plus('e', bioSample.Experiments.length) }}
-              {{ expcount == 1 ? bioSample.Experiments[0].ExperimentId : genome.Experiments.length }}
+              {{ expcount == 1 ? bioSample.Experiments[0].ExperimentId : expcount }}
             </span>
           </td>
 
-          <td v-for="bioProject in genome.BioProjects" :key="bioProject.BioProjectId">
+          <td v-for="bioProject in genome" :key="bioProject.BioProjectId">
             <span v-for="bioSample in bioProject.BioSamples" :key="bioSample.BioSampleId">
               <span v-for="experiment in bioSample.Experiments" :key="experiment.ExperimentId">
                 {{ plus('r', experiment.Runs.length) }}
-                {{ runcount == 1 ? experiment.Runs[0].RunId : runcount }}
+                {{ runcount == 1 ? experiment.Runs[0] : runcount }}
               </span>
             </span>
-          </td>
-
-          <td v-for="bioProject in genome.BioProjects" :key="bioProject.BioProjectId">
-            <span v-for="bioSample in bioProject.BioSamples" :key="bioSample.BioSampleId">
-              <span v-for="experiment in bioSample.Experiments" :key="experiment.ExperimentId">
-                <span v-for="run in experiment.Runs" :key="run.RunId">
-                  {{ plus('rd', run.RunDataId.length) }}
-                  {{ rundatacount == 1 ? run.RunDataId[0].RunDataIdValue : rundatacount}}
-                </span>
-              </span>
-            </span>
-          </td>
-
-
+          </td> -->
 
       </tr>
     </table>

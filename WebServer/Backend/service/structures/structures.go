@@ -125,8 +125,23 @@ type TableComplete struct {
 	} `bson:"Country"`
 }
 
-type Markdown struct {
-	Title    string `bson:"Title"`
-	Versione string `bson:"Versione"`
-	Text     string `bson:"Text"`
+type Genome struct {
+	TaxId          string
+	ScientificName string
+	BioProjects    []SraBioProject
+}
+
+type SraBioProject struct {
+	ScientificName string
+	TaxId          string
+	BioProjectId   string
+	Comment        string
+	ImagesPath     []string
+	BioSamples     []struct {
+		BioSampleId string
+		Experiments []struct {
+			ExperimentId string
+			Runs         []string
+		}
+	}
 }

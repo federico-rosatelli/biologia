@@ -9,12 +9,7 @@ import (
 
 func (rt *_router) Welcome(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	w.Header().Set("content-type", "application/json")
-	mr, err := rt.db.WelcomeMarkDown()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	if errJson := json.NewEncoder(w).Encode(mr); errJson != nil {
+	if errJson := json.NewEncoder(w).Encode("Ok"); errJson != nil {
 		http.Error(w, errJson.Error(), http.StatusBadRequest)
 		return
 	}
@@ -139,4 +134,17 @@ func (rt *_router) Get_Protein_From_Locus(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+}
+
+func (rt *_router) Get_Analysis(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Header().Set("content-type", "application/json")
+	c, err := rt.GetAnalysis()
+	if err != nil {
+		http.Error(w, err.Error(), err.Type())
+		return
+	}
+	if errJson := json.NewEncoder(w).Encode(c); errJson != nil {
+		http.Error(w, errJson.Error(), http.StatusBadRequest)
+		return
+	}
 }

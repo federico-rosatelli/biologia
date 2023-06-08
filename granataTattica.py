@@ -130,8 +130,49 @@ def funzioneRicorsiva(bla) -> dict:
 
 #SRAFind("txid3077")
 
+with open('WebServer/visual.json') as jsrd:
+    sample = json.load(jsrd)
 
+tuttoquanto = []
+for s in sample:
+    tuttoquanto.append(s["TaxId"])
+quellichenonesistono = []
+for d in datasTaxon:
+    data = d[0]
+    if str(data) in tuttoquanto:
+        print(f"{data} esiste")
+    else:
+        quellichenonesistono.append(data)
 
+for non in quellichenonesistono:
+    dato = db["sequences_data"].count_documents({"SAMPLE.SAMPLE_NAME.TAXON_ID.value":f"{non}"})
+    print(f"AO INVECE SU {non} troviamo {dato}")
+
+def proviamoAdAggregare(taxid):
+    filter = {
+        "SAMPLE.SAMPLE_NAME.TAXON_ID.value": f"{taxid}",
+    }
+
+    proj = {
+        "_id":0,
+        "TaxId":"$SAMPLE.SAMPLE_NAME.TAXON_ID.value",
+        "BioProject":"$STUDY.alias",
+        "BioSample":"$SAMPLE.IDENTIFIERS.EXTERNAL_ID.value",
+        "ExperimentCode":"$EXPERIMENT.accession",
+        "SRR":"$RUN_SET.RUN.accession",
+        "Abstract":"$STUDY.DESCRIPTOR.STUDY_ABSTRACT.value",
+        "LinkSRA":"$RUN_SET.RUN.SRAFiles"
+    }
+    aggregate = [
+        {"$match": filter},
+        {"$project":proj}
+    ]
+
+    all_data = db["sequences_data"].aggregate(aggregate)
+    data = list(all_data)
+    print(len(data))
+
+proviamoAdAggregare("2730355")
 def csvWriteProf():
     print("MEEE SOOO MBRIAAACATO")
     filter = {

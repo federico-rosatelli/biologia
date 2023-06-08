@@ -50,15 +50,6 @@ func (db *appDB) TableOrganism(search string, typeS string, listTaxId []string) 
 	return orgTable, nil
 }
 
-func (db *appDB) WelcomeMarkDown() (str.Markdown, errorM.Errors) {
-	var mark str.Markdown
-	err := db.markdown.FindOne(context.TODO(), bson.D{{}}).Decode(&mark)
-	if err != nil {
-		return mark, errorM.NewError("Can't find Markdown info", errorM.StatusBadRequest)
-	}
-	return mark, nil
-}
-
 func (db *appDB) TableOrganismByProduct(product string) ([]string, errorM.Errors) {
 	var listTaxId []string
 	proj := options.Find().SetProjection(bson.D{{Key: "TaxId", Value: 1}})
