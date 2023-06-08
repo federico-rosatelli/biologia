@@ -11,7 +11,8 @@ export default {
             nucleo:null,
             dataArray: [],
             otherRouterLink:null,
-            taxonomy:null
+            taxonomy:null,
+            product:""
 
 		}
 	},

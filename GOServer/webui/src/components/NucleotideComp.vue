@@ -17,9 +17,14 @@ export default {
             <ul>
                 {{ feature.GBFeatureKey }}
                 <ul v-for="quals in feature.GBFeatureQuals">
-                    <div v-if="quals.GBQualifierName != 'transcription'">
+                    <div v-if="quals.GBQualifierName != 'transcription'" style="display: flex;">
                         {{ quals.GBQualifierName }}:
-                        {{ quals.GBQualifierValue }}
+                        <a v-if="quals.GBQualifierName == 'product'" :href="'/taxon?product='+quals.GBQualifierValue">
+                            {{ quals.GBQualifierValue }}
+                        </a>
+                        <div v-else>
+                            {{ quals.GBQualifierValue }}
+                        </div>
                     </div>
                 </ul>
             </ul>
